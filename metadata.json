@@ -1,0 +1,6 @@
+{
+  "name": "YouthPick",
+  "description": "나에게 맞는 청년정책을 쉽고 빠르게 찾아주는 청년정책 맞춤형 서비스",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

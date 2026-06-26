@@ -1,0 +1,96 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  /* Brand colors */
+  --color-primary: hsl(255 75% 72%);
+  --color-primary-foreground: oklch(1 0 0);
+  --color-primary-light: hsl(255 75% 96%);
+  --color-brand-secondary: hsl(345 80% 78%);
+  --color-secondary: hsl(210 20% 96%);
+  --color-secondary-foreground: hsl(210 10% 28%);
+  --color-accent: hsl(255 75% 96%);
+  --color-accent-foreground: hsl(255 60% 40%);
+  --color-success: hsl(150 50% 48%);
+  --color-success-foreground: oklch(1 0 0);
+  --color-border: hsl(210 20% 90%);
+}
+
+:root {
+  --radius: 0.875rem;
+  --background: hsl(210 20% 98%);
+  --surface: hsl(210 20% 96%);
+  --foreground: hsl(210 10% 12%);
+  --card: oklch(1 0 0);
+  --card-foreground: hsl(210 10% 12%);
+  --popover: oklch(1 0 0);
+  --popover-foreground: hsl(210 10% 12%);
+  --primary: hsl(255 75% 72%);
+  --primary-foreground: oklch(1 0 0);
+  --primary-light: hsl(255 75% 96%);
+  --brand-secondary: hsl(345 80% 78%);
+  --secondary: hsl(210 20% 96%);
+  --secondary-foreground: hsl(210 10% 28%);
+  --muted: hsl(210 20% 96%);
+  --muted-foreground: hsl(210 10% 56%);
+  --accent: hsl(255 75% 96%);
+  --accent-foreground: hsl(255 60% 40%);
+  --destructive: hsl(350 75% 64%);
+  --destructive-foreground: oklch(1 0 0);
+  --warning: hsl(36 85% 55%);
+  --warning-foreground: hsl(36 85% 20%);
+  --success: hsl(150 50% 48%);
+  --success-foreground: oklch(1 0 0);
+  --border: hsl(210 20% 90%);
+  --input: hsl(210 15% 83%);
+  --ring: hsl(255 75% 72%);
+}
+
+@layer components {
+  .brand-logo {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03125rem;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--brand-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .brand-logo-sm {
+    font-size: 1.125rem;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: #1e293b;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
