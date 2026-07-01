@@ -8,7 +8,11 @@ interface HeroBannerProps {
   onSearchSubmit: () => void;
 }
 
-export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit }: HeroBannerProps) {
+export default function HeroBanner({
+  searchQuery,
+  setSearchQuery,
+  onSearchSubmit,
+}: HeroBannerProps) {
   return (
     <div className="relative overflow-hidden bg-[#F1F5F9]/30 py-10 lg:py-14 border-b border-slate-100">
       {/* Background soft circles and shapes as seen in screenshot */}
@@ -18,7 +22,6 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12">
-          
           {/* Left Text and Search (5 columns) */}
           <div className="space-y-6 lg:col-span-5 text-left">
             <motion.div
@@ -29,7 +32,10 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
             >
               <h1 className="text-3xl font-black tracking-tight text-slate-800 sm:text-4xl lg:text-4.5xl leading-tight">
                 나에게 맞는 <br />
-                <span className="bg-gradient-to-r from-primary to-brand-secondary bg-clip-text text-transparent">청년정책</span>을 찾아보세요
+                <span className="bg-gradient-to-r from-primary to-brand-secondary bg-clip-text text-transparent">
+                  청년정책
+                </span>
+                을 찾아보세요
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed max-w-md">
                 지역, 생활 상태, 관심사에 맞는 정책을 쉽고 빠르게 찾아드립니다.
@@ -50,7 +56,7 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
                   placeholder="정책명 또는 키워드를 입력하세요"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && onSearchSubmit()}
+                  onKeyDown={(e) => e.key === "Enter" && onSearchSubmit()}
                   className="w-full bg-transparent py-2.5 pl-10 pr-4 text-xs font-medium text-slate-700 outline-none placeholder:text-slate-400"
                   id="hero-search-input"
                 />
@@ -75,7 +81,7 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
             >
               {/* Underlay shapes to resemble the design in screenshot */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7)_0%,transparent_70%)]"></div>
-              
+
               {/* Insert the generated character illustration */}
               <img
                 src={youthPurpleIllustration}

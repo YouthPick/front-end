@@ -1,4 +1,15 @@
-import { Calendar, HelpCircle, ExternalLink, Heart, X, CheckCircle2, AlertTriangle, Check, Award, Flame } from "lucide-react";
+import {
+  Calendar,
+  HelpCircle,
+  ExternalLink,
+  Heart,
+  X,
+  CheckCircle2,
+  AlertTriangle,
+  Check,
+  Award,
+  Flame,
+} from "lucide-react";
 import type { Policy } from "@entities/policy";
 import { motion } from "motion/react";
 
@@ -12,14 +23,14 @@ interface DetailModalProps {
   onStartTracker?: (policy: Policy) => void;
 }
 
-export default function DetailModal({ 
-  policy, 
-  onClose, 
-  isSaved, 
+export default function DetailModal({
+  policy,
+  onClose,
+  isSaved,
   onToggleSave,
   isRecommendation,
   recommendationScore = 84,
-  onStartTracker
+  onStartTracker,
 }: DetailModalProps) {
   if (!policy) return null;
 
@@ -51,7 +62,9 @@ export default function DetailModal({
         <div className="flex items-start justify-between border-b border-slate-100 pb-4">
           <div className="text-left space-y-1.5">
             <div className="flex items-center space-x-2">
-              <span className={`rounded-lg border px-2.5 py-0.5 text-[10px] font-bold ${getCategoryStyles(policy.category)}`}>
+              <span
+                className={`rounded-lg border px-2.5 py-0.5 text-[10px] font-bold ${getCategoryStyles(policy.category)}`}
+              >
                 {policy.category}
               </span>
               <span className="rounded-lg bg-slate-50 border border-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-500">
@@ -77,36 +90,57 @@ export default function DetailModal({
                 <span className="text-[10px] font-extrabold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                   회원님과의 조건 분석 결과
                 </span>
-                <span className="text-[9px] font-bold text-slate-400">데이터 신뢰도: <span className="text-emerald-500 font-extrabold">MEDIUM</span></span>
+                <span className="text-[9px] font-bold text-slate-400">
+                  데이터 신뢰도: <span className="text-emerald-500 font-extrabold">MEDIUM</span>
+                </span>
               </div>
               <div className="flex items-baseline space-x-1.5">
                 <span className="text-2xl font-black text-primary">{recommendationScore}점</span>
                 <span className="text-xs text-slate-400 font-bold">유사도 매칭</span>
               </div>
-              
+
               <div className="space-y-2 pt-2 border-t border-slate-100">
-                <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">일치하는 조건</span>
+                <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+                  일치하는 조건
+                </span>
                 <div className="space-y-1.5 text-xs text-slate-600 font-medium">
                   <div className="flex items-center justify-between">
-                    <span className="flex items-center text-emerald-600"><Check className="h-3.5 w-3.5 mr-1 shrink-0" />거주지역이 서울특별시로 일치합니다.</span>
+                    <span className="flex items-center text-emerald-600">
+                      <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
+                      거주지역이 서울특별시로 일치합니다.
+                    </span>
                     <span className="text-[10px] text-slate-400 font-bold">+25</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="flex items-center text-emerald-600"><Check className="h-3.5 w-3.5 mr-1 shrink-0" />관심 분야인 {policy.category} 정책입니다.</span>
+                    <span className="flex items-center text-emerald-600">
+                      <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
+                      관심 분야인 {policy.category} 정책입니다.
+                    </span>
                     <span className="text-[10px] text-slate-400 font-bold">+20</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="flex items-center text-emerald-600"><Check className="h-3.5 w-3.5 mr-1 shrink-0" />취업상태 조건이 일치합니다.</span>
+                    <span className="flex items-center text-emerald-600">
+                      <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
+                      취업상태 조건이 일치합니다.
+                    </span>
                     <span className="text-[10px] text-slate-400 font-bold">+15</span>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-1.5 pt-1">
-                <span className="block text-[9px] font-extrabold text-amber-500 uppercase tracking-wider">확인 필요 사항</span>
+                <span className="block text-[9px] font-extrabold text-amber-500 uppercase tracking-wider">
+                  확인 필요 사항
+                </span>
                 <div className="space-y-1 text-[11px] text-slate-500 leading-normal">
-                  <p className="flex items-start"><span className="text-amber-500 mr-1">•</span>세부 소득요건은 공식 공고에서 자격 자가진단으로 확인해야 합니다.</p>
-                  <p className="flex items-start"><span className="text-amber-500 mr-1">•</span>추가 신청자격 및 제출서류 조건이 변경되었는지 공고에서 대조하세요.</p>
+                  <p className="flex items-start">
+                    <span className="text-amber-500 mr-1">•</span>세부 소득요건은 공식 공고에서 자격
+                    자가진단으로 확인해야 합니다.
+                  </p>
+                  <p className="flex items-start">
+                    <span className="text-amber-500 mr-1">•</span>추가 신청자격 및 제출서류 조건이
+                    변경되었는지 공고에서 대조하세요.
+                  </p>
                 </div>
               </div>
             </div>
@@ -114,7 +148,9 @@ export default function DetailModal({
 
           {/* Intro description */}
           <div className="rounded-2xl bg-slate-50/50 border border-slate-100 p-4">
-            <p className="text-xs leading-relaxed text-slate-600 font-medium">{policy.description}</p>
+            <p className="text-xs leading-relaxed text-slate-600 font-medium">
+              {policy.description}
+            </p>
           </div>
 
           {/* Quick info row */}

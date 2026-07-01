@@ -33,7 +33,9 @@ export function useAdminSync(): UseAdminSyncResult {
       .catch((error: unknown) => {
         if (abortController.signal.aborted) return;
         setSyncHistory([]);
-        setErrorMessage(error instanceof Error ? error.message : "동기화 이력 API 호출에 실패했습니다.");
+        setErrorMessage(
+          error instanceof Error ? error.message : "동기화 이력 API 호출에 실패했습니다.",
+        );
       })
       .finally(() => {
         if (!abortController.signal.aborted) {
@@ -53,7 +55,8 @@ export function useAdminSync(): UseAdminSyncResult {
       setErrorMessage(null);
       return log;
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "정책 수집 실행 API 호출에 실패했습니다.";
+      const message =
+        error instanceof Error ? error.message : "정책 수집 실행 API 호출에 실패했습니다.";
       setErrorMessage(message);
       throw new Error(message);
     } finally {
@@ -68,7 +71,8 @@ export function useAdminSync(): UseAdminSyncResult {
       setErrorMessage(null);
       return `${result.message} (${result.indexJobId})`;
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "검색 인덱스 재생성 API 호출에 실패했습니다.";
+      const message =
+        error instanceof Error ? error.message : "검색 인덱스 재생성 API 호출에 실패했습니다.";
       setErrorMessage(message);
       throw new Error(message);
     } finally {

@@ -31,19 +31,22 @@ export interface PolicyComparisonDto {
 }
 
 export async function createPolicyComparison(policyIds: string[]): Promise<PolicyComparisonDto> {
-  const response = await requestJson<ApiResponse<PolicyComparisonDto>>("/api/v1/policy-comparisons", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await requestJson<ApiResponse<PolicyComparisonDto>>(
+    "/api/v1/policy-comparisons",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ policyIds }),
     },
-    body: JSON.stringify({ policyIds }),
-  });
+  );
   return response.data;
 }
 
 export async function fetchPolicyComparison(comparisonId: string): Promise<PolicyComparisonDto> {
   const response = await requestJson<ApiResponse<PolicyComparisonDto>>(
-    `/api/v1/policy-comparisons/${encodeURIComponent(comparisonId)}`
+    `/api/v1/policy-comparisons/${encodeURIComponent(comparisonId)}`,
   );
   return response.data;
 }

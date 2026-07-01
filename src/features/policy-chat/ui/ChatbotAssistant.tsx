@@ -1,6 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MessageSquare, Send, Sparkles, X, Loader2, UserRound } from "lucide-react";
-import { formatPolicyChatResponse, streamPolicyChat, type ChatMessage, type PolicyChatProgressStatus, type PolicyChatUserProfilePayload } from "@features/policy-chat";
+import {
+  formatPolicyChatResponse,
+  streamPolicyChat,
+  type ChatMessage,
+  type PolicyChatProgressStatus,
+  type PolicyChatUserProfilePayload,
+} from "@features/policy-chat";
 import { fetchUserProfile, getStoredAuthTokens, type ProfileResponseDto } from "@entities/user";
 import { motion, AnimatePresence } from "motion/react";
 import { ChatMessageContent } from "./ChatMessageContent";
@@ -38,8 +44,8 @@ export default function ChatbotAssistant() {
       id: "welcome",
       role: "bot",
       text: "안녕하세요! 청년정책 비서 **정책 탐색 도우미**입니다. 무엇을 도와드릴까요?",
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   ]);
   const [inputVal, setInputVal] = useState("");
   const [threadId, setThreadId] = useState<string | undefined>();
@@ -94,9 +100,9 @@ export default function ChatbotAssistant() {
       id: `u-${Date.now()}`,
       role: "user",
       text,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-    
+
     setMessages((prev) => [...prev, userMsg]);
     setInputVal("");
     setLoading(true);
@@ -109,12 +115,12 @@ export default function ChatbotAssistant() {
         onProgress: setProgressStatus,
       });
       setThreadId(data.threadId);
-      
+
       const botMsg: ChatMessage = {
         id: `b-${Date.now()}`,
         role: "bot",
         text: formatPolicyChatResponse(data),
-        timestamp: new Date()
+        timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, botMsg]);
@@ -124,7 +130,7 @@ export default function ChatbotAssistant() {
         id: `b-err-${Date.now()}`,
         role: "bot",
         text: "정책 검색 API가 현재 응답하지 않습니다. 잠시 후 다시 시도하거나 일반 검색 화면에서 직접 찾아보세요.",
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botMsg]);
     } finally {
@@ -202,11 +208,12 @@ export default function ChatbotAssistant() {
                   />
                   <span>
                     <span className="flex items-center gap-1 font-bold text-slate-700">
-                      <UserRound className="h-3.5 w-3.5 text-primary" />
-                      내 온보딩 정보 기반으로 추천받기
+                      <UserRound className="h-3.5 w-3.5 text-primary" />내 온보딩 정보 기반으로
+                      추천받기
                     </span>
                     <span className="mt-0.5 block leading-relaxed">
-                      체크하면 지역, 출생연도, 고용상태, 학력, 관심 분야를 이번 질문에만 함께 보냅니다.
+                      체크하면 지역, 출생연도, 고용상태, 학력, 관심 분야를 이번 질문에만 함께
+                      보냅니다.
                     </span>
                   </span>
                 </label>
@@ -217,7 +224,9 @@ export default function ChatbotAssistant() {
               )}
 
               <div className="border-b border-slate-100 bg-white px-4 py-3">
-                <p className="mb-2 text-left text-[10px] font-extrabold uppercase tracking-wider text-slate-400">빠른 질문</p>
+                <p className="mb-2 text-left text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                  빠른 질문
+                </p>
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
@@ -280,7 +289,10 @@ export default function ChatbotAssistant() {
                 <div ref={messagesEndRef} />
               </div>
 
-              <form onSubmit={handleFormSubmit} className="border-t border-slate-100 bg-white p-3 flex items-center space-x-2">
+              <form
+                onSubmit={handleFormSubmit}
+                className="border-t border-slate-100 bg-white p-3 flex items-center space-x-2"
+              >
                 <input
                   type="text"
                   placeholder="예: 경기도 거주자를 위한 주택 전세대출 지원"

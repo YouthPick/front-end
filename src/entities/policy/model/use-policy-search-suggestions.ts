@@ -32,7 +32,9 @@ export function usePolicySearchSuggestions(keyword: string): UsePolicySearchSugg
       .catch((error: unknown) => {
         if (abortController.signal.aborted) return;
         setSuggestions([]);
-        setErrorMessage(error instanceof Error ? error.message : "검색어 제안 API 호출에 실패했습니다.");
+        setErrorMessage(
+          error instanceof Error ? error.message : "검색어 제안 API 호출에 실패했습니다.",
+        );
       })
       .finally(() => {
         if (!abortController.signal.aborted) {

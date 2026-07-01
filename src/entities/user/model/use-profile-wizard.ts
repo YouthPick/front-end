@@ -31,11 +31,7 @@ export function useProfileWizard({ onComplete, onToast }: UseProfileWizardParams
     errorMessage: profileOptionsErrorMessage,
   } = useProfileOptions();
 
-  const {
-    isSaving: isProfileSaving,
-    loadProfile,
-    saveProfile,
-  } = useProfilePersistence();
+  const { isSaving: isProfileSaving, loadProfile, saveProfile } = useProfilePersistence();
 
   const updateWizardProfile = useCallback((patch: Partial<UserProfile>) => {
     setWizardProfile((prev) => ({ ...prev, ...patch }));
@@ -46,12 +42,15 @@ export function useProfileWizard({ onComplete, onToast }: UseProfileWizardParams
     setWizardProfile(userProfile);
   }, [userProfile]);
 
-  const loadSavedProfile = useCallback(async (signal?: AbortSignal) => {
-    const savedProfile = await loadProfile(signal);
-    setUserProfile(savedProfile);
-    setWizardProfile(savedProfile);
-    return savedProfile;
-  }, [loadProfile]);
+  const loadSavedProfile = useCallback(
+    async (signal?: AbortSignal) => {
+      const savedProfile = await loadProfile(signal);
+      setUserProfile(savedProfile);
+      setWizardProfile(savedProfile);
+      return savedProfile;
+    },
+    [loadProfile],
+  );
 
   const handleWizardNext = useCallback(async () => {
     if (profileSetupStep < 3) {
@@ -82,22 +81,28 @@ export function useProfileWizard({ onComplete, onToast }: UseProfileWizardParams
     }
   }, [profileSetupStep]);
 
-  const addKeyword = useCallback((keyword: string) => {
-    const trimmedKeyword = keyword.trim();
-    if (trimmedKeyword === "") return;
-    if (wizardProfile.keywords.includes(trimmedKeyword)) {
-      onToast("이미 추가된 키워드입니다.", "info");
-      return;
-    }
-    if (wizardProfile.keywords.length >= profileOptions.maxKeywordCount) {
-      onToast(`관심 키워드는 최대 ${profileOptions.maxKeywordCount}개까지 추가할 수 있습니다.`, "warning");
-      return;
-    }
-    setWizardProfile((prev) => ({
-      ...prev,
-      keywords: [...prev.keywords, trimmedKeyword],
-    }));
-  }, [onToast, profileOptions.maxKeywordCount, wizardProfile.keywords]);
+  const addKeyword = useCallback(
+    (keyword: string) => {
+      const trimmedKeyword = keyword.trim();
+      if (trimmedKeyword === "") return;
+      if (wizardProfile.keywords.includes(trimmedKeyword)) {
+        onToast("이미 추가된 키워드입니다.", "info");
+        return;
+      }
+      if (wizardProfile.keywords.length >= profileOptions.maxKeywordCount) {
+        onToast(
+          `관심 키워드는 최대 ${profileOptions.maxKeywordCount}개까지 추가할 수 있습니다.`,
+          "warning",
+        );
+        return;
+      }
+      setWizardProfile((prev) => ({
+        ...prev,
+        keywords: [...prev.keywords, trimmedKeyword],
+      }));
+    },
+    [onToast, profileOptions.maxKeywordCount, wizardProfile.keywords],
+  );
 
   const handleAddKeyword = useCallback(() => {
     addKeyword(newKeywordInput);
@@ -111,25 +116,31 @@ export function useProfileWizard({ onComplete, onToast }: UseProfileWizardParams
     }));
   }, []);
 
-  const handleToggleInterest = useCallback((interest: string) => {
-    if (wizardProfile.interests.includes(interest)) {
+  const handleToggleInterest = useCallback(
+    (interest: string) => {
+      if (wizardProfile.interests.includes(interest)) {
+        setWizardProfile((prev) => ({
+          ...prev,
+          interests: prev.interests.filter((item) => item !== interest),
+        }));
+        return;
+      }
+
+      if (wizardProfile.interests.length >= profileOptions.maxInterestCount) {
+        onToast(
+          `관심 분야는 최대 ${profileOptions.maxInterestCount}개까지 선택할 수 있습니다.`,
+          "warning",
+        );
+        return;
+      }
+
       setWizardProfile((prev) => ({
         ...prev,
-        interests: prev.interests.filter((item) => item !== interest),
+        interests: [...prev.interests, interest],
       }));
-      return;
-    }
-
-    if (wizardProfile.interests.length >= profileOptions.maxInterestCount) {
-      onToast(`관심 분야는 최대 ${profileOptions.maxInterestCount}개까지 선택할 수 있습니다.`, "warning");
-      return;
-    }
-
-    setWizardProfile((prev) => ({
-      ...prev,
-      interests: [...prev.interests, interest],
-    }));
-  }, [onToast, profileOptions.maxInterestCount, wizardProfile.interests]);
+    },
+    [onToast, profileOptions.maxInterestCount, wizardProfile.interests],
+  );
 
   return {
     userProfile,

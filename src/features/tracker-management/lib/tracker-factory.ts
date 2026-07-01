@@ -18,7 +18,10 @@ export function createTrackerFromPolicy(policy: Policy): TrackerItem {
     policyId: policy.id,
     policySnapshot: policy,
     status: "준비중",
-    targetDate: policy.deadline !== "원본확인불가" && policy.deadline !== "상시모집" ? policy.deadline : "2026-06-30",
+    targetDate:
+      policy.deadline !== "원본확인불가" && policy.deadline !== "상시모집"
+        ? policy.deadline
+        : "2026-06-30",
     checklist: [
       createChecklistItem("기본 제출 서류 취합"),
       createChecklistItem("공고 상세 자격요건 검증"),

@@ -20,10 +20,16 @@ interface UseTrackerManagementOptions {
   onToast: (message: string, type: "success" | "info" | "warning") => void;
 }
 
-export function useTrackerManagement({ isLoggedIn, onRequireLogin, onToast }: UseTrackerManagementOptions) {
+export function useTrackerManagement({
+  isLoggedIn,
+  onRequireLogin,
+  onToast,
+}: UseTrackerManagementOptions) {
   const restoredState = useMemo(() => restoreTrackerState(), []);
   const [trackers, setTrackers] = useState<TrackerItem[]>(restoredState.trackers);
-  const [selectedTrackerPolicyId, setSelectedTrackerPolicyId] = useState<string | null>(restoredState.selectedTrackerPolicyId);
+  const [selectedTrackerPolicyId, setSelectedTrackerPolicyId] = useState<string | null>(
+    restoredState.selectedTrackerPolicyId,
+  );
   const [trackerTab, setTrackerTab] = useState<string>(restoredState.trackerTab);
   const [showAddChecklistItem, setShowAddChecklistItem] = useState<boolean>(false);
   const [newChecklistItemText, setNewChecklistItemText] = useState<string>("");
@@ -40,7 +46,10 @@ export function useTrackerManagement({ isLoggedIn, onRequireLogin, onToast }: Us
   }, [activeTrackerItem]);
 
   useEffect(() => {
-    if (selectedTrackerPolicyId && !trackers.some((tracker) => tracker.policyId === selectedTrackerPolicyId)) {
+    if (
+      selectedTrackerPolicyId &&
+      !trackers.some((tracker) => tracker.policyId === selectedTrackerPolicyId)
+    ) {
       setSelectedTrackerPolicyId(null);
     }
   }, [trackers, selectedTrackerPolicyId]);

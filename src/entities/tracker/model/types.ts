@@ -9,7 +9,7 @@ export interface TrackerChecklistItem {
 export interface TrackerItem {
   policyId: string;
   policySnapshot: Policy;
-  status: '관심' | '준비중' | '신청완료' | '결과대기' | '종료';
+  status: "관심" | "준비중" | "신청완료" | "결과대기" | "종료";
   targetDate: string;
   checklist: TrackerChecklistItem[];
   memo: string;

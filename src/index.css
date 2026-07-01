@@ -2,9 +2,10 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-display: "Space Grotesk", sans-serif;
-  
+
   /* Brand colors */
   --color-primary: hsl(255 75% 72%);
   --color-primary-foreground: oklch(1 0 0);
@@ -93,4 +94,3 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
-

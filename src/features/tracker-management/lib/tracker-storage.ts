@@ -30,40 +30,45 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isChecklistItem(value: unknown): value is TrackerItem["checklist"][number] {
   return (
-    isRecord(value)
-    && typeof value.id === "string"
-    && typeof value.text === "string"
-    && typeof value.completed === "boolean"
+    isRecord(value) &&
+    typeof value.id === "string" &&
+    typeof value.text === "string" &&
+    typeof value.completed === "boolean"
   );
 }
 
 function isPolicySnapshot(value: unknown): value is TrackerItem["policySnapshot"] {
   return (
-    isRecord(value)
-    && typeof value.id === "string"
-    && typeof value.title === "string"
-    && typeof value.category === "string"
-    && typeof value.region === "string"
-    && typeof value.description === "string"
+    isRecord(value) &&
+    typeof value.id === "string" &&
+    typeof value.title === "string" &&
+    typeof value.category === "string" &&
+    typeof value.region === "string" &&
+    typeof value.description === "string"
   );
 }
 
 function isTrackerItem(value: unknown): value is TrackerItem {
   return (
-    isRecord(value)
-    && typeof value.policyId === "string"
-    && isPolicySnapshot(value.policySnapshot)
-    && typeof value.status === "string"
-    && typeof value.targetDate === "string"
-    && Array.isArray(value.checklist)
-    && value.checklist.every(isChecklistItem)
-    && typeof value.memo === "string"
+    isRecord(value) &&
+    typeof value.policyId === "string" &&
+    isPolicySnapshot(value.policySnapshot) &&
+    typeof value.status === "string" &&
+    typeof value.targetDate === "string" &&
+    Array.isArray(value.checklist) &&
+    value.checklist.every(isChecklistItem) &&
+    typeof value.memo === "string"
   );
 }
 
-function normalizeSelection(trackers: TrackerItem[], selectedTrackerPolicyId: string | null): string | null {
+function normalizeSelection(
+  trackers: TrackerItem[],
+  selectedTrackerPolicyId: string | null,
+): string | null {
   if (!selectedTrackerPolicyId) return null;
-  return trackers.some((tracker) => tracker.policyId === selectedTrackerPolicyId) ? selectedTrackerPolicyId : null;
+  return trackers.some((tracker) => tracker.policyId === selectedTrackerPolicyId)
+    ? selectedTrackerPolicyId
+    : null;
 }
 
 function normalizeStoredState(value: unknown): TrackerStorageState | null {
@@ -72,8 +77,12 @@ function normalizeStoredState(value: unknown): TrackerStorageState | null {
   if (!Array.isArray(value.trackers) || !value.trackers.every(isTrackerItem)) return null;
 
   const trackers = value.trackers;
-  const selectedTrackerPolicyId = typeof value.selectedTrackerPolicyId === "string" ? value.selectedTrackerPolicyId : null;
-  const trackerTab = typeof value.trackerTab === "string" && value.trackerTab.trim() !== "" ? value.trackerTab : "전체";
+  const selectedTrackerPolicyId =
+    typeof value.selectedTrackerPolicyId === "string" ? value.selectedTrackerPolicyId : null;
+  const trackerTab =
+    typeof value.trackerTab === "string" && value.trackerTab.trim() !== ""
+      ? value.trackerTab
+      : "전체";
 
   return {
     trackers,

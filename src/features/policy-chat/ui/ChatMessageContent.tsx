@@ -96,7 +96,9 @@ function renderBlock(block: ParsedBlock, role: "user" | "bot") {
     case "ordered":
       return (
         <div key={block.key} className="mt-3 flex min-w-0 items-start gap-2 first:mt-0">
-          <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${markerClass}`}>
+          <span
+            className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${markerClass}`}
+          >
             {block.number}
           </span>
           <p className={`min-w-0 flex-1 break-words font-bold ${strongTextClass}`}>
@@ -115,7 +117,10 @@ function renderBlock(block: ParsedBlock, role: "user" | "bot") {
       );
     case "paragraph":
       return (
-        <p key={block.key} className={`min-w-0 break-words whitespace-pre-wrap ${paragraphTextClass}`}>
+        <p
+          key={block.key}
+          className={`min-w-0 break-words whitespace-pre-wrap ${paragraphTextClass}`}
+        >
           {renderInline(block.text, role)}
         </p>
       );
@@ -127,7 +132,10 @@ function renderInline(text: string, role: "user" | "bot"): React.ReactNode[] {
     switch (segment.kind) {
       case "bold":
         return (
-          <strong key={segment.key} className={role === "user" ? "font-bold text-white" : "font-bold text-primary"}>
+          <strong
+            key={segment.key}
+            className={role === "user" ? "font-bold text-white" : "font-bold text-primary"}
+          >
             {segment.text}
           </strong>
         );
@@ -138,7 +146,11 @@ function renderInline(text: string, role: "user" | "bot"): React.ReactNode[] {
             href={segment.href}
             target="_blank"
             rel="noopener noreferrer"
-            className={role === "user" ? "break-all font-bold underline decoration-white/70 underline-offset-2" : "break-all font-bold text-primary underline underline-offset-2"}
+            className={
+              role === "user"
+                ? "break-all font-bold underline decoration-white/70 underline-offset-2"
+                : "break-all font-bold text-primary underline underline-offset-2"
+            }
           >
             {segment.label}
           </a>

@@ -1,4 +1,10 @@
-export type AdminSyncStatus = "REQUESTED" | "RUNNING" | "SUCCEEDED" | "FAILED" | "SUCCESS" | "PARTIAL";
+export type AdminSyncStatus =
+  | "REQUESTED"
+  | "RUNNING"
+  | "SUCCEEDED"
+  | "FAILED"
+  | "SUCCESS"
+  | "PARTIAL";
 
 export interface AdminSyncLog {
   id: string;

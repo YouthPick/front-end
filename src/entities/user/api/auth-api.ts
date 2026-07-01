@@ -1,4 +1,10 @@
-import { apiBaseUrl, requestJson, requestNoContent, setUnauthorizedHandler, type ApiResponse } from "@shared/api/http";
+import {
+  apiBaseUrl,
+  requestJson,
+  requestNoContent,
+  setUnauthorizedHandler,
+  type ApiResponse,
+} from "@shared/api/http";
 
 const AUTH_USER_STORAGE_KEY = "bop.auth.user";
 const AUTH_TOKEN_STORAGE_KEY = "bop.auth.tokens";
@@ -8,11 +14,11 @@ export type OAuthProvider = (typeof OAUTH_PROVIDERS)[number];
 
 const PROVIDER_ALIASES: Record<string, OAuthProvider> = {
   kakao: "kakao",
-  "카카오": "kakao",
+  카카오: "kakao",
   naver: "naver",
-  "네이버": "naver",
+  네이버: "naver",
   google: "google",
-  "구글": "google",
+  구글: "google",
 };
 
 export interface CurrentUserDto {
@@ -70,7 +76,9 @@ export function inferOAuthProvider(userId: string | null | undefined): OAuthProv
   return OAUTH_PROVIDERS.find((provider) => normalizedUserId.startsWith(`${provider}:`)) ?? null;
 }
 
-export function toDisplayUserName(user: Pick<StoredAuthUser, "userId" | "displayName"> | null): string {
+export function toDisplayUserName(
+  user: Pick<StoredAuthUser, "userId" | "displayName"> | null,
+): string {
   const displayName = user?.displayName?.trim();
   if (displayName && !isProviderSubjectUserId(displayName)) {
     return displayName;
@@ -95,7 +103,8 @@ interface StoredAuthTokens {
 }
 
 export function normalizeOAuthProvider(provider: string): OAuthProvider {
-  const normalized = PROVIDER_ALIASES[provider.trim().toLowerCase()] ?? PROVIDER_ALIASES[provider.trim()];
+  const normalized =
+    PROVIDER_ALIASES[provider.trim().toLowerCase()] ?? PROVIDER_ALIASES[provider.trim()];
   if (!normalized) {
     throw new Error("지원하지 않는 OAuth 제공자입니다.");
   }
@@ -135,9 +144,19 @@ export function setAuthenticatedUser(user: OAuthCallbackDto | CurrentUserDto): v
   const shouldPreserveExisting = existingUser?.userId === user.userId;
   const stored: StoredAuthUser = {
     userId: user.userId,
-    displayName: "displayName" in user ? user.displayName : shouldPreserveExisting ? existingUser.displayName : null,
+    displayName:
+      "displayName" in user
+        ? user.displayName
+        : shouldPreserveExisting
+          ? existingUser.displayName
+          : null,
     email: "email" in user ? user.email : shouldPreserveExisting ? existingUser.email : null,
-    provider: "provider" in user ? user.provider : shouldPreserveExisting ? existingUser.provider ?? inferOAuthProvider(user.userId) ?? undefined : inferOAuthProvider(user.userId) ?? undefined,
+    provider:
+      "provider" in user
+        ? user.provider
+        : shouldPreserveExisting
+          ? (existingUser.provider ?? inferOAuthProvider(user.userId) ?? undefined)
+          : (inferOAuthProvider(user.userId) ?? undefined),
   };
   window.localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(stored));
 
@@ -164,7 +183,9 @@ export function clearAuthenticatedUser(): void {
 
 export function getUserHeaders(): Record<string, string> {
   const tokens = getStoredAuthTokens();
-  return tokens?.accessToken ? { Authorization: `${tokens.tokenType || "Bearer"} ${tokens.accessToken}` } : {};
+  return tokens?.accessToken
+    ? { Authorization: `${tokens.tokenType || "Bearer"} ${tokens.accessToken}` }
+    : {};
 }
 
 export function getUserJsonHeaders(): Record<string, string> {
@@ -187,7 +208,10 @@ export async function fetchCurrentUser(signal?: AbortSignal): Promise<CurrentUse
   return response.data;
 }
 
-export async function fetchOAuthAuthorizationUrl(provider: string, state?: string): Promise<OAuthAuthorizationUrlDto> {
+export async function fetchOAuthAuthorizationUrl(
+  provider: string,
+  state?: string,
+): Promise<OAuthAuthorizationUrlDto> {
   const normalizedProvider = normalizeOAuthProvider(provider);
   const redirectUri = `${window.location.origin}/login/callback`;
   const searchParams = new URLSearchParams({ redirectUri });
@@ -200,7 +224,10 @@ export async function fetchOAuthAuthorizationUrl(provider: string, state?: strin
   return response.data;
 }
 
-export async function completeOAuthLogin(provider: string, code: string): Promise<OAuthCallbackDto> {
+export async function completeOAuthLogin(
+  provider: string,
+  code: string,
+): Promise<OAuthCallbackDto> {
   const normalizedProvider = normalizeOAuthProvider(provider);
   const response = await requestJson<ApiResponse<OAuthCallbackDto>>(
     `/api/v1/auth/oauth/${encodeURIComponent(normalizedProvider)}/callback`,

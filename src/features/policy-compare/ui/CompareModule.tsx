@@ -10,7 +10,11 @@ interface CompareModuleProps {
   onRemove: (policy: Policy) => void;
 }
 
-export default function CompareModule({ comparingPolicies, onClear, onRemove }: CompareModuleProps) {
+export default function CompareModule({
+  comparingPolicies,
+  onClear,
+  onRemove,
+}: CompareModuleProps) {
   const [showDetailDialog, setShowDetailDialog] = useState(false);
   const [comparison, setComparison] = useState<PolicyComparisonDto | null>(null);
   const [isLoadingComparison, setIsLoadingComparison] = useState(false);
@@ -26,7 +30,9 @@ export default function CompareModule({ comparingPolicies, onClear, onRemove }: 
       setComparison(result);
     } catch (error) {
       setComparison(null);
-      setComparisonErrorMessage(error instanceof Error ? error.message : "비교 API 응답을 불러오지 못했습니다.");
+      setComparisonErrorMessage(
+        error instanceof Error ? error.message : "비교 API 응답을 불러오지 못했습니다.",
+      );
     } finally {
       setIsLoadingComparison(false);
       setShowDetailDialog(true);
@@ -50,7 +56,9 @@ export default function CompareModule({ comparingPolicies, onClear, onRemove }: 
       <div className="flex items-start justify-between">
         <div className="text-left space-y-0.5">
           <h3 className="text-sm font-bold text-slate-800">정책 비교</h3>
-          <p className="text-[10px] text-slate-400 font-medium">최대 3개 정책을 선택해 같은 기준으로 비교해보세요.</p>
+          <p className="text-[10px] text-slate-400 font-medium">
+            최대 3개 정책을 선택해 같은 기준으로 비교해보세요.
+          </p>
         </div>
 
         {comparingPolicies.length >= 2 ? (
@@ -59,7 +67,11 @@ export default function CompareModule({ comparingPolicies, onClear, onRemove }: 
             disabled={isLoadingComparison}
             className="text-xs font-bold text-primary hover:underline flex items-center space-x-0.5 cursor-pointer disabled:cursor-wait disabled:opacity-60"
           >
-            {isLoadingComparison ? <Loader2 className="h-3 w-3 animate-spin" /> : <span>비교하기</span>}
+            {isLoadingComparison ? (
+              <Loader2 className="h-3 w-3 animate-spin" />
+            ) : (
+              <span>비교하기</span>
+            )}
             <ArrowRight className="h-3 w-3" />
           </button>
         ) : (
@@ -81,7 +93,10 @@ export default function CompareModule({ comparingPolicies, onClear, onRemove }: 
                     <span className="inline-block rounded px-1.5 py-0.5 text-[9px] font-bold bg-primary/10 text-primary border border-primary/20">
                       {policy.category}
                     </span>
-                    <h4 className="line-clamp-2 text-[10px] font-bold text-slate-700 leading-normal" title={policy.title}>
+                    <h4
+                      className="line-clamp-2 text-[10px] font-bold text-slate-700 leading-normal"
+                      title={policy.title}
+                    >
                       {policy.title}
                     </h4>
                     <p className="text-[9px] text-slate-400 font-semibold">{policy.region}</p>
@@ -140,7 +155,9 @@ export default function CompareModule({ comparingPolicies, onClear, onRemove }: 
                     {comparison?.notice ?? "서버 비교 데이터를 불러오지 못했습니다."}
                   </p>
                   {comparisonErrorMessage && (
-                    <p className="mt-1 text-[11px] font-bold text-rose-600">{comparisonErrorMessage}</p>
+                    <p className="mt-1 text-[11px] font-bold text-rose-600">
+                      {comparisonErrorMessage}
+                    </p>
                   )}
                 </div>
                 <button
@@ -153,43 +170,49 @@ export default function CompareModule({ comparingPolicies, onClear, onRemove }: 
               </div>
 
               {comparison ? (
-              <div className="mt-5 overflow-x-auto">
-                <table className="min-w-[760px] w-full border-separate border-spacing-0 text-left">
-                  <thead>
-                    <tr>
-                      <th className="sticky left-0 z-10 w-36 bg-white px-3 py-3 text-xs font-black text-slate-400">구분</th>
-                      {comparison.policies.map((policy) => (
-                        <th key={policy.policyId} className="min-w-48 px-3 py-3 align-top">
-                          <p className="text-xs font-black text-slate-800">{policy.title}</p>
-                          <p className="mt-1 text-[10px] font-bold text-slate-400">{policy.region} · {policy.category}</p>
+                <div className="mt-5 overflow-x-auto">
+                  <table className="min-w-[760px] w-full border-separate border-spacing-0 text-left">
+                    <thead>
+                      <tr>
+                        <th className="sticky left-0 z-10 w-36 bg-white px-3 py-3 text-xs font-black text-slate-400">
+                          구분
                         </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {comparison.rows.map((row) => (
-                      <tr key={row.key} className="border-t border-slate-100">
-                        <th className="sticky left-0 z-10 bg-white px-3 py-3 text-xs font-bold text-slate-600">
-                          <span className="inline-flex items-center gap-1">
-                            {row.different && <span className="text-primary">●</span>}
-                            {row.label}
-                          </span>
-                        </th>
-                        {row.values.map((value) => (
-                          <td
-                            key={`${row.key}-${value.policyId}`}
-                            className={`border-t border-slate-100 px-3 py-3 text-xs leading-relaxed ${
-                              row.different ? "bg-primary/[0.03] text-slate-800" : "text-slate-600"
-                            } ${value.missing ? "text-slate-400" : ""}`}
-                          >
-                            {value.displayValue}
-                          </td>
+                        {comparison.policies.map((policy) => (
+                          <th key={policy.policyId} className="min-w-48 px-3 py-3 align-top">
+                            <p className="text-xs font-black text-slate-800">{policy.title}</p>
+                            <p className="mt-1 text-[10px] font-bold text-slate-400">
+                              {policy.region} · {policy.category}
+                            </p>
+                          </th>
                         ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {comparison.rows.map((row) => (
+                        <tr key={row.key} className="border-t border-slate-100">
+                          <th className="sticky left-0 z-10 bg-white px-3 py-3 text-xs font-bold text-slate-600">
+                            <span className="inline-flex items-center gap-1">
+                              {row.different && <span className="text-primary">●</span>}
+                              {row.label}
+                            </span>
+                          </th>
+                          {row.values.map((value) => (
+                            <td
+                              key={`${row.key}-${value.policyId}`}
+                              className={`border-t border-slate-100 px-3 py-3 text-xs leading-relaxed ${
+                                row.different
+                                  ? "bg-primary/[0.03] text-slate-800"
+                                  : "text-slate-600"
+                              } ${value.missing ? "text-slate-400" : ""}`}
+                            >
+                              {value.displayValue}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 <div className="mt-5 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-8 text-center text-xs font-bold text-slate-400">
                   서버 비교 API 응답이 없어 비교표를 표시하지 않습니다.

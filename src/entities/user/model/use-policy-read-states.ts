@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { fetchPolicyReadStates, markPolicyAsRead, type PolicyReadStateDto, type PolicyReadStatus } from "../api/policy-read-state-api";
+import {
+  fetchPolicyReadStates,
+  markPolicyAsRead,
+  type PolicyReadStateDto,
+  type PolicyReadStatus,
+} from "../api/policy-read-state-api";
 
 interface UsePolicyReadStatesResult {
   readStatesByPolicyId: Record<string, PolicyReadStatus>;
@@ -10,7 +15,10 @@ interface UsePolicyReadStatesResult {
 }
 
 export function usePolicyReadStates(policyIds: string[]): UsePolicyReadStatesResult {
-  const stablePolicyIds = useMemo(() => Array.from(new Set(policyIds)).filter(Boolean).sort(), [policyIds]);
+  const stablePolicyIds = useMemo(
+    () => Array.from(new Set(policyIds)).filter(Boolean).sort(),
+    [policyIds],
+  );
   const [readStates, setReadStates] = useState<PolicyReadStateDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -32,7 +40,9 @@ export function usePolicyReadStates(policyIds: string[]): UsePolicyReadStatesRes
       .catch((error: unknown) => {
         if (abortController.signal.aborted) return;
         setReadStates([]);
-        setErrorMessage(error instanceof Error ? error.message : "읽음 상태 API 호출에 실패했습니다.");
+        setErrorMessage(
+          error instanceof Error ? error.message : "읽음 상태 API 호출에 실패했습니다.",
+        );
       })
       .finally(() => {
         if (!abortController.signal.aborted) {
@@ -46,10 +56,7 @@ export function usePolicyReadStates(policyIds: string[]): UsePolicyReadStatesRes
   const markRead = useCallback(async (policyId: string) => {
     try {
       const result = await markPolicyAsRead(policyId);
-      setReadStates((prev) => [
-        ...prev.filter((item) => item.policyId !== policyId),
-        result,
-      ]);
+      setReadStates((prev) => [...prev.filter((item) => item.policyId !== policyId), result]);
     } catch (error: unknown) {
       setErrorMessage(error instanceof Error ? error.message : "읽음 처리에 실패했습니다.");
       throw error;

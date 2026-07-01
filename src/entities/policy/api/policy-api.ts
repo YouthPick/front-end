@@ -55,7 +55,10 @@ export interface PolicySearchQuery {
   size?: number;
 }
 
-export async function fetchPolicies(query: PolicySearchQuery, signal?: AbortSignal): Promise<PolicyListDto> {
+export async function fetchPolicies(
+  query: PolicySearchQuery,
+  signal?: AbortSignal,
+): Promise<PolicyListDto> {
   const searchParams = new URLSearchParams();
   if (query.keyword.trim()) {
     searchParams.set("keyword", query.keyword.trim());
@@ -71,11 +74,16 @@ export async function fetchPolicies(query: PolicySearchQuery, signal?: AbortSign
   searchParams.set("sort", "relevance");
 
   const suffix = searchParams.toString() ? `?${searchParams.toString()}` : "";
-  const response = await requestJson<ApiResponse<PolicyListDto>>(`/api/v1/policies${suffix}`, { signal });
+  const response = await requestJson<ApiResponse<PolicyListDto>>(`/api/v1/policies${suffix}`, {
+    signal,
+  });
   return response.data;
 }
 
-export async function fetchPolicyDetail(policyId: string, signal?: AbortSignal): Promise<PolicyDetailDto> {
+export async function fetchPolicyDetail(
+  policyId: string,
+  signal?: AbortSignal,
+): Promise<PolicyDetailDto> {
   const response = await requestJson<ApiResponse<PolicyDetailDto>>(
     `/api/v1/policies/${encodeURIComponent(policyId)}`,
     { signal },
@@ -83,7 +91,10 @@ export async function fetchPolicyDetail(policyId: string, signal?: AbortSignal):
   return response.data;
 }
 
-export async function fetchPolicySearchSuggestions(keyword: string, signal?: AbortSignal): Promise<PolicySearchSuggestionListDto> {
+export async function fetchPolicySearchSuggestions(
+  keyword: string,
+  signal?: AbortSignal,
+): Promise<PolicySearchSuggestionListDto> {
   const searchParams = new URLSearchParams();
   if (keyword.trim()) {
     searchParams.set("keyword", keyword.trim());

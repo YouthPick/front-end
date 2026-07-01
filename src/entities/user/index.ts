@@ -1,4 +1,8 @@
-export { deleteFavoritePolicy, fetchFavoritePolicies, saveFavoritePolicy } from "./api/favorite-policy-api";
+export {
+  deleteFavoritePolicy,
+  fetchFavoritePolicies,
+  saveFavoritePolicy,
+} from "./api/favorite-policy-api";
 export { fetchProfileOptions } from "./api/profile-options-api";
 export { fetchUserProfile, saveUserProfile } from "./api/profile-api";
 export { fetchPolicyReadStates, markPolicyAsRead } from "./api/policy-read-state-api";

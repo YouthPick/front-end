@@ -54,7 +54,7 @@ export async function queryPolicyChat(
     throw new Error(`Chatbot API request failed: ${response.status}`);
   }
 
-  const data = await response.json() as FastApiChatResponse;
+  const data = (await response.json()) as FastApiChatResponse;
   return {
     message: data.message,
     threadId: data.thread_id,
@@ -134,12 +134,8 @@ function buildChatRequestBody(
 }
 
 function parseSseChunk(chunk: string): FastApiStreamEvent | null {
-  const eventLine = chunk
-    .split("\n")
-    .find((line) => line.startsWith("event:"));
-  const dataLine = chunk
-    .split("\n")
-    .find((line) => line.startsWith("data:"));
+  const eventLine = chunk.split("\n").find((line) => line.startsWith("event:"));
+  const dataLine = chunk.split("\n").find((line) => line.startsWith("data:"));
 
   if (!eventLine || !dataLine) {
     return null;

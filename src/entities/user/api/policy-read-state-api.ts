@@ -15,14 +15,20 @@ export interface PolicyReadStateListDto {
   items: PolicyReadStateDto[];
 }
 
-export async function fetchPolicyReadStates(policyIds: string[], signal?: AbortSignal): Promise<PolicyReadStateListDto> {
+export async function fetchPolicyReadStates(
+  policyIds: string[],
+  signal?: AbortSignal,
+): Promise<PolicyReadStateListDto> {
   const searchParams = new URLSearchParams();
   policyIds.forEach((policyId) => searchParams.append("policyIds", policyId));
   const suffix = searchParams.toString() ? `?${searchParams.toString()}` : "";
-  const response = await requestJson<ApiResponse<PolicyReadStateListDto>>(`/api/v1/me/policy-read-states${suffix}`, {
-    headers: getUserHeaders(),
-    signal,
-  });
+  const response = await requestJson<ApiResponse<PolicyReadStateListDto>>(
+    `/api/v1/me/policy-read-states${suffix}`,
+    {
+      headers: getUserHeaders(),
+      signal,
+    },
+  );
   return response.data;
 }
 

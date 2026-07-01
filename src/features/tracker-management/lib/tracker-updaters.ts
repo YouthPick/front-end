@@ -1,13 +1,21 @@
 import type { TrackerItem } from "@entities/tracker";
 import { createChecklistItem } from "./tracker-factory";
 
-export function updateTrackerMemo(trackers: TrackerItem[], policyId: string, memo: string): TrackerItem[] {
+export function updateTrackerMemo(
+  trackers: TrackerItem[],
+  policyId: string,
+  memo: string,
+): TrackerItem[] {
   return trackers.map((tracker) =>
     tracker.policyId === policyId ? { ...tracker, memo } : tracker,
   );
 }
 
-export function addTrackerChecklistItem(trackers: TrackerItem[], policyId: string, text: string): TrackerItem[] {
+export function addTrackerChecklistItem(
+  trackers: TrackerItem[],
+  policyId: string,
+  text: string,
+): TrackerItem[] {
   return trackers.map((tracker) =>
     tracker.policyId === policyId
       ? { ...tracker, checklist: [...tracker.checklist, createChecklistItem(text)] }
@@ -15,7 +23,11 @@ export function addTrackerChecklistItem(trackers: TrackerItem[], policyId: strin
   );
 }
 
-export function toggleTrackerChecklistItem(trackers: TrackerItem[], policyId: string, itemId: string): TrackerItem[] {
+export function toggleTrackerChecklistItem(
+  trackers: TrackerItem[],
+  policyId: string,
+  itemId: string,
+): TrackerItem[] {
   return trackers.map((tracker) =>
     tracker.policyId === policyId
       ? {
@@ -28,7 +40,11 @@ export function toggleTrackerChecklistItem(trackers: TrackerItem[], policyId: st
   );
 }
 
-export function deleteTrackerChecklistItem(trackers: TrackerItem[], policyId: string, itemId: string): TrackerItem[] {
+export function deleteTrackerChecklistItem(
+  trackers: TrackerItem[],
+  policyId: string,
+  itemId: string,
+): TrackerItem[] {
   return trackers.map((tracker) =>
     tracker.policyId === policyId
       ? { ...tracker, checklist: tracker.checklist.filter((item) => item.id !== itemId) }
@@ -46,7 +62,11 @@ export function updateTrackerStatus(
   );
 }
 
-export function updateTrackerTargetDate(trackers: TrackerItem[], policyId: string, targetDate: string): TrackerItem[] {
+export function updateTrackerTargetDate(
+  trackers: TrackerItem[],
+  policyId: string,
+  targetDate: string,
+): TrackerItem[] {
   return trackers.map((tracker) =>
     tracker.policyId === policyId ? { ...tracker, targetDate } : tracker,
   );

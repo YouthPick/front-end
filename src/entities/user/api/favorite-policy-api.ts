@@ -35,8 +35,8 @@ export async function saveFavoritePolicy(policyId: string): Promise<FavoritePoli
 }
 
 export async function deleteFavoritePolicy(policyId: string): Promise<void> {
-  await requestNoContent(
-    `/api/v1/me/favorites/${encodeURIComponent(policyId)}`,
-    { method: "DELETE", headers: getUserHeaders() },
-  );
+  await requestNoContent(`/api/v1/me/favorites/${encodeURIComponent(policyId)}`, {
+    method: "DELETE",
+    headers: getUserHeaders(),
+  });
 }

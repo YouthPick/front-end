@@ -5,7 +5,9 @@ const KNOWN_CATEGORIES: PolicyCategory[] = ["일자리", "주거", "교육", "�
 
 function normalizeCategory(category: string): PolicyCategory {
   const normalized = category.replace(/・|·/g, "");
-  return KNOWN_CATEGORIES.includes(normalized as PolicyCategory) ? normalized as PolicyCategory : "참여권리";
+  return KNOWN_CATEGORIES.includes(normalized as PolicyCategory)
+    ? (normalized as PolicyCategory)
+    : "참여권리";
 }
 
 function logoTypeFor(category: PolicyCategory): Policy["logoType"] {
@@ -25,7 +27,10 @@ function logoTypeFor(category: PolicyCategory): Policy["logoType"] {
 
 function deadlineFromPeriod(applicationPeriod: string): string {
   if (!applicationPeriod || applicationPeriod === "미정") return "상시모집";
-  const parts = applicationPeriod.split(/[~～-]/).map((part) => part.trim()).filter(Boolean);
+  const parts = applicationPeriod
+    .split(/[~～-]/)
+    .map((part) => part.trim())
+    .filter(Boolean);
   return parts.at(-1) ?? applicationPeriod;
 }
 
@@ -42,7 +47,9 @@ export function mapPolicyCardDto(dto: PolicyCardDto): Policy {
     deadline: "상세확인",
     logoType: logoTypeFor(category),
     details: [
-      dto.supportContent ? `지원내용: ${dto.supportContent}` : "지원내용: 상세 화면에서 확인하세요.",
+      dto.supportContent
+        ? `지원내용: ${dto.supportContent}`
+        : "지원내용: 상세 화면에서 확인하세요.",
       dto.organizationName ? `운영기관: ${dto.organizationName}` : "운영기관: 미정",
       dto.applicationStatus ? `신청상태: ${dto.applicationStatus}` : "신청상태: 미정",
     ],

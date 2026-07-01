@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchRecommendedPolicies, type RecommendationConfidence, type RecommendedPolicyQuery } from "../api/recommendation-api";
+import {
+  fetchRecommendedPolicies,
+  type RecommendationConfidence,
+  type RecommendedPolicyQuery,
+} from "../api/recommendation-api";
 import { mapPolicyCardDto } from "../lib/policy-mapper";
 import type { Policy } from "./types";
 
@@ -44,14 +48,16 @@ export function useRecommendedPolicies(
 
     fetchRecommendedPolicies(parsedQuery, abortController.signal)
       .then((result) => {
-        setRecommendedPolicies(result.items.map((item) => ({
-          policy: mapPolicyCardDto(item.policy),
-          score: item.score,
-          reliability: item.confidence,
-          reasons: item.reasons.map((reason) => reason.message),
-          reasonDetails: item.reasons,
-          checkpoints: item.checkpoints,
-        })));
+        setRecommendedPolicies(
+          result.items.map((item) => ({
+            policy: mapPolicyCardDto(item.policy),
+            score: item.score,
+            reliability: item.confidence,
+            reasons: item.reasons.map((reason) => reason.message),
+            reasonDetails: item.reasons,
+            checkpoints: item.checkpoints,
+          })),
+        );
         setMessage(result.message);
         setPersonalized(result.personalized);
       })

@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { deleteFavoritePolicy, fetchFavoritePolicies, saveFavoritePolicy, type FavoritePolicyDto } from "../api/favorite-policy-api";
+import {
+  deleteFavoritePolicy,
+  fetchFavoritePolicies,
+  saveFavoritePolicy,
+  type FavoritePolicyDto,
+} from "../api/favorite-policy-api";
 
 interface UseFavoritePoliciesResult {
   savedPolicyIds: string[];
@@ -30,7 +35,9 @@ export function useFavoritePolicies(): UseFavoritePoliciesResult {
         if (abortController.signal.aborted) return;
         setFavoritePolicies([]);
         setSavedPolicyIds([]);
-        setErrorMessage(error instanceof Error ? error.message : "관심 정책 API 호출에 실패했습니다.");
+        setErrorMessage(
+          error instanceof Error ? error.message : "관심 정책 API 호출에 실패했습니다.",
+        );
       })
       .finally(() => {
         if (!abortController.signal.aborted) {
@@ -41,27 +48,30 @@ export function useFavoritePolicies(): UseFavoritePoliciesResult {
     return () => abortController.abort();
   }, []);
 
-  const toggleFavoritePolicy = useCallback(async (policyId: string): Promise<"saved" | "removed"> => {
-    const wasSaved = savedPolicyIds.includes(policyId);
-    const nextSavedPolicyIds = wasSaved
-      ? savedPolicyIds.filter((id) => id !== policyId)
-      : [...savedPolicyIds, policyId];
+  const toggleFavoritePolicy = useCallback(
+    async (policyId: string): Promise<"saved" | "removed"> => {
+      const wasSaved = savedPolicyIds.includes(policyId);
+      const nextSavedPolicyIds = wasSaved
+        ? savedPolicyIds.filter((id) => id !== policyId)
+        : [...savedPolicyIds, policyId];
 
-    setSavedPolicyIds(nextSavedPolicyIds);
+      setSavedPolicyIds(nextSavedPolicyIds);
 
-    try {
-      if (wasSaved) {
-        await deleteFavoritePolicy(policyId);
-        return "removed";
+      try {
+        if (wasSaved) {
+          await deleteFavoritePolicy(policyId);
+          return "removed";
+        }
+        await saveFavoritePolicy(policyId);
+        return "saved";
+      } catch (error: unknown) {
+        setSavedPolicyIds(savedPolicyIds);
+        setErrorMessage(error instanceof Error ? error.message : "관심 정책 변경에 실패했습니다.");
+        throw error;
       }
-      await saveFavoritePolicy(policyId);
-      return "saved";
-    } catch (error: unknown) {
-      setSavedPolicyIds(savedPolicyIds);
-      setErrorMessage(error instanceof Error ? error.message : "관심 정책 변경에 실패했습니다.");
-      throw error;
-    }
-  }, [savedPolicyIds]);
+    },
+    [savedPolicyIds],
+  );
 
   return {
     savedPolicyIds,

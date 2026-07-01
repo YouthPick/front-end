@@ -26,7 +26,12 @@ const EMPTY_PAGINATION: PolicyPagination = {
   totalPages: 0,
 };
 
-export function usePolicies(keyword: string, filters: FilterState, page = 0, size = 20): UsePoliciesResult {
+export function usePolicies(
+  keyword: string,
+  filters: FilterState,
+  page = 0,
+  size = 20,
+): UsePoliciesResult {
   const [policies, setPolicies] = useState<Policy[]>([]);
   const [pagination, setPagination] = useState<PolicyPagination>(EMPTY_PAGINATION);
   const [isLoading, setIsLoading] = useState(false);

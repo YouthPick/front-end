@@ -48,7 +48,9 @@ export function useAdminMetrics(): UseAdminMetricsResult {
       .catch((error: unknown) => {
         if (abortController.signal.aborted) return;
         setMetrics(EMPTY_ADMIN_METRICS);
-        setErrorMessage(error instanceof Error ? error.message : "운영 지표 API 호출에 실패했습니다.");
+        setErrorMessage(
+          error instanceof Error ? error.message : "운영 지표 API 호출에 실패했습니다.",
+        );
       })
       .finally(() => {
         if (!abortController.signal.aborted) {

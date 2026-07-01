@@ -43,19 +43,27 @@ export async function fetchPolicySyncJobs(signal?: AbortSignal): Promise<PolicyS
   return response.data;
 }
 
-export async function startPolicySync(mode: PolicySyncJobModeDto = "FULL"): Promise<PolicySyncJobDto> {
-  const response = await requestJson<ApiResponse<PolicySyncJobDto>>("/api/v1/admin/policy-sync-jobs", {
-    method: "POST",
-    headers: getUserJsonHeaders(),
-    body: JSON.stringify({ mode }),
-  });
+export async function startPolicySync(
+  mode: PolicySyncJobModeDto = "FULL",
+): Promise<PolicySyncJobDto> {
+  const response = await requestJson<ApiResponse<PolicySyncJobDto>>(
+    "/api/v1/admin/policy-sync-jobs",
+    {
+      method: "POST",
+      headers: getUserJsonHeaders(),
+      body: JSON.stringify({ mode }),
+    },
+  );
   return response.data;
 }
 
 export async function rebuildSearchIndex(): Promise<SearchIndexRebuildDto> {
-  const response = await requestJson<ApiResponse<SearchIndexRebuildDto>>("/api/v1/admin/search-indexes/rebuild", {
-    method: "POST",
-    headers: getUserHeaders(),
-  });
+  const response = await requestJson<ApiResponse<SearchIndexRebuildDto>>(
+    "/api/v1/admin/search-indexes/rebuild",
+    {
+      method: "POST",
+      headers: getUserHeaders(),
+    },
+  );
   return response.data;
 }

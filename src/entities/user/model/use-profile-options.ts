@@ -68,7 +68,9 @@ export function useProfileOptions(): UseProfileOptionsResult {
         if (abortController.signal.aborted) return;
         setOptions(FALLBACK_PROFILE_OPTIONS);
         setIsFallback(true);
-        setErrorMessage(error instanceof Error ? error.message : "프로필 선택지 API 호출에 실패했습니다.");
+        setErrorMessage(
+          error instanceof Error ? error.message : "프로필 선택지 API 호출에 실패했습니다.",
+        );
       })
       .finally(() => {
         if (!abortController.signal.aborted) {

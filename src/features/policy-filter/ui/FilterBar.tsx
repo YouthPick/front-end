@@ -11,14 +11,13 @@ export default function FilterBar({ filters, setFilters }: FilterBarProps) {
   const handleChange = (key: keyof FilterState, value: string) => {
     setFilters((prev) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
   };
 
   return (
     <div className="rounded-2xl border border-slate-200/60 bg-white shadow-sm overflow-hidden">
       <div className="grid grid-cols-2 divide-x divide-slate-100 sm:grid-cols-4">
-        
         {/* Region Filter */}
         <div className="flex items-center px-4.5 py-3.5 transition-colors hover:bg-slate-50/40 relative">
           <div className="flex items-center space-x-2 w-full text-left">
@@ -39,7 +38,12 @@ export default function FilterBar({ filters, setFilters }: FilterBarProps) {
               </select>
               <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-slate-400">
                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={3}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </div>
             </div>
@@ -66,7 +70,12 @@ export default function FilterBar({ filters, setFilters }: FilterBarProps) {
               </select>
               <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-slate-400">
                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={3}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </div>
             </div>
@@ -93,7 +102,12 @@ export default function FilterBar({ filters, setFilters }: FilterBarProps) {
               </select>
               <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-slate-400">
                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={3}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </div>
             </div>
@@ -120,13 +134,17 @@ export default function FilterBar({ filters, setFilters }: FilterBarProps) {
               </select>
               <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-slate-400">
                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={3}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

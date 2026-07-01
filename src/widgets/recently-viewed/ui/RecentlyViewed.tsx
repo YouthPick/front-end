@@ -26,7 +26,13 @@ export default function RecentlyViewed({ policies, onViewDetails }: RecentlyView
         <h3 className="text-sm font-bold text-slate-800">최근 본 정책</h3>
         <button className="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center space-x-0.5 cursor-pointer">
           <span>전체 보기</span>
-          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          <svg
+            className="h-3 w-3"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={3}
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
           </svg>
         </button>
@@ -47,7 +53,9 @@ export default function RecentlyViewed({ policies, onViewDetails }: RecentlyView
               id={`recently-viewed-${policy.id}`}
             >
               <div className="flex items-center space-x-2.5 min-w-0 flex-1">
-                <span className={`rounded px-1.5 py-0.5 text-[9px] font-bold shrink-0 ${getBadgeColors(policy.category)}`}>
+                <span
+                  className={`rounded px-1.5 py-0.5 text-[9px] font-bold shrink-0 ${getBadgeColors(policy.category)}`}
+                >
                   {policy.category}
                 </span>
                 <span className="truncate text-[11px] font-bold text-slate-700">

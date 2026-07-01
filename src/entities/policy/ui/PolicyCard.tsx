@@ -1,5 +1,15 @@
 import React from "react";
-import { Heart, Briefcase, Home, GraduationCap, Flame, ThumbsUp, Sparkles, CheckSquare, Square } from "lucide-react";
+import {
+  Heart,
+  Briefcase,
+  Home,
+  GraduationCap,
+  Flame,
+  ThumbsUp,
+  Sparkles,
+  CheckSquare,
+  Square,
+} from "lucide-react";
 import type { Policy } from "@entities/policy";
 
 type PolicyReadStatus = "UNREAD" | "READ" | "NEEDS_RECHECK";
@@ -22,21 +32,36 @@ export default function PolicyCard({
   onToggleSave,
   onViewDetails,
   isComparing,
-  onToggleCompare
+  onToggleCompare,
 }: PolicyCardProps) {
   // Select color styles depending on the category
   const getCategoryStyles = (category: string) => {
     switch (category) {
       case "일자리":
-        return { bg: "bg-primary/10 text-primary border-primary/20", labelBg: "bg-primary text-white" };
+        return {
+          bg: "bg-primary/10 text-primary border-primary/20",
+          labelBg: "bg-primary text-white",
+        };
       case "주거":
-        return { bg: "bg-blue-50 text-blue-600 border-blue-100", labelBg: "bg-blue-600 text-white" };
+        return {
+          bg: "bg-blue-50 text-blue-600 border-blue-100",
+          labelBg: "bg-blue-600 text-white",
+        };
       case "교육":
-        return { bg: "bg-indigo-50 text-indigo-600 border-indigo-100", labelBg: "bg-indigo-600 text-white" };
+        return {
+          bg: "bg-indigo-50 text-indigo-600 border-indigo-100",
+          labelBg: "bg-indigo-600 text-white",
+        };
       case "복지문화":
-        return { bg: "bg-rose-50 text-rose-600 border-rose-100", labelBg: "bg-rose-600 text-white" };
+        return {
+          bg: "bg-rose-50 text-rose-600 border-rose-100",
+          labelBg: "bg-rose-600 text-white",
+        };
       default:
-        return { bg: "bg-amber-50 text-amber-600 border-amber-100", labelBg: "bg-amber-600 text-white" };
+        return {
+          bg: "bg-amber-50 text-amber-600 border-amber-100",
+          labelBg: "bg-amber-600 text-white",
+        };
     }
   };
 
@@ -64,7 +89,7 @@ export default function PolicyCard({
     home: Home,
     education: GraduationCap,
     heart: Heart,
-    hand: ThumbsUp
+    hand: ThumbsUp,
   };
 
   const LogoIcon = IconMap[policy.logoType] || Briefcase;
@@ -73,7 +98,6 @@ export default function PolicyCard({
   return (
     <div className="flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
       <div className="space-y-3.5">
-        
         {/* Top Badges and subtle compare checkbox */}
         <div className="flex items-center justify-between">
           <div className="flex flex-wrap gap-1.5">
@@ -84,11 +108,15 @@ export default function PolicyCard({
               {policy.region}
             </span>
             {policy.tag && (
-              <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold border ${getTagStyles(policy.tag)}`}>
+              <span
+                className={`rounded-md px-2 py-0.5 text-[10px] font-bold border ${getTagStyles(policy.tag)}`}
+              >
                 {policy.tag}
               </span>
             )}
-            <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold border ${readStatusStyle}`}>
+            <span
+              className={`rounded-md px-2 py-0.5 text-[10px] font-bold border ${readStatusStyle}`}
+            >
               {readStatusLabel}
             </span>
           </div>
@@ -97,18 +125,14 @@ export default function PolicyCard({
           <button
             onClick={() => onToggleCompare(policy)}
             className={`flex items-center space-x-1 rounded px-2 py-0.5 text-[10px] font-bold border transition-colors ${
-              isComparing 
-                ? "bg-primary/10 border-primary/30 text-primary" 
+              isComparing
+                ? "bg-primary/10 border-primary/30 text-primary"
                 : "bg-white border-slate-200 text-slate-400 hover:text-slate-600"
             }`}
             id={`compare-toggle-${policy.id}`}
           >
             <span>비교</span>
-            {isComparing ? (
-              <CheckSquare className="h-3 w-3" />
-            ) : (
-              <Square className="h-3 w-3" />
-            )}
+            {isComparing ? <CheckSquare className="h-3 w-3" /> : <Square className="h-3 w-3" />}
           </button>
         </div>
 
@@ -126,7 +150,9 @@ export default function PolicyCard({
         <div className="text-left border-t border-slate-100/75 pt-3 text-[10px] font-bold text-slate-400">
           <span>지원 대상 {policy.target}</span>
           <span className="mx-2 text-slate-200">|</span>
-          <span>마감 <span className="text-primary font-extrabold">{policy.deadline}</span></span>
+          <span>
+            마감 <span className="text-primary font-extrabold">{policy.deadline}</span>
+          </span>
         </div>
       </div>
 

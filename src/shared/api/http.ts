@@ -109,7 +109,10 @@ function normalizeDetails(errorBody?: ApiErrorResponse): ApiErrorDetail[] {
   return errorBody?.details ?? errorBody?.errors ?? [];
 }
 
-function buildUserMessage(errorBody: ApiErrorResponse | undefined, details: ApiErrorDetail[]): string {
+function buildUserMessage(
+  errorBody: ApiErrorResponse | undefined,
+  details: ApiErrorDetail[],
+): string {
   const baseMessage = errorBody?.code ? ERROR_MESSAGE_BY_CODE[errorBody.code] : undefined;
   const message = baseMessage ?? DEFAULT_ERROR_MESSAGE;
   if (errorBody?.code !== "C001" || details.length === 0) {
