@@ -1,0 +1,27 @@
+export type PolicyCategory = "일자리" | "주거" | "교육" | "복지·문화" | "참여·권리";
+
+export type PolicyTag = "HIGH" | "추천" | "NEW" | "마감임박";
+
+export type PolicyLogoType = "job" | "home" | "education" | "heart" | "hand";
+
+export interface Policy {
+  id: string;
+  title: string;
+  category: PolicyCategory;
+  region: string;
+  tag: PolicyTag;
+  description: string;
+  target: string;
+  deadline: string;
+  logoType: PolicyLogoType;
+  details: string[];
+  link: string;
+  isSourceMissing: boolean;
+}
+
+export interface RecentlyViewedPolicy {
+  id: string;
+  category: PolicyCategory;
+  title: string;
+  viewedDate: string;
+}
