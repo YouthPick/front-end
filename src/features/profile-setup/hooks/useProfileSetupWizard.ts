@@ -61,6 +61,12 @@ export function useProfileSetupWizard() {
   const addKeyword = () => {
     const keyword = newKeywordInput.trim();
     if (keyword === "") return;
+    // 중복 키워드는 key 충돌과 removeKeyword의 일괄 삭제를 유발하므로 미리 걸러낸다.
+    if (draft.keywords.includes(keyword)) {
+      showToast("이미 추가된 키워드입니다.", "info");
+      setNewKeywordInput("");
+      return;
+    }
     if (draft.keywords.length >= MAX_KEYWORD_COUNT) {
       showToast(`관심 키워드는 최대 ${MAX_KEYWORD_COUNT}개까지 추가할 수 있습니다.`, "warning");
       return;
