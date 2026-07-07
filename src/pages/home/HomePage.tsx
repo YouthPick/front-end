@@ -5,7 +5,7 @@ import { useAuthStore } from "@/entities/user";
 import { RecommendationPreview, useRecommendations } from "@/features/policy-recommendation";
 import { ChatbotContainer } from "@/features/chatbot";
 import { ROUTES } from "@/shared/constants";
-import { Skeleton } from "@/shared/ui";
+import { ErrorState, Skeleton } from "@/shared/ui";
 import { HeroBanner } from "@/widgets/hero-banner";
 import { PolicyCardGrid } from "@/widgets/policy-card-grid";
 import { RecentlyViewed } from "@/widgets/recently-viewed";
@@ -18,7 +18,13 @@ const HOME_POLICY_COUNT = 4;
 export function HomePage() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
-  const { profile, recommendations } = useRecommendations();
+  const {
+    profile,
+    recommendations,
+    isLoading: isRecommendationsLoading,
+    isError: isRecommendationsError,
+    reload: reloadRecommendations,
+  } = useRecommendations();
   const { data: policies = [], isLoading } = usePoliciesQuery();
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
   const navigate = useNavigate();
@@ -34,14 +40,20 @@ export function HomePage() {
       <CategoryQuickLinks onSelectCategory={handleSelectCategory} />
 
       {isAuthenticated && user ? (
-        <RecommendationPreview
-          userName={user.name}
-          profile={profile}
-          recommendations={recommendations}
-          onEditProfile={() => navigate(ROUTES.profileSetup)}
-          onViewAll={() => navigate(ROUTES.recommend)}
-          onViewDetails={(policy) => openPolicyDetail(policy.id)}
-        />
+        isRecommendationsError ? (
+          <ErrorState title="맞춤 추천을 불러오지 못했습니다" onRetry={() => reloadRecommendations()} />
+        ) : isRecommendationsLoading ? (
+          <Skeleton className="h-64" />
+        ) : (
+          <RecommendationPreview
+            userName={user.name}
+            profile={profile}
+            recommendations={recommendations}
+            onEditProfile={() => navigate(ROUTES.profileSetup)}
+            onViewAll={() => navigate(ROUTES.recommend)}
+            onViewDetails={(policy) => openPolicyDetail(policy.id)}
+          />
+        )
       ) : (
         <GuestRecommendCta
           onGetRecommendations={() =>
