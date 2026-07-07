@@ -3,12 +3,7 @@ import { useLocation, useNavigate } from "react-router";
 import { useAuthStore, useProfileStore } from "@/entities/user";
 import { ROUTES } from "@/shared/constants";
 import { useToast } from "@/shared/ui";
-
-function getRedirectPath(state: unknown): string | null {
-  if (typeof state !== "object" || state === null) return null;
-  const from = (state as Record<string, unknown>).from;
-  return typeof from === "string" ? from : null;
-}
+import { getRedirectPath } from "@/shared/utils";
 
 export function useSocialLogin() {
   const login = useAuthStore((state) => state.login);
@@ -21,13 +16,15 @@ export function useSocialLogin() {
     login({ name: "민지", role: "member" });
     showToast(`🎉 ${provider} 계정으로 환영합니다! 맞춤 청년 정책 매칭이 활성화되었습니다.`, "success");
 
+    const from = getRedirectPath(location.state);
+
     // 관심 분야가 비어 있으면 최초 로그인으로 보고 프로필 설정 마법사로 안내한다.
+    // 원래 가려던 경로(from)는 마법사 완료 후 복귀할 수 있게 state로 넘긴다.
     if (profile.interests.length === 0) {
-      navigate(ROUTES.profileSetup, { replace: true });
+      navigate(ROUTES.profileSetup, { replace: true, state: { from } });
       return;
     }
 
-    const from = getRedirectPath(location.state);
     navigate(from ?? ROUTES.home, { replace: true });
   };
 

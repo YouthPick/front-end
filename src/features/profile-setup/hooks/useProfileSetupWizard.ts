@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 import { useProfileStore, type UserProfile } from "@/entities/user";
 import { ROUTES } from "@/shared/constants";
 import { useToast } from "@/shared/ui";
+import { getRedirectPath } from "@/shared/utils";
 
 export const MAX_INTEREST_COUNT = 3;
 export const MAX_KEYWORD_COUNT = 5;
@@ -14,6 +15,10 @@ export function useProfileSetupWizard() {
   const updateProfile = useProfileStore((state) => state.updateProfile);
   const { showToast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // 로그인 시 원래 가려던 경로. 마법사 완료·보류 후 이곳으로 복귀한다.
+  const from = getRedirectPath(location.state);
 
   const [step, setStep] = useState(1);
   const [draft, setDraft] = useState<UserProfile>({
@@ -32,8 +37,13 @@ export function useProfileSetupWizard() {
       setStep((prev) => prev + 1);
       return;
     }
+    // 관심 분야 없이 완료하면 다음 로그인에 마법사가 다시 뜨므로 최소 1개를 요구한다.
+    if (draft.interests.length === 0) {
+      showToast("관심 분야를 1개 이상 선택해 주세요.", "warning");
+      return;
+    }
     updateProfile(draft);
-    navigate(ROUTES.recommend);
+    navigate(from ?? ROUTES.recommend, { replace: true });
     showToast("✨ 맞춤 프로필 설정 완료! 실시간 추천 결과 28건이 연계되었습니다.", "success");
   };
 
@@ -44,7 +54,7 @@ export function useProfileSetupWizard() {
   };
 
   const skip = () => {
-    navigate(ROUTES.home);
+    navigate(from ?? ROUTES.home, { replace: true });
     showToast("설정 마법사가 일시적으로 보류되었습니다.", "info");
   };
 

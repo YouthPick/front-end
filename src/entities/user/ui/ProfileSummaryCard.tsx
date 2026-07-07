@@ -37,11 +37,15 @@ export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps)
         <div className="grid grid-cols-4 gap-2">
           <span className="text-slate-400 font-bold">관심 분야 목록</span>
           <span className="col-span-3 flex flex-wrap gap-1 font-bold text-slate-700">
-            {profile.interests.map((interest) => (
-              <span key={interest} className="bg-slate-100 px-2 py-0.5 rounded-md text-[10px]">
-                {interest}
-              </span>
-            ))}
+            {profile.interests.length > 0 ? (
+              profile.interests.map((interest) => (
+                <span key={interest} className="bg-slate-100 px-2 py-0.5 rounded-md text-[10px]">
+                  {interest}
+                </span>
+              ))
+            ) : (
+              <span className="text-[10px] text-slate-400">관심 분야 미설정</span>
+            )}
           </span>
         </div>
       </div>

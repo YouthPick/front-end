@@ -2,14 +2,15 @@ import { create } from "zustand";
 
 import type { UserProfile } from "./user.types";
 
+// interests가 비어 있으면 최초 로그인으로 간주해 프로필 설정 마법사로 안내한다.
 const DEFAULT_USER_PROFILE: UserProfile = {
   birthYear: 1998,
   region: "서울특별시",
   subRegion: "마포구",
   employmentStatus: "미취업·구직",
   educationStatus: "대학 졸업",
-  interests: ["일자리", "교육"],
-  keywords: ["직무교육", "면접비"],
+  interests: [],
+  keywords: [],
 };
 
 interface ProfileStore {
