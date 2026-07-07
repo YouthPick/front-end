@@ -1,9 +1,9 @@
+import { MOCK_API_DELAY_MS } from "@/shared/constants";
 import { delay } from "@/shared/utils";
 import type { PolicyDto, RecentlyViewedPolicyDto } from "./policy.dto";
 import { MOCK_POLICY_DTOS, RECENTLY_VIEWED_POLICY_DTOS } from "./policyMockData";
 
 // 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
-const MOCK_API_DELAY_MS = 250;
 
 export interface PolicySearchParams {
   query?: string;

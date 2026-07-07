@@ -1,5 +1,6 @@
 import { usePolicySearchQuery } from "@/entities/policy";
 import { useDebouncedValue } from "@/shared/hooks";
+import { useToast } from "@/shared/ui";
 
 import { useSearchFilters } from "./useSearchFilters";
 
@@ -9,6 +10,7 @@ const SEARCH_DEBOUNCE_MS = 300;
 export function usePolicySearch() {
   const { query, filters, setQuery, setFilter, resetFilters, showNationwideOnly } =
     useSearchFilters();
+  const { showToast } = useToast();
 
   // 입력은 URL에 즉시 반영하되, 질의는 디바운스해 keystroke마다 refetch되지 않게 한다.
   const debouncedQuery = useDebouncedValue(query, SEARCH_DEBOUNCE_MS);
@@ -19,6 +21,10 @@ export function usePolicySearch() {
     isError,
     refetch,
   } = usePolicySearchQuery({ query: debouncedQuery, ...filters });
+
+  const submitSearch = () => {
+    showToast(`검색 쿼리가 적용되었습니다: '${query}'`, "info");
+  };
 
   return {
     query,
@@ -31,5 +37,6 @@ export function usePolicySearch() {
     setFilter,
     resetFilters,
     showNationwideOnly,
+    submitSearch,
   };
 }

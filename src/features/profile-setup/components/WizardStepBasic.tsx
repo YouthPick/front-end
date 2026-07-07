@@ -1,10 +1,12 @@
 import type { UserProfile } from "@/entities/user";
+import { REGIONS } from "@/shared/constants";
 
 const BIRTH_YEAR_BASE = 1988;
 const BIRTH_YEAR_COUNT = 25;
 const CURRENT_YEAR = 2026;
 
-const REGION_OPTIONS = ["서울특별시", "경기도", "부산광역시", "인천광역시"];
+// 검색 필터와 달리 프로필에서 "전체" 거주지는 선택할 수 없다.
+const REGION_OPTIONS = REGIONS.filter((region) => region !== "전체");
 const SUB_REGION_OPTIONS = ["마포구", "분당구", "해운대구", "남동구", "기타"];
 
 interface WizardStepBasicProps {

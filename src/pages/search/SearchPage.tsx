@@ -6,7 +6,7 @@ import {
   SearchEmptyState,
   usePolicySearch,
 } from "@/features/policy-search";
-import { ErrorState, Skeleton, useToast } from "@/shared/ui";
+import { ErrorState, Skeleton } from "@/shared/ui";
 import { PolicyCardGrid } from "@/widgets/policy-card-grid";
 
 export function SearchPage() {
@@ -21,8 +21,8 @@ export function SearchPage() {
     setFilter,
     resetFilters,
     showNationwideOnly,
+    submitSearch,
   } = usePolicySearch();
-  const { showToast } = useToast();
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -34,11 +34,7 @@ export function SearchPage() {
         </p>
       </div>
 
-      <PolicySearchBar
-        query={query}
-        onQueryChange={setQuery}
-        onSubmit={() => showToast(`검색 쿼리가 적용되었습니다: '${query}'`, "info")}
-      />
+      <PolicySearchBar query={query} onQueryChange={setQuery} onSubmit={submitSearch} />
 
       <PolicyFilterBar filters={filters} onFilterChange={setFilter} />
 

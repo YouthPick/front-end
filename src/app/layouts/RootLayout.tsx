@@ -9,7 +9,7 @@ import { PolicyDetailModalContainer } from "@/widgets/policy-detail-modal";
 
 export function RootLayout() {
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#f8fafc]" id="app-root">
+    <div className="min-h-screen flex flex-col justify-between" id="app-root">
       <ToastContainer />
 
       <Header />

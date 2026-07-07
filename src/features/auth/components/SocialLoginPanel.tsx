@@ -2,6 +2,10 @@ import { ArrowLeft, Sparkles } from "lucide-react";
 
 import type { UserRole } from "@/entities/user";
 
+// 소셜 채널 공식 브랜드 컬러 — 디자인 토큰 대상이 아닌 외부 브랜드 가이드 고정값.
+const KAKAO_BRAND_CLASSES = "bg-[#FEE500] text-[#191919]";
+const NAVER_BRAND_CLASSES = "bg-[#03C75A] text-white";
+
 interface SocialLoginPanelProps {
   onSocialLogin: (provider: string, role?: UserRole) => void;
   onBackToHome: () => void;
@@ -25,7 +29,7 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
         <button
           type="button"
           onClick={() => onSocialLogin("카카오")}
-          className="flex w-full items-center justify-center space-x-3 rounded-2xl bg-[#FEE500] py-3 text-xs font-extrabold text-[#191919] hover:brightness-95 transition-all cursor-pointer"
+          className={`flex w-full items-center justify-center space-x-3 rounded-2xl py-3 text-xs font-extrabold hover:brightness-95 transition-all cursor-pointer ${KAKAO_BRAND_CLASSES}`}
         >
           <span className="text-sm font-black">💬</span>
           <span>카카오톡으로 3초만에 계속하기</span>
@@ -34,7 +38,7 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
         <button
           type="button"
           onClick={() => onSocialLogin("네이버")}
-          className="flex w-full items-center justify-center space-x-3 rounded-2xl bg-[#03C75A] py-3 text-xs font-extrabold text-white hover:brightness-95 transition-all cursor-pointer"
+          className={`flex w-full items-center justify-center space-x-3 rounded-2xl py-3 text-xs font-extrabold hover:brightness-95 transition-all cursor-pointer ${NAVER_BRAND_CLASSES}`}
         >
           <span className="text-sm font-black">N</span>
           <span>네이버 아이디로 편리하게 로그인</span>

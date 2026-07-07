@@ -1,9 +1,9 @@
+import { MOCK_API_DELAY_MS } from "@/shared/constants";
 import { delay, generateId, toIsoDateString } from "@/shared/utils";
 
 import type { TrackerItem, TrackerStatus } from "../types/tracker.types";
 
 // 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
-const MOCK_API_DELAY_MS = 150;
 
 const DEFAULT_TARGET_DATE = "2026-06-30";
 
