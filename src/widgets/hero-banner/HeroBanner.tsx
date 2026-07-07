@@ -76,7 +76,9 @@ export function HeroBanner() {
                   placeholder="정책명 또는 키워드를 입력하세요"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" && !e.nativeEvent.isComposing && handleSearchSubmit()
+                  }
                   className="w-full bg-transparent py-2.5 pl-10 pr-4 text-xs font-medium text-slate-700 outline-none placeholder:text-slate-400"
                   id="hero-search-input"
                   aria-label="정책 검색어 입력"

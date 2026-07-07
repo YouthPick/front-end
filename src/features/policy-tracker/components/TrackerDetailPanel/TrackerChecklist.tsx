@@ -56,7 +56,7 @@ export function TrackerChecklist({
             value={newItemText}
             onChange={(e) => setNewItemText(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") handleAdd();
+              if (e.key === "Enter" && !e.nativeEvent.isComposing) handleAdd();
             }}
             className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs focus:outline-none focus:border-primary"
             aria-label="체크리스트 항목 입력"
