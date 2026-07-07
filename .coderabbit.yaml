@@ -1,0 +1,71 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit 설정 파일
+# 참고: https://docs.coderabbit.ai/getting-started/configure-coderabbit
+
+language: "ko-KR"
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "main"
+  labeling_instructions:
+    - label: "feat"
+      instructions: "새로운 기능 추가 PR에 적용"
+    - label: "fix"
+      instructions: "버그 수정 PR에 적용"
+    - label: "docs"
+      instructions: "문서 변경 PR에 적용"
+    - label: "refac"
+      instructions: "리팩토링 PR에 적용"
+  path_instructions:
+    - path: "src/**"
+      instructions: |
+        이 프로젝트는 rules.md의 규칙을 따른다. 리뷰 시 아래 사항을 중점적으로 확인한다.
+
+        FSD(Feature-Sliced Design) 구조:
+        - 레이어 의존 방향은 app → pages → widgets → features → entities → shared 만 허용된다.
+          하위 레이어가 상위 레이어를 import하면 지적한다. (예: entities가 features를 import 금지)
+        - 외부 slice의 내부 파일을 깊게 import하지 않고 slice의 index.ts(public API)를 통해 import해야 한다.
+
+        Container/Presenter 패턴:
+        - Container는 상태, side effect, API 호출을 담당하고, Presenter는 props 기반 렌더링만 한다.
+        - Presenter 내부에서 fetch, localStorage 접근, 복잡한 상태 전이가 있으면 지적한다.
+        - 기능 로직은 model 디렉터리의 custom hook(use 접두사)으로 분리되어야 한다.
+
+        TypeScript:
+        - any 사용 금지. unknown + type guard를 권장한다.
+        - @ts-ignore 금지. 불가피하면 @ts-expect-error와 이유 주석이 있어야 한다.
+        - 런타임 검증 없는 타입 단언(as)은 지적한다.
+        - API 응답 DTO와 UI model이 분리되어 있는지, mapper가 lib/*-mapper.ts에 있는지 확인한다.
+        - type-only import는 import type을 사용해야 한다.
+
+        React:
+        - 동적 list에서 index를 key로 사용하면 지적한다.
+        - useEffect는 외부 시스템 동기화에만 사용하고, cleanup 누락을 확인한다.
+        - event handler는 handleX, props callback은 onX 네이밍을 따른다.
+        - 접근성: semantic HTML, button type="button", aria-label, target="_blank" 링크의 rel="noopener noreferrer"를 확인한다.
+
+        API/상태 처리:
+        - API 오류는 HTTP status가 아닌 응답 body의 code 기준으로 사용자 메시지를 매핑해야 한다.
+        - 서버 raw message, exception, stack trace를 사용자에게 그대로 노출하면 지적한다.
+        - loading / error / empty / fallback 상태 처리가 누락되면 지적한다.
+        - API key 등 secret이 클라이언트 번들에 노출되는지 확인한다.
+
+        디자인 시스템:
+        - src/index.css의 디자인 토큰(--color-primary 등)과 무관한 임의 hex 색상 추가를 지적한다.
+        - 기존 UI 패턴과 다른 radius, shadow, spacing을 임의로 도입하면 지적한다.
+    - path: "**/*.css"
+      instructions: |
+        디자인 토큰은 src/index.css에서 관리한다. 새로운 색상/폰트/radius 변수를 추가할 때
+        기존 토큰과 중복되거나 일관성이 깨지지 않는지 확인한다.
+
+chat:
+  auto_reply: true
