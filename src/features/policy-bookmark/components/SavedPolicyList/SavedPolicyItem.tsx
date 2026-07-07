@@ -1,4 +1,4 @@
-import type { Policy } from "@/entities/policy";
+import { getPolicyCategoryBadgeClasses, type Policy } from "@/entities/policy";
 
 interface SavedPolicyItemProps {
   policy: Policy;
@@ -32,7 +32,9 @@ export function SavedPolicyItem({
                 원본 누락
               </span>
             ) : (
-              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[8px] font-bold text-primary">
+              <span
+                className={`rounded border px-1.5 py-0.5 text-[8px] font-bold ${getPolicyCategoryBadgeClasses(policy.category)}`}
+              >
                 {policy.category}
               </span>
             )}

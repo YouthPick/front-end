@@ -1,4 +1,4 @@
-export { useRecommendations, recommendationKeys } from "./hooks/useRecommendations";
+export { useRecommendations } from "./hooks/useRecommendations";
 export { ProfileBriefing } from "./components/ProfileBriefing";
 export { RecommendationCard } from "./components/RecommendationCard";
 export { RecommendationPreview } from "./components/RecommendationPreview";

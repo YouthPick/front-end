@@ -1,6 +1,6 @@
 import { AlertTriangle, Check } from "lucide-react";
 
-import type { Policy } from "@/entities/policy";
+import { getPolicyCategoryBadgeClasses, type Policy } from "@/entities/policy";
 
 import type { PolicyRecommendation } from "../types/recommendation.types";
 
@@ -30,7 +30,9 @@ export function RecommendationCard({
 
       <div className="space-y-1">
         <div className="flex items-center space-x-2">
-          <span className="inline-block rounded px-1.5 py-0.5 text-[9px] font-bold bg-primary/10 text-primary border border-primary/20">
+          <span
+            className={`inline-block rounded border px-1.5 py-0.5 text-[9px] font-bold ${getPolicyCategoryBadgeClasses(policy.category)}`}
+          >
             {policy.category}
           </span>
           <span className="text-[10px] text-slate-400 font-bold">{policy.region}</span>

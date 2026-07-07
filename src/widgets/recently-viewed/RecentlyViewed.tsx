@@ -1,18 +1,9 @@
-import { usePoliciesQuery, usePolicyDetailStore, useRecentlyViewedPoliciesQuery, type PolicyCategory } from "@/entities/policy";
+import {
+  getPolicyCategoryBadgeClasses,
+  usePolicyDetailStore,
+  useRecentlyViewedPoliciesQuery,
+} from "@/entities/policy";
 import { Skeleton } from "@/shared/ui";
-
-function getBadgeColors(category: PolicyCategory): string {
-  switch (category) {
-    case "주거":
-      return "bg-blue-50 text-blue-600 border border-blue-100";
-    case "일자리":
-      return "bg-primary/10 text-primary border border-primary/20";
-    case "교육":
-      return "bg-indigo-50 text-indigo-600 border border-indigo-100";
-    default:
-      return "bg-slate-50 text-slate-500 border border-slate-100";
-  }
-}
 
 // 원본 화면과 동일하게 일부 제목에 주관 부처를 병기한다.
 const TITLE_SUFFIX_BY_NAME: Record<string, string> = {
@@ -22,7 +13,6 @@ const TITLE_SUFFIX_BY_NAME: Record<string, string> = {
 
 export function RecentlyViewed() {
   const { data: recentPolicies = [], isLoading } = useRecentlyViewedPoliciesQuery();
-  const { data: policies = [] } = usePoliciesQuery();
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
 
   return (
@@ -54,20 +44,20 @@ export function RecentlyViewed() {
         )}
 
         {recentPolicies.map((item) => {
-          const fullPolicy = policies.find((policy) => policy.id === item.id);
           const displayTitle = TITLE_SUFFIX_BY_NAME[item.title] ?? item.title;
 
           return (
             <button
               key={item.id}
               type="button"
-              onClick={() => fullPolicy && openPolicyDetail(fullPolicy.id)}
-              disabled={!fullPolicy}
+              onClick={() => openPolicyDetail(item.id)}
               className="flex w-full items-center justify-between py-3 text-left transition-colors hover:bg-slate-50/50 rounded-xl px-2 -mx-2 cursor-pointer"
               id={`recently-viewed-${item.id}`}
             >
               <div className="flex items-center space-x-2.5 min-w-0 flex-1">
-                <span className={`rounded px-1.5 py-0.5 text-[9px] font-bold shrink-0 ${getBadgeColors(item.category)}`}>
+                <span
+                  className={`rounded border px-1.5 py-0.5 text-[9px] font-bold shrink-0 ${getPolicyCategoryBadgeClasses(item.category)}`}
+                >
                   {item.category}
                 </span>
                 <span className="truncate text-[11px] font-bold text-slate-700">{displayTitle}</span>

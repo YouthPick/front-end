@@ -1,12 +1,14 @@
-import { fetchPolicies, mapPolicyDtosToPolicies } from "@/entities/policy";
+import type { Policy } from "@/entities/policy";
 import type { UserProfile } from "@/entities/user";
 
 import type { PolicyRecommendation } from "../types/recommendation.types";
 
-// 추천 점수 계산은 실서비스에서 서버가 수행한다. 백엔드 API가 준비되면 이 mock 계산을 교체한다.
-export async function fetchRecommendations(profile: UserProfile): Promise<PolicyRecommendation[]> {
-  const policies = mapPolicyDtosToPolicies(await fetchPolicies());
-
+// 추천 점수 계산은 실서비스에서 서버가 수행한다. 백엔드 API가 준비되면
+// 이 mock 계산을 apiClient 호출로 교체하고, 정책 목록 인자는 제거한다.
+export function buildRecommendations(
+  policies: Policy[],
+  profile: UserProfile,
+): PolicyRecommendation[] {
   return policies
     .map((policy, index) => {
       let score = 70;
