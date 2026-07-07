@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(corepack pnpm run lint)",
+      "Bash(corepack pnpm run build)",
+      "Bash(corepack pnpm install*)",
+      "Bash(corepack prepare *)",
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git switch*)",
+      "Bash(git add*)",
+      "Bash(gh issue *)",
+      "Bash(gh pr *)",
+      "Bash(gh repo *)"
+    ],
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Read(./**/*.pem)"]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/block-secrets.sh\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/format-on-save.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
