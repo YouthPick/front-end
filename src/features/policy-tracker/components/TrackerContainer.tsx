@@ -13,11 +13,27 @@ import { TrackerListPanel, type TrackerListEntry } from "./TrackerListPanel";
 
 export function TrackerContainer() {
   const [activeTab, setActiveTab] = useState<TrackerStatusTab>("전체");
-  const { data: trackers = [], isLoading, isError, refetch } = useTrackers();
-  const { data: policies = [] } = usePoliciesQuery();
+  const {
+    data: trackers = [],
+    isLoading: isTrackersLoading,
+    isError: isTrackersError,
+    refetch: refetchTrackers,
+  } = useTrackers();
+  const {
+    data: policies = [],
+    isLoading: isPoliciesLoading,
+    isError: isPoliciesError,
+    refetch: refetchPolicies,
+  } = usePoliciesQuery();
   const { selectedPolicyId, selectTracker, clearSelection } = useTrackerSelection();
   const mutations = useTrackerMutations();
   const { isStartError, retryStart } = useTrackerStartParam();
+
+  // 목록(trackers)과 정책 조인(policies) 딜레이가 달라, policies가 pending/실패인 동안
+  // policyTitle 필터가 목록을 비우면 탭 카운트(raw trackers)와 불일치가 생긴다.
+  // 두 쿼리를 함께 게이트해 로딩/에러 상태에서 일관된 UI를 보장한다.
+  const isLoading = isTrackersLoading || isPoliciesLoading;
+  const isError = isTrackersError || isPoliciesError;
 
   if (isLoading) {
     return (
@@ -35,7 +51,15 @@ export function TrackerContainer() {
   }
 
   if (isError) {
-    return <ErrorState title="신청관리 목록을 불러오지 못했습니다" onRetry={() => refetch()} />;
+    return (
+      <ErrorState
+        title="신청관리 목록을 불러오지 못했습니다"
+        onRetry={() => {
+          if (isTrackersError) refetchTrackers();
+          if (isPoliciesError) refetchPolicies();
+        }}
+      />
+    );
   }
 
   const entries: TrackerListEntry[] = trackers
