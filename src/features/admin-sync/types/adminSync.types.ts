@@ -8,3 +8,10 @@ export interface SyncLog {
   missingCount: number;
   errorCount: number;
 }
+
+export interface SyncSummary {
+  activeCount: number;
+  missingCount: number;
+  parseErrorCount: number;
+  dbFailCount: number;
+}

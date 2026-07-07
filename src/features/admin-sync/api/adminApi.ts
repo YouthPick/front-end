@@ -1,10 +1,22 @@
+import { MOCK_API_DELAY_MS } from "@/shared/constants";
 import { delay } from "@/shared/utils";
 
-import type { SyncLog } from "../types/adminSync.types";
+import type { SyncLog, SyncSummary } from "../types/adminSync.types";
 
 // 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
-const MOCK_FETCH_DELAY_MS = 150;
 const MOCK_SYNC_DURATION_MS = 2000;
+
+const MOCK_SYNC_SUMMARY: SyncSummary = {
+  activeCount: 3241,
+  missingCount: 12,
+  parseErrorCount: 18,
+  dbFailCount: 2,
+};
+
+export async function fetchSyncSummary(): Promise<SyncSummary> {
+  await delay(MOCK_API_DELAY_MS);
+  return { ...MOCK_SYNC_SUMMARY };
+}
 
 let syncHistory: SyncLog[] = [
   { date: "06.24 06:00", status: "SUCCESS", newCount: 18, editCount: 44, missingCount: 2, errorCount: 0 },
@@ -12,7 +24,7 @@ let syncHistory: SyncLog[] = [
 ];
 
 export async function fetchSyncHistory(): Promise<SyncLog[]> {
-  await delay(MOCK_FETCH_DELAY_MS);
+  await delay(MOCK_API_DELAY_MS);
   return syncHistory.map((log) => ({ ...log }));
 }
 
