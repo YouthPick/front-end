@@ -6,6 +6,7 @@ export interface PolicyDto {
   tag: string;
   description: string;
   target: string;
+  eligibleStatuses: string[];
   deadline: string;
   logoType: string;
   details: string[];

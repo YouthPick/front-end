@@ -14,6 +14,7 @@ export type {
   RecentlyViewedPolicy,
 } from "./model/policy.types";
 export { POLICY_CATEGORIES, normalizePolicyCategory } from "./model/policyCategories";
+export { POLICY_ELIGIBLE_STATUSES } from "./model/policyStatuses";
 export {
   mapPolicyDtosToPolicies,
   mapPolicyDtoToPolicy,

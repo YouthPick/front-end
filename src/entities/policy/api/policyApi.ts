@@ -43,6 +43,15 @@ function matchesSearchParams(policy: PolicyDto, params: PolicySearchParams): boo
     return false;
   }
 
+  if (
+    params.status &&
+    params.status !== "전체" &&
+    !policy.eligibleStatuses.includes("전체") &&
+    !policy.eligibleStatuses.includes(params.status)
+  ) {
+    return false;
+  }
+
   return true;
 }
 

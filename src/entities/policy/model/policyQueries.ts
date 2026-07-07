@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import {
   fetchPolicies,
@@ -32,6 +32,8 @@ export function usePolicySearchQuery(params: PolicySearchParams) {
   return useQuery({
     queryKey: policyKeys.list(params),
     queryFn: async () => mapPolicyDtosToPolicies(await searchPolicies(params)),
+    // 파라미터 변경 시 이전 결과를 유지해 스켈레톤 flash와 '총 0건' 깜빡임을 막는다.
+    placeholderData: keepPreviousData,
   });
 }
 

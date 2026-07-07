@@ -9,6 +9,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "HIGH",
     description: "IT 분야 실무 경험과 교육을 제공하고 취업 연계를 지원하는 고용노동부 주관 사업입니다.",
     target: "만 19~34세",
+    eligibleStatuses: ["취업준비", "미취업"],
     deadline: "2025.06.30",
     logoType: "job",
     details: [
@@ -26,6 +27,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "추천",
     description: "서울 및 전국 무주택 청년의 주거비 부담 경감을 위해 실제 납부하는 월세를 지원합니다.",
     target: "만 19~34세",
+    eligibleStatuses: ["전체"],
     deadline: "2025.06.30",
     logoType: "home",
     details: [
@@ -43,6 +45,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "HIGH",
     description: "디지털, AI, 신기술 핵심 실무 중심 교육을 통해 고소득 기술 취업 역량을 극대화하는 과정입니다.",
     target: "만 19~34세",
+    eligibleStatuses: ["취업준비", "대학생", "미취업"],
     deadline: "2025.07.15",
     logoType: "education",
     details: [
@@ -60,6 +63,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "NEW",
     description: "중소기업 취업 청년의 자산 형성을 지원하여 장기 근속을 유도하고 대기업과의 격차를 완화합니다.",
     target: "만 15~34세",
+    eligibleStatuses: ["직장인"],
     deadline: "2025.08.31",
     logoType: "job",
     details: [
@@ -77,6 +81,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "추천",
     description: "주거급여 수급 가구 중 학업이나 취업으로 부모와 타 지역에 거주하는 청년에게 별도로 급여를 지급합니다.",
     target: "만 19~30세",
+    eligibleStatuses: ["전체"],
     deadline: "2025.12.31",
     logoType: "home",
     details: [
@@ -94,6 +99,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "NEW",
     description: "취업준비생 및 이직 희망 청년이 스스로 직업 능력을 개발하도록 평생교육 배움 비용을 보조합니다.",
     target: "전체",
+    eligibleStatuses: ["전체"],
     deadline: "2025.12.31",
     logoType: "education",
     details: [
@@ -111,6 +117,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "HIGH",
     description: "서울 거주 미취업 청년들의 안정적인 구직활동과 진로 개척을 돕기 위해 생계 보조 청년 수당을 지급합니다.",
     target: "만 19~34세",
+    eligibleStatuses: ["취업준비", "미취업"],
     deadline: "2025.09.30",
     logoType: "heart",
     details: [
@@ -128,6 +135,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "추천",
     description: "일하는 청년들이 주거, 취업 등으로 인한 자립 기반을 갖출 수 있도록 정부가 목돈을 함께 마련해 줍니다.",
     target: "만 19~34세",
+    eligibleStatuses: ["직장인", "창업자"],
     deadline: "2025.10.15",
     logoType: "heart",
     details: [
@@ -145,6 +153,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "NEW",
     description: "사회에 첫 발을 내딛는 청년들에게 다채로운 문화생활과 연극, 전시, 음악 관람 비용을 전폭적으로 제공합니다.",
     target: "만 19세",
+    eligibleStatuses: ["전체"],
     deadline: "2025.11.30",
     logoType: "heart",
     details: [
@@ -162,6 +171,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "추천",
     description: "중앙 행정 기관의 입법, 사업 진행 등의 부처 행정 실무를 인턴십으로 체험하고 참관할 기회를 제공합니다.",
     target: "만 19~34세",
+    eligibleStatuses: ["취업준비", "대학생", "대학원생", "미취업"],
     deadline: "2025.06.15",
     logoType: "hand",
     details: [
@@ -179,6 +189,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     tag: "NEW",
     description: "현재 공식 원본을 확인할 수 없습니다. 저장한 기록과 메모는 유지됩니다.",
     target: "전체",
+    eligibleStatuses: ["전체"],
     deadline: "원본확인불가",
     logoType: "job",
     details: ["현재 이 정책의 원본 공고가 만료되었거나 삭제되었습니다. 개인 메모 및 이력은 유지됩니다."],
