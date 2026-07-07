@@ -23,7 +23,6 @@ export {
 export {
   policyKeys,
   usePoliciesQuery,
-  usePolicyQuery,
   usePolicySearchQuery,
   useRecentlyViewedPoliciesQuery,
 } from "./model/policyQueries";
