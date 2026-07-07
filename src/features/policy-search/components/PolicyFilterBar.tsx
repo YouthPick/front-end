@@ -1,7 +1,6 @@
-import { REGIONS } from "@/shared/constants";
 import { POLICY_CATEGORIES } from "@/entities/policy";
 
-import { AGES, STATUSES } from "../policySearchOptions";
+import { AGES, REGION_FILTER_OPTIONS, STATUSES } from "../policySearchOptions";
 import type { PolicySearchFilterKey, PolicySearchFilters } from "../types/policySearch.types";
 
 interface PolicyFilterBarProps {
@@ -58,7 +57,7 @@ export function PolicyFilterBar({ filters, onFilterChange }: PolicyFilterBarProp
           id="filter-region-select"
           label="지역"
           value={filters.region}
-          options={REGIONS}
+          options={REGION_FILTER_OPTIONS}
           onChange={(value) => onFilterChange("region", value)}
         />
         <FilterSelect
