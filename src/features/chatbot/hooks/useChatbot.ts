@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
+import { generateId } from "@/shared/utils";
+
 import { sendChatMessage } from "../api/chatApi";
 import type { ChatMessage } from "../types/chat.types";
 
@@ -27,7 +29,7 @@ export function useChatbot() {
       setMessages((prev) => [
         ...prev,
         {
-          id: crypto.randomUUID(),
+          id: generateId(),
           role: "bot",
           text: result.text,
           timestamp: new Date(),
@@ -46,7 +48,7 @@ export function useChatbot() {
 
     setMessages((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), role: "user", text: trimmed, timestamp: new Date() },
+      { id: generateId(), role: "user", text: trimmed, timestamp: new Date() },
     ]);
     sendMutation.mutate({ text: trimmed, history });
   };

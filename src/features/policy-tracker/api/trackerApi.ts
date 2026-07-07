@@ -1,4 +1,4 @@
-import { delay } from "@/shared/utils";
+import { delay, generateId, toIsoDateString } from "@/shared/utils";
 
 import type { TrackerItem, TrackerStatus } from "../types/tracker.types";
 
@@ -6,7 +6,6 @@ import type { TrackerItem, TrackerStatus } from "../types/tracker.types";
 const MOCK_API_DELAY_MS = 150;
 
 const DEFAULT_TARGET_DATE = "2026-06-30";
-const UNKNOWN_DEADLINES = ["원본확인불가", "상시모집"];
 
 let trackers: TrackerItem[] = [
   {
@@ -82,11 +81,11 @@ export async function startTracker(policyId: string, deadline: string): Promise<
   const newTracker: TrackerItem = {
     policyId,
     status: "준비중",
-    targetDate: UNKNOWN_DEADLINES.includes(deadline) ? DEFAULT_TARGET_DATE : deadline,
+    targetDate: toIsoDateString(deadline) ?? DEFAULT_TARGET_DATE,
     checklist: [
-      { id: crypto.randomUUID(), text: "기본 제출 서류 취합", completed: false },
-      { id: crypto.randomUUID(), text: "공고 상세 자격요건 검증", completed: false },
-      { id: crypto.randomUUID(), text: "지원서 및 온라인 제출 완료", completed: false },
+      { id: generateId(), text: "기본 제출 서류 취합", completed: false },
+      { id: generateId(), text: "공고 상세 자격요건 검증", completed: false },
+      { id: generateId(), text: "지원서 및 온라인 제출 완료", completed: false },
     ],
     memo: "",
   };
@@ -117,7 +116,7 @@ export async function addChecklistItem(
   await delay(MOCK_API_DELAY_MS);
   return updateTracker(policyId, (tracker) => ({
     ...tracker,
-    checklist: [...tracker.checklist, { id: crypto.randomUUID(), text, completed: false }],
+    checklist: [...tracker.checklist, { id: generateId(), text, completed: false }],
   }));
 }
 
