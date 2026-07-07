@@ -16,6 +16,7 @@ export function useBookmark() {
     data: savedPolicyIds = [],
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: bookmarkKeys.all,
     queryFn: fetchBookmarkedPolicyIds,
@@ -41,5 +42,6 @@ export function useBookmark() {
     toggleSave: (policyId: string) => toggleMutation.mutate(policyId),
     isLoading,
     isError,
+    refetch,
   };
 }
