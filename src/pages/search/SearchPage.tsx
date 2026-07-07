@@ -6,7 +6,7 @@ import {
   SearchEmptyState,
   usePolicySearch,
 } from "@/features/policy-search";
-import { Skeleton, useToast } from "@/shared/ui";
+import { ErrorState, Skeleton, useToast } from "@/shared/ui";
 import { PolicyCardGrid } from "@/widgets/policy-card-grid";
 
 export function SearchPage() {
@@ -75,18 +75,7 @@ export function SearchPage() {
         </div>
       )}
 
-      {isError && (
-        <div className="rounded-3xl border border-rose-100 bg-rose-50/30 py-16 px-4 text-center space-y-3">
-          <h3 className="text-sm font-extrabold text-rose-700">정책 목록을 불러오지 못했습니다</h3>
-          <button
-            type="button"
-            onClick={() => reload()}
-            className="rounded-xl bg-rose-600 px-4 py-2 text-xs font-bold text-white hover:bg-rose-700"
-          >
-            다시 시도
-          </button>
-        </div>
-      )}
+      {isError && <ErrorState title="정책 목록을 불러오지 못했습니다" onRetry={() => reload()} />}
 
       {!isLoading && !isError && (
         policies.length > 0 ? (

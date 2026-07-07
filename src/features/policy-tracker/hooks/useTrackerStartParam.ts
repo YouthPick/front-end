@@ -19,18 +19,32 @@ export function useTrackerStartParam() {
   const startMutation = useMutation({
     mutationFn: async (policyId: string) => {
       const policy = await fetchPolicy(policyId);
-      if (!policy) return null;
+      if (!policy) throw new Error(`정책을 찾을 수 없습니다: ${policyId}`);
       const result = await startTracker(policyId, policy.deadline);
-      return { ...result, policyTitle: policy.title };
+      return { ...result, policyId, policyTitle: policy.title };
     },
     onSuccess: (result) => {
-      if (!result) return;
       queryClient.invalidateQueries({ queryKey: trackerKeys.all });
+      // 성공했을 때만 start를 selected로 치환한다 — 실패 시 start가 남아 새로고침이 곧 재시도가 된다.
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.delete("start");
+          next.set("selected", result.policyId);
+          return next;
+        },
+        { replace: true },
+      );
       if (result.created) {
         showToast(`🎉 '${result.policyTitle}' 신청관리 상태가 새로 시작되었습니다!`, "success");
       } else {
         showToast("이미 등록된 신청 정보가 존재하여, 관리 상세로 연결되었습니다.", "info");
       }
+    },
+    onError: () => {
+      // 같은 start 파라미터로 재시도할 수 있게 가드를 푼다.
+      startedPolicyIdRef.current = null;
+      showToast("신청관리 시작에 실패했습니다. 다시 시도해 주세요.", "warning");
     },
   });
 
@@ -43,16 +57,15 @@ export function useTrackerStartParam() {
     startedPolicyIdRef.current = startPolicyId;
 
     startMutation.mutate(startPolicyId);
-    setSearchParams(
-      (prev) => {
-        const next = new URLSearchParams(prev);
-        next.delete("start");
-        next.set("selected", startPolicyId);
-        return next;
-      },
-      { replace: true },
-    );
     // startMutation은 매 렌더마다 새 객체이므로 의존성에 넣지 않는다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startPolicyId]);
+
+  const retryStart = () => {
+    if (!startPolicyId) return;
+    startedPolicyIdRef.current = startPolicyId;
+    startMutation.mutate(startPolicyId);
+  };
+
+  return { isStartError: startMutation.isError, retryStart };
 }

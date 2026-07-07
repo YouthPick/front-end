@@ -11,7 +11,7 @@ import {
   updateTrackerDate,
   updateTrackerStatus,
 } from "../api/trackerApi";
-import type { TrackerStatus } from "../types/tracker.types";
+import type { TrackerItem, TrackerStatus } from "../types/tracker.types";
 import { trackerKeys } from "./useTrackers";
 
 export function useTrackerMutations() {
@@ -52,7 +52,16 @@ export function useTrackerMutations() {
   const toggleChecklistMutation = useMutation({
     mutationFn: ({ policyId, itemId }: { policyId: string; itemId: string }) =>
       toggleChecklistItem(policyId, itemId),
-    onSuccess: invalidateTrackers,
+    // 토글은 고빈도 조작이라 전체 invalidate 대신 반환된 항목만 캐시에 반영한다.
+    onSuccess: (updated) => {
+      if (!updated) {
+        invalidateTrackers();
+        return;
+      }
+      queryClient.setQueryData<TrackerItem[]>(trackerKeys.all, (prev) =>
+        prev?.map((tracker) => (tracker.policyId === updated.policyId ? updated : tracker)),
+      );
+    },
   });
 
   const deleteChecklistMutation = useMutation({

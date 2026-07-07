@@ -7,7 +7,7 @@ import {
   useRunSync,
   useSyncHistory,
 } from "@/features/admin-sync";
-import { Skeleton } from "@/shared/ui";
+import { ErrorState, Skeleton } from "@/shared/ui";
 
 export function AdminPage() {
   const { data: syncHistory = [], isLoading, isError, refetch } = useSyncHistory();
@@ -52,16 +52,7 @@ export function AdminPage() {
       {isLoading && <Skeleton className="h-48" />}
 
       {isError && (
-        <div className="rounded-3xl border border-rose-100 bg-rose-50/30 py-12 px-4 text-center space-y-3">
-          <h3 className="text-sm font-extrabold text-rose-700">동기화 이력을 불러오지 못했습니다</h3>
-          <button
-            type="button"
-            onClick={() => refetch()}
-            className="rounded-xl bg-rose-600 px-4 py-2 text-xs font-bold text-white hover:bg-rose-700"
-          >
-            다시 시도
-          </button>
-        </div>
+        <ErrorState title="동기화 이력을 불러오지 못했습니다" onRetry={() => refetch()} />
       )}
 
       {!isLoading && !isError && <SyncHistoryTable logs={syncHistory} />}
