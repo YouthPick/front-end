@@ -9,7 +9,7 @@ model: inherit
 
 ## 진행 방식
 
-1. `git diff main...HEAD`(없으면 워킹/스테이징 diff)로 변경 범위를 확인한다.
+1. `git diff origin/dev...HEAD`(없으면 워킹/스테이징 diff)로 변경 범위를 확인한다.
 2. 변경 파일과 그 주변 맥락(같은 slice의 index/model/ui)을 읽고 diff만 보고 판단하지 않는다.
 3. 아래 관점으로 점검하고, 각 발견을 `파일:라인 · 무엇이 문제 · 왜 · 권장 수정`으로 남긴다.
 

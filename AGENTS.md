@@ -28,7 +28,7 @@ corepack pnpm run build    # vite build
 
 ## Non-negotiable rules (요약)
 
-- `main` 직접 커밋 금지, 이슈 없이 임의 브랜치 작업 금지. 브랜치는 `feat|fix|docs|refac/{issue-number}-{short-name}`.
+- 기본 브랜치는 `dev`다(레포 default·통합 브랜치, PR base도 `dev`). `main`은 현재 미사용. `dev` 직접 커밋 금지, 이슈 없이 임의 브랜치 작업 금지. 브랜치는 `feat|fix|docs|refac/{issue-number}-{short-name}`.
 - FSD 레이어 의존 방향을 지킨다: `app → pages → widgets → features → entities → shared`. 하위→상위 import 금지.
 - slice 외부에서는 내부 파일을 깊게 import하지 않고 `index.ts`(public API)를 통한다.
 - 새/큰 변경 기능은 Container/Presenter로 분리하고, 기능 로직은 `model`의 `use*` custom hook에 둔다. Presenter는 props로 렌더만 하고 API/스토리지/복잡한 상태 전이를 소유하지 않는다.

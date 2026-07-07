@@ -3,7 +3,7 @@ export const meta = {
   description:
     '현재 브랜치 변경사항을 관점별로 병렬 리뷰하고, 각 발견을 적대적으로 검증한 뒤 종합한다.',
   whenToUse:
-    'PR 전 또는 변경 검토 시. main 대비 diff를 FSD/Container-Presenter/TS/디자인/접근성/보안 관점으로 나눠 리뷰한다.',
+    'PR 전 또는 변경 검토 시. dev 대비 diff를 FSD/Container-Presenter/TS/디자인/접근성/보안 관점으로 나눠 리뷰한다.',
   phases: [
     { title: 'Review', detail: '관점별 병렬 리뷰' },
     { title: 'Verify', detail: '발견마다 적대적 검증' },
@@ -83,9 +83,9 @@ const VERDICT_SCHEMA = {
   },
 };
 
-const DIFF_CMD = 'git diff main...HEAD 2>/dev/null || git diff';
+const DIFF_CMD = 'git diff origin/dev...HEAD 2>/dev/null || git diff';
 
-log('main 대비 변경사항을 관점별로 리뷰합니다.');
+log('dev 대비 변경사항을 관점별로 리뷰합니다.');
 
 const reviewed = await pipeline(
   DIMENSIONS,
