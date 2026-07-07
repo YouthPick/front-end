@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Search, Bell, Sparkles, Home, Briefcase, GraduationCap, Heart, Hand } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { Bell, Briefcase, GraduationCap, Home, Search } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import type React from 'react';
+import { useState } from 'react';
 
 interface HeroBannerProps {
   searchQuery: string;
@@ -8,9 +9,13 @@ interface HeroBannerProps {
   onSearchSubmit: () => void;
 }
 
-export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit }: HeroBannerProps) {
+export default function HeroBanner({
+  searchQuery,
+  setSearchQuery,
+  onSearchSubmit,
+}: HeroBannerProps) {
   const [subscribed, setSubscribed] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [showDialog, setShowDialog] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
@@ -20,7 +25,7 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
     setTimeout(() => {
       setShowDialog(false);
       setSubscribed(false);
-      setEmail("");
+      setEmail('');
     }, 2000);
   };
 
@@ -33,7 +38,6 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12">
-          
           {/* Left Text and Search (5 columns) */}
           <div className="space-y-6 lg:col-span-5 text-left">
             <motion.div
@@ -44,7 +48,10 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
             >
               <h1 className="text-3xl font-black tracking-tight text-slate-800 sm:text-4xl lg:text-4.5xl leading-tight">
                 나에게 맞는 <br />
-                <span className="bg-gradient-to-r from-primary to-brand-secondary bg-clip-text text-transparent">청년정책</span>을 찾아보세요
+                <span className="bg-gradient-to-r from-primary to-brand-secondary bg-clip-text text-transparent">
+                  청년정책
+                </span>
+                을 찾아보세요
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed max-w-md">
                 지역, 생활 상태, 관심사에 맞는 정책을 쉽고 빠르게 찾아드립니다.
@@ -71,6 +78,7 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
                 />
               </div>
               <button
+                type="button"
                 onClick={onSearchSubmit}
                 className="rounded-xl bg-gradient-to-r from-primary to-brand-secondary px-5 py-2.5 text-xs font-bold text-white transition-all hover:brightness-105 active:scale-[0.98]"
                 id="hero-search-button"
@@ -90,7 +98,7 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
             >
               {/* Underlay shapes to resemble the design in screenshot */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7)_0%,transparent_70%)]"></div>
-              
+
               {/* Insert the generated character illustration */}
               <img
                 src="/src/assets/images/youth_purple_illustration_1782457991844.jpg"
@@ -128,7 +136,9 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
                     <Bell className="h-4.5 w-4.5" />
                   </div>
                   <div>
-                    <h3 className="text-xs font-bold text-slate-800 leading-tight">청년을 위한 정부 지원 정책</h3>
+                    <h3 className="text-xs font-bold text-slate-800 leading-tight">
+                      청년을 위한 정부 지원 정책
+                    </h3>
                     <p className="text-[10px] text-slate-400 font-medium mt-1">알림 서비스</p>
                   </div>
                 </div>
@@ -138,6 +148,7 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
               </div>
 
               <button
+                type="button"
                 onClick={() => setShowDialog(true)}
                 className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-800"
                 id="alert-signup-button"
@@ -146,7 +157,6 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
               </button>
             </motion.div>
           </div>
-
         </div>
       </div>
 
@@ -164,16 +174,29 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-base font-bold text-slate-800">신규 청년 정책 알림 설정</h3>
-                  <button onClick={() => setShowDialog(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+                  <button
+                    type="button"
+                    onClick={() => setShowDialog(false)}
+                    className="text-slate-400 hover:text-slate-600"
+                  >
+                    ✕
+                  </button>
                 </div>
                 {!subscribed ? (
                   <form onSubmit={handleSubscribe} className="space-y-3">
                     <p className="text-xs leading-relaxed text-slate-500">
-                      관심 지역과 전공/분야에 일치하는 맞춤형 정부 정책이 공고될 때 가장 신속하게 알림을 받아보실 수 있습니다.
+                      관심 지역과 전공/분야에 일치하는 맞춤형 정부 정책이 공고될 때 가장 신속하게
+                      알림을 받아보실 수 있습니다.
                     </p>
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-bold text-slate-500">이메일 주소</label>
+                      <label
+                        htmlFor="hero-subscribe-email"
+                        className="text-[11px] font-bold text-slate-500"
+                      >
+                        이메일 주소
+                      </label>
                       <input
+                        id="hero-subscribe-email"
                         type="email"
                         required
                         placeholder="example@email.com"
@@ -192,7 +215,9 @@ export default function HeroBanner({ searchQuery, setSearchQuery, onSearchSubmit
                 ) : (
                   <div className="py-6 text-center space-y-2">
                     <span className="text-4xl">🎉</span>
-                    <h4 className="text-sm font-bold bg-gradient-to-r from-primary to-brand-secondary bg-clip-text text-transparent">알림 설정 완료!</h4>
+                    <h4 className="text-sm font-bold bg-gradient-to-r from-primary to-brand-secondary bg-clip-text text-transparent">
+                      알림 설정 완료!
+                    </h4>
                     <p className="text-xs text-slate-500">매주 맞춤 추천 소식을 보내드립니다.</p>
                   </div>
                 )}

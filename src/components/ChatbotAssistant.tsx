@@ -1,28 +1,29 @@
-import React, { useState, useRef, useEffect } from "react";
-import { MessageSquare, Send, Sparkles, Smile, X, Loader2 } from "lucide-react";
-import { ChatMessage } from "../types";
-import { motion, AnimatePresence } from "motion/react";
+import { Loader2, MessageSquare, Send, Sparkles, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { ChatMessage } from '../types';
 
 export default function ChatbotAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: "welcome",
-      role: "bot",
-      text: "안녕하세요! 청년정책 비서 **정책 탐색 도우미**입니다. 무엇을 도와드릴까요?",
-      timestamp: new Date()
-    }
+      id: 'welcome',
+      role: 'bot',
+      text: '안녕하세요! 청년정책 비서 **정책 탐색 도우미**입니다. 무엇을 도와드릴까요?',
+      timestamp: new Date(),
+    },
   ]);
-  const [inputVal, setInputVal] = useState("");
+  const [inputVal, setInputVal] = useState('');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto scroll to bottom
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, loading]);
+  }, []);
 
   const sendMessageToApi = async (text: string) => {
     if (!text.trim()) return;
@@ -30,37 +31,37 @@ export default function ChatbotAssistant() {
     // Add user message
     const userMsg: ChatMessage = {
       id: `u-${Date.now()}`,
-      role: "user",
+      role: 'user',
       text: text,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-    
+
     setMessages((prev) => [...prev, userMsg]);
-    setInputVal("");
+    setInputVal('');
     setLoading(true);
 
     try {
       // Build chat history for API
       const history = messages
-        .filter((m) => m.id !== "welcome")
+        .filter((m) => m.id !== 'welcome')
         .map((m) => ({
           role: m.role,
-          text: m.text
+          text: m.text,
         }));
 
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, history })
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history }),
       });
 
       const data = await res.json();
-      
+
       const botMsg: ChatMessage = {
         id: `b-${Date.now()}`,
-        role: "bot",
-        text: data.text || "죄송합니다. 답변을 얻지 못했습니다. 다시 한 번 질문해 주세요.",
-        timestamp: new Date()
+        role: 'bot',
+        text: data.text || '죄송합니다. 답변을 얻지 못했습니다. 다시 한 번 질문해 주세요.',
+        timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, botMsg]);
@@ -68,9 +69,9 @@ export default function ChatbotAssistant() {
       console.error(err);
       const botMsg: ChatMessage = {
         id: `b-err-${Date.now()}`,
-        role: "bot",
-        text: "서버가 현재 혼잡하여 응답할 수 없습니다. 잠시 후 다시 시도해 주세요.",
-        timestamp: new Date()
+        role: 'bot',
+        text: '서버가 현재 혼잡하여 응답할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+        timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botMsg]);
     } finally {
@@ -94,7 +95,7 @@ export default function ChatbotAssistant() {
       {/* Mini Widget on Dashboard */}
       <div className="rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm text-left">
         <h3 className="text-sm font-bold text-slate-800">정책 탐색 도우미</h3>
-        
+
         {/* Avatar + Speech bubble layout matching screenshot */}
         <div className="mt-4 flex items-start space-x-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-lg border border-slate-200">
@@ -111,21 +112,24 @@ export default function ChatbotAssistant() {
         {/* Suggestion Options with plain text matching screenshot */}
         <div className="mt-4 space-y-2 text-left">
           <button
-            onClick={() => handleSuggestionClick("주거 지원 정책을 찾고 있어요")}
+            type="button"
+            onClick={() => handleSuggestionClick('주거 지원 정책을 찾고 있어요')}
             className="block w-full rounded-xl border border-slate-200/60 bg-white py-2.5 px-3.5 text-left text-xs font-bold text-slate-600 transition-colors hover:bg-slate-50"
             id="chat-suggest-1"
           >
             주거 지원 정책을 찾고 있어요
           </button>
           <button
-            onClick={() => handleSuggestionClick("취업 준비생을 위한 정책이 궁금해요")}
+            type="button"
+            onClick={() => handleSuggestionClick('취업 준비생을 위한 정책이 궁금해요')}
             className="block w-full rounded-xl border border-slate-200/60 bg-white py-2.5 px-3.5 text-left text-xs font-bold text-slate-600 transition-colors hover:bg-slate-50"
             id="chat-suggest-2"
           >
             취업 준비생을 위한 정책이 궁금해요
           </button>
           <button
-            onClick={() => handleSuggestionClick("서울시 청년 지원 정책 알려주세요")}
+            type="button"
+            onClick={() => handleSuggestionClick('서울시 청년 지원 정책 알려주세요')}
             className="block w-full rounded-xl border border-slate-200/60 bg-white py-2.5 px-3.5 text-left text-xs font-bold text-slate-600 transition-colors hover:bg-slate-50"
             id="chat-suggest-3"
           >
@@ -135,6 +139,7 @@ export default function ChatbotAssistant() {
 
         {/* Bottom Button */}
         <button
+          type="button"
           onClick={() => setIsOpen(true)}
           className="mt-4 flex w-full items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-primary to-brand-secondary py-2.5 text-xs font-bold text-white transition-all hover:brightness-105"
           id="chat-open-button"
@@ -168,6 +173,7 @@ export default function ChatbotAssistant() {
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setIsOpen(false)}
                   className="rounded-full bg-white/10 p-1.5 transition-colors hover:bg-white/20 text-white"
                 >
@@ -180,21 +186,37 @@ export default function ChatbotAssistant() {
                 {messages.map((m) => (
                   <div
                     key={m.id}
-                    className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                    className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div className="max-w-[85%] space-y-1">
                       <div
                         className={`rounded-2xl p-3.5 text-xs text-left leading-relaxed ${
-                          m.role === "user"
-                            ? "bg-primary text-white rounded-tr-none shadow-md shadow-primary/5"
-                            : "bg-white text-slate-700 border border-slate-100 rounded-tl-none shadow-sm"
+                          m.role === 'user'
+                            ? 'bg-primary text-white rounded-tr-none shadow-md shadow-primary/5'
+                            : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none shadow-sm'
                         }`}
                       >
                         {/* Preserve simple formatting for markdown lists / bolds */}
                         <div className="whitespace-pre-line">
-                          {m.text.split("**").map((part, i) => 
-                            i % 2 === 1 ? <strong key={i} className={m.role === 'user' ? 'text-white' : 'text-primary font-bold'}>{part}</strong> : part
-                          )}
+                          {(() => {
+                            let offset = 0;
+                            return m.text.split('**').map((part, i) => {
+                              const key = `${m.id}-${offset}`;
+                              offset += part.length + 2;
+                              return i % 2 === 1 ? (
+                                <strong
+                                  key={key}
+                                  className={
+                                    m.role === 'user' ? 'text-white' : 'text-primary font-bold'
+                                  }
+                                >
+                                  {part}
+                                </strong>
+                              ) : (
+                                part
+                              );
+                            });
+                          })()}
                         </div>
                       </div>
                       <span className="block text-[8px] text-slate-400 px-1 text-right">
@@ -217,7 +239,10 @@ export default function ChatbotAssistant() {
               </div>
 
               {/* Chat Input form */}
-              <form onSubmit={handleFormSubmit} className="border-t border-slate-100 bg-white p-3 flex items-center space-x-2">
+              <form
+                onSubmit={handleFormSubmit}
+                className="border-t border-slate-100 bg-white p-3 flex items-center space-x-2"
+              >
                 <input
                   type="text"
                   placeholder="예: 경기도 거주자를 위한 주택 전세대출 지원"

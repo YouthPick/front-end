@@ -1,8 +1,8 @@
-import express from "express";
-import path from "path";
-import { createServer as createViteServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
-import dotenv from "dotenv";
+import path from 'node:path';
+import { GoogleGenAI } from '@google/genai';
+import dotenv from 'dotenv';
+import express from 'express';
+import { createServer as createViteServer } from 'vite';
 
 dotenv.config();
 
@@ -18,25 +18,25 @@ if (apiKey) {
     apiKey: apiKey,
     httpOptions: {
       headers: {
-        "User-Agent": "aistudio-build",
+        'User-Agent': 'aistudio-build',
       },
     },
   });
 } else {
   console.warn(
-    "GEMINI_API_KEY environment variable is not defined. Chatbot will run in fallback mock mode.",
+    'GEMINI_API_KEY environment variable is not defined. Chatbot will run in fallback mock mode.',
   );
 }
 
 app.use(express.json());
 
 // API route for chatbot helper
-app.post("/api/chat", async (req, res) => {
+app.post('/api/chat', async (req, res) => {
   try {
     const { message, history } = req.body;
 
     if (!message) {
-      return res.status(400).json({ error: "Message is required." });
+      return res.status(400).json({ error: 'Message is required.' });
     }
 
     if (!ai) {
@@ -87,18 +87,18 @@ Guidelines:
     if (history && Array.isArray(history)) {
       for (const h of history) {
         contents.push({
-          role: h.role === "user" ? "user" : "model",
+          role: h.role === 'user' ? 'user' : 'model',
           parts: [{ text: h.text }],
         });
       }
     }
     contents.push({
-      role: "user",
+      role: 'user',
       parts: [{ text: message }],
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: 'gemini-3.5-flash',
       contents: contents,
       config: {
         systemInstruction: systemInstruction,
@@ -106,34 +106,31 @@ Guidelines:
       },
     });
 
-    const replyText =
-      response.text || "죄송합니다. 답변을 생성하지 못했습니다.";
+    const replyText = response.text || '죄송합니다. 답변을 생성하지 못했습니다.';
     res.json({ text: replyText });
-  } catch (error: any) {
-    console.error("Error communicating with Gemini API:", error);
-    res
-      .status(500)
-      .json({ error: "서버 오류가 발생하여 챗봇 응답에 실패했습니다." });
+  } catch (error: unknown) {
+    console.error('Error communicating with Gemini API:', error);
+    res.status(500).json({ error: '서버 오류가 발생하여 챗봇 응답에 실패했습니다.' });
   }
 });
 
 // Configure Vite or serve static assets
 async function startServer() {
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },
-      appType: "spa",
+      appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), "dist");
+    const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(distPath, 'index.html'));
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`[YouthPick] Server running on port ${PORT}`);
   });
 }
