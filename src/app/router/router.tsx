@@ -1,17 +1,24 @@
+import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router";
 
-import { AdminPage } from "@/pages/admin";
 import { HomePage } from "@/pages/home";
 import { LoginPage } from "@/pages/login";
-import { MyPage } from "@/pages/my";
-import { ProfileSetupPage } from "@/pages/profile-setup";
-import { RecommendPage } from "@/pages/recommend";
 import { SearchPage } from "@/pages/search";
-import { TrackerPage } from "@/pages/tracker";
 import { ROUTES } from "@/shared/constants";
 
 import { RootLayout } from "../layouts/RootLayout";
 import { ProtectedRoute } from "./ProtectedRoute";
+
+// 홈·검색·로그인 외 화면은 라우트 단위로 지연 로딩해 초기 번들을 줄인다.
+const AdminPage = lazy(() => import("@/pages/admin").then((m) => ({ default: m.AdminPage })));
+const MyPage = lazy(() => import("@/pages/my").then((m) => ({ default: m.MyPage })));
+const ProfileSetupPage = lazy(() =>
+  import("@/pages/profile-setup").then((m) => ({ default: m.ProfileSetupPage })),
+);
+const RecommendPage = lazy(() =>
+  import("@/pages/recommend").then((m) => ({ default: m.RecommendPage })),
+);
+const TrackerPage = lazy(() => import("@/pages/tracker").then((m) => ({ default: m.TrackerPage })));
 
 export const router = createBrowserRouter([
   {
@@ -20,7 +27,10 @@ export const router = createBrowserRouter([
       { path: ROUTES.home, element: <HomePage /> },
       { path: ROUTES.search, element: <SearchPage /> },
       { path: ROUTES.login, element: <LoginPage /> },
-      { path: ROUTES.admin, element: <AdminPage /> },
+      {
+        element: <ProtectedRoute requiredRole="admin" />,
+        children: [{ path: ROUTES.admin, element: <AdminPage /> }],
+      },
       {
         element: <ProtectedRoute />,
         children: [

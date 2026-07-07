@@ -1,6 +1,7 @@
+import { Suspense } from "react";
 import { Outlet, ScrollRestoration } from "react-router";
 
-import { ToastContainer } from "@/shared/ui";
+import { Skeleton, ToastContainer } from "@/shared/ui";
 import { Footer, NoticeBanner } from "@/widgets/footer";
 import { Header } from "@/widgets/header";
 import { MobileNav } from "@/widgets/mobile-nav";
@@ -14,7 +15,17 @@ export function RootLayout() {
       <Header />
 
       <main className="mx-auto flex-1 w-full max-w-7xl px-4 py-8 sm:px-6">
-        <Outlet />
+        <Suspense
+          fallback={
+            <div className="space-y-4">
+              <Skeleton className="h-10 w-1/3" />
+              <Skeleton className="h-56" />
+              <Skeleton className="h-56" />
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
         <NoticeBanner />
       </main>
 

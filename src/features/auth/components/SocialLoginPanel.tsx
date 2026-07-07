@@ -1,7 +1,9 @@
 import { ArrowLeft, Sparkles } from "lucide-react";
 
+import type { UserRole } from "@/entities/user";
+
 interface SocialLoginPanelProps {
-  onSocialLogin: (provider: string) => void;
+  onSocialLogin: (provider: string, role?: UserRole) => void;
   onBackToHome: () => void;
 }
 
@@ -57,14 +59,23 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
         </p>
       </div>
 
-      <button
-        type="button"
-        onClick={onBackToHome}
-        className="inline-flex items-center space-x-1 text-xs text-slate-400 hover:text-slate-600 font-bold"
-      >
-        <ArrowLeft className="h-3.5 w-3.5" />
-        <span>비회원 홈 화면으로 돌아가기</span>
-      </button>
+      <div className="flex items-center justify-center space-x-4">
+        <button
+          type="button"
+          onClick={onBackToHome}
+          className="inline-flex items-center space-x-1 text-xs text-slate-400 hover:text-slate-600 font-bold"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          <span>비회원 홈 화면으로 돌아가기</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => onSocialLogin("데모", "admin")}
+          className="text-xs text-slate-400 hover:text-slate-600 font-bold underline underline-offset-2"
+        >
+          관리자 데모 로그인
+        </button>
+      </div>
     </div>
   );
 }
