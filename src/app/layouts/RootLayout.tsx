@@ -3,7 +3,7 @@ import { Outlet, ScrollRestoration } from 'react-router';
 
 import { ChatbotContainer } from '@/features/chatbot';
 import { Skeleton, ToastContainer } from '@/shared/ui';
-import { Footer, NoticeBanner } from '@/widgets/footer';
+import { NoticeBanner } from '@/widgets/footer';
 import { Header } from '@/widgets/header';
 import { MobileNav } from '@/widgets/mobile-nav';
 import { PolicyDetailModalContainer } from '@/widgets/policy-detail-modal';
@@ -31,8 +31,6 @@ export function RootLayout() {
       </main>
 
       <MobileNav />
-
-      <Footer />
 
       <PolicyDetailModalContainer />
 
