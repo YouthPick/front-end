@@ -75,6 +75,11 @@ body {
   color: #1e293b;
 }
 
+/* Tailwind preflight가 button의 커서를 default로 초기화하므로, 클릭 가능한 버튼은 포인터로 되돌린다. */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
