@@ -44,7 +44,7 @@ reviews:
         - any 사용 금지. unknown + type guard를 권장한다.
         - @ts-ignore 금지. 불가피하면 @ts-expect-error와 이유 주석이 있어야 한다.
         - 런타임 검증 없는 타입 단언(as)은 지적한다.
-        - API 응답 DTO와 UI model이 분리되어 있는지, mapper가 lib/*-mapper.ts에 있는지 확인한다.
+        - API 응답 DTO와 UI model이 분리되어 있는지, DTO → model 변환이 매퍼 함수(예: entities/{domain}/model의 *Mapper.ts)로 처리되는지 확인한다.
         - type-only import는 import type을 사용해야 한다.
 
         React:
