@@ -1,3 +1,6 @@
+// 이 파일은 Claude Code의 Workflow 런타임 스크립트다. 본문은 async 함수 컨텍스트로
+// 감싸져 실행되므로 top-level await와 마지막 줄의 `return`(워크플로 결과 반환)이 유효하다.
+// 일반 ESM 모듈로 파싱하는 정적 분석기는 top-level return을 오탐할 수 있다(Biome 대상에서도 제외됨).
 export const meta = {
   name: 'pr-review',
   description:

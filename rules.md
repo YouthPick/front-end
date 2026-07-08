@@ -454,7 +454,7 @@ function parse(value: any) {}
 
 우선 사용 기준:
 
-- 브랜드 CTA: `bg-primary`, `text-primary`, `from-primary to-brand-secondary`
+- 브랜드 CTA: `bg-primary` + `text-primary-foreground`(대비 확보), `from-primary to-brand-secondary`. `text-primary`는 밝은 배경 위 텍스트 색으로만 쓴다.
 - 카드/패널: `rounded-2xl` 또는 `rounded-3xl`, `bg-white`, `border border-slate-100`, `shadow-sm`
 - 보조 배경: `bg-slate-50`, `bg-primary/5`, `bg-primary-light`
 - 상태 색상: success/warning/destructive 계열 토큰을 일관되게 사용
