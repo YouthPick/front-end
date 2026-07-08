@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router';
 
 import { type Policy, usePolicyDetailStore } from '@/entities/policy';
 import { useBookmark } from '@/features/policy-bookmark';
+import { useCompare } from '@/features/policy-compare';
 import { RecommendationCard, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
 import { Skeleton } from '@/shared/ui';
@@ -13,6 +14,7 @@ const FEED_COUNT = 8;
 export function RecommendationFeed() {
   const { recommendations, isLoading, isError, reload } = useRecommendations();
   const { isSaved, toggleSave } = useBookmark();
+  const { isComparing, toggleCompare } = useCompare();
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
   const navigate = useNavigate();
 
@@ -70,6 +72,8 @@ export function RecommendationFeed() {
           onViewDetails={(policy) => openPolicyDetail(policy.id)}
           onToggleSave={toggleSave}
           onStartTracker={handleStartTracker}
+          isComparing={isComparing(recommendation.policy.id)}
+          onToggleCompare={toggleCompare}
         />
       ))}
     </div>
