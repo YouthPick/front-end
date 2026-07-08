@@ -1,17 +1,13 @@
 import { RefreshCw } from 'lucide-react';
-import { AnimatePresence } from 'motion/react';
 
 import type { Policy } from '@/entities/policy';
 import { MAX_COMPARE_COUNT } from '@/shared/constants';
 
-import { CompareDetailDialog } from './CompareDetailDialog';
 import { COMPARE_SLOTS } from './compareSlots';
 
 interface ComparePanelPresenterProps {
   comparingPolicies: Policy[];
-  showDetailDialog: boolean;
   onOpenDetail: () => void;
-  onCloseDetail: () => void;
   onRemove: (policy: Policy) => void;
   onClear: () => void;
 }
@@ -60,9 +56,7 @@ function CompareSlot({ policy, slotLabel, badgeClasses, onRemove }: CompareSlotP
 
 export function ComparePanelPresenter({
   comparingPolicies,
-  showDetailDialog,
   onOpenDetail,
-  onCloseDetail,
   onRemove,
   onClear,
 }: ComparePanelPresenterProps) {
@@ -141,12 +135,6 @@ export function ComparePanelPresenter({
           </div>
         )}
       </div>
-
-      <AnimatePresence>
-        {showDetailDialog && canCompare && (
-          <CompareDetailDialog policies={comparingPolicies} onClose={onCloseDetail} />
-        )}
-      </AnimatePresence>
     </div>
   );
 }
