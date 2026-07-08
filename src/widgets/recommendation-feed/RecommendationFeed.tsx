@@ -22,7 +22,8 @@ export function RecommendationFeed() {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Skeleton className="h-64" />
         <Skeleton className="h-64" />
         <Skeleton className="h-64" />
         <Skeleton className="h-64" />
@@ -60,7 +61,7 @@ export function RecommendationFeed() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {recommendations.slice(0, FEED_COUNT).map((recommendation) => (
         <RecommendationCard
           key={recommendation.policy.id}
