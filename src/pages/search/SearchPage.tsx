@@ -1,4 +1,4 @@
-import { ComparePanelContainer } from '@/features/policy-compare';
+import { CompareDockContainer } from '@/features/policy-compare';
 import {
   PolicyFilterBar,
   PolicySearchBar,
@@ -6,7 +6,7 @@ import {
   usePolicySearch,
 } from '@/features/policy-search';
 import { ErrorState, Skeleton } from '@/shared/ui';
-import { PolicyCardGrid } from '@/widgets/policy-card-grid';
+import { POLICY_GRID_CLASS, PolicyCardGrid } from '@/widgets/policy-card-grid';
 
 export function SearchPage() {
   const {
@@ -58,16 +58,13 @@ export function SearchPage() {
       </div>
 
       {isLoading && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-8 grid grid-cols-1 gap-4.5 sm:grid-cols-2">
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-          </div>
-          <div className="lg:col-span-4">
-            <Skeleton className="h-48" />
-          </div>
+        <div className={POLICY_GRID_CLASS}>
+          <Skeleton className="h-56" />
+          <Skeleton className="h-56" />
+          <Skeleton className="h-56" />
+          <Skeleton className="h-56" />
+          <Skeleton className="h-56" />
+          <Skeleton className="h-56" />
         </div>
       )}
 
@@ -76,24 +73,16 @@ export function SearchPage() {
       {!isLoading &&
         !isError &&
         (policies.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8">
-              <PolicyCardGrid
-                policies={policies}
-                className="grid grid-cols-1 gap-4.5 sm:grid-cols-2"
-              />
-            </div>
-
-            <div className="lg:col-span-4 space-y-6">
-              <ComparePanelContainer />
-            </div>
-          </div>
+          <PolicyCardGrid policies={policies} />
         ) : (
           <SearchEmptyState
             onResetAll={() => resetFilters({ clearQuery: true })}
             onShowNationwide={showNationwideOnly}
           />
         ))}
+
+      {/* 정책 비교 독 (우측 슬라이드-인, 담긴 정책이 있을 때만 노출) */}
+      <CompareDockContainer />
     </div>
   );
 }

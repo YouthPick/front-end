@@ -7,13 +7,12 @@ import { RecommendationPreview, useRecommendations } from '@/features/policy-rec
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
 import { HeroBanner } from '@/widgets/hero-banner';
-import { PolicyCardGrid } from '@/widgets/policy-card-grid';
+import { POLICY_GRID_CLASS, PolicyCardGrid } from '@/widgets/policy-card-grid';
 
 import { CategoryQuickLinks } from './components/CategoryQuickLinks';
 import { GuestRecommendCta } from './components/GuestRecommendCta';
 
 const HOME_POLICY_COUNT = 6;
-const POLICY_GRID_CLASS = 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3';
 
 export function HomePage() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
