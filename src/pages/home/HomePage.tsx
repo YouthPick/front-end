@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router';
 
 import { type PolicyCategory, usePoliciesQuery, usePolicyDetailStore } from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
+import { ComparePanelContainer } from '@/features/policy-compare';
 import { RecommendationPreview, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
@@ -62,6 +63,9 @@ export function HomePage() {
           onBrowseAll={() => navigate(ROUTES.search)}
         />
       )}
+
+      {/* 정책 비교 패널 */}
+      <ComparePanelContainer />
 
       {/* 신규 정책 그리드 */}
       <section className="space-y-6 pt-4">
