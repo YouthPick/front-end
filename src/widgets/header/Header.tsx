@@ -6,12 +6,32 @@ import { useAuthStore } from '@/entities/user';
 import { ROUTES } from '@/shared/constants';
 
 const MENU_ITEMS = [
-  { to: ROUTES.home, label: '홈', end: true, muted: false, adminOnly: false },
-  { to: ROUTES.search, label: '정책 찾기', end: false, muted: false, adminOnly: false },
-  { to: ROUTES.recommend, label: '맞춤 추천', end: false, muted: false, adminOnly: false },
-  { to: ROUTES.tracker, label: '신청관리', end: false, muted: false, adminOnly: false },
-  { to: ROUTES.my, label: '마이페이지', end: false, muted: false, adminOnly: false },
-  { to: ROUTES.admin, label: '관리자', end: false, muted: true, adminOnly: true },
+  { to: ROUTES.home, label: '홈', end: true, muted: false, adminOnly: false, authOnly: false },
+  {
+    to: ROUTES.search,
+    label: '정책 찾기',
+    end: false,
+    muted: false,
+    adminOnly: false,
+    authOnly: false,
+  },
+  {
+    to: ROUTES.recommend,
+    label: '맞춤 추천',
+    end: false,
+    muted: false,
+    adminOnly: false,
+    authOnly: false,
+  },
+  {
+    to: ROUTES.tracker,
+    label: '신청관리',
+    end: false,
+    muted: false,
+    adminOnly: false,
+    authOnly: true,
+  },
+  { to: ROUTES.admin, label: '관리자', end: false, muted: true, adminOnly: true, authOnly: false },
 ];
 
 export function Header() {
@@ -20,8 +40,11 @@ export function Header() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const navigate = useNavigate();
 
-  // 관리자 전용 링크는 실제 admin 계정에만 노출한다. (라우터 가드와 이중 방어)
-  const menuItems = MENU_ITEMS.filter((item) => !item.adminOnly || user?.role === 'admin');
+  // 관리자 전용 링크는 실제 admin 계정에만, 로그인 전용 링크(신청관리)는 인증 사용자에만 노출한다.
+  // (라우터 가드와 이중 방어)
+  const menuItems = MENU_ITEMS.filter(
+    (item) => (!item.adminOnly || user?.role === 'admin') && (!item.authOnly || isAuthenticated),
+  );
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md shadow-sm">
