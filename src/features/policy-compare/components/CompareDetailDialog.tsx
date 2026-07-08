@@ -1,9 +1,12 @@
 import { motion } from 'motion/react';
+import { useEffect } from 'react';
 
 import type { Policy } from '@/entities/policy';
 import { useBodyScrollLock } from '@/shared/hooks';
 
 import { COMPARE_SLOTS } from './compareSlots';
+
+const DIALOG_TITLE_ID = 'compare-detail-title';
 
 interface CompareDetailDialogProps {
   policies: Policy[];
@@ -26,17 +29,38 @@ function getPolicyCellClass(index: number) {
 export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogProps) {
   useBodyScrollLock();
 
+  // Escape 키로 닫기
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+    // biome-ignore lint/a11y/noStaticElementInteractions: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    // biome-ignore lint/a11y/useKeyWithClickEvents: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={DIALOG_TITLE_ID}
         className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-6 shadow-xl"
         id="comparison-detail-modal"
       >
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <h3 className="text-base font-extrabold text-slate-800">📊 청년정책 맞춤 비교분석</h3>
+          <h3 id={DIALOG_TITLE_ID} className="text-base font-extrabold text-slate-800">
+            📊 청년정책 맞춤 비교분석
+          </h3>
           <button
             type="button"
             onClick={onClose}
