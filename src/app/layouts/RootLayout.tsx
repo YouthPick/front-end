@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router';
 
+import { ChatbotContainer } from '@/features/chatbot';
 import { Skeleton, ToastContainer } from '@/shared/ui';
 import { Footer, NoticeBanner } from '@/widgets/footer';
 import { Header } from '@/widgets/header';
@@ -34,6 +35,8 @@ export function RootLayout() {
       <Footer />
 
       <PolicyDetailModalContainer />
+
+      <ChatbotContainer />
 
       <ScrollRestoration />
     </div>
