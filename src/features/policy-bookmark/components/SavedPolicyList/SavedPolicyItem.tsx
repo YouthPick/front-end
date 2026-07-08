@@ -1,4 +1,4 @@
-import { getPolicyCategoryBadgeClasses, type Policy } from "@/entities/policy";
+import { getPolicyCategoryBadgeClasses, type Policy } from '@/entities/policy';
 
 interface SavedPolicyItemProps {
   policy: Policy;
@@ -19,8 +19,8 @@ export function SavedPolicyItem({
     <div
       className={`rounded-2xl border p-4.5 space-y-3 transition-all ${
         policy.isSourceMissing
-          ? "border-amber-200 bg-amber-50/30"
-          : "border-slate-100 bg-slate-50/30 hover:border-slate-200"
+          ? 'border-amber-200 bg-amber-50/30'
+          : 'border-slate-100 bg-slate-50/30 hover:border-slate-200'
       }`}
     >
       {/* Title row */}
@@ -58,7 +58,8 @@ export function SavedPolicyItem({
             ⚠️ 현재 해당 사업의 공공데이터 공식 원본 공고를 조회할 수 없습니다.
           </p>
           <p className="text-[10px] text-slate-400 leading-normal">
-            기존에 작성해두셨던 체크리스트, 진행 단계 일정 및 개인 소명 기록 메모 등은 이 계정에 그대로 안전하게 계속 보호 유지됩니다.
+            기존에 작성해두셨던 체크리스트, 진행 단계 일정 및 개인 소명 기록 메모 등은 이 계정에
+            그대로 안전하게 계속 보호 유지됩니다.
           </p>
         </div>
       ) : (

@@ -1,2 +1,2 @@
-export { useCompare } from "./hooks/useCompare";
-export { ComparePanelContainer } from "./components/ComparePanelContainer";
+export { ComparePanelContainer } from './components/ComparePanelContainer';
+export { useCompare } from './hooks/useCompare';

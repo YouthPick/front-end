@@ -1,9 +1,9 @@
-import { MessageSquare } from "lucide-react";
+import { MessageSquare } from 'lucide-react';
 
 const SUGGESTIONS = [
-  "주거 지원 정책을 찾고 있어요",
-  "취업 준비생을 위한 정책이 궁금해요",
-  "서울시 청년 지원 정책 알려주세요",
+  '주거 지원 정책을 찾고 있어요',
+  '취업 준비생을 위한 정책이 궁금해요',
+  '서울시 청년 지원 정책 알려주세요',
 ];
 
 interface ChatbotWidgetProps {

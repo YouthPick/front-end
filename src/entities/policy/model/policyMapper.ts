@@ -1,18 +1,18 @@
-import type { PolicyDto, RecentlyViewedPolicyDto } from "../api/policy.dto";
-import { normalizePolicyCategory } from "./policyCategories";
-import type { Policy, PolicyLogoType, PolicyTag, RecentlyViewedPolicy } from "./policy.types";
+import type { PolicyDto, RecentlyViewedPolicyDto } from '../api/policy.dto';
+import type { Policy, PolicyLogoType, PolicyTag, RecentlyViewedPolicy } from './policy.types';
+import { normalizePolicyCategory } from './policyCategories';
 
-const POLICY_TAGS: readonly PolicyTag[] = ["HIGH", "추천", "NEW", "마감임박"];
-const POLICY_LOGO_TYPES: readonly PolicyLogoType[] = ["job", "home", "education", "heart", "hand"];
+const POLICY_TAGS: readonly PolicyTag[] = ['HIGH', '추천', 'NEW', '마감임박'];
+const POLICY_LOGO_TYPES: readonly PolicyLogoType[] = ['job', 'home', 'education', 'heart', 'hand'];
 
 function toPolicyTag(value: string): PolicyTag {
   const matched = POLICY_TAGS.find((tag) => tag === value);
-  return matched ?? "NEW";
+  return matched ?? 'NEW';
 }
 
 function toPolicyLogoType(value: string): PolicyLogoType {
   const matched = POLICY_LOGO_TYPES.find((logoType) => logoType === value);
-  return matched ?? "job";
+  return matched ?? 'job';
 }
 
 // 카테고리를 식별할 수 없는 DTO는 null을 반환하므로 caller가 걸러낸다.
@@ -37,9 +37,7 @@ export function mapPolicyDtoToPolicy(dto: PolicyDto): Policy | null {
 }
 
 export function mapPolicyDtosToPolicies(dtos: PolicyDto[]): Policy[] {
-  return dtos
-    .map(mapPolicyDtoToPolicy)
-    .filter((policy): policy is Policy => policy !== null);
+  return dtos.map(mapPolicyDtoToPolicy).filter((policy): policy is Policy => policy !== null);
 }
 
 export function mapRecentlyViewedDtoToModel(

@@ -1,4 +1,4 @@
-import type { UserProfile } from "@/entities/user";
+import type { UserProfile } from '@/entities/user';
 
 interface ProfileBriefingProps {
   profile: UserProfile;
@@ -10,7 +10,8 @@ export function ProfileBriefing({ profile }: ProfileBriefingProps) {
       <div className="md:col-span-8 space-y-1.5">
         <span className="text-[10px] font-extrabold text-slate-400">현재 대조 프로필 조건</span>
         <p className="text-xs text-slate-700 font-extrabold leading-relaxed">
-          {profile.region} {profile.subRegion} · {profile.birthYear}년생 · {profile.employmentStatus} · {profile.educationStatus}
+          {profile.region} {profile.subRegion} · {profile.birthYear}년생 ·{' '}
+          {profile.employmentStatus} · {profile.educationStatus}
         </p>
         <div className="flex flex-wrap gap-1">
           {profile.interests.length === 0 && profile.keywords.length === 0 ? (
@@ -20,12 +21,18 @@ export function ProfileBriefing({ profile }: ProfileBriefingProps) {
           ) : (
             <>
               {profile.interests.map((interest) => (
-                <span key={interest} className="text-[9px] bg-slate-200/60 text-slate-600 px-2 py-0.5 rounded-md font-bold">
+                <span
+                  key={interest}
+                  className="text-[9px] bg-slate-200/60 text-slate-600 px-2 py-0.5 rounded-md font-bold"
+                >
                   #{interest}
                 </span>
               ))}
               {profile.keywords.map((keyword) => (
-                <span key={keyword} className="text-[9px] bg-primary/10 text-primary px-2 py-0.5 rounded-md font-bold">
+                <span
+                  key={keyword}
+                  className="text-[9px] bg-primary/10 text-primary px-2 py-0.5 rounded-md font-bold"
+                >
                   #{keyword}
                 </span>
               ))}

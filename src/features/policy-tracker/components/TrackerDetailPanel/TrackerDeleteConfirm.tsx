@@ -1,4 +1,4 @@
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle } from 'lucide-react';
 
 interface TrackerDeleteConfirmProps {
   onCancel: () => void;
@@ -11,9 +11,12 @@ export function TrackerDeleteConfirm({ onCancel, onConfirm }: TrackerDeleteConfi
       <div className="flex items-start space-x-2">
         <AlertTriangle className="h-5 w-5 text-rose-600 shrink-0" />
         <div className="space-y-1">
-          <h4 className="text-xs font-extrabold text-rose-900">정말로 신청 일정을 삭제하시겠습니까?</h4>
+          <h4 className="text-xs font-extrabold text-rose-900">
+            정말로 신청 일정을 삭제하시겠습니까?
+          </h4>
           <p className="text-[11px] text-rose-700 leading-normal">
-            기록을 지우면 그동안 기입해둔 맞춤 일정, 서류 체크리스트 및 개인 메모가 영구적으로 파기됩니다.
+            기록을 지우면 그동안 기입해둔 맞춤 일정, 서류 체크리스트 및 개인 메모가 영구적으로
+            파기됩니다.
           </p>
         </div>
       </div>

@@ -1,8 +1,8 @@
-import { AlertTriangle, Check } from "lucide-react";
+import { AlertTriangle, Check } from 'lucide-react';
 
-import { getPolicyCategoryBadgeClasses, type Policy } from "@/entities/policy";
+import { getPolicyCategoryBadgeClasses, type Policy } from '@/entities/policy';
 
-import type { PolicyRecommendation } from "../types/recommendation.types";
+import type { PolicyRecommendation } from '../types/recommendation.types';
 
 interface RecommendationCardProps {
   recommendation: PolicyRecommendation;
@@ -70,7 +70,9 @@ export function RecommendationCard({
           </span>
           <p className="text-[11px] text-slate-500 flex items-start">
             <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mr-1 shrink-0 mt-0.5" />
-            <span>세부 건강보험 소득요건 및 기업 규모별 제한사항은 공식 페이지 상세조회가 필요합니다.</span>
+            <span>
+              세부 건강보험 소득요건 및 기업 규모별 제한사항은 공식 페이지 상세조회가 필요합니다.
+            </span>
           </p>
         </div>
       </div>
@@ -90,11 +92,11 @@ export function RecommendationCard({
           aria-pressed={isSaved}
           className={`rounded-xl px-4 py-2 text-xs font-bold border transition-all ${
             isSaved
-              ? "bg-rose-50 border-rose-100 text-rose-500"
-              : "bg-white border-slate-200 text-slate-500"
+              ? 'bg-rose-50 border-rose-100 text-rose-500'
+              : 'bg-white border-slate-200 text-slate-500'
           }`}
         >
-          {isSaved ? "관심 저장됨 ♥" : "관심 정책 담기"}
+          {isSaved ? '관심 저장됨 ♥' : '관심 정책 담기'}
         </button>
         <button
           type="button"

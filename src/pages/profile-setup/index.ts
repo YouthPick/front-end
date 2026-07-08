@@ -1,1 +1,1 @@
-export { ProfileSetupPage } from "./ProfileSetupPage";
+export { ProfileSetupPage } from './ProfileSetupPage';

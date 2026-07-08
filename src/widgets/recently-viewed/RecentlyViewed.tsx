@@ -2,13 +2,13 @@ import {
   getPolicyCategoryBadgeClasses,
   usePolicyDetailStore,
   useRecentlyViewedPoliciesQuery,
-} from "@/entities/policy";
-import { Skeleton } from "@/shared/ui";
+} from '@/entities/policy';
+import { Skeleton } from '@/shared/ui';
 
 // 원본 화면과 동일하게 일부 제목에 주관 부처를 병기한다.
 const TITLE_SUFFIX_BY_NAME: Record<string, string> = {
-  청년내일채움공제: "청년내일채움공제 (고용노동부)",
-  국민내일배움카드: "국민내일배움카드 (고용노동부)",
+  청년내일채움공제: '청년내일채움공제 (고용노동부)',
+  국민내일배움카드: '국민내일배움카드 (고용노동부)',
 };
 
 export function RecentlyViewed() {
@@ -24,7 +24,14 @@ export function RecentlyViewed() {
           className="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center space-x-0.5 cursor-pointer"
         >
           <span>전체 보기</span>
-          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
+          <svg
+            className="h-3 w-3"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={3}
+            aria-hidden="true"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
           </svg>
         </button>
@@ -60,11 +67,20 @@ export function RecentlyViewed() {
                 >
                   {item.category}
                 </span>
-                <span className="truncate text-[11px] font-bold text-slate-700">{displayTitle}</span>
+                <span className="truncate text-[11px] font-bold text-slate-700">
+                  {displayTitle}
+                </span>
               </div>
               <div className="flex items-center space-x-1 shrink-0 pl-2">
                 <span className="text-[10px] font-semibold text-slate-400">{item.viewedDate}</span>
-                <svg className="h-3 w-3 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <svg
+                  className="h-3 w-3 text-slate-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                 </svg>
               </div>

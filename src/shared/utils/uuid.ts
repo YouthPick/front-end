@@ -1,6 +1,6 @@
 // crypto.randomUUID는 secure context 전용이라 http+LAN IP 서빙 시 존재하지 않는다.
 export function generateId(): string {
-  if (typeof crypto.randomUUID === "function") {
+  if (typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();
   }
 
@@ -8,6 +8,6 @@ export function generateId(): string {
   bytes[6] = (bytes[6] & 0x0f) | 0x40;
   bytes[8] = (bytes[8] & 0x3f) | 0x80;
 
-  const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+  const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }

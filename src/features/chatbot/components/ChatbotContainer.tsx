@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence } from 'motion/react';
+import { useState } from 'react';
 
-import { useChatbot } from "../hooks/useChatbot";
-import { ChatbotWidget } from "./ChatbotWidget";
-import { ChatDrawer } from "./ChatDrawer";
+import { useChatbot } from '../hooks/useChatbot';
+import { ChatbotWidget } from './ChatbotWidget';
+import { ChatDrawer } from './ChatDrawer';
 
 export function ChatbotContainer() {
   const [isOpen, setIsOpen] = useState(false);

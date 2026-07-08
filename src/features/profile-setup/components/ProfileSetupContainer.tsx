@@ -1,5 +1,5 @@
-import { useProfileSetupWizard } from "../hooks/useProfileSetupWizard";
-import { ProfileSetupPresenter } from "./ProfileSetupPresenter";
+import { useProfileSetupWizard } from '../hooks/useProfileSetupWizard';
+import { ProfileSetupPresenter } from './ProfileSetupPresenter';
 
 export function ProfileSetupContainer() {
   const {

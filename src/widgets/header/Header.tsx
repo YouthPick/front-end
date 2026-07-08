@@ -1,18 +1,17 @@
-import { useState } from "react";
-import { Menu, User, X } from "lucide-react";
-import { Link, NavLink, useNavigate } from "react-router";
-
-import { useAuthStore } from "@/entities/user";
-import { ROUTES } from "@/shared/constants";
-import youthPickLogo from "@/assets/images/youthpick-logo.png";
+import { Menu, User, X } from 'lucide-react';
+import { useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router';
+import youthPickLogo from '@/assets/images/youthpick-logo.png';
+import { useAuthStore } from '@/entities/user';
+import { ROUTES } from '@/shared/constants';
 
 const MENU_ITEMS = [
-  { to: ROUTES.home, label: "홈", end: true, muted: false, adminOnly: false },
-  { to: ROUTES.search, label: "정책 찾기", end: false, muted: false, adminOnly: false },
-  { to: ROUTES.recommend, label: "맞춤 추천", end: false, muted: false, adminOnly: false },
-  { to: ROUTES.tracker, label: "신청관리", end: false, muted: false, adminOnly: false },
-  { to: ROUTES.my, label: "마이페이지", end: false, muted: false, adminOnly: false },
-  { to: ROUTES.admin, label: "관리자", end: false, muted: true, adminOnly: true },
+  { to: ROUTES.home, label: '홈', end: true, muted: false, adminOnly: false },
+  { to: ROUTES.search, label: '정책 찾기', end: false, muted: false, adminOnly: false },
+  { to: ROUTES.recommend, label: '맞춤 추천', end: false, muted: false, adminOnly: false },
+  { to: ROUTES.tracker, label: '신청관리', end: false, muted: false, adminOnly: false },
+  { to: ROUTES.my, label: '마이페이지', end: false, muted: false, adminOnly: false },
+  { to: ROUTES.admin, label: '관리자', end: false, muted: true, adminOnly: true },
 ];
 
 export function Header() {
@@ -22,7 +21,7 @@ export function Header() {
   const navigate = useNavigate();
 
   // 관리자 전용 링크는 실제 admin 계정에만 노출한다. (라우터 가드와 이중 방어)
-  const menuItems = MENU_ITEMS.filter((item) => !item.adminOnly || user?.role === "admin");
+  const menuItems = MENU_ITEMS.filter((item) => !item.adminOnly || user?.role === 'admin');
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md shadow-sm">
@@ -49,10 +48,10 @@ export function Header() {
                 className={({ isActive }) =>
                   `transition-all py-1.5 px-1 relative hover:text-primary ${
                     isActive
-                      ? "text-primary"
+                      ? 'text-primary'
                       : item.muted
-                      ? "text-slate-400 font-medium hover:text-slate-600"
-                      : ""
+                        ? 'text-slate-400 font-medium hover:text-slate-600'
+                        : ''
                   }`
                 }
               >
@@ -105,7 +104,7 @@ export function Header() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+            aria-label={mobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
             aria-expanded={mobileMenuOpen}
             className="md:hidden flex h-8 w-8 items-center justify-center rounded-xl border border-slate-100 hover:bg-slate-50"
           >
@@ -129,7 +128,7 @@ export function Header() {
               onClick={() => setMobileMenuOpen(false)}
               className={({ isActive }) =>
                 `flex w-full items-center rounded-xl px-4 py-2.5 text-xs font-bold text-left transition-colors ${
-                  isActive ? "bg-primary/10 text-primary" : "text-slate-600 hover:bg-slate-50"
+                  isActive ? 'bg-primary/10 text-primary' : 'text-slate-600 hover:bg-slate-50'
                 }`
               }
             >

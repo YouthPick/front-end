@@ -1,1 +1,1 @@
-export { TrackerPage } from "./TrackerPage";
+export { TrackerPage } from './TrackerPage';

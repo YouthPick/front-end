@@ -1,4 +1,4 @@
-export type SyncStatus = "SUCCESS" | "PARTIAL";
+export type SyncStatus = 'SUCCESS' | 'PARTIAL';
 
 export interface SyncLog {
   date: string;

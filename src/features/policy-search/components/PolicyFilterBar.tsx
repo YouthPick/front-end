@@ -1,7 +1,7 @@
-import { POLICY_CATEGORIES } from "@/entities/policy";
+import { POLICY_CATEGORIES } from '@/entities/policy';
 
-import { AGES, REGION_FILTER_OPTIONS, STATUSES } from "../policySearchOptions";
-import type { PolicySearchFilterKey, PolicySearchFilters } from "../types/policySearch.types";
+import { AGES, REGION_FILTER_OPTIONS, STATUSES } from '../policySearchOptions';
+import type { PolicySearchFilterKey, PolicySearchFilters } from '../types/policySearch.types';
 
 interface PolicyFilterBarProps {
   filters: PolicySearchFilters;
@@ -16,7 +16,7 @@ interface FilterSelectProps {
   onChange: (value: string) => void;
 }
 
-const CATEGORY_OPTIONS = ["전체", ...POLICY_CATEGORIES];
+const CATEGORY_OPTIONS = ['전체', ...POLICY_CATEGORIES];
 
 function FilterSelect({ id, label, value, options, onChange }: FilterSelectProps) {
   return (
@@ -39,8 +39,19 @@ function FilterSelect({ id, label, value, options, onChange }: FilterSelectProps
             ))}
           </select>
           <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-slate-400">
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+            <svg
+              className="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={3}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
         </div>
@@ -58,28 +69,28 @@ export function PolicyFilterBar({ filters, onFilterChange }: PolicyFilterBarProp
           label="지역"
           value={filters.region}
           options={REGION_FILTER_OPTIONS}
-          onChange={(value) => onFilterChange("region", value)}
+          onChange={(value) => onFilterChange('region', value)}
         />
         <FilterSelect
           id="filter-status-select"
           label="생활·상태"
           value={filters.status}
           options={STATUSES}
-          onChange={(value) => onFilterChange("status", value)}
+          onChange={(value) => onFilterChange('status', value)}
         />
         <FilterSelect
           id="filter-category-select"
           label="카테고리"
           value={filters.category}
           options={CATEGORY_OPTIONS}
-          onChange={(value) => onFilterChange("category", value)}
+          onChange={(value) => onFilterChange('category', value)}
         />
         <FilterSelect
           id="filter-age-select"
           label="연령"
           value={filters.age}
           options={AGES}
-          onChange={(value) => onFilterChange("age", value)}
+          onChange={(value) => onFilterChange('age', value)}
         />
       </div>
     </div>

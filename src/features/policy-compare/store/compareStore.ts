@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface CompareStore {
   policyIds: string[];
@@ -9,8 +9,7 @@ interface CompareStore {
 
 export const useCompareStore = create<CompareStore>((set) => ({
   policyIds: [],
-  addPolicyId: (policyId) =>
-    set((state) => ({ policyIds: [...state.policyIds, policyId] })),
+  addPolicyId: (policyId) => set((state) => ({ policyIds: [...state.policyIds, policyId] })),
   removePolicyId: (policyId) =>
     set((state) => ({ policyIds: state.policyIds.filter((id) => id !== policyId) })),
   clearPolicyIds: () => set({ policyIds: [] }),

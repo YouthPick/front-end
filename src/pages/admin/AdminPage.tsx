@@ -1,4 +1,4 @@
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2, RefreshCw } from 'lucide-react';
 
 import {
   AdminQaNote,
@@ -6,8 +6,8 @@ import {
   SyncSummaryCards,
   useRunSync,
   useSyncHistory,
-} from "@/features/admin-sync";
-import { ErrorState, Skeleton } from "@/shared/ui";
+} from '@/features/admin-sync';
+import { ErrorState, Skeleton } from '@/shared/ui';
 
 export function AdminPage() {
   const { data: syncHistory = [], isLoading, isError, refetch } = useSyncHistory();

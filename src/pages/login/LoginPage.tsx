@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router';
 
-import { SocialLoginPanel, useSocialLogin } from "@/features/auth";
-import { ROUTES } from "@/shared/constants";
+import { SocialLoginPanel, useSocialLogin } from '@/features/auth';
+import { ROUTES } from '@/shared/constants';
 
 export function LoginPage() {
   const { socialLogin } = useSocialLogin();

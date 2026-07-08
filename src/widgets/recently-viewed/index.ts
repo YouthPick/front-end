@@ -1,1 +1,1 @@
-export { RecentlyViewed } from "./RecentlyViewed";
+export { RecentlyViewed } from './RecentlyViewed';

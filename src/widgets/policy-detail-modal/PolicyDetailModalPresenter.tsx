@@ -1,7 +1,7 @@
-import { Calendar, Check, CheckCircle2, Heart, HelpCircle, X } from "lucide-react";
-import { motion } from "motion/react";
+import { Calendar, Check, CheckCircle2, Heart, HelpCircle, X } from 'lucide-react';
+import { motion } from 'motion/react';
 
-import { getPolicyCategoryBadgeClasses, type Policy } from "@/entities/policy";
+import { getPolicyCategoryBadgeClasses, type Policy } from '@/entities/policy';
 
 interface PolicyDetailModalPresenterProps {
   policy: Policy;
@@ -35,7 +35,9 @@ export function PolicyDetailModalPresenter({
         <div className="flex items-start justify-between border-b border-slate-100 pb-4">
           <div className="text-left space-y-1.5">
             <div className="flex items-center space-x-2">
-              <span className={`rounded-lg border px-2.5 py-0.5 text-[10px] font-bold ${getPolicyCategoryBadgeClasses(policy.category)}`}>
+              <span
+                className={`rounded-lg border px-2.5 py-0.5 text-[10px] font-bold ${getPolicyCategoryBadgeClasses(policy.category)}`}
+              >
                 {policy.category}
               </span>
               <span className="rounded-lg bg-slate-50 border border-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-500">
@@ -121,7 +123,9 @@ export function PolicyDetailModalPresenter({
 
           {/* Intro description */}
           <div className="rounded-2xl bg-slate-50/50 border border-slate-100 p-4">
-            <p className="text-xs leading-relaxed text-slate-600 font-medium">{policy.description}</p>
+            <p className="text-xs leading-relaxed text-slate-600 font-medium">
+              {policy.description}
+            </p>
           </div>
 
           {/* Quick info row */}
@@ -168,12 +172,12 @@ export function PolicyDetailModalPresenter({
             aria-pressed={isSaved}
             className={`flex items-center justify-center space-x-1.5 rounded-xl border px-3.5 py-2.5 text-xs font-bold transition-all ${
               isSaved
-                ? "bg-rose-50 border-rose-100 text-rose-500 hover:bg-rose-100/50"
-                : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-rose-500"
+                ? 'bg-rose-50 border-rose-100 text-rose-500 hover:bg-rose-100/50'
+                : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-rose-500'
             }`}
           >
-            <Heart className={`h-4.5 w-4.5 ${isSaved ? "fill-current" : ""}`} />
-            <span>{isSaved ? "담김" : "담기"}</span>
+            <Heart className={`h-4.5 w-4.5 ${isSaved ? 'fill-current' : ''}`} />
+            <span>{isSaved ? '담김' : '담기'}</span>
           </button>
 
           <button

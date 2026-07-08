@@ -1,1 +1,1 @@
-export { ProfileSetupContainer } from "./components/ProfileSetupContainer";
+export { ProfileSetupContainer } from './components/ProfileSetupContainer';

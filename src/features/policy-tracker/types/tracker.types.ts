@@ -1,4 +1,4 @@
-export type TrackerStatus = "관심" | "준비중" | "신청완료" | "결과대기" | "종료";
+export type TrackerStatus = '관심' | '준비중' | '신청완료' | '결과대기' | '종료';
 
 export interface TrackerChecklistItem {
   id: string;
@@ -14,4 +14,4 @@ export interface TrackerItem {
   memo: string;
 }
 
-export type TrackerStatusTab = "전체" | TrackerStatus;
+export type TrackerStatusTab = '전체' | TrackerStatus;

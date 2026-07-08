@@ -1,9 +1,9 @@
-import { RefreshCw } from "lucide-react";
-import { AnimatePresence } from "motion/react";
+import { RefreshCw } from 'lucide-react';
+import { AnimatePresence } from 'motion/react';
 
-import type { Policy } from "@/entities/policy";
+import type { Policy } from '@/entities/policy';
 
-import { CompareDetailDialog } from "./CompareDetailDialog";
+import { CompareDetailDialog } from './CompareDetailDialog';
 
 interface ComparePanelPresenterProps {
   comparingPolicies: Policy[];
@@ -38,7 +38,10 @@ function CompareSlot({ policy, slotLabel, badgeClasses, onRemove }: CompareSlotP
         <span className={`inline-block rounded px-1.5 py-0.5 text-[9px] font-bold ${badgeClasses}`}>
           {policy.category}
         </span>
-        <h4 className="line-clamp-2 text-[10px] font-bold text-slate-700 leading-normal" title={policy.title}>
+        <h4
+          className="line-clamp-2 text-[10px] font-bold text-slate-700 leading-normal"
+          title={policy.title}
+        >
           {policy.title}
         </h4>
         <p className="text-[9px] text-slate-400 font-semibold">({policy.region})</p>
@@ -71,7 +74,9 @@ export function ComparePanelPresenter({
       <div className="flex items-start justify-between">
         <div className="text-left space-y-0.5">
           <h3 className="text-sm font-bold text-slate-800">정책 비교</h3>
-          <p className="text-[10px] text-slate-400 font-medium">최대 2개 정책을 선택해 비교해보세요.</p>
+          <p className="text-[10px] text-slate-400 font-medium">
+            최대 2개 정책을 선택해 비교해보세요.
+          </p>
         </div>
 
         {canCompare ? (
@@ -81,14 +86,28 @@ export function ComparePanelPresenter({
             className="text-xs font-bold text-primary hover:underline flex items-center space-x-0.5 cursor-pointer"
           >
             <span>비교하기</span>
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
+            <svg
+              className="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={3}
+              aria-hidden="true"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>
         ) : (
           <span className="text-xs font-bold text-slate-300 flex items-center space-x-0.5 cursor-default select-none">
             <span>비교하기</span>
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
+            <svg
+              className="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={3}
+              aria-hidden="true"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </span>
@@ -104,7 +123,9 @@ export function ComparePanelPresenter({
             badgeClasses="bg-primary/10 text-primary border border-primary/20"
             onRemove={onRemove}
           />
-          <div className="col-span-1 flex justify-center text-[10px] font-black text-slate-300">VS</div>
+          <div className="col-span-1 flex justify-center text-[10px] font-black text-slate-300">
+            VS
+          </div>
           <CompareSlot
             policy={secondPolicy}
             slotLabel="정책 2 선택"

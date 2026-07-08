@@ -1,11 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { useToast } from "@/shared/ui";
+import { useToast } from '@/shared/ui';
 
-import { fetchBookmarkedPolicyIds, toggleBookmark } from "../api/bookmarkApi";
+import { fetchBookmarkedPolicyIds, toggleBookmark } from '../api/bookmarkApi';
 
 export const bookmarkKeys = {
-  all: ["bookmarks"] as const,
+  all: ['bookmarks'] as const,
 };
 
 export function useBookmark() {
@@ -27,9 +27,9 @@ export function useBookmark() {
     onSuccess: ({ saved }) => {
       queryClient.invalidateQueries({ queryKey: bookmarkKeys.all });
       if (saved) {
-        showToast("관심 정책으로 보관되었습니다! [신청관리]에서 일정을 추가해 보세요.", "success");
+        showToast('관심 정책으로 보관되었습니다! [신청관리]에서 일정을 추가해 보세요.', 'success');
       } else {
-        showToast("관심 정책 목록에서 해제되었습니다.", "info");
+        showToast('관심 정책 목록에서 해제되었습니다.', 'info');
       }
     },
   });

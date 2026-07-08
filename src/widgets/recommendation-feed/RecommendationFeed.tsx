@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router';
 
-import { usePolicyDetailStore, type Policy } from "@/entities/policy";
-import { useBookmark } from "@/features/policy-bookmark";
-import { RecommendationCard, useRecommendations } from "@/features/policy-recommendation";
-import { ROUTES } from "@/shared/constants";
-import { Skeleton } from "@/shared/ui";
+import { type Policy, usePolicyDetailStore } from '@/entities/policy';
+import { useBookmark } from '@/features/policy-bookmark';
+import { RecommendationCard, useRecommendations } from '@/features/policy-recommendation';
+import { ROUTES } from '@/shared/constants';
+import { Skeleton } from '@/shared/ui';
 
 const FEED_COUNT = 8;
 
@@ -34,7 +34,9 @@ export function RecommendationFeed() {
     return (
       <div className="rounded-3xl border border-rose-100 bg-rose-50/30 py-16 px-4 text-center space-y-3">
         <h3 className="text-sm font-extrabold text-rose-700">추천 목록을 불러오지 못했습니다</h3>
-        <p className="text-xs text-slate-500">추천 엔진 응답이 지연되고 있습니다. 최신 정책 목록은 [정책 찾기]에서 확인할 수 있습니다.</p>
+        <p className="text-xs text-slate-500">
+          추천 엔진 응답이 지연되고 있습니다. 최신 정책 목록은 [정책 찾기]에서 확인할 수 있습니다.
+        </p>
         <button
           type="button"
           onClick={() => reload()}
@@ -50,7 +52,9 @@ export function RecommendationFeed() {
     return (
       <div className="rounded-3xl border border-dashed border-slate-200 bg-white py-16 px-4 text-center space-y-2">
         <h3 className="text-sm font-extrabold text-slate-700">아직 추천할 정책이 없습니다</h3>
-        <p className="text-xs text-slate-400">프로필을 더 자세히 설정하면 맞춤 추천을 받을 수 있습니다.</p>
+        <p className="text-xs text-slate-400">
+          프로필을 더 자세히 설정하면 맞춤 추천을 받을 수 있습니다.
+        </p>
       </div>
     );
   }

@@ -1,6 +1,6 @@
-import { ChevronRight } from "lucide-react";
+import { ChevronRight } from 'lucide-react';
 
-import type { TrackerItem } from "../../types/tracker.types";
+import type { TrackerItem } from '../../types/tracker.types';
 
 interface TrackerCardProps {
   tracker: TrackerItem;
@@ -9,16 +9,16 @@ interface TrackerCardProps {
   onSelect: (policyId: string) => void;
 }
 
-function getStatusBadgeClasses(status: TrackerItem["status"]): string {
+function getStatusBadgeClasses(status: TrackerItem['status']): string {
   switch (status) {
-    case "준비중":
-      return "bg-amber-50 text-amber-600 border border-amber-100";
-    case "결과대기":
-      return "bg-blue-50 text-blue-600 border border-blue-100";
-    case "신청완료":
-      return "bg-emerald-50 text-emerald-600 border border-emerald-100";
+    case '준비중':
+      return 'bg-amber-50 text-amber-600 border border-amber-100';
+    case '결과대기':
+      return 'bg-blue-50 text-blue-600 border border-blue-100';
+    case '신청완료':
+      return 'bg-emerald-50 text-emerald-600 border border-emerald-100';
     default:
-      return "bg-slate-50 text-slate-500 border border-slate-100";
+      return 'bg-slate-50 text-slate-500 border border-slate-100';
   }
 }
 
@@ -33,12 +33,14 @@ export function TrackerCard({ tracker, policyTitle, isSelected, onSelect }: Trac
       onClick={() => onSelect(tracker.policyId)}
       className={`block w-full rounded-2xl border p-4 transition-all cursor-pointer text-left ${
         isSelected
-          ? "border-primary bg-primary/[0.01] shadow-sm ring-2 ring-primary/10"
-          : "border-slate-100 bg-white hover:border-slate-200"
+          ? 'border-primary bg-primary/[0.01] shadow-sm ring-2 ring-primary/10'
+          : 'border-slate-100 bg-white hover:border-slate-200'
       }`}
     >
       <div className="flex items-center justify-between">
-        <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full ${getStatusBadgeClasses(tracker.status)}`}>
+        <span
+          className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full ${getStatusBadgeClasses(tracker.status)}`}
+        >
           {tracker.status}
         </span>
         <span className="text-[10px] text-slate-400 font-bold">목표: {tracker.targetDate}</span>
@@ -55,7 +57,10 @@ export function TrackerCard({ tracker, policyTitle, isSelected, onSelect }: Trac
           <span>{pct}%</span>
         </div>
         <div className="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
-          <div className="h-full bg-primary transition-all duration-300" style={{ width: `${pct}%` }} />
+          <div
+            className="h-full bg-primary transition-all duration-300"
+            style={{ width: `${pct}%` }}
+          />
         </div>
       </div>
 

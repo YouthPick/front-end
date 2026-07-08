@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Youtube } from "lucide-react";
+import { Facebook, Instagram, Youtube } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -7,7 +7,9 @@ export function Footer() {
         <div className="flex flex-wrap justify-center sm:justify-start gap-4 text-xs font-semibold text-slate-500">
           <span className="hover:text-slate-800 cursor-pointer">이용약관</span>
           <span>|</span>
-          <span className="hover:text-slate-800 cursor-pointer font-bold text-primary">개인정보처리방침</span>
+          <span className="hover:text-slate-800 cursor-pointer font-bold text-primary">
+            개인정보처리방침
+          </span>
           <span>|</span>
           <span className="hover:text-slate-800 cursor-pointer">사이트맵</span>
           <span>|</span>

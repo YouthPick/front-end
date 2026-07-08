@@ -1,6 +1,6 @@
-import { motion } from "motion/react";
+import { motion } from 'motion/react';
 
-import type { Policy } from "@/entities/policy";
+import type { Policy } from '@/entities/policy';
 
 interface CompareDetailDialogProps {
   firstPolicy: Policy;
@@ -8,7 +8,11 @@ interface CompareDetailDialogProps {
   onClose: () => void;
 }
 
-export function CompareDetailDialog({ firstPolicy, secondPolicy, onClose }: CompareDetailDialogProps) {
+export function CompareDetailDialog({
+  firstPolicy,
+  secondPolicy,
+  onClose,
+}: CompareDetailDialogProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <motion.div
@@ -32,17 +36,27 @@ export function CompareDetailDialog({ firstPolicy, secondPolicy, onClose }: Comp
 
         <div className="mt-6 space-y-4">
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-3 font-semibold text-xs text-slate-400 text-left self-center">구분</div>
-            <div className="col-span-4 font-bold text-xs text-primary text-left">{firstPolicy.title}</div>
-            <div className="col-span-5 font-bold text-xs text-blue-600 text-left">{secondPolicy.title}</div>
+            <div className="col-span-3 font-semibold text-xs text-slate-400 text-left self-center">
+              구분
+            </div>
+            <div className="col-span-4 font-bold text-xs text-primary text-left">
+              {firstPolicy.title}
+            </div>
+            <div className="col-span-5 font-bold text-xs text-blue-600 text-left">
+              {secondPolicy.title}
+            </div>
           </div>
 
           <div className="border-t border-slate-50 my-2"></div>
 
           <div className="grid grid-cols-12 gap-4">
             <div className="col-span-3 text-xs font-bold text-slate-500 text-left">카테고리</div>
-            <div className="col-span-4 text-xs text-slate-700 text-left">{firstPolicy.category}</div>
-            <div className="col-span-5 text-xs text-slate-700 text-left">{secondPolicy.category}</div>
+            <div className="col-span-4 text-xs text-slate-700 text-left">
+              {firstPolicy.category}
+            </div>
+            <div className="col-span-5 text-xs text-slate-700 text-left">
+              {secondPolicy.category}
+            </div>
           </div>
 
           <div className="grid grid-cols-12 gap-4">
@@ -68,7 +82,9 @@ export function CompareDetailDialog({ firstPolicy, secondPolicy, onClose }: Comp
           </div>
 
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-3 text-xs font-bold text-slate-500 text-left">상세 혜택 및 요건</div>
+            <div className="col-span-3 text-xs font-bold text-slate-500 text-left">
+              상세 혜택 및 요건
+            </div>
             <div className="col-span-4 text-[10px] text-slate-600 text-left space-y-1.5 leading-relaxed">
               {firstPolicy.details.map((detail) => (
                 <p key={detail}>• {detail}</p>

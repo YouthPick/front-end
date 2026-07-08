@@ -1,6 +1,6 @@
-import { Briefcase, GraduationCap, Hand, Heart, Home, type LucideIcon } from "lucide-react";
+import { Briefcase, GraduationCap, Hand, Heart, Home, type LucideIcon } from 'lucide-react';
 
-import type { PolicyCategory } from "@/entities/policy";
+import type { PolicyCategory } from '@/entities/policy';
 
 interface CategoryCard {
   key: PolicyCategory;
@@ -11,11 +11,41 @@ interface CategoryCard {
 }
 
 const CATEGORY_CARDS = [
-  { key: "일자리", title: "일자리", subtitle: "취업・창업 지원", bg: "bg-primary/10 text-primary hover:bg-primary/20", icon: Briefcase },
-  { key: "주거", title: "주거", subtitle: "주거・금융 지원", bg: "bg-blue-50 text-blue-600 hover:bg-blue-100/50", icon: Home },
-  { key: "교육", title: "교육", subtitle: "역량・자기개발", bg: "bg-indigo-50 text-indigo-600 hover:bg-indigo-100/50", icon: GraduationCap },
-  { key: "복지·문화", title: "복지・문화", subtitle: "생활・건강・문화", bg: "bg-rose-50 text-rose-600 hover:bg-rose-100/50", icon: Heart },
-  { key: "참여·권리", title: "참여・권리", subtitle: "참여・권익 보호", bg: "bg-amber-50 text-amber-600 hover:bg-amber-100/50", icon: Hand },
+  {
+    key: '일자리',
+    title: '일자리',
+    subtitle: '취업・창업 지원',
+    bg: 'bg-primary/10 text-primary hover:bg-primary/20',
+    icon: Briefcase,
+  },
+  {
+    key: '주거',
+    title: '주거',
+    subtitle: '주거・금융 지원',
+    bg: 'bg-blue-50 text-blue-600 hover:bg-blue-100/50',
+    icon: Home,
+  },
+  {
+    key: '교육',
+    title: '교육',
+    subtitle: '역량・자기개발',
+    bg: 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100/50',
+    icon: GraduationCap,
+  },
+  {
+    key: '복지·문화',
+    title: '복지・문화',
+    subtitle: '생활・건강・문화',
+    bg: 'bg-rose-50 text-rose-600 hover:bg-rose-100/50',
+    icon: Heart,
+  },
+  {
+    key: '참여·권리',
+    title: '참여・권리',
+    subtitle: '참여・권익 보호',
+    bg: 'bg-amber-50 text-amber-600 hover:bg-amber-100/50',
+    icon: Hand,
+  },
 ] satisfies CategoryCard[];
 
 interface CategoryQuickLinksProps {
@@ -42,7 +72,9 @@ export function CategoryQuickLinks({ onSelectCategory }: CategoryQuickLinksProps
               className="flex items-center space-x-3.5 rounded-3xl border border-slate-100 bg-white p-4.5 text-left transition-all hover:scale-[1.02] hover:shadow-md cursor-pointer"
               id={`category-card-${item.key}`}
             >
-              <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${item.bg}`}>
+              <div
+                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${item.bg}`}
+              >
                 <IconComp className="h-5.5 w-5.5" />
               </div>
               <div>

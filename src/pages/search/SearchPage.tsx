@@ -1,13 +1,13 @@
-import { ChatbotContainer } from "@/features/chatbot";
-import { ComparePanelContainer } from "@/features/policy-compare";
+import { ChatbotContainer } from '@/features/chatbot';
+import { ComparePanelContainer } from '@/features/policy-compare';
 import {
   PolicyFilterBar,
   PolicySearchBar,
   SearchEmptyState,
   usePolicySearch,
-} from "@/features/policy-search";
-import { ErrorState, Skeleton } from "@/shared/ui";
-import { PolicyCardGrid } from "@/widgets/policy-card-grid";
+} from '@/features/policy-search';
+import { ErrorState, Skeleton } from '@/shared/ui';
+import { PolicyCardGrid } from '@/widgets/policy-card-grid';
 
 export function SearchPage() {
   const {
@@ -42,7 +42,8 @@ export function SearchPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 text-left">
         <div>
           <span className="text-xs text-slate-500 font-semibold">
-            총 <span className="text-primary font-bold">{policies.length}건</span>의 청년 정책이 정밀 필터링되었습니다.
+            총 <span className="text-primary font-bold">{policies.length}건</span>의 청년 정책이
+            정밀 필터링되었습니다.
           </span>
         </div>
         <div className="flex items-center space-x-1">
@@ -73,8 +74,9 @@ export function SearchPage() {
 
       {isError && <ErrorState title="정책 목록을 불러오지 못했습니다" onRetry={() => reload()} />}
 
-      {!isLoading && !isError && (
-        policies.length > 0 ? (
+      {!isLoading &&
+        !isError &&
+        (policies.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-8">
               <PolicyCardGrid
@@ -93,8 +95,7 @@ export function SearchPage() {
             onResetAll={() => resetFilters({ clearQuery: true })}
             onShowNationwide={showNationwideOnly}
           />
-        )
-      )}
+        ))}
     </div>
   );
 }

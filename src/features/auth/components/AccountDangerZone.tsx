@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { LogOut, ShieldAlert } from "lucide-react";
+import { LogOut, ShieldAlert } from 'lucide-react';
+import { useState } from 'react';
 
-import { ConfirmDialog } from "@/shared/ui";
+import { ConfirmDialog } from '@/shared/ui';
 
 interface AccountDangerZoneProps {
   trackerCount: number;
@@ -25,7 +25,8 @@ export function AccountDangerZone({
         <span>계정 보안 및 위험 설정 구역</span>
       </h4>
       <p className="text-[11px] text-slate-400">
-        수정하신 프로필 데이터 가중치는 즉시 휘발되며, 회원 탈퇴 시 모든 신청관리 대시보드가 파기됩니다.
+        수정하신 프로필 데이터 가중치는 즉시 휘발되며, 회원 탈퇴 시 모든 신청관리 대시보드가
+        파기됩니다.
       </p>
       <div className="flex space-x-2 pt-1.5">
         <button
@@ -50,7 +51,7 @@ export function AccountDangerZone({
         title="정말로 회원 탈퇴를 진행합니까?"
         description={
           <>
-            탈퇴 완료 시 Google 간편인증 연동이 해제되며, 그동안 기획관리 중이던{" "}
+            탈퇴 완료 시 Google 간편인증 연동이 해제되며, 그동안 기획관리 중이던{' '}
             <strong>
               {trackerCount}건의 신청 기한 타임라인 및 {savedCount}건의 관심 저장 목록
             </strong>

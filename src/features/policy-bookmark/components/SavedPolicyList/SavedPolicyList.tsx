@@ -1,6 +1,6 @@
-import type { Policy } from "@/entities/policy";
+import type { Policy } from '@/entities/policy';
 
-import { SavedPolicyItem } from "./SavedPolicyItem";
+import { SavedPolicyItem } from './SavedPolicyItem';
 
 interface SavedPolicyListProps {
   savedPolicies: Policy[];

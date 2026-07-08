@@ -1,1 +1,1 @@
-export { RecommendationFeed } from "./RecommendationFeed";
+export { RecommendationFeed } from './RecommendationFeed';

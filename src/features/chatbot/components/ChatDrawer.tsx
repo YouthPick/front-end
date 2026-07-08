@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { Loader2, Send, Sparkles, X } from "lucide-react";
-import { motion } from "motion/react";
+import { Loader2, Send, Sparkles, X } from 'lucide-react';
+import { motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
 
-import type { ChatMessage } from "../types/chat.types";
-import { ChatMessageBubble } from "./ChatMessageBubble";
+import type { ChatMessage } from '../types/chat.types';
+import { ChatMessageBubble } from './ChatMessageBubble';
 
 interface ChatDrawerProps {
   messages: ChatMessage[];
@@ -13,13 +13,14 @@ interface ChatDrawerProps {
 }
 
 export function ChatDrawer({ messages, isLoading, onSend, onClose }: ChatDrawerProps) {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // 새 메시지·로딩 표시가 생기면 목록 맨 아래로 스크롤을 동기화한다.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: messages·isLoading 변화를 스크롤 트리거로 의도적으로 구독
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isLoading]);
 
@@ -27,7 +28,7 @@ export function ChatDrawer({ messages, isLoading, onSend, onClose }: ChatDrawerP
     e.preventDefault();
     if (!inputValue.trim() || isLoading) return;
     onSend(inputValue);
-    setInputValue("");
+    setInputValue('');
   };
 
   return (
@@ -79,7 +80,10 @@ export function ChatDrawer({ messages, isLoading, onSend, onClose }: ChatDrawerP
         </div>
 
         {/* Chat input form */}
-        <form onSubmit={handleSubmit} className="border-t border-slate-100 bg-white p-3 flex items-center space-x-2">
+        <form
+          onSubmit={handleSubmit}
+          className="border-t border-slate-100 bg-white p-3 flex items-center space-x-2"
+        >
           <input
             type="text"
             placeholder="예: 경기도 거주자를 위한 주택 전세대출 지원"

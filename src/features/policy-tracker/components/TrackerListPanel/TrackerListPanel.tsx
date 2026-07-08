@@ -1,6 +1,6 @@
-import type { TrackerItem, TrackerStatusTab } from "../../types/tracker.types";
-import { TrackerCard } from "./TrackerCard";
-import { TrackerStatusTabs } from "./TrackerStatusTabs";
+import type { TrackerItem, TrackerStatusTab } from '../../types/tracker.types';
+import { TrackerCard } from './TrackerCard';
+import { TrackerStatusTabs } from './TrackerStatusTabs';
 
 export interface TrackerListEntry {
   tracker: TrackerItem;

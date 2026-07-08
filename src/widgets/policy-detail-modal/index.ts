@@ -1,1 +1,1 @@
-export { PolicyDetailModalContainer } from "./PolicyDetailModalContainer";
+export { PolicyDetailModalContainer } from './PolicyDetailModalContainer';

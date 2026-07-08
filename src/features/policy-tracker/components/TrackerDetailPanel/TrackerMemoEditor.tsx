@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const MEMO_MAX_LENGTH = 2000;
 
@@ -13,7 +13,10 @@ export function TrackerMemoEditor({ initialMemo, onSave }: TrackerMemoEditorProp
 
   return (
     <div className="space-y-2">
-      <label className="block text-xs font-extrabold text-slate-800" htmlFor="tracker-memo-textarea">
+      <label
+        className="block text-xs font-extrabold text-slate-800"
+        htmlFor="tracker-memo-textarea"
+      >
         개인 업무 및 보완 기록 메모
       </label>
       <textarea

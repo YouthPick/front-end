@@ -1,22 +1,22 @@
-import type { UserProfile } from "@/entities/user";
+import type { UserProfile } from '@/entities/user';
 
 const EMPLOYMENT_STATUS_OPTIONS = [
-  "미취업·구직",
-  "재직",
-  "자영업",
-  "프리랜서",
-  "창업·창업준비",
-  "기타",
+  '미취업·구직',
+  '재직',
+  '자영업',
+  '프리랜서',
+  '창업·창업준비',
+  '기타',
 ];
 
 const EDUCATION_STATUS_OPTIONS = [
-  "고교 재학",
-  "고교 졸업",
-  "대학 재학",
-  "대졸 예정",
-  "대학 졸업",
-  "석·박사",
-  "기타",
+  '고교 재학',
+  '고교 졸업',
+  '대학 재학',
+  '대졸 예정',
+  '대학 졸업',
+  '석·박사',
+  '기타',
 ];
 
 interface WizardStepStatusProps {
@@ -34,7 +34,9 @@ interface OptionButtonGridProps {
 function OptionButtonGrid({ label, options, selected, onSelect }: OptionButtonGridProps) {
   return (
     <div className="space-y-2">
-      <span className="block text-xs font-extrabold text-slate-400 uppercase tracking-wider">{label}</span>
+      <span className="block text-xs font-extrabold text-slate-400 uppercase tracking-wider">
+        {label}
+      </span>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {options.map((option) => {
           const isSelected = selected === option;
@@ -46,8 +48,8 @@ function OptionButtonGrid({ label, options, selected, onSelect }: OptionButtonGr
               aria-pressed={isSelected}
               className={`rounded-xl border py-2.5 text-xs font-bold transition-all cursor-pointer ${
                 isSelected
-                  ? "bg-primary border-primary text-white shadow-sm"
-                  : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                  ? 'bg-primary border-primary text-white shadow-sm'
+                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
               }`}
             >
               {option}

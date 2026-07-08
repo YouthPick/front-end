@@ -1,7 +1,7 @@
-import { POLICY_CATEGORIES } from "@/entities/policy";
-import type { UserProfile } from "@/entities/user";
+import { POLICY_CATEGORIES } from '@/entities/policy';
+import type { UserProfile } from '@/entities/user';
 
-import { MAX_INTEREST_COUNT, MAX_KEYWORD_COUNT } from "../hooks/useProfileSetupWizard";
+import { MAX_INTEREST_COUNT, MAX_KEYWORD_COUNT } from '../hooks/useProfileSetupWizard';
 
 interface WizardStepInterestProps {
   draft: UserProfile;
@@ -44,8 +44,8 @@ export function WizardStepInterest({
                 aria-pressed={isSelected}
                 className={`rounded-xl border px-3.5 py-2 text-xs font-bold transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-primary border-primary text-white"
-                    : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                    ? 'bg-primary border-primary text-white'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 {category}
@@ -66,7 +66,7 @@ export function WizardStepInterest({
             value={newKeywordInput}
             onChange={(e) => onKeywordInputChange(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+              if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
                 e.preventDefault();
                 onAddKeyword();
               }

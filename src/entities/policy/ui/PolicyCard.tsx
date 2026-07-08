@@ -1,7 +1,7 @@
-import { CheckSquare, Heart, Square } from "lucide-react";
+import { CheckSquare, Heart, Square } from 'lucide-react';
 
-import type { Policy } from "../model/policy.types";
-import { PolicyCategoryBadge } from "./PolicyCategoryBadge";
+import type { Policy } from '../model/policy.types';
+import { PolicyCategoryBadge } from './PolicyCategoryBadge';
 
 interface PolicyCardProps {
   policy: Policy;
@@ -13,10 +13,10 @@ interface PolicyCardProps {
 }
 
 function getTagStyles(tag: string) {
-  if (tag === "HIGH") {
-    return "bg-emerald-50 text-emerald-600 border-emerald-100";
+  if (tag === 'HIGH') {
+    return 'bg-emerald-50 text-emerald-600 border-emerald-100';
   }
-  return "bg-sky-50 text-sky-600 border-sky-100";
+  return 'bg-sky-50 text-sky-600 border-sky-100';
 }
 
 export function PolicyCard({
@@ -38,7 +38,9 @@ export function PolicyCard({
               {policy.region}
             </span>
             {policy.tag && (
-              <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold border ${getTagStyles(policy.tag)}`}>
+              <span
+                className={`rounded-md px-2 py-0.5 text-[10px] font-bold border ${getTagStyles(policy.tag)}`}
+              >
                 {policy.tag}
               </span>
             )}
@@ -50,8 +52,8 @@ export function PolicyCard({
             onClick={() => onToggleCompare(policy)}
             className={`flex items-center space-x-1 rounded px-2 py-0.5 text-[10px] font-bold border transition-colors ${
               isComparing
-                ? "bg-primary/10 border-primary/30 text-primary"
-                : "bg-white border-slate-200 text-slate-400 hover:text-slate-600"
+                ? 'bg-primary/10 border-primary/30 text-primary'
+                : 'bg-white border-slate-200 text-slate-400 hover:text-slate-600'
             }`}
             id={`compare-toggle-${policy.id}`}
           >
@@ -97,12 +99,12 @@ export function PolicyCard({
           aria-pressed={isSaved}
           className={`flex-1 flex items-center justify-center space-x-1 rounded-xl border py-2.5 text-xs font-bold transition-colors ${
             isSaved
-              ? "bg-rose-50 border-rose-100 text-rose-500"
-              : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700"
+              ? 'bg-rose-50 border-rose-100 text-rose-500'
+              : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700'
           }`}
           id={`save-toggle-${policy.id}`}
         >
-          <Heart className={`h-3.5 w-3.5 ${isSaved ? "fill-current" : ""}`} />
+          <Heart className={`h-3.5 w-3.5 ${isSaved ? 'fill-current' : ''}`} />
           <span>찜하기</span>
         </button>
       </div>

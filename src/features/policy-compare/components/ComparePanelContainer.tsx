@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { useCompare } from "../hooks/useCompare";
-import { ComparePanelPresenter } from "./ComparePanelPresenter";
+import { useCompare } from '../hooks/useCompare';
+import { ComparePanelPresenter } from './ComparePanelPresenter';
 
 export function ComparePanelContainer() {
   const { comparingPolicies, removeCompare, clearCompare } = useCompare();

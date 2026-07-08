@@ -1,10 +1,10 @@
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles } from 'lucide-react';
 
-import type { UserRole } from "@/entities/user";
+import type { UserRole } from '@/entities/user';
 
 // 소셜 채널 공식 브랜드 컬러 — 디자인 토큰 대상이 아닌 외부 브랜드 가이드 고정값.
-const KAKAO_BRAND_CLASSES = "bg-[#FEE500] text-[#191919]";
-const NAVER_BRAND_CLASSES = "bg-[#03C75A] text-white";
+const KAKAO_BRAND_CLASSES = 'bg-[#FEE500] text-[#191919]';
+const NAVER_BRAND_CLASSES = 'bg-[#03C75A] text-white';
 
 interface SocialLoginPanelProps {
   onSocialLogin: (provider: string, role?: UserRole) => void;
@@ -16,11 +16,15 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
     <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm text-center space-y-6">
       <div className="space-y-2">
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto">
-          <Sparkles className="h-6 w-6 fill-current animate-spin" style={{ animationDuration: "6s" }} />
+          <Sparkles
+            className="h-6 w-6 fill-current animate-spin"
+            style={{ animationDuration: '6s' }}
+          />
         </span>
         <h2 className="text-xl font-black text-slate-800">YouthPick 소셜 계정 연동</h2>
         <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
-          원하시는 소셜 채널 계정을 통해 간편하게 로그인하시면 관심 정책을 즉각 담아두고 신청 준비 체크리스트 관리를 바로 시작하실 수 있습니다.
+          원하시는 소셜 채널 계정을 통해 간편하게 로그인하시면 관심 정책을 즉각 담아두고 신청 준비
+          체크리스트 관리를 바로 시작하실 수 있습니다.
         </p>
       </div>
 
@@ -28,7 +32,7 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
       <div className="space-y-2.5">
         <button
           type="button"
-          onClick={() => onSocialLogin("카카오")}
+          onClick={() => onSocialLogin('카카오')}
           className={`flex w-full items-center justify-center space-x-3 rounded-2xl py-3 text-xs font-extrabold hover:brightness-95 transition-all cursor-pointer ${KAKAO_BRAND_CLASSES}`}
         >
           <span className="text-sm font-black">💬</span>
@@ -37,7 +41,7 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
 
         <button
           type="button"
-          onClick={() => onSocialLogin("네이버")}
+          onClick={() => onSocialLogin('네이버')}
           className={`flex w-full items-center justify-center space-x-3 rounded-2xl py-3 text-xs font-extrabold hover:brightness-95 transition-all cursor-pointer ${NAVER_BRAND_CLASSES}`}
         >
           <span className="text-sm font-black">N</span>
@@ -46,7 +50,7 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
 
         <button
           type="button"
-          onClick={() => onSocialLogin("Google")}
+          onClick={() => onSocialLogin('Google')}
           className="flex w-full items-center justify-center space-x-3 rounded-2xl border border-slate-200 bg-white py-3 text-xs font-extrabold text-slate-700 hover:bg-slate-50 transition-all cursor-pointer shadow-sm"
         >
           <span className="text-sm font-black">G</span>
@@ -56,10 +60,12 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
 
       <div className="space-y-1.5 pt-4 border-t border-slate-100 text-[10px] text-slate-400 text-left leading-normal">
         <p className="flex items-start">
-          ✓ 로그인 진행 시 청년정책 매칭을 위한 개인정보 수집 이용약관 및 개인정보처리방침 조항에 동의한 것으로 자동 간주합니다.
+          ✓ 로그인 진행 시 청년정책 매칭을 위한 개인정보 수집 이용약관 및 개인정보처리방침 조항에
+          동의한 것으로 자동 간주합니다.
         </p>
         <p className="flex items-start">
-          ✓ YouthPick은 사용자의 민감한 비공개 프로필 정보들을 엄격하게 비공개 보관하며 최소한의 정보 연동에만 활용합니다.
+          ✓ YouthPick은 사용자의 민감한 비공개 프로필 정보들을 엄격하게 비공개 보관하며 최소한의
+          정보 연동에만 활용합니다.
         </p>
       </div>
 
@@ -74,7 +80,7 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
         </button>
         <button
           type="button"
-          onClick={() => onSocialLogin("데모", "admin")}
+          onClick={() => onSocialLogin('데모', 'admin')}
           className="text-xs text-slate-400 hover:text-slate-600 font-bold underline underline-offset-2"
         >
           관리자 데모 로그인

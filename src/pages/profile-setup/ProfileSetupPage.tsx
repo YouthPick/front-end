@@ -1,4 +1,4 @@
-import { ProfileSetupContainer } from "@/features/profile-setup";
+import { ProfileSetupContainer } from '@/features/profile-setup';
 
 export function ProfileSetupPage() {
   return (

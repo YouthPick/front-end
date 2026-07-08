@@ -1,4 +1,4 @@
-import type { SyncLog } from "../types/adminSync.types";
+import type { SyncLog } from '../types/adminSync.types';
 
 interface SyncHistoryTableProps {
   logs: SyncLog[];
@@ -22,14 +22,17 @@ export function SyncHistoryTable({ logs }: SyncHistoryTableProps) {
           </thead>
           <tbody className="divide-y divide-slate-100">
             {logs.map((log) => (
-              <tr key={`${log.date}-${log.newCount}-${log.editCount}`} className="hover:bg-slate-50/50">
+              <tr
+                key={`${log.date}-${log.newCount}-${log.editCount}`}
+                className="hover:bg-slate-50/50"
+              >
                 <td className="py-3 px-3 font-semibold text-slate-700">{log.date}</td>
                 <td className="py-3 px-3">
                   <span
                     className={`inline-block rounded px-1.5 py-0.5 text-[9px] font-black ${
-                      log.status === "SUCCESS"
-                        ? "bg-emerald-50 text-emerald-600"
-                        : "bg-amber-50 text-amber-600"
+                      log.status === 'SUCCESS'
+                        ? 'bg-emerald-50 text-emerald-600'
+                        : 'bg-amber-50 text-amber-600'
                     }`}
                   >
                     {log.status}
@@ -37,7 +40,9 @@ export function SyncHistoryTable({ logs }: SyncHistoryTableProps) {
                 </td>
                 <td className="py-3 px-3 text-right font-bold text-slate-700">+{log.newCount}</td>
                 <td className="py-3 px-3 text-right font-medium">{log.editCount}</td>
-                <td className="py-3 px-3 text-right text-amber-600 font-bold">{log.missingCount}</td>
+                <td className="py-3 px-3 text-right text-amber-600 font-bold">
+                  {log.missingCount}
+                </td>
                 <td className="py-3 px-3 text-right text-rose-500 font-bold">{log.errorCount}</td>
               </tr>
             ))}

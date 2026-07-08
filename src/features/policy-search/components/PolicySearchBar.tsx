@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search } from 'lucide-react';
 
 interface PolicySearchBarProps {
   query: string;
@@ -16,7 +16,7 @@ export function PolicySearchBar({ query, onQueryChange, onSubmit }: PolicySearch
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.nativeEvent.isComposing) onSubmit();
+            if (e.key === 'Enter' && !e.nativeEvent.isComposing) onSubmit();
           }}
           className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-5 pr-12 text-xs transition-colors focus:border-primary focus:outline-none shadow-sm"
           id="search-main-input"

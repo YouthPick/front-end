@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { CheckSquare, Plus, Square, Trash2 } from "lucide-react";
+import { CheckSquare, Plus, Square, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
-import type { TrackerChecklistItem } from "../../types/tracker.types";
+import type { TrackerChecklistItem } from '../../types/tracker.types';
 
 interface TrackerChecklistProps {
   checklist: TrackerChecklistItem[];
@@ -17,18 +17,18 @@ export function TrackerChecklist({
   onAddItem,
 }: TrackerChecklistProps) {
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newItemText, setNewItemText] = useState("");
+  const [newItemText, setNewItemText] = useState('');
 
   const handleAdd = () => {
-    if (newItemText.trim() === "") return;
+    if (newItemText.trim() === '') return;
     onAddItem(newItemText.trim());
-    setNewItemText("");
+    setNewItemText('');
     setShowAddForm(false);
   };
 
   const handleCancelAdd = () => {
     setShowAddForm(false);
-    setNewItemText("");
+    setNewItemText('');
   };
 
   return (
@@ -56,7 +56,7 @@ export function TrackerChecklist({
             value={newItemText}
             onChange={(e) => setNewItemText(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.nativeEvent.isComposing) handleAdd();
+              if (e.key === 'Enter' && !e.nativeEvent.isComposing) handleAdd();
             }}
             className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs focus:outline-none focus:border-primary"
             aria-label="체크리스트 항목 입력"
@@ -99,7 +99,7 @@ export function TrackerChecklist({
               )}
               <span
                 className={`text-xs font-semibold ${
-                  item.completed ? "line-through text-slate-400" : "text-slate-700"
+                  item.completed ? 'line-through text-slate-400' : 'text-slate-700'
                 }`}
               >
                 {item.text}

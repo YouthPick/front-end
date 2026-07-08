@@ -1,11 +1,11 @@
-import { Suspense } from "react";
-import { Outlet, ScrollRestoration } from "react-router";
+import { Suspense } from 'react';
+import { Outlet, ScrollRestoration } from 'react-router';
 
-import { Skeleton, ToastContainer } from "@/shared/ui";
-import { Footer, NoticeBanner } from "@/widgets/footer";
-import { Header } from "@/widgets/header";
-import { MobileNav } from "@/widgets/mobile-nav";
-import { PolicyDetailModalContainer } from "@/widgets/policy-detail-modal";
+import { Skeleton, ToastContainer } from '@/shared/ui';
+import { Footer, NoticeBanner } from '@/widgets/footer';
+import { Header } from '@/widgets/header';
+import { MobileNav } from '@/widgets/mobile-nav';
+import { PolicyDetailModalContainer } from '@/widgets/policy-detail-modal';
 
 export function RootLayout() {
   return (

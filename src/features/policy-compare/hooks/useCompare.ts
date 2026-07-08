@@ -1,8 +1,8 @@
-import { usePoliciesQuery, type Policy } from "@/entities/policy";
-import { MAX_COMPARE_COUNT } from "@/shared/constants";
-import { useToast } from "@/shared/ui";
+import { type Policy, usePoliciesQuery } from '@/entities/policy';
+import { MAX_COMPARE_COUNT } from '@/shared/constants';
+import { useToast } from '@/shared/ui';
 
-import { useCompareStore } from "../store/compareStore";
+import { useCompareStore } from '../store/compareStore';
 
 // 비교함에는 policyId만 저장하고, Policy 객체는 정책 query 결과에서 join한다.
 export function useCompare() {
@@ -26,11 +26,11 @@ export function useCompare() {
       return;
     }
     if (policyIds.length >= MAX_COMPARE_COUNT) {
-      showToast(`비교 분석은 한 번에 최대 ${MAX_COMPARE_COUNT}개의 정책만 가능합니다.`, "warning");
+      showToast(`비교 분석은 한 번에 최대 ${MAX_COMPARE_COUNT}개의 정책만 가능합니다.`, 'warning');
       return;
     }
     addPolicyId(policy.id);
-    showToast(`${policy.title}이 비교 슬롯에 등록되었습니다.`, "success");
+    showToast(`${policy.title}이 비교 슬롯에 등록되었습니다.`, 'success');
   };
 
   return {

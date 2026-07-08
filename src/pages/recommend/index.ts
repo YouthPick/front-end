@@ -1,1 +1,1 @@
-export { RecommendPage } from "./RecommendPage";
+export { RecommendPage } from './RecommendPage';

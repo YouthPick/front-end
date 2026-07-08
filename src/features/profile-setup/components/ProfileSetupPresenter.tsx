@@ -1,9 +1,9 @@
-import type { UserProfile } from "@/entities/user";
+import type { UserProfile } from '@/entities/user';
 
-import { WIZARD_TOTAL_STEPS } from "../hooks/useProfileSetupWizard";
-import { WizardStepBasic } from "./WizardStepBasic";
-import { WizardStepInterest } from "./WizardStepInterest";
-import { WizardStepStatus } from "./WizardStepStatus";
+import { WIZARD_TOTAL_STEPS } from '../hooks/useProfileSetupWizard';
+import { WizardStepBasic } from './WizardStepBasic';
+import { WizardStepInterest } from './WizardStepInterest';
+import { WizardStepStatus } from './WizardStepStatus';
 
 interface ProfileSetupPresenterProps {
   step: number;
@@ -88,7 +88,7 @@ export function ProfileSetupPresenter({
           onClick={onNext}
           className="rounded-xl bg-gradient-to-r from-primary to-brand-secondary px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:brightness-105 active:scale-95"
         >
-          {step === WIZARD_TOTAL_STEPS ? "맞춤 추천목록 확인" : "다음 단계로"}
+          {step === WIZARD_TOTAL_STEPS ? '맞춤 추천목록 확인' : '다음 단계로'}
         </button>
       </div>
     </div>

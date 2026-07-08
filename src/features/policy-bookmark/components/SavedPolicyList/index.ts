@@ -1,1 +1,1 @@
-export { SavedPolicyList } from "./SavedPolicyList";
+export { SavedPolicyList } from './SavedPolicyList';

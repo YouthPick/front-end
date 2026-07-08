@@ -1,12 +1,12 @@
-import { Edit3 } from "lucide-react";
-import { useNavigate } from "react-router";
+import { Edit3 } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
-import { useProfileStore } from "@/entities/user";
-import { ChatbotContainer } from "@/features/chatbot";
-import { ComparePanelContainer } from "@/features/policy-compare";
-import { ProfileBriefing } from "@/features/policy-recommendation";
-import { ROUTES } from "@/shared/constants";
-import { RecommendationFeed } from "@/widgets/recommendation-feed";
+import { useProfileStore } from '@/entities/user';
+import { ChatbotContainer } from '@/features/chatbot';
+import { ComparePanelContainer } from '@/features/policy-compare';
+import { ProfileBriefing } from '@/features/policy-recommendation';
+import { ROUTES } from '@/shared/constants';
+import { RecommendationFeed } from '@/widgets/recommendation-feed';
 
 export function RecommendPage() {
   const profile = useProfileStore((state) => state.profile);

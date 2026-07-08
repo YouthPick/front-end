@@ -1,13 +1,13 @@
-import type { UserProfile } from "@/entities/user";
-import { REGIONS } from "@/shared/constants";
+import type { UserProfile } from '@/entities/user';
+import { REGIONS } from '@/shared/constants';
 
 const BIRTH_YEAR_BASE = 1988;
 const BIRTH_YEAR_COUNT = 25;
 const CURRENT_YEAR = 2026;
 
 // 검색 필터와 달리 프로필에서 "전체" 거주지는 선택할 수 없다.
-const REGION_OPTIONS = REGIONS.filter((region) => region !== "전체");
-const SUB_REGION_OPTIONS = ["마포구", "분당구", "해운대구", "남동구", "기타"];
+const REGION_OPTIONS = REGIONS.filter((region) => region !== '전체');
+const SUB_REGION_OPTIONS = ['마포구', '분당구', '해운대구', '남동구', '기타'];
 
 interface WizardStepBasicProps {
   draft: UserProfile;
@@ -73,14 +73,15 @@ export function WizardStepBasic({ draft, onUpdateDraft }: WizardStepBasicProps) 
           >
             {SUB_REGION_OPTIONS.map((subRegion) => (
               <option key={subRegion} value={subRegion}>
-                {subRegion === "기타" ? "기타 전체" : subRegion}
+                {subRegion === '기타' ? '기타 전체' : subRegion}
               </option>
             ))}
           </select>
         </div>
       </div>
       <p className="text-[10px] text-slate-400">
-        ※ 시군구 조건이 맞지 않더라도 전국 및 광역시 통합 우대 조건은 누락 없이 분석 매치해 드립니다.
+        ※ 시군구 조건이 맞지 않더라도 전국 및 광역시 통합 우대 조건은 누락 없이 분석 매치해
+        드립니다.
       </p>
     </div>
   );

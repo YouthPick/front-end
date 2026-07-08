@@ -14,7 +14,8 @@ export function GuestRecommendCta({ onGetRecommendations, onBrowseAll }: GuestRe
           프로필을 딱 한 번만 입력하고, 나에게 꼭 맞는 청년 정책을 받아보세요!
         </h3>
         <p className="text-xs text-slate-500 leading-relaxed">
-          거주지역, 연령뿐만 아니라 상세한 취업상태, 학력, 관심 키워드 조건을 대조하여 복잡한 수령자격을 자동으로 비교 분석해 드립니다.
+          거주지역, 연령뿐만 아니라 상세한 취업상태, 학력, 관심 키워드 조건을 대조하여 복잡한
+          수령자격을 자동으로 비교 분석해 드립니다.
         </p>
       </div>
       <div className="flex flex-wrap gap-2 pt-2">

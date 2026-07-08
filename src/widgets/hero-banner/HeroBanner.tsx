@@ -1,22 +1,21 @@
-import { useState } from "react";
-import { Bell, Briefcase, GraduationCap, Home, Search } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import { useNavigate } from "react-router";
-
-import { ROUTES } from "@/shared/constants";
-import youthIllustration from "@/assets/images/youth_purple_illustration_1782457991844.jpg";
+import { Bell, Briefcase, GraduationCap, Home, Search } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import youthIllustration from '@/assets/images/youth_purple_illustration_1782457991844.jpg';
+import { ROUTES } from '@/shared/constants';
 
 export function HeroBanner() {
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
   const [subscribed, setSubscribed] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [showDialog, setShowDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleSearchSubmit = () => {
     const params = new URLSearchParams();
-    if (searchInput.trim() !== "") {
-      params.set("q", searchInput.trim());
+    if (searchInput.trim() !== '') {
+      params.set('q', searchInput.trim());
     }
     const queryString = params.toString();
     navigate(queryString ? `${ROUTES.search}?${queryString}` : ROUTES.search);
@@ -29,7 +28,7 @@ export function HeroBanner() {
     setTimeout(() => {
       setShowDialog(false);
       setSubscribed(false);
-      setEmail("");
+      setEmail('');
     }, 2000);
   };
 
@@ -77,7 +76,7 @@ export function HeroBanner() {
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   onKeyDown={(e) =>
-                    e.key === "Enter" && !e.nativeEvent.isComposing && handleSearchSubmit()
+                    e.key === 'Enter' && !e.nativeEvent.isComposing && handleSearchSubmit()
                   }
                   className="w-full bg-transparent py-2.5 pl-10 pr-4 text-xs font-medium text-slate-700 outline-none placeholder:text-slate-400"
                   id="hero-search-input"
@@ -141,7 +140,9 @@ export function HeroBanner() {
                     <Bell className="h-4.5 w-4.5" />
                   </div>
                   <div>
-                    <h3 className="text-xs font-bold text-slate-800 leading-tight">청년을 위한 정부 지원 정책</h3>
+                    <h3 className="text-xs font-bold text-slate-800 leading-tight">
+                      청년을 위한 정부 지원 정책
+                    </h3>
                     <p className="text-[10px] text-slate-400 font-medium mt-1">알림 서비스</p>
                   </div>
                 </div>
@@ -189,10 +190,14 @@ export function HeroBanner() {
                 {!subscribed ? (
                   <form onSubmit={handleSubscribe} className="space-y-3">
                     <p className="text-xs leading-relaxed text-slate-500">
-                      관심 지역과 전공/분야에 일치하는 맞춤형 정부 정책이 공고될 때 가장 신속하게 알림을 받아보실 수 있습니다.
+                      관심 지역과 전공/분야에 일치하는 맞춤형 정부 정책이 공고될 때 가장 신속하게
+                      알림을 받아보실 수 있습니다.
                     </p>
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-bold text-slate-500" htmlFor="subscribe-email-input">
+                      <label
+                        className="text-[11px] font-bold text-slate-500"
+                        htmlFor="subscribe-email-input"
+                      >
                         이메일 주소
                       </label>
                       <input

@@ -1,4 +1,4 @@
-import type { UserProfile } from "../model/user.types";
+import type { UserProfile } from '../model/user.types';
 
 interface ProfileSummaryCardProps {
   profile: UserProfile;
@@ -10,7 +10,11 @@ export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps)
     <div className="rounded-3xl bg-white border border-slate-100 p-6 text-left space-y-4 shadow-sm">
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
         <h4 className="text-xs font-extrabold text-slate-800">개인 맞춤 조건 가중치 프로필</h4>
-        <button type="button" onClick={onEdit} className="text-xs text-primary font-bold hover:underline">
+        <button
+          type="button"
+          onClick={onEdit}
+          className="text-xs text-primary font-bold hover:underline"
+        >
           수정
         </button>
       </div>
@@ -28,11 +32,15 @@ export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps)
         </div>
         <div className="grid grid-cols-4 gap-2">
           <span className="text-slate-400 font-bold">현재 취업상태</span>
-          <span className="col-span-3 font-extrabold text-slate-800">{profile.employmentStatus}</span>
+          <span className="col-span-3 font-extrabold text-slate-800">
+            {profile.employmentStatus}
+          </span>
         </div>
         <div className="grid grid-cols-4 gap-2">
           <span className="text-slate-400 font-bold">최종 학력수준</span>
-          <span className="col-span-3 font-extrabold text-slate-800">{profile.educationStatus}</span>
+          <span className="col-span-3 font-extrabold text-slate-800">
+            {profile.educationStatus}
+          </span>
         </div>
         <div className="grid grid-cols-4 gap-2">
           <span className="text-slate-400 font-bold">관심 분야 목록</span>

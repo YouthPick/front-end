@@ -1,8 +1,8 @@
-import { usePolicySearchQuery } from "@/entities/policy";
-import { useDebouncedValue } from "@/shared/hooks";
-import { useToast } from "@/shared/ui";
+import { usePolicySearchQuery } from '@/entities/policy';
+import { useDebouncedValue } from '@/shared/hooks';
+import { useToast } from '@/shared/ui';
 
-import { useSearchFilters } from "./useSearchFilters";
+import { useSearchFilters } from './useSearchFilters';
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -23,7 +23,7 @@ export function usePolicySearch() {
   } = usePolicySearchQuery({ query: debouncedQuery, ...filters });
 
   const submitSearch = () => {
-    showToast(`검색 쿼리가 적용되었습니다: '${query}'`, "info");
+    showToast(`검색 쿼리가 적용되었습니다: '${query}'`, 'info');
   };
 
   return {

@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router';
 
-import { usePoliciesQuery, usePolicyDetailStore, type Policy } from "@/entities/policy";
-import { ProfileSummaryCard, useAuthStore, useProfileStore } from "@/entities/user";
-import { AccountDangerZone, useDeleteAccount, useLogout } from "@/features/auth";
-import { SavedPolicyList, useBookmark } from "@/features/policy-bookmark";
-import { useTrackers } from "@/features/policy-tracker";
-import { ROUTES } from "@/shared/constants";
-import { ErrorState, Skeleton, useToast } from "@/shared/ui";
+import { type Policy, usePoliciesQuery, usePolicyDetailStore } from '@/entities/policy';
+import { ProfileSummaryCard, useAuthStore, useProfileStore } from '@/entities/user';
+import { AccountDangerZone, useDeleteAccount, useLogout } from '@/features/auth';
+import { SavedPolicyList, useBookmark } from '@/features/policy-bookmark';
+import { useTrackers } from '@/features/policy-tracker';
+import { ROUTES } from '@/shared/constants';
+import { ErrorState, Skeleton, useToast } from '@/shared/ui';
 
 export function MyPage() {
   const user = useAuthStore((state) => state.user);
@@ -36,13 +36,13 @@ export function MyPage() {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const userName = user?.name ?? "";
+  const userName = user?.name ?? '';
   const savedPolicies = savedPolicyIds
     .map((id) => policies.find((policy) => policy.id === id))
     .filter((policy): policy is Policy => policy !== undefined);
 
-  const preparingCount = trackers.filter((tracker) => tracker.status === "준비중").length;
-  const waitingCount = trackers.filter((tracker) => tracker.status === "결과대기").length;
+  const preparingCount = trackers.filter((tracker) => tracker.status === '준비중').length;
+  const waitingCount = trackers.filter((tracker) => tracker.status === '결과대기').length;
 
   // 저장 카운트·목록은 bookmark+policies 조인, 준비/대기 지표는 trackers에 의존한다.
   // 쿼리 딜레이가 달라 일부만 도착하면 카운트와 목록이 어긋나므로 함께 게이트한다.
@@ -61,13 +61,15 @@ export function MyPage() {
 
   const handleRestoreView = (policy: Policy) => {
     openPolicyDetail(policy.id);
-    showToast("만료전 백업된 최종 저장 정보를 대조합니다.", "info");
+    showToast('만료전 백업된 최종 저장 정보를 대조합니다.', 'info');
   };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300 max-w-3xl mx-auto">
       <div className="text-left space-y-1">
-        <span className="text-[10px] font-extrabold text-primary uppercase tracking-wider">나의 맞춤 센터</span>
+        <span className="text-[10px] font-extrabold text-primary uppercase tracking-wider">
+          나의 맞춤 센터
+        </span>
         <h2 className="text-lg font-black text-slate-800">마이페이지</h2>
       </div>
 
@@ -106,8 +108,12 @@ export function MyPage() {
               onClick={() => navigate(ROUTES.search)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
-              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">관심 정책 저장</span>
-              <span className="text-xl font-black text-slate-800 block mt-1">{savedPolicies.length}</span>
+              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                관심 정책 저장
+              </span>
+              <span className="text-xl font-black text-slate-800 block mt-1">
+                {savedPolicies.length}
+              </span>
             </button>
 
             <button
@@ -115,7 +121,9 @@ export function MyPage() {
               onClick={() => navigate(ROUTES.tracker)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
-              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">신청 준비중</span>
+              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                신청 준비중
+              </span>
               <span className="text-xl font-black text-slate-800 block mt-1">{preparingCount}</span>
             </button>
 
@@ -124,7 +132,9 @@ export function MyPage() {
               onClick={() => navigate(ROUTES.tracker)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
-              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">결과 대기목록</span>
+              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                결과 대기목록
+              </span>
               <span className="text-xl font-black text-slate-800 block mt-1">{waitingCount}</span>
             </button>
           </div>

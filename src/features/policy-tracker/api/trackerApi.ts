@@ -1,44 +1,44 @@
-import { MOCK_API_DELAY_MS } from "@/shared/constants";
-import { delay, generateId, toIsoDateString } from "@/shared/utils";
+import { MOCK_API_DELAY_MS } from '@/shared/constants';
+import { delay, generateId, toIsoDateString } from '@/shared/utils';
 
-import type { TrackerItem, TrackerStatus } from "../types/tracker.types";
+import type { TrackerItem, TrackerStatus } from '../types/tracker.types';
 
 // 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
 
-const DEFAULT_TARGET_DATE = "2026-06-30";
+const DEFAULT_TARGET_DATE = '2026-06-30';
 
 let trackers: TrackerItem[] = [
   {
-    policyId: "p1",
-    status: "준비중",
-    targetDate: "2026-06-25",
+    policyId: 'p1',
+    status: '준비중',
+    targetDate: '2026-06-25',
     checklist: [
-      { id: "c1", text: "지원서 작성", completed: true },
-      { id: "c2", text: "자기소개서 초안 작성", completed: true },
-      { id: "c3", text: "구직상태 확인서 발급", completed: false },
-      { id: "c4", text: "최종 제출 완료", completed: false },
+      { id: 'c1', text: '지원서 작성', completed: true },
+      { id: 'c2', text: '자기소개서 초안 작성', completed: true },
+      { id: 'c3', text: '구직상태 확인서 발급', completed: false },
+      { id: 'c4', text: '최종 제출 완료', completed: false },
     ],
-    memo: "교육 일정과 면접 일정이 겹치는지 확인할 것",
+    memo: '교육 일정과 면접 일정이 겹치는지 확인할 것',
   },
   {
-    policyId: "p2",
-    status: "관심",
-    targetDate: "2026-07-10",
+    policyId: 'p2',
+    status: '관심',
+    targetDate: '2026-07-10',
     checklist: [
-      { id: "c5", text: "주민등록등본 발급", completed: false },
-      { id: "c6", text: "임대차계약서 사본 준비", completed: false },
+      { id: 'c5', text: '주민등록등본 발급', completed: false },
+      { id: 'c6', text: '임대차계약서 사본 준비', completed: false },
     ],
-    memo: "월세 이체 내역 3개월분 미리 출력해두기",
+    memo: '월세 이체 내역 3개월분 미리 출력해두기',
   },
   {
-    policyId: "p5",
-    status: "결과대기",
-    targetDate: "2026-06-20",
+    policyId: 'p5',
+    status: '결과대기',
+    targetDate: '2026-06-20',
     checklist: [
-      { id: "c7", text: "서류 업로드", completed: true },
-      { id: "c8", text: "심사 대기 확인", completed: true },
+      { id: 'c7', text: '서류 업로드', completed: true },
+      { id: 'c8', text: '심사 대기 확인', completed: true },
     ],
-    memo: "결과 발표는 공식 홈페이지 고시 예정",
+    memo: '결과 발표는 공식 홈페이지 고시 예정',
   },
 ];
 
@@ -70,7 +70,10 @@ export interface StartTrackerResult {
 }
 
 // 이미 등록된 정책이면 기존 항목을 반환한다(중복 생성 방지).
-export async function startTracker(policyId: string, deadline: string): Promise<StartTrackerResult> {
+export async function startTracker(
+  policyId: string,
+  deadline: string,
+): Promise<StartTrackerResult> {
   await delay(MOCK_API_DELAY_MS);
 
   const existing = trackers.find((tracker) => tracker.policyId === policyId);
@@ -80,14 +83,14 @@ export async function startTracker(policyId: string, deadline: string): Promise<
 
   const newTracker: TrackerItem = {
     policyId,
-    status: "준비중",
+    status: '준비중',
     targetDate: toIsoDateString(deadline) ?? DEFAULT_TARGET_DATE,
     checklist: [
-      { id: generateId(), text: "기본 제출 서류 취합", completed: false },
-      { id: generateId(), text: "공고 상세 자격요건 검증", completed: false },
-      { id: generateId(), text: "지원서 및 온라인 제출 완료", completed: false },
+      { id: generateId(), text: '기본 제출 서류 취합', completed: false },
+      { id: generateId(), text: '공고 상세 자격요건 검증', completed: false },
+      { id: generateId(), text: '지원서 및 온라인 제출 완료', completed: false },
     ],
-    memo: "",
+    memo: '',
   };
   trackers = [...trackers, newTracker];
   return { tracker: cloneTracker(newTracker), created: true };
@@ -144,10 +147,7 @@ export async function deleteChecklistItem(
   }));
 }
 
-export async function saveTrackerMemo(
-  policyId: string,
-  memo: string,
-): Promise<TrackerItem | null> {
+export async function saveTrackerMemo(policyId: string, memo: string): Promise<TrackerItem | null> {
   await delay(MOCK_API_DELAY_MS);
   return updateTracker(policyId, (tracker) => ({ ...tracker, memo }));
 }

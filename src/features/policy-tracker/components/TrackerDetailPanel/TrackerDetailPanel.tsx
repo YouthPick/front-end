@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
-import type { Policy } from "@/entities/policy";
+import type { Policy } from '@/entities/policy';
 
-import type { TrackerItem, TrackerStatus } from "../../types/tracker.types";
-import { TrackerChecklist } from "./TrackerChecklist";
-import { TrackerDeleteConfirm } from "./TrackerDeleteConfirm";
-import { TrackerMemoEditor } from "./TrackerMemoEditor";
+import type { TrackerItem, TrackerStatus } from '../../types/tracker.types';
+import { TrackerChecklist } from './TrackerChecklist';
+import { TrackerDeleteConfirm } from './TrackerDeleteConfirm';
+import { TrackerMemoEditor } from './TrackerMemoEditor';
 
-const TRACKER_STATUS_OPTIONS: TrackerStatus[] = ["관심", "준비중", "신청완료", "결과대기", "종료"];
+const TRACKER_STATUS_OPTIONS: TrackerStatus[] = ['관심', '준비중', '신청완료', '결과대기', '종료'];
 
 function isTrackerStatus(value: string): value is TrackerStatus {
   return (TRACKER_STATUS_OPTIONS as readonly string[]).includes(value);
@@ -62,7 +62,10 @@ export function TrackerDetailPanel({
       {/* Interactive inputs: status, target date */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-extrabold text-slate-400 uppercase" htmlFor="tracker-status-select">
+          <label
+            className="block text-[10px] font-extrabold text-slate-400 uppercase"
+            htmlFor="tracker-status-select"
+          >
             신청 상태 변경
           </label>
           <select
@@ -82,7 +85,10 @@ export function TrackerDetailPanel({
         </div>
 
         <div className="space-y-1.5">
-          <label className="block text-[10px] font-extrabold text-slate-400 uppercase" htmlFor="tracker-date-input">
+          <label
+            className="block text-[10px] font-extrabold text-slate-400 uppercase"
+            htmlFor="tracker-date-input"
+          >
             목표 마감일 설정
           </label>
           <input
@@ -104,7 +110,8 @@ export function TrackerDetailPanel({
           • 신청서 및 자기소개서, 구직상태 자격 소명 확인서
         </p>
         <p className="text-[10px] text-slate-400">
-          * 주관 부처 마감 이전에 제출 서류 목록이 변동되었는지 공식 안내 고시를 반드시 교차 검토하세요.
+          * 주관 부처 마감 이전에 제출 서류 목록이 변동되었는지 공식 안내 고시를 반드시 교차
+          검토하세요.
         </p>
       </div>
 

@@ -1,1 +1,1 @@
-export { TrackerDetailPanel } from "./TrackerDetailPanel";
+export { TrackerDetailPanel } from './TrackerDetailPanel';

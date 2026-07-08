@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 
-import { useProfileStore, type UserProfile } from "@/entities/user";
-import { ROUTES } from "@/shared/constants";
-import { useToast } from "@/shared/ui";
-import { getRedirectPath } from "@/shared/utils";
+import { type UserProfile, useProfileStore } from '@/entities/user';
+import { ROUTES } from '@/shared/constants';
+import { useToast } from '@/shared/ui';
+import { getRedirectPath } from '@/shared/utils';
 
 export const MAX_INTEREST_COUNT = 3;
 export const MAX_KEYWORD_COUNT = 5;
@@ -26,7 +26,7 @@ export function useProfileSetupWizard() {
     interests: [...profile.interests],
     keywords: [...profile.keywords],
   });
-  const [newKeywordInput, setNewKeywordInput] = useState("");
+  const [newKeywordInput, setNewKeywordInput] = useState('');
 
   const updateDraft = (patch: Partial<UserProfile>) => {
     setDraft((prev) => ({ ...prev, ...patch }));
@@ -39,12 +39,12 @@ export function useProfileSetupWizard() {
     }
     // 관심 분야 없이 완료하면 다음 로그인에 마법사가 다시 뜨므로 최소 1개를 요구한다.
     if (draft.interests.length === 0) {
-      showToast("관심 분야를 1개 이상 선택해 주세요.", "warning");
+      showToast('관심 분야를 1개 이상 선택해 주세요.', 'warning');
       return;
     }
     updateProfile(draft);
     navigate(from ?? ROUTES.recommend, { replace: true });
-    showToast("✨ 맞춤 프로필 설정 완료! 실시간 추천 결과 28건이 연계되었습니다.", "success");
+    showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과 28건이 연계되었습니다.', 'success');
   };
 
   const goPrev = () => {
@@ -55,24 +55,24 @@ export function useProfileSetupWizard() {
 
   const skip = () => {
     navigate(from ?? ROUTES.home, { replace: true });
-    showToast("설정 마법사가 일시적으로 보류되었습니다.", "info");
+    showToast('설정 마법사가 일시적으로 보류되었습니다.', 'info');
   };
 
   const addKeyword = () => {
     const keyword = newKeywordInput.trim();
-    if (keyword === "") return;
+    if (keyword === '') return;
     // 중복 키워드는 key 충돌과 removeKeyword의 일괄 삭제를 유발하므로 미리 걸러낸다.
     if (draft.keywords.includes(keyword)) {
-      showToast("이미 추가된 키워드입니다.", "info");
-      setNewKeywordInput("");
+      showToast('이미 추가된 키워드입니다.', 'info');
+      setNewKeywordInput('');
       return;
     }
     if (draft.keywords.length >= MAX_KEYWORD_COUNT) {
-      showToast(`관심 키워드는 최대 ${MAX_KEYWORD_COUNT}개까지 추가할 수 있습니다.`, "warning");
+      showToast(`관심 키워드는 최대 ${MAX_KEYWORD_COUNT}개까지 추가할 수 있습니다.`, 'warning');
       return;
     }
     setDraft((prev) => ({ ...prev, keywords: [...prev.keywords, keyword] }));
-    setNewKeywordInput("");
+    setNewKeywordInput('');
   };
 
   const removeKeyword = (keyword: string) => {
@@ -91,7 +91,7 @@ export function useProfileSetupWizard() {
       return;
     }
     if (draft.interests.length >= MAX_INTEREST_COUNT) {
-      showToast(`관심 분야는 최대 ${MAX_INTEREST_COUNT}개까지 선택할 수 있습니다.`, "warning");
+      showToast(`관심 분야는 최대 ${MAX_INTEREST_COUNT}개까지 선택할 수 있습니다.`, 'warning');
       return;
     }
     setDraft((prev) => ({ ...prev, interests: [...prev.interests, interest] }));

@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { fetchTrackers } from "../api/trackerApi";
+import { fetchTrackers } from '../api/trackerApi';
 
 export const trackerKeys = {
-  all: ["trackers"] as const,
+  all: ['trackers'] as const,
 };
 
 export function useTrackers() {

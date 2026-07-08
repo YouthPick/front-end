@@ -1,9 +1,9 @@
-import { ArrowRight, Edit3, Sparkles } from "lucide-react";
+import { ArrowRight, Edit3, Sparkles } from 'lucide-react';
 
-import type { Policy } from "@/entities/policy";
-import type { UserProfile } from "@/entities/user";
+import type { Policy } from '@/entities/policy';
+import type { UserProfile } from '@/entities/user';
 
-import type { PolicyRecommendation } from "../types/recommendation.types";
+import type { PolicyRecommendation } from '../types/recommendation.types';
 
 const PREVIEW_COUNT = 3;
 
@@ -33,9 +33,10 @@ export function RecommendationPreview({
             <span>{userName}님과 일치 확률이 가장 높은 추천 정책</span>
           </h3>
           <p className="text-[11px] text-slate-400 mt-1">
-            현재 프로필:{" "}
+            현재 프로필:{' '}
             <span className="font-bold text-primary">
-              {profile.region} {profile.subRegion} · {profile.employmentStatus} · {profile.educationStatus}
+              {profile.region} {profile.subRegion} · {profile.employmentStatus} ·{' '}
+              {profile.educationStatus}
             </span>
           </p>
         </div>
@@ -63,7 +64,9 @@ export function RecommendationPreview({
                 <span className="text-[10px] text-slate-400">{policy.region}</span>
               </div>
               <h4 className="text-xs font-extrabold text-slate-800 line-clamp-1">{policy.title}</h4>
-              <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">{policy.description}</p>
+              <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">
+                {policy.description}
+              </p>
             </div>
             <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
               <span className="text-slate-400 font-medium">마감 {policy.deadline}</span>

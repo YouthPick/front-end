@@ -1,4 +1,4 @@
-import { EmptyState } from "@/shared/ui";
+import { EmptyState } from '@/shared/ui';
 
 interface SearchEmptyStateProps {
   onResetAll: () => void;

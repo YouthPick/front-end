@@ -1,17 +1,17 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router';
 
-import { usePoliciesQuery, usePolicyDetailStore, type PolicyCategory } from "@/entities/policy";
-import { useAuthStore } from "@/entities/user";
-import { RecommendationPreview, useRecommendations } from "@/features/policy-recommendation";
-import { ChatbotContainer } from "@/features/chatbot";
-import { ROUTES } from "@/shared/constants";
-import { ErrorState, Skeleton } from "@/shared/ui";
-import { HeroBanner } from "@/widgets/hero-banner";
-import { PolicyCardGrid } from "@/widgets/policy-card-grid";
-import { RecentlyViewed } from "@/widgets/recently-viewed";
+import { type PolicyCategory, usePoliciesQuery, usePolicyDetailStore } from '@/entities/policy';
+import { useAuthStore } from '@/entities/user';
+import { ChatbotContainer } from '@/features/chatbot';
+import { RecommendationPreview, useRecommendations } from '@/features/policy-recommendation';
+import { ROUTES } from '@/shared/constants';
+import { ErrorState, Skeleton } from '@/shared/ui';
+import { HeroBanner } from '@/widgets/hero-banner';
+import { PolicyCardGrid } from '@/widgets/policy-card-grid';
+import { RecentlyViewed } from '@/widgets/recently-viewed';
 
-import { CategoryQuickLinks } from "./components/CategoryQuickLinks";
-import { GuestRecommendCta } from "./components/GuestRecommendCta";
+import { CategoryQuickLinks } from './components/CategoryQuickLinks';
+import { GuestRecommendCta } from './components/GuestRecommendCta';
 
 const HOME_POLICY_COUNT = 4;
 
@@ -41,7 +41,10 @@ export function HomePage() {
 
       {isAuthenticated && user ? (
         isRecommendationsError ? (
-          <ErrorState title="맞춤 추천을 불러오지 못했습니다" onRetry={() => reloadRecommendations()} />
+          <ErrorState
+            title="맞춤 추천을 불러오지 못했습니다"
+            onRetry={() => reloadRecommendations()}
+          />
         ) : isRecommendationsLoading ? (
           <Skeleton className="h-64" />
         ) : (
@@ -56,9 +59,7 @@ export function HomePage() {
         )
       ) : (
         <GuestRecommendCta
-          onGetRecommendations={() =>
-            navigate(ROUTES.login, { state: { from: ROUTES.recommend } })
-          }
+          onGetRecommendations={() => navigate(ROUTES.login, { state: { from: ROUTES.recommend } })}
           onBrowseAll={() => navigate(ROUTES.search)}
         />
       )}

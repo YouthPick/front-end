@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { fetchSyncHistory, fetchSyncSummary } from "../api/adminApi";
+import { fetchSyncHistory, fetchSyncSummary } from '../api/adminApi';
 
 export const adminSyncKeys = {
-  history: ["admin", "sync-history"] as const,
-  summary: ["admin", "sync-summary"] as const,
+  history: ['admin', 'sync-history'] as const,
+  summary: ['admin', 'sync-summary'] as const,
 };
 
 export function useSyncHistory() {

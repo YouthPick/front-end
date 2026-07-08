@@ -1,18 +1,18 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import {
   fetchPolicies,
   fetchRecentlyViewedPolicies,
-  searchPolicies,
   type PolicySearchParams,
-} from "../api/policyApi";
-import { mapPolicyDtosToPolicies, mapRecentlyViewedDtoToModel } from "./policyMapper";
-import type { RecentlyViewedPolicy } from "./policy.types";
+  searchPolicies,
+} from '../api/policyApi';
+import type { RecentlyViewedPolicy } from './policy.types';
+import { mapPolicyDtosToPolicies, mapRecentlyViewedDtoToModel } from './policyMapper';
 
 export const policyKeys = {
-  all: ["policies"] as const,
-  list: (params: PolicySearchParams) => ["policies", "list", params] as const,
-  recentlyViewed: ["policies", "recently-viewed"] as const,
+  all: ['policies'] as const,
+  list: (params: PolicySearchParams) => ['policies', 'list', params] as const,
+  recentlyViewed: ['policies', 'recently-viewed'] as const,
 };
 
 export function usePoliciesQuery() {

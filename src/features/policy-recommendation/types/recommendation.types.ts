@@ -1,6 +1,6 @@
-import type { Policy } from "@/entities/policy";
+import type { Policy } from '@/entities/policy';
 
-export type RecommendationReliability = "HIGH" | "MEDIUM" | "LOW";
+export type RecommendationReliability = 'HIGH' | 'MEDIUM' | 'LOW';
 
 export interface PolicyRecommendation {
   policy: Policy;

@@ -1,7 +1,7 @@
-import { MOCK_API_DELAY_MS } from "@/shared/constants";
-import { delay } from "@/shared/utils";
-import type { PolicyDto, RecentlyViewedPolicyDto } from "./policy.dto";
-import { MOCK_POLICY_DTOS, RECENTLY_VIEWED_POLICY_DTOS } from "./policyMockData";
+import { MOCK_API_DELAY_MS } from '@/shared/constants';
+import { delay } from '@/shared/utils';
+import type { PolicyDto, RecentlyViewedPolicyDto } from './policy.dto';
+import { MOCK_POLICY_DTOS, RECENTLY_VIEWED_POLICY_DTOS } from './policyMockData';
 
 // 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
 
@@ -18,12 +18,12 @@ function cloneDto(dto: PolicyDto): PolicyDto {
 }
 
 function normalizeCategory(value: string): string {
-  return value.replace(/・/g, "·");
+  return value.replace(/・/g, '·');
 }
 
 function matchesSearchParams(policy: PolicyDto, params: PolicySearchParams): boolean {
-  const query = params.query?.trim().toLowerCase() ?? "";
-  if (query !== "") {
+  const query = params.query?.trim().toLowerCase() ?? '';
+  if (query !== '') {
     const matchesQuery =
       policy.title.toLowerCase().includes(query) ||
       policy.category.toLowerCase().includes(query) ||
@@ -31,22 +31,27 @@ function matchesSearchParams(policy: PolicyDto, params: PolicySearchParams): boo
     if (!matchesQuery) return false;
   }
 
-  if (params.region && params.region !== "전체" && policy.region !== "전국") {
+  if (params.region && params.region !== '전체' && policy.region !== '전국') {
     if (policy.region !== params.region) return false;
   }
 
-  if (params.category && params.category !== "전체") {
+  if (params.category && params.category !== '전체') {
     if (normalizeCategory(policy.category) !== normalizeCategory(params.category)) return false;
   }
 
-  if (params.age && params.age !== "전체" && policy.target !== "전체" && policy.target !== params.age) {
+  if (
+    params.age &&
+    params.age !== '전체' &&
+    policy.target !== '전체' &&
+    policy.target !== params.age
+  ) {
     return false;
   }
 
   if (
     params.status &&
-    params.status !== "전체" &&
-    !policy.eligibleStatuses.includes("전체") &&
+    params.status !== '전체' &&
+    !policy.eligibleStatuses.includes('전체') &&
     !policy.eligibleStatuses.includes(params.status)
   ) {
     return false;

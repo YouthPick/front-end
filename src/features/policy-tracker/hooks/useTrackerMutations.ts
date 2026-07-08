@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useToast } from "@/shared/ui";
+import { useToast } from '@/shared/ui';
 
 import {
   addChecklistItem,
@@ -10,9 +10,9 @@ import {
   toggleChecklistItem,
   updateTrackerDate,
   updateTrackerStatus,
-} from "../api/trackerApi";
-import type { TrackerItem, TrackerStatus } from "../types/tracker.types";
-import { trackerKeys } from "./useTrackers";
+} from '../api/trackerApi';
+import type { TrackerItem, TrackerStatus } from '../types/tracker.types';
+import { trackerKeys } from './useTrackers';
 
 export function useTrackerMutations() {
   const queryClient = useQueryClient();
@@ -27,7 +27,7 @@ export function useTrackerMutations() {
       updateTrackerStatus(policyId, status),
     onSuccess: (_, { status }) => {
       invalidateTrackers();
-      showToast(`신청관리 상태가 [${status}]로 갱신되었습니다.`, "success");
+      showToast(`신청관리 상태가 [${status}]로 갱신되었습니다.`, 'success');
     },
   });
 
@@ -36,7 +36,7 @@ export function useTrackerMutations() {
       updateTrackerDate(policyId, targetDate),
     onSuccess: (_, { targetDate }) => {
       invalidateTrackers();
-      showToast(`제출 마감일정이 변경되었습니다: ${targetDate}`, "info");
+      showToast(`제출 마감일정이 변경되었습니다: ${targetDate}`, 'info');
     },
   });
 
@@ -45,7 +45,7 @@ export function useTrackerMutations() {
       addChecklistItem(policyId, text),
     onSuccess: () => {
       invalidateTrackers();
-      showToast("체크리스트 준비 일감이 추가되었습니다.", "success");
+      showToast('체크리스트 준비 일감이 추가되었습니다.', 'success');
     },
   });
 
@@ -69,7 +69,7 @@ export function useTrackerMutations() {
       deleteChecklistItem(policyId, itemId),
     onSuccess: () => {
       invalidateTrackers();
-      showToast("준비할 일감이 삭제되었습니다.", "info");
+      showToast('준비할 일감이 삭제되었습니다.', 'info');
     },
   });
 
@@ -78,7 +78,7 @@ export function useTrackerMutations() {
       saveTrackerMemo(policyId, memo),
     onSuccess: () => {
       invalidateTrackers();
-      showToast("📝 개인 기록 메모가 성공적으로 저장되었습니다.", "success");
+      showToast('📝 개인 기록 메모가 성공적으로 저장되었습니다.', 'success');
     },
   });
 
@@ -86,7 +86,7 @@ export function useTrackerMutations() {
     mutationFn: (policyId: string) => deleteTracker(policyId),
     onSuccess: () => {
       invalidateTrackers();
-      showToast("신청관리 목록에서 안전하게 삭제되었습니다.", "warning");
+      showToast('신청관리 목록에서 안전하게 삭제되었습니다.', 'warning');
     },
   });
 

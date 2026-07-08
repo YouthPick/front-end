@@ -1,4 +1,4 @@
-import { TrackerContainer } from "@/features/policy-tracker";
+import { TrackerContainer } from '@/features/policy-tracker';
 
 export function TrackerPage() {
   return (
