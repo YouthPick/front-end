@@ -6,7 +6,6 @@ import { useAuthStore } from '@/entities/user';
 import { ROUTES } from '@/shared/constants';
 
 const MENU_ITEMS = [
-  { to: ROUTES.home, label: '홈', end: true, muted: false, adminOnly: false, authOnly: false },
   {
     to: ROUTES.search,
     label: '정책 찾기',
