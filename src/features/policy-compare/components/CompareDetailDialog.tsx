@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 
 import type { Policy } from '@/entities/policy';
+import { useBodyScrollLock } from '@/shared/hooks';
 
 import { COMPARE_SLOTS } from './compareSlots';
 
@@ -18,6 +19,8 @@ const COMPARE_ROWS: { label: string; render: (policy: Policy) => string }[] = [
 ];
 
 export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogProps) {
+  useBodyScrollLock();
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <motion.div
@@ -89,16 +92,6 @@ export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogPr
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="mt-8 flex justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-xl bg-slate-900 px-5 py-2 text-xs font-bold text-white hover:bg-slate-800"
-          >
-            닫기
-          </button>
         </div>
       </motion.div>
     </div>
