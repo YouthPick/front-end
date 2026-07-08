@@ -1,49 +1,22 @@
-import { Menu, User, X } from 'lucide-react';
-import { useState } from 'react';
+import { User } from 'lucide-react';
 import { Link, NavLink, useNavigate } from 'react-router';
 import youthPickLogo from '@/assets/images/youthpick-logo.png';
 import { useAuthStore } from '@/entities/user';
 import { ROUTES } from '@/shared/constants';
 
 const MENU_ITEMS = [
-  {
-    to: ROUTES.search,
-    label: '정책 찾기',
-    end: false,
-    muted: false,
-    adminOnly: false,
-    authOnly: false,
-  },
-  {
-    to: ROUTES.recommend,
-    label: '맞춤 추천',
-    end: false,
-    muted: false,
-    adminOnly: false,
-    authOnly: false,
-  },
-  {
-    to: ROUTES.tracker,
-    label: '신청관리',
-    end: false,
-    muted: false,
-    adminOnly: false,
-    authOnly: true,
-  },
-  { to: ROUTES.admin, label: '관리자', end: false, muted: true, adminOnly: true, authOnly: false },
+  { to: ROUTES.search, label: '정책 찾기', end: false, authOnly: false },
+  { to: ROUTES.recommend, label: '맞춤 추천', end: false, authOnly: false },
+  { to: ROUTES.tracker, label: '신청관리', end: false, authOnly: true },
 ];
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const navigate = useNavigate();
 
-  // 관리자 전용 링크는 실제 admin 계정에만, 로그인 전용 링크(신청관리)는 인증 사용자에만 노출한다.
-  // (라우터 가드와 이중 방어)
-  const menuItems = MENU_ITEMS.filter(
-    (item) => (!item.adminOnly || user?.role === 'admin') && (!item.authOnly || isAuthenticated),
-  );
+  // 로그인 전용 링크(신청관리)는 인증 사용자에게만 노출한다. (라우터 가드와 이중 방어)
+  const menuItems = MENU_ITEMS.filter((item) => !item.authOnly || isAuthenticated);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md shadow-sm">
@@ -52,7 +25,6 @@ export function Header() {
         <div className="flex items-center space-x-8">
           <Link
             to={ROUTES.home}
-            onClick={() => setMobileMenuOpen(false)}
             className="flex cursor-pointer items-center"
             id="header-logo"
             aria-label="YouthPick 홈"
@@ -60,7 +32,7 @@ export function Header() {
             <img src={youthPickLogo} alt="" className="h-8 w-auto" />
           </Link>
 
-          {/* Desktop navigation */}
+          {/* Desktop navigation. 모바일은 하단 탭바(MobileNav)가 동일한 동선을 제공한다. */}
           <nav className="hidden md:flex items-center space-x-6 text-xs font-bold text-slate-500">
             {menuItems.map((item) => (
               <NavLink
@@ -68,13 +40,7 @@ export function Header() {
                 to={item.to}
                 end={item.end}
                 className={({ isActive }) =>
-                  `transition-all py-1.5 px-1 relative hover:text-primary ${
-                    isActive
-                      ? 'text-primary'
-                      : item.muted
-                        ? 'text-slate-400 font-medium hover:text-slate-600'
-                        : ''
-                  }`
+                  `transition-all py-1.5 px-1 relative hover:text-primary ${isActive ? 'text-primary' : ''}`
                 }
               >
                 {({ isActive }) => (
@@ -93,27 +59,36 @@ export function Header() {
         {/* Right side: login/profile */}
         <div className="flex items-center space-x-3">
           {isAuthenticated && user ? (
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                navigate(ROUTES.my);
-              }}
-              className="flex items-center space-x-1.5 rounded-full border border-slate-100 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700 transition-all hover:bg-slate-100"
-              id="header-profile-button"
-            >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-black text-white">
-                {user.name[0]}
-              </span>
-              <span className="max-w-[70px] truncate">{user.name}님</span>
-            </button>
+            <>
+              {user.role === 'admin' && (
+                <NavLink
+                  to={ROUTES.admin}
+                  className={({ isActive }) =>
+                    `text-xs font-bold transition-colors hover:text-primary ${
+                      isActive ? 'text-primary' : 'text-slate-400'
+                    }`
+                  }
+                  id="header-admin-link"
+                >
+                  관리자
+                </NavLink>
+              )}
+              <button
+                type="button"
+                onClick={() => navigate(ROUTES.my)}
+                className="flex items-center space-x-1.5 rounded-full border border-slate-100 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700 transition-all hover:bg-slate-100"
+                id="header-profile-button"
+              >
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-black text-white">
+                  {user.name[0]}
+                </span>
+                <span className="max-w-[70px] truncate">{user.name}님</span>
+              </button>
+            </>
           ) : (
             <button
               type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                navigate(ROUTES.login);
-              }}
+              onClick={() => navigate(ROUTES.login)}
               className="flex items-center space-x-1 rounded-full bg-primary px-4.5 py-2 text-xs font-bold text-white transition-all hover:brightness-105 active:scale-95 cursor-pointer shadow-sm shadow-primary/10"
               id="login-button"
             >
@@ -121,44 +96,8 @@ export function Header() {
               <span>로그인</span>
             </button>
           )}
-
-          {/* Mobile menu toggle */}
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
-            aria-expanded={mobileMenuOpen}
-            className="md:hidden flex h-8 w-8 items-center justify-center rounded-xl border border-slate-100 hover:bg-slate-50"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-4.5 w-4.5 text-slate-600" />
-            ) : (
-              <Menu className="h-4.5 w-4.5 text-slate-600" />
-            )}
-          </button>
         </div>
       </div>
-
-      {/* Mobile menu panel */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-1 shadow-inner animate-in slide-in-from-top duration-200">
-          {menuItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              onClick={() => setMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `flex w-full items-center rounded-xl px-4 py-2.5 text-xs font-bold text-left transition-colors ${
-                  isActive ? 'bg-primary/10 text-primary' : 'text-slate-600 hover:bg-slate-50'
-                }`
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </div>
-      )}
     </header>
   );
 }
