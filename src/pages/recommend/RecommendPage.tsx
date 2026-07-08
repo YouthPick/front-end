@@ -2,8 +2,7 @@ import { Edit3 } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 import { useProfileStore } from '@/entities/user';
-import { ChatbotContainer } from '@/features/chatbot';
-import { ComparePanelContainer } from '@/features/policy-compare';
+import { CompareDockContainer } from '@/features/policy-compare';
 import { ProfileBriefing } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
 import { RecommendationFeed } from '@/widgets/recommendation-feed';
@@ -36,16 +35,10 @@ export function RecommendPage() {
 
       <ProfileBriefing profile={profile} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-8">
-          <RecommendationFeed />
-        </div>
+      <RecommendationFeed />
 
-        <div className="lg:col-span-4 space-y-6">
-          <ComparePanelContainer />
-          <ChatbotContainer />
-        </div>
-      </div>
+      {/* 정책 비교 독 (우측 슬라이드-인, 담긴 정책이 있을 때만 노출) */}
+      <CompareDockContainer />
     </div>
   );
 }
