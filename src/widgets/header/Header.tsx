@@ -36,7 +36,7 @@ export function Header() {
             id="header-logo"
             aria-label="YouthPick 홈"
           >
-            <img src={youthPickLogo} alt="YouthPick" className="h-8 w-auto" />
+            <img src={youthPickLogo} alt="" className="h-8 w-auto" />
           </Link>
 
           {/* Desktop navigation */}
