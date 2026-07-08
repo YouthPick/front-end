@@ -19,7 +19,7 @@ export function MobileNav() {
   const navItems = NAV_ITEMS.filter((item) => !item.authOnly || isAuthenticated);
 
   return (
-    <nav className="md:hidden sticky bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-100 px-4 py-2 flex items-center justify-around text-[10px] font-bold text-slate-400">
+    <nav className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-100 px-4 py-2 flex items-center justify-around text-[10px] font-bold text-slate-400">
       {navItems.map((item) => {
         const Icon = item.icon;
         return (
