@@ -38,7 +38,7 @@ reviews:
         Container/Presenter 패턴:
         - Container는 상태, side effect, API 호출을 담당하고, Presenter는 props 기반 렌더링만 한다.
         - Presenter 내부에서 fetch, localStorage 접근, 복잡한 상태 전이가 있으면 지적한다.
-        - 기능 로직은 model 디렉터리의 custom hook(use 접두사)으로 분리되어야 한다.
+        - 기능 로직은 hooks 디렉터리의 custom hook(use 접두사)으로 분리되어야 한다.
 
         TypeScript:
         - any 사용 금지. unknown + type guard를 권장한다.
