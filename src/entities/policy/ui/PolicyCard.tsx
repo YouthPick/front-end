@@ -34,6 +34,7 @@ export function PolicyCard({
         type="button"
         onClick={() => onViewDetails(policy)}
         aria-label={`${policy.title} 상세 보기`}
+        title={policy.title}
         className="absolute inset-0 rounded-2xl focus:outline-none"
       />
 
