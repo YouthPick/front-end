@@ -7,12 +7,17 @@ import { RecommendationPreview, useRecommendations } from '@/features/policy-rec
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
 import { HeroBanner } from '@/widgets/hero-banner';
-import { POLICY_GRID_CLASS, PolicyCardGrid } from '@/widgets/policy-card-grid';
+import {
+  POLICY_GRID_CLASS,
+  POLICY_GRID_SKELETON_COUNT,
+  PolicyCardGrid,
+} from '@/widgets/policy-card-grid';
 
 import { CategoryQuickLinks } from './components/CategoryQuickLinks';
 import { GuestRecommendCta } from './components/GuestRecommendCta';
 
-const HOME_POLICY_COUNT = 6;
+// 로딩 스켈레톤 개수를 실제 표시 개수와 같은 값으로 맞춰 드리프트를 방지한다.
+const HOME_POLICY_COUNT = POLICY_GRID_SKELETON_COUNT;
 
 export function HomePage() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -83,12 +88,10 @@ export function HomePage() {
 
         {isLoading ? (
           <div className={POLICY_GRID_CLASS}>
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
+            {Array.from({ length: HOME_POLICY_COUNT }, (_, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: 순서가 바뀌지 않는 정적 로딩 플레이스홀더라 안정적인 id가 없다
+              <Skeleton key={index} className="h-56" />
+            ))}
           </div>
         ) : (
           <PolicyCardGrid

@@ -6,7 +6,11 @@ import {
   usePolicySearch,
 } from '@/features/policy-search';
 import { ErrorState, Skeleton } from '@/shared/ui';
-import { POLICY_GRID_CLASS, PolicyCardGrid } from '@/widgets/policy-card-grid';
+import {
+  POLICY_GRID_CLASS,
+  POLICY_GRID_SKELETON_COUNT,
+  PolicyCardGrid,
+} from '@/widgets/policy-card-grid';
 
 export function SearchPage() {
   const {
@@ -59,12 +63,10 @@ export function SearchPage() {
 
       {isLoading && (
         <div className={POLICY_GRID_CLASS}>
-          <Skeleton className="h-56" />
-          <Skeleton className="h-56" />
-          <Skeleton className="h-56" />
-          <Skeleton className="h-56" />
-          <Skeleton className="h-56" />
-          <Skeleton className="h-56" />
+          {Array.from({ length: POLICY_GRID_SKELETON_COUNT }, (_, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: 순서가 바뀌지 않는 정적 로딩 플레이스홀더라 안정적인 id가 없다
+            <Skeleton key={index} className="h-56" />
+          ))}
         </div>
       )}
 
