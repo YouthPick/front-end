@@ -11,7 +11,7 @@ export function getPolicyCategoryBadgeClasses(category: PolicyCategory): string 
     case '주거':
       return 'bg-blue-50 text-blue-600 border-blue-100';
     case '교육':
-      return 'bg-indigo-50 text-indigo-600 border-indigo-100';
+      return 'bg-teal-50 text-teal-600 border-teal-100';
     case '복지·문화':
       return 'bg-rose-50 text-rose-600 border-rose-100';
     default:
