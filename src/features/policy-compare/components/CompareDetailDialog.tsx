@@ -18,6 +18,11 @@ const COMPARE_ROWS: { label: string; render: (policy: Policy) => string }[] = [
   { label: '정책 소개', render: (policy) => policy.description },
 ];
 
+// 정책 칸끼리 옅은 세로선으로 구분한다(첫 칸 제외). 라벨 칸은 구분선 없이 오른쪽 여백만 둔다.
+function getPolicyCellClass(index: number) {
+  return `flex-1 min-w-0 text-left px-4 ${index > 0 ? 'border-l border-slate-100' : ''}`;
+}
+
 export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogProps) {
   useBodyScrollLock();
 
@@ -44,14 +49,14 @@ export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogPr
 
         <div className="mt-6 space-y-4">
           {/* 헤더: 정책 제목 */}
-          <div className="flex gap-4">
-            <div className="w-20 shrink-0 self-center text-left text-xs font-semibold text-slate-400">
+          <div className="flex">
+            <div className="w-28 shrink-0 self-center whitespace-nowrap pr-4 text-left text-xs font-semibold text-slate-400">
               구분
             </div>
             {policies.map((policy, index) => (
               <div
                 key={policy.id}
-                className={`flex-1 text-left text-xs font-bold ${COMPARE_SLOTS[index]?.title ?? 'text-slate-700'}`}
+                className={`${getPolicyCellClass(index)} text-xs font-bold ${COMPARE_SLOTS[index]?.title ?? 'text-slate-700'}`}
               >
                 {policy.title}
               </div>
@@ -61,14 +66,14 @@ export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogPr
           <div className="border-t border-slate-50"></div>
 
           {COMPARE_ROWS.map((row) => (
-            <div key={row.label} className="flex gap-4">
-              <div className="w-20 shrink-0 text-left text-xs font-bold text-slate-500">
+            <div key={row.label} className="flex">
+              <div className="w-28 shrink-0 whitespace-nowrap pr-4 text-left text-xs font-bold text-slate-500">
                 {row.label}
               </div>
-              {policies.map((policy) => (
+              {policies.map((policy, index) => (
                 <div
                   key={policy.id}
-                  className="flex-1 text-left text-xs text-slate-700 leading-relaxed"
+                  className={`${getPolicyCellClass(index)} text-xs text-slate-700 leading-relaxed`}
                 >
                   {row.render(policy)}
                 </div>
@@ -77,14 +82,14 @@ export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogPr
           ))}
 
           {/* 상세 혜택 및 요건 (리스트) */}
-          <div className="flex gap-4">
-            <div className="w-20 shrink-0 text-left text-xs font-bold text-slate-500">
+          <div className="flex">
+            <div className="w-28 shrink-0 whitespace-nowrap pr-4 text-left text-xs font-bold text-slate-500">
               상세 혜택 및 요건
             </div>
-            {policies.map((policy) => (
+            {policies.map((policy, index) => (
               <div
                 key={policy.id}
-                className="flex-1 text-left text-[10px] text-slate-600 space-y-1.5 leading-relaxed"
+                className={`${getPolicyCellClass(index)} text-[10px] text-slate-600 space-y-1.5 leading-relaxed`}
               >
                 {policy.details.map((detail) => (
                   <p key={detail}>• {detail}</p>
