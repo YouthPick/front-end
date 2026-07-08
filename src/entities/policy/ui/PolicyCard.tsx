@@ -28,7 +28,15 @@ export function PolicyCard({
   onToggleCompare,
 }: PolicyCardProps) {
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+    <div className="relative flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-within:ring-2 focus-within:ring-primary/40">
+      {/* 카드 전체를 덮는 상세 이동 버튼. 내부 버튼(비교·찜)은 z-10으로 위에 올려 독립 동작시킨다. */}
+      <button
+        type="button"
+        onClick={() => onViewDetails(policy)}
+        aria-label={`${policy.title} 상세 보기`}
+        className="absolute inset-0 rounded-2xl focus:outline-none"
+      />
+
       <div className="space-y-3.5">
         {/* Top Badges and subtle compare checkbox */}
         <div className="flex items-center justify-between">
@@ -50,7 +58,7 @@ export function PolicyCard({
           <button
             type="button"
             onClick={() => onToggleCompare(policy)}
-            className={`flex items-center space-x-1 rounded px-2 py-0.5 text-[10px] font-bold border transition-colors ${
+            className={`relative z-10 flex items-center space-x-1 rounded px-2 py-0.5 text-[10px] font-bold border transition-colors ${
               isComparing
                 ? 'bg-primary/10 border-primary/30 text-primary'
                 : 'bg-white border-slate-200 text-slate-400 hover:text-slate-600'
@@ -82,22 +90,13 @@ export function PolicyCard({
         </div>
       </div>
 
-      {/* Card Action Buttons */}
-      <div className="mt-4.5 flex items-center gap-2 border-t border-slate-100/75 pt-3.5">
-        <button
-          type="button"
-          onClick={() => onViewDetails(policy)}
-          className="flex-1 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-800"
-          id={`view-details-${policy.id}`}
-        >
-          자세히 보기
-        </button>
-
+      {/* Card Action Button */}
+      <div className="mt-4.5 border-t border-slate-100/75 pt-3.5">
         <button
           type="button"
           onClick={() => onToggleSave(policy.id)}
           aria-pressed={isSaved}
-          className={`flex-1 flex items-center justify-center space-x-1 rounded-xl border py-2.5 text-xs font-bold transition-colors ${
+          className={`relative z-10 flex w-full items-center justify-center space-x-1 rounded-xl border py-2.5 text-xs font-bold transition-colors ${
             isSaved
               ? 'bg-rose-50 border-rose-100 text-rose-500'
               : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700'
