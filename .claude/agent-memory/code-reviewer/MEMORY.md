@@ -6,7 +6,7 @@ code-reviewer 에이전트가 이 레포를 리뷰하며 축적하는 지속 메
 
 - 스택: React 19, TypeScript(strict 지향), Vite 6, Tailwind CSS 4, pnpm 11.9.0. 테스트 러너 미도입.
 - 구조: Feature-Sliced Design. 의존 방향 `app → pages → widgets → features → entities → shared` (역방향 import 금지).
-- 검증 명령: `corepack pnpm run lint`(= `tsc --noEmit`), `corepack pnpm run build`.
+- 검증 명령: `corepack pnpm run lint`(= `biome check .` + `tsc --noEmit`), `corepack pnpm run build`. 포맷·lint는 Biome, 타입 검증은 `tsc`가 담당(별도 `typecheck` 스크립트도 있음).
 - 디자인 토큰은 `src/index.css`의 `@theme`/`:root`에 정의. 임의 hex/radius/shadow 금지.
 - 에러 처리: HTTP status가 아니라 응답 body의 `code` 기준으로 사용자 메시지를 매핑한다.
 

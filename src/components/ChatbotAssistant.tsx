@@ -18,12 +18,13 @@ export default function ChatbotAssistant() {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto scroll to bottom
+  // 새 메시지 추가·로딩 상태 변화 시 최하단으로 스크롤
+  // biome-ignore lint/correctness/useExhaustiveDependencies: messages·loading 변화를 스크롤 트리거로 의도적으로 구독
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, []);
+  }, [messages, loading]);
 
   const sendMessageToApi = async (text: string) => {
     if (!text.trim()) return;
@@ -53,9 +54,14 @@ export default function ChatbotAssistant() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, history }),
+        signal: AbortSignal.timeout(15000),
       });
 
       const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'API 요청에 실패했습니다.');
+      }
 
       const botMsg: ChatMessage = {
         id: `b-${Date.now()}`,

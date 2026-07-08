@@ -27,7 +27,7 @@ React 코드는 공식 권장 패턴과 커뮤니티 표준을 따른다. 진입
 ## 3. 접근성
 
 - semantic HTML을 사용한다.
-- 버튼은 `type="button"`을 명시한다.
+- 기본(비제출) 버튼은 `type="button"`을 명시한다. 폼 제출/리셋 버튼은 `type="submit"` / `type="reset"`을 쓴다.
 - 아이콘/비텍스트 컨트롤에는 `aria-label`을 붙이고 focus 가능 상태를 고려한다.
 - `target="_blank"` 링크에는 `rel="noopener noreferrer"`를 붙인다.
 

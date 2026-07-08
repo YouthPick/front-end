@@ -22,13 +22,13 @@ block() {
   exit 2
 }
 
-# 1) 루트/홈 대상 파괴적 삭제
-if printf '%s' "$cmd" | grep -Eq 'rm[[:space:]]+(-[a-zA-Z]+[[:space:]]+)*-[a-zA-Z]*[rRfF][a-zA-Z]*[[:space:]]+(/|~|\$HOME|/\*|\.\*)([[:space:]]|$)'; then
+# 1) 루트/홈 대상 파괴적 삭제 (short/long 옵션 모두)
+if printf '%s' "$cmd" | grep -Eq 'rm[[:space:]]+((-[a-zA-Z]+|--(recursive|force|no-preserve-root))[[:space:]]+)*(-[a-zA-Z]*[rRfF][a-zA-Z]*|--(recursive|force))[[:space:]]+(/|~|\$HOME|/\*|\.\*)([[:space:]]|$)'; then
   block "루트/홈 대상 파괴적 삭제(rm -rf)"
 fi
 
-# 2) .env 등 시크릿 파일 내용 출력
-if printf '%s' "$cmd" | grep -Eq '(cat|less|more|head|tail|xxd|od|base64|strings)[[:space:]]+[^|;&]*(\.env($|[^.a-zA-Z0-9])|\.env\.[a-z]+|id_rsa|id_ed25519|\.pem($|[^a-zA-Z]))'; then
+# 2) .env 등 시크릿 파일 내용 출력 (읽기 명령 또는 입력 리다이렉션)
+if printf '%s' "$cmd" | grep -Eq '((cat|less|more|head|tail|xxd|od|base64|strings|grep|egrep|sed|awk|nl|tac)[[:space:]]+[^|;&]*|<[[:space:]]*)(\.env($|[^.a-zA-Z0-9])|\.env\.[a-z]+|id_rsa|id_ed25519|\.pem($|[^a-zA-Z]))'; then
   block "시크릿/자격증명 파일 내용 출력 시도"
 fi
 

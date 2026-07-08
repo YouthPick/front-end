@@ -8,7 +8,7 @@
 - React 19 · TypeScript · Vite 6 · Tailwind CSS 4 · pnpm 11.9.0
 - 포매터/린터: **Biome** (`biome.json`). 포맷·import 정리·lint를 한 도구로 처리. 타입 검증은 `tsc --noEmit`가 담당.
 - 구조: Feature-Sliced Design(FSD) — `app / pages / widgets / features / entities / shared`
-- 빌드: Vite 정적 SPA. production smoke는 Vite preview 서버(`pnpm start`)로 확인하고 별도 Node 서버를 추가하지 않는다.
+- 빌드: `pnpm build`가 Vite로 SPA를 만들고 `server.ts`를 `dist/server.cjs`로 번들한다. production smoke는 `pnpm start`(= `node dist/server.cjs`, 정적 결과물 + `/api/chat` 서빙)로 확인한다.
 - 백엔드 API 연동: 에러는 HTTP status가 아니라 응답 body의 `code` 기반으로 사용자 메시지를 매핑한다.
 - 디자인 토큰은 `src/index.css`에 정의된 것만 사용한다.
 
@@ -59,6 +59,6 @@ corepack pnpm run build    # vite build
 - `.claude/agents/code-reviewer.md` — 수정하지 않고 리뷰만 하는 전용 에이전트.
 - `.claude/skills/security-review/` — 프론트 보안 점검 스킬.
 - `.claude/workflows/pr-review.js` — 관점별 병렬 리뷰 → 적대적 검증 → 종합 워크플로우.
-- `.claude/hooks/` — `block-secrets.sh`(파괴적 삭제·시크릿 노출 차단), `format-on-save.sh`(prettier 있을 때 포맷). `settings.json`에 연결됨.
+- `.claude/hooks/` — `block-secrets.sh`(파괴적 삭제·시크릿 노출 차단), `format-on-save.sh`(Biome로 저장 파일 포맷·정리). `settings.json`에 연결됨.
 - `.claude/output-styles/teaching.md` — 설명을 덧붙이는 말투.
 - `CLAUDE.local.md`, `.claude/settings.local.json` — 개인/로컬 전용(gitignore).

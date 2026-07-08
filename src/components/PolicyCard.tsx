@@ -1,4 +1,4 @@
-import { Briefcase, CheckSquare, GraduationCap, Heart, Home, Square, ThumbsUp } from 'lucide-react';
+import { CheckSquare, Heart, Square } from 'lucide-react';
 import type { Policy } from '../types';
 
 interface PolicyCardProps {
@@ -57,15 +57,6 @@ export default function PolicyCard({
     return 'bg-sky-50 text-sky-600 border-sky-100';
   };
 
-  const IconMap = {
-    job: Briefcase,
-    home: Home,
-    education: GraduationCap,
-    heart: Heart,
-    hand: ThumbsUp,
-  };
-
-  const _LogoIcon = IconMap[policy.logoType] || Briefcase;
   const colors = getCategoryStyles(policy.category);
 
   return (
