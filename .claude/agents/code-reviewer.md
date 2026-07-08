@@ -10,7 +10,7 @@ model: inherit
 ## 진행 방식
 
 1. `git diff origin/dev...HEAD`(없으면 워킹/스테이징 diff)로 변경 범위를 확인한다.
-2. 변경 파일과 그 주변 맥락(같은 slice의 index/model/ui)을 읽고 diff만 보고 판단하지 않는다.
+2. 변경 파일과 그 주변 맥락(같은 slice의 public API `index.ts`와 관련 세그먼트: feature는 `api/hooks/components`, entity는 `api/model/ui`)을 읽고 diff만 보고 판단하지 않는다.
 3. 아래 관점으로 점검하고, 각 발견을 `파일:라인 · 무엇이 문제 · 왜 · 권장 수정`으로 남긴다.
 
 ## 리뷰 관점
@@ -22,11 +22,11 @@ model: inherit
 
 **Container / Presenter**
 - Presenter가 API 호출·localStorage·복잡한 상태 전이를 직접 하지 않는가?
-- 기능 로직이 `model`의 custom hook으로 분리됐는가? hook 이름은 `use`로 시작하는가?
+- 기능 로직이 feature의 `hooks`에 있는 `use*` custom hook으로 분리됐는가? hook 이름은 `use`로 시작하는가?
 
 **TypeScript**
 - `any`, 불필요한 `as`, `@ts-ignore`가 있는가? (`unknown` + type guard 권장)
-- API DTO와 UI model이 분리되고 매퍼가 `lib`에 있는가?
+- API DTO와 UI model이 분리되고 매퍼가 올바른 위치(공유 도메인은 `entities/*/model`, feature 전용은 feature `api` 근처)에 있는가?
 - nullable 처리와 union/discriminated union 사용이 안전한가?
 
 **React**

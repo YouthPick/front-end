@@ -24,7 +24,7 @@ allowed-tools: Bash(gh issue *), Bash(gh pr *), Bash(git *), Bash(corepack pnpm 
 4. **구현**:
    - FSD 의존 방향(`app → pages → widgets → features → entities → shared`)을 지킨다.
    - 새/큰 변경 기능은 Container/Presenter로 분리하고 로직은 `hooks`의 `use*` custom hook에 둔다.
-   - API는 DTO ↔ UI model 분리 + `lib` 매퍼. 에러는 `code` 기반 매핑.
+   - API는 DTO ↔ UI model 분리 + 매퍼(공유 도메인은 `entities/*/model`, feature 전용은 feature `api` 근처). 에러는 `code` 기반 매핑.
    - 디자인은 `src/index.css` 토큰과 기존 UI 패턴을 따른다. 임의 색/여백/radius 금지.
    - `any`, 불필요한 `as`, `@ts-ignore` 금지.
    - loading/error/empty/fallback 상태와 접근성(semantic HTML, button type, aria, 외부 링크 rel)을 처리한다.
