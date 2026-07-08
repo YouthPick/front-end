@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+# 동일 브랜치/PR에서 새 커밋이 푸시되면 진행 중인 실행을 취소한다.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# 검증 전용 잡이므로 읽기 권한만 부여한다.
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # 검증만 하는 잡이라 push 권한이 필요 없다.
+          # 자격증명을 워크스페이스에 남기지 않아 서드파티 postinstall의 토큰 탈취를 막는다.
+          persist-credentials: false
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint & typecheck
+        run: pnpm run lint
+
+      - name: Build
+        run: pnpm run build
