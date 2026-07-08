@@ -1,4 +1,3 @@
-import { ChatbotContainer } from '@/features/chatbot';
 import { ComparePanelContainer } from '@/features/policy-compare';
 import {
   PolicyFilterBar,
@@ -87,7 +86,6 @@ export function SearchPage() {
 
             <div className="lg:col-span-4 space-y-6">
               <ComparePanelContainer />
-              <ChatbotContainer />
             </div>
           </div>
         ) : (
