@@ -1,6 +1,6 @@
 import { RefreshCw } from 'lucide-react';
 
-import type { Policy } from '@/entities/policy';
+import { getPolicyCategoryBadgeClasses, type Policy } from '@/entities/policy';
 import { MAX_COMPARE_COUNT } from '@/shared/constants';
 
 import { COMPARE_SLOTS } from './compareSlots';
@@ -15,11 +15,10 @@ interface ComparePanelPresenterProps {
 interface CompareSlotProps {
   policy: Policy | undefined;
   slotLabel: string;
-  badgeClasses: string;
   onRemove: (policy: Policy) => void;
 }
 
-function CompareSlot({ policy, slotLabel, badgeClasses, onRemove }: CompareSlotProps) {
+function CompareSlot({ policy, slotLabel, onRemove }: CompareSlotProps) {
   if (!policy) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-white py-2 text-[9px] font-bold text-slate-400 min-h-[64px]">
@@ -31,7 +30,9 @@ function CompareSlot({ policy, slotLabel, badgeClasses, onRemove }: CompareSlotP
   return (
     <div className="relative rounded-lg border border-slate-100 bg-white p-2.5 min-h-[64px]">
       <div className="space-y-1 pr-4">
-        <span className={`inline-block rounded px-1.5 py-0.5 text-[9px] font-bold ${badgeClasses}`}>
+        <span
+          className={`inline-block rounded border px-1.5 py-0.5 text-[9px] font-bold ${getPolicyCategoryBadgeClasses(policy.category)}`}
+        >
           {policy.category}
         </span>
         <h4
@@ -116,7 +117,6 @@ export function ComparePanelPresenter({
               key={slot.label}
               policy={comparingPolicies[index]}
               slotLabel={slot.label}
-              badgeClasses={slot.badge}
               onRemove={onRemove}
             />
           ))}
