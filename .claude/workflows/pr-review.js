@@ -11,7 +11,7 @@ export const meta = {
   ],
 };
 
-// 리뷰 관점 (.claude/rules/* 기반)
+// 리뷰 관점 (rules.md 기반)
 const DIMENSIONS = [
   {
     key: 'fsd',
@@ -21,7 +21,7 @@ const DIMENSIONS = [
   {
     key: 'container-presenter',
     prompt:
-      'Container/Presenter 관점에서만 리뷰하라. Presenter가 API 호출/localStorage/복잡한 상태전이를 직접 하는지, 기능 로직이 model의 use* custom hook으로 분리됐는지 확인하라.',
+      'Container/Presenter 관점에서만 리뷰하라. Presenter가 API 호출/localStorage/복잡한 상태전이를 직접 하는지, 기능 로직이 hooks의 use* custom hook으로 분리됐는지 확인하라.',
   },
   {
     key: 'typescript',
@@ -91,7 +91,7 @@ const reviewed = await pipeline(
   DIMENSIONS,
   (d) =>
     agent(
-      `이 레포(React19+TS+Vite+Tailwind, FSD)의 변경사항을 리뷰한다. 기준은 AGENTS.md와 .claude/rules/ 문서다.\n` +
+      `이 레포(React19+TS+Vite+Tailwind, FSD)의 변경사항을 리뷰한다. 기준은 AGENTS.md와 정본 규칙 rules.md다.\n` +
         `먼저 \`${DIFF_CMD}\`로 변경 파일과 diff를 확보하고, 필요하면 주변 파일도 읽어라.\n` +
         `아래 관점만 담당한다. 다른 관점은 무시한다.\n관점: ${d.prompt}\n` +
         `확신이 낮은 항목은 넣지 말고, 실제 문제만 findings로 반환하라. 없으면 빈 배열.`,
@@ -104,7 +104,7 @@ const reviewed = await pipeline(
           agent(
             `다음 리뷰 발견이 실제 문제인지 적대적으로 검증하라. 기본값은 "반증"이며, 근거가 확실할 때만 isReal=true.\n` +
               `파일: ${f.file}:${f.line}\n요약: ${f.summary}\n제안: ${f.suggestion}\n` +
-              `해당 파일을 직접 읽고 .claude/rules/ 기준으로 판단하라.`,
+              `해당 파일을 직접 읽고 rules.md 기준으로 판단하라.`,
             { label: `verify:${d.key}:${f.file}`, phase: 'Verify', schema: VERDICT_SCHEMA },
           ).then((v) => ({ ...f, dimension: d.key, verdict: v })),
       ),
@@ -123,7 +123,7 @@ phase('Synthesize');
 log(`검증 통과 ${confirmed.length}건. 종합합니다.`);
 
 const report = await agent(
-  `아래는 관점별 리뷰 후 적대적 검증을 통과한 발견 목록(JSON)이다. 이 레포 규칙(AGENTS.md · .claude/rules/) 기준으로 한국어 리뷰 리포트를 작성하라.\n` +
+  `아래는 관점별 리뷰 후 적대적 검증을 통과한 발견 목록(JSON)이다. 이 레포 규칙(AGENTS.md · rules.md) 기준으로 한국어 리뷰 리포트를 작성하라.\n` +
     `- 심각도(Blocking/High/Medium/Nit)순으로 정리\n- 각 항목: 파일:라인 · 문제 · 왜 · 권장 수정\n- 중복은 병합\n- 마지막에 잘된 점 1~2줄과 머지 가능 여부 의견\n\n` +
     JSON.stringify(confirmed, null, 2),
   { phase: 'Synthesize' },

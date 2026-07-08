@@ -1,15 +1,20 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import { RouterProvider } from 'react-router/dom';
+
+import { AppProviders } from './app/providers';
+import { router } from './app/router';
 import './index.css';
 
-const rootEl = document.getElementById('root');
-if (!rootEl) {
-  throw new Error('Root element #root not found');
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error('Root element #root를 찾을 수 없습니다.');
 }
 
-createRoot(rootEl).render(
+createRoot(rootElement).render(
   <StrictMode>
-    <App />
+    <AppProviders>
+      <RouterProvider router={router} />
+    </AppProviders>
   </StrictMode>,
 );

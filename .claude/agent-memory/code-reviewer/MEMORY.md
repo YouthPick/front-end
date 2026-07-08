@@ -13,10 +13,10 @@ code-reviewer 에이전트가 이 레포를 리뷰하며 축적하는 지속 메
 ## 반복 지적 패턴
 
 <!-- 리뷰하며 반복 발견되는 항목을 여기에 추가. 예: -->
-<!-- - Presenter에서 fetch/localStorage 직접 호출 → model hook으로 분리 필요. (근거: .claude/rules/component-pattern.md) -->
-<!-- - list index key 사용 → stable id로 교체. (근거: .claude/rules/react.md) -->
+<!-- - Presenter에서 fetch/localStorage 직접 호출 → hooks의 custom hook으로 분리 필요. (근거: rules.md) -->
+<!-- - list index key 사용 → stable id로 교체. (근거: rules.md) -->
 
 ## 합의된 판단 / 예외
 
 <!-- 팀이 합의한 예외나 관례를 여기에 기록. 예: -->
-<!-- - 초기 마이그레이션 중인 src/App.tsx 대형 파일은 기능 변경 시 점진 분리 허용. (근거: .claude/rules/component-pattern.md) -->
+<!-- - FSD 레이어 경계·public API(index.ts) 준수 여부는 rules.md의 FSD 규칙 기준으로 판단. (근거: rules.md) -->

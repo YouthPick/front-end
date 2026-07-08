@@ -6,7 +6,7 @@ allowed-tools: Bash(gh issue *), Bash(gh pr *), Bash(git *), Bash(corepack pnpm 
 
 # /fix-issue
 
-이 레포의 이슈 우선 워크플로우로 이슈 하나를 끝까지 처리한다. 반드시 [`AGENTS.md`](../../AGENTS.md)와 작업 관련 [`.claude/rules/`](../rules) 문서를 먼저 따른다.
+이 레포의 이슈 우선 워크플로우로 이슈 하나를 끝까지 처리한다. 반드시 [`AGENTS.md`](../../AGENTS.md)와 정본 상세 규칙 [`rules.md`](../../rules.md)를 먼저 따른다.
 
 ## 대상 이슈
 
