@@ -68,7 +68,7 @@ export function MyPage() {
           <div className="grid grid-cols-3 gap-4">
             <button
               type="button"
-              onClick={() => navigate(ROUTES.tracker)}
+              onClick={() => navigate(`${ROUTES.tracker}?tab=${encodeURIComponent('관심')}`)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
               <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
@@ -79,7 +79,7 @@ export function MyPage() {
 
             <button
               type="button"
-              onClick={() => navigate(ROUTES.tracker)}
+              onClick={() => navigate(`${ROUTES.tracker}?tab=${encodeURIComponent('준비중')}`)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
               <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
@@ -90,7 +90,7 @@ export function MyPage() {
 
             <button
               type="button"
-              onClick={() => navigate(ROUTES.tracker)}
+              onClick={() => navigate(`${ROUTES.tracker}?tab=${encodeURIComponent('결과대기')}`)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
               <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
