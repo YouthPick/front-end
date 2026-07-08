@@ -75,7 +75,7 @@ export function PolicyCard({
           <h3 className="line-clamp-1 text-sm font-bold text-slate-800" title={policy.title}>
             {policy.title}
           </h3>
-          <p className="line-clamp-2 h-7.5 text-[11px] leading-relaxed text-slate-400 font-medium">
+          <p className="line-clamp-2 min-h-9 text-[11px] leading-relaxed text-slate-400 font-medium">
             {policy.description}
           </p>
         </div>
