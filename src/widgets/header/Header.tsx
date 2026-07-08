@@ -1,7 +1,7 @@
-import { Menu, Sparkles, User, X } from 'lucide-react';
+import { Menu, User, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router';
-
+import youthPickLogo from '@/assets/images/youthpick-logo.png';
 import { useAuthStore } from '@/entities/user';
 import { ROUTES } from '@/shared/constants';
 
@@ -31,15 +31,11 @@ export function Header() {
           <Link
             to={ROUTES.home}
             onClick={() => setMobileMenuOpen(false)}
-            className="flex cursor-pointer items-center space-x-2 text-xl font-bold tracking-tight"
+            className="flex cursor-pointer items-center"
             id="header-logo"
+            aria-label="YouthPick 홈"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Sparkles className="h-4 w-4 fill-current animate-pulse" />
-            </span>
-            <span className="font-extrabold text-slate-800 bg-gradient-to-r from-primary to-brand-secondary bg-clip-text text-transparent">
-              YouthPick
-            </span>
+            <img src={youthPickLogo} alt="" className="h-8 w-auto" />
           </Link>
 
           {/* Desktop navigation */}
