@@ -115,7 +115,7 @@ export function Header() {
                 setMobileMenuOpen(false);
                 navigate(ROUTES.login);
               }}
-              className="flex items-center space-x-1 rounded-full bg-gradient-to-r from-primary to-brand-secondary px-4.5 py-2 text-xs font-bold text-white transition-all hover:brightness-105 active:scale-95 cursor-pointer shadow-sm shadow-primary/10"
+              className="flex items-center space-x-1 rounded-full bg-primary px-4.5 py-2 text-xs font-bold text-white transition-all hover:brightness-105 active:scale-95 cursor-pointer shadow-sm shadow-primary/10"
               id="login-button"
             >
               <User className="h-3.5 w-3.5" />

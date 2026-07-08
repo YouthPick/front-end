@@ -27,7 +27,7 @@ export function PolicySearchBar({ query, onQueryChange, onSubmit }: PolicySearch
       <button
         type="button"
         onClick={onSubmit}
-        className="rounded-2xl bg-gradient-to-r from-primary to-brand-secondary px-6 py-3 text-xs font-bold text-white transition-all hover:brightness-105"
+        className="rounded-2xl bg-primary px-6 py-3 text-xs font-bold text-white transition-all hover:brightness-105"
       >
         검색하기
       </button>

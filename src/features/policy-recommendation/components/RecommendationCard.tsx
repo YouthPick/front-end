@@ -101,7 +101,7 @@ export function RecommendationCard({
         <button
           type="button"
           onClick={() => onStartTracker(policy)}
-          className="rounded-xl bg-gradient-to-r from-primary to-brand-secondary px-4.5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 transition-all"
+          className="rounded-xl bg-primary px-4.5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 transition-all"
         >
           신청관리 시작
         </button>
