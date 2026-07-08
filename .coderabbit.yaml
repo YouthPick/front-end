@@ -15,7 +15,7 @@ reviews:
     enabled: true
     drafts: false
     base_branches:
-      - "main"
+      - "dev"
   labeling_instructions:
     - label: "feat"
       instructions: "새로운 기능 추가 PR에 적용"
