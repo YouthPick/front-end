@@ -45,7 +45,7 @@ export function CompareDockContainer() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 360, opacity: 0 }}
               style={{ y: '-50%' }}
-              className="fixed right-4 top-1/2 z-40 w-80 max-w-[calc(100vw-2rem)]"
+              className="fixed right-4 top-1/2 z-40 w-[28rem] max-w-[calc(100vw-2rem)]"
             >
               <button
                 type="button"
