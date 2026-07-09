@@ -14,7 +14,7 @@ export function CommunityCategoryTabs({
   onCategoryChange,
 }: CommunityCategoryTabsProps) {
   return (
-    <div className="flex flex-wrap gap-1.5 border-b border-slate-200 pb-2">
+    <div className="flex flex-wrap gap-1.5">
       {CATEGORY_TABS.map((tab) => (
         <button
           key={tab}
