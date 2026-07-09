@@ -8,6 +8,7 @@ import { ROUTES } from '@/shared/constants';
 
 import { RootLayout } from '../layouts/RootLayout';
 import { ProtectedRoute } from './ProtectedRoute';
+import { RequireOnboarded } from './RequireOnboarded';
 
 // 홈·검색·로그인 외 화면은 라우트 단위로 지연 로딩해 초기 번들을 줄인다.
 const AdminPage = lazy(() => import('@/pages/admin').then((m) => ({ default: m.AdminPage })));
@@ -42,7 +43,10 @@ export const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
-          { path: ROUTES.recommend, element: <RecommendPage /> },
+          {
+            element: <RequireOnboarded />,
+            children: [{ path: ROUTES.recommend, element: <RecommendPage /> }],
+          },
           { path: ROUTES.tracker, element: <TrackerPage /> },
           { path: ROUTES.my, element: <MyPage /> },
           { path: ROUTES.profileSetup, element: <ProfileSetupPage /> },

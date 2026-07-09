@@ -12,6 +12,14 @@ export interface Policy {
   tag: PolicyTag;
   description: string;
   target: string;
+  eligibleStatuses: string[];
+  // 온보딩 프로필과의 매칭 채점용 정책 조건. 조건 없음 표현은 필드별로 다르다(policy.dto.ts 주석 참고).
+  ageMin: number | null;
+  ageMax: number | null;
+  maritalCondition: string;
+  majorCondition: string;
+  specialConditionTags: string[];
+  incomeMax: number | null;
   deadline: string;
   logoType: PolicyLogoType;
   details: string[];

@@ -36,17 +36,20 @@ export function MyPage() {
         <h2 className="text-lg font-black text-slate-800">마이페이지</h2>
       </div>
 
-      {/* Account card */}
-      <div className="rounded-3xl bg-white border border-slate-100 p-6 text-left flex items-center space-x-4 shadow-sm">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-primary to-brand-secondary text-lg font-black text-white">
-          {userName[0]}
-        </div>
-        <div className="space-y-1 flex-1">
-          <h3 className="text-sm font-extrabold text-slate-800">{userName}님</h3>
-          <p className="text-[11px] text-slate-400 flex items-center">
-            <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 mr-1.5 animate-ping" />
-            <span>Google 계정 연동 간편 로그인 사용 중</span>
-          </p>
+      {/* 닉네임·이메일은 소셜 로그인에서 받아온 값으로, 여기서 수정할 수 없다. */}
+      <div className="rounded-3xl bg-white border border-slate-100 p-6 text-left shadow-sm">
+        <div className="flex items-center space-x-4">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-primary to-brand-secondary text-lg font-black text-white">
+            {userName[0]}
+          </div>
+          <div className="space-y-1 flex-1 min-w-0">
+            <h3 className="text-sm font-extrabold text-slate-800">{userName}님</h3>
+            <p className="text-[11px] text-slate-400 truncate">{user?.email}</p>
+            <p className="text-[11px] text-slate-400 flex items-center">
+              <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 mr-1.5 animate-ping" />
+              <span>{user?.provider} 계정 연동 간편 로그인 사용 중</span>
+            </p>
+          </div>
         </div>
       </div>
 

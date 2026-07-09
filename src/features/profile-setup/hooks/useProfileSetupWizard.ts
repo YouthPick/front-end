@@ -8,7 +8,14 @@ import { getRedirectPath } from '@/shared/utils';
 
 export const MAX_INTEREST_COUNT = 3;
 export const MAX_KEYWORD_COUNT = 5;
-export const WIZARD_TOTAL_STEPS = 3;
+export const WIZARD_TOTAL_STEPS = 4;
+
+// 출생연도·거주지역(1단계)·취업상태·학력(2단계)은 필수값이다. 나머지 단계는 전부 선택이라 항상 통과시킨다.
+function isStepComplete(step: number, draft: UserProfile): boolean {
+  if (step === 1) return draft.birthYear !== 0 && draft.region !== '';
+  if (step === 2) return draft.employmentStatus !== '' && draft.educationStatus !== '';
+  return true;
+}
 
 export function useProfileSetupWizard() {
   const profile = useProfileStore((state) => state.profile);
@@ -23,6 +30,7 @@ export function useProfileSetupWizard() {
   const [step, setStep] = useState(1);
   const [draft, setDraft] = useState<UserProfile>({
     ...profile,
+    specialConditions: [...profile.specialConditions],
     interests: [...profile.interests],
     keywords: [...profile.keywords],
   });
@@ -32,19 +40,20 @@ export function useProfileSetupWizard() {
     setDraft((prev) => ({ ...prev, ...patch }));
   };
 
+  const canProceed = isStepComplete(step, draft);
+
   const goNext = () => {
+    // 버튼이 비활성화돼 있어 정상 흐름에서는 도달하지 않지만, 방어적으로 한 번 더 막는다.
+    if (!canProceed) return;
+
     if (step < WIZARD_TOTAL_STEPS) {
       setStep((prev) => prev + 1);
       return;
     }
-    // 관심 분야 없이 완료하면 다음 로그인에 마법사가 다시 뜨므로 최소 1개를 요구한다.
-    if (draft.interests.length === 0) {
-      showToast('관심 분야를 1개 이상 선택해 주세요.', 'warning');
-      return;
-    }
-    updateProfile(draft);
+    // 결혼상태·전공·특화조건·연소득·관심분야는 모두 선택 항목이라, 비워 두면 매칭 시 제한없음으로 간주한다.
+    updateProfile({ ...draft, isOnboarded: true });
     navigate(from ?? ROUTES.recommend, { replace: true });
-    showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과 28건이 연계되었습니다.', 'success');
+    showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과를 확인해보세요.', 'success');
   };
 
   const goPrev = () => {
@@ -54,8 +63,9 @@ export function useProfileSetupWizard() {
   };
 
   const skip = () => {
-    navigate(from ?? ROUTES.home, { replace: true });
-    showToast('설정 마법사가 일시적으로 보류되었습니다.', 'info');
+    // 원래 가려던 경로(from)가 온보딩을 요구하는 화면(예: 맞춤 추천)이면 그리로 돌아가는 순간
+    // 다시 마법사로 튕기므로, 스킵은 항상 홈으로 보낸다.
+    navigate(ROUTES.home, { replace: true });
   };
 
   const addKeyword = () => {
@@ -97,9 +107,19 @@ export function useProfileSetupWizard() {
     setDraft((prev) => ({ ...prev, interests: [...prev.interests, interest] }));
   };
 
+  const toggleSpecialCondition = (condition: string) => {
+    setDraft((prev) => ({
+      ...prev,
+      specialConditions: prev.specialConditions.includes(condition)
+        ? prev.specialConditions.filter((c) => c !== condition)
+        : [...prev.specialConditions, condition],
+    }));
+  };
+
   return {
     step,
     draft,
+    canProceed,
     newKeywordInput,
     setNewKeywordInput,
     updateDraft,
@@ -109,5 +129,6 @@ export function useProfileSetupWizard() {
     addKeyword,
     removeKeyword,
     toggleInterest,
+    toggleSpecialCondition,
   };
 }

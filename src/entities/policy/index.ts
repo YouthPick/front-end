@@ -14,6 +14,7 @@ export type {
   RecentlyViewedPolicy,
 } from './model/policy.types';
 export { normalizePolicyCategory, POLICY_CATEGORIES } from './model/policyCategories';
+export { UNRESTRICTED_CONDITION } from './model/policyConditions';
 export { usePolicyDetailStore } from './model/policyDetailStore';
 export {
   mapPolicyDtosToPolicies,
