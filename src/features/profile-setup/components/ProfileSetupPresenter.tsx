@@ -9,6 +9,7 @@ import { WizardStepStatus } from './WizardStepStatus';
 interface ProfileSetupPresenterProps {
   step: number;
   draft: UserProfile;
+  canProceed: boolean;
   newKeywordInput: string;
   onKeywordInputChange: (value: string) => void;
   onUpdateDraft: (patch: Partial<UserProfile>) => void;
@@ -24,6 +25,7 @@ interface ProfileSetupPresenterProps {
 export function ProfileSetupPresenter({
   step,
   draft,
+  canProceed,
   newKeywordInput,
   onKeywordInputChange,
   onUpdateDraft,
@@ -96,7 +98,8 @@ export function ProfileSetupPresenter({
         <button
           type="button"
           onClick={onNext}
-          className="rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:brightness-105 active:scale-95"
+          disabled={!canProceed}
+          className="rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:brightness-105 active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none disabled:hover:brightness-100 disabled:active:scale-100"
         >
           {step === WIZARD_TOTAL_STEPS ? '맞춤 추천목록 확인' : '다음 단계로'}
         </button>

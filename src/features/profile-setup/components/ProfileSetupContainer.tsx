@@ -5,6 +5,7 @@ export function ProfileSetupContainer() {
   const {
     step,
     draft,
+    canProceed,
     newKeywordInput,
     setNewKeywordInput,
     updateDraft,
@@ -21,6 +22,7 @@ export function ProfileSetupContainer() {
     <ProfileSetupPresenter
       step={step}
       draft={draft}
+      canProceed={canProceed}
       newKeywordInput={newKeywordInput}
       onKeywordInputChange={setNewKeywordInput}
       onUpdateDraft={updateDraft}

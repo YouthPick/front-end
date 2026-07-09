@@ -10,6 +10,13 @@ export const MAX_INTEREST_COUNT = 3;
 export const MAX_KEYWORD_COUNT = 5;
 export const WIZARD_TOTAL_STEPS = 4;
 
+// 출생연도·거주지역(1단계)·취업상태·학력(2단계)은 필수값이다. 나머지 단계는 전부 선택이라 항상 통과시킨다.
+function isStepComplete(step: number, draft: UserProfile): boolean {
+  if (step === 1) return draft.birthYear !== 0 && draft.region !== '';
+  if (step === 2) return draft.employmentStatus !== '' && draft.educationStatus !== '';
+  return true;
+}
+
 export function useProfileSetupWizard() {
   const profile = useProfileStore((state) => state.profile);
   const updateProfile = useProfileStore((state) => state.updateProfile);
@@ -33,7 +40,12 @@ export function useProfileSetupWizard() {
     setDraft((prev) => ({ ...prev, ...patch }));
   };
 
+  const canProceed = isStepComplete(step, draft);
+
   const goNext = () => {
+    // 버튼이 비활성화돼 있어 정상 흐름에서는 도달하지 않지만, 방어적으로 한 번 더 막는다.
+    if (!canProceed) return;
+
     if (step < WIZARD_TOTAL_STEPS) {
       setStep((prev) => prev + 1);
       return;
@@ -106,6 +118,7 @@ export function useProfileSetupWizard() {
   return {
     step,
     draft,
+    canProceed,
     newKeywordInput,
     setNewKeywordInput,
     updateDraft,
