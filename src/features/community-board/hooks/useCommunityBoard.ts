@@ -9,7 +9,7 @@ const SEARCH_DEBOUNCE_MS = 300;
 export function useCommunityBoard() {
   const { query, category, sort, setQuery, setCategory, setSort } = useCommunityBoardFilters();
 
-  // 입력은 URL에 즉시 반영하되, 질의는 디바운스해 keystroke마다 refetch되지 않게 한다.
+  // 검색 질의는 디바운스해 keystroke마다 refetch되지 않게 한다(URL 동기화는 훅 내부에서 별도 디바운스).
   const debouncedQuery = useDebouncedValue(query, SEARCH_DEBOUNCE_MS);
 
   const {
