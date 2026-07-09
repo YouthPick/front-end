@@ -90,12 +90,9 @@ export function WizardStepAdditional({
           <input
             type="checkbox"
             checked={draft.incomeUnknown}
-            onChange={(e) =>
-              onUpdateDraft({
-                incomeUnknown: e.target.checked,
-                annualIncome: e.target.checked ? null : draft.annualIncome,
-              })
-            }
+            // 체크 시 annualIncome을 지우지 않는다. matchesIncome이 incomeUnknown만으로 이미
+            // 중립 처리하므로 값을 유지해야 체크 해제 시 이전에 입력한 소득이 그대로 복원된다.
+            onChange={(e) => onUpdateDraft({ incomeUnknown: e.target.checked })}
             className="h-3.5 w-3.5 rounded border-slate-300 accent-primary"
           />
           <span>소득 정보 없음 / 소득 무관 정책만 매칭</span>
