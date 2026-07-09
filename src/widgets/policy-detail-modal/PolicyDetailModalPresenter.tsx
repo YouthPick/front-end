@@ -177,7 +177,7 @@ export function PolicyDetailModalPresenter({
             }`}
           >
             <Star className={`h-4.5 w-4.5 ${isSaved ? 'fill-current' : ''}`} />
-            <span>{isSaved ? '담김' : '담기'}</span>
+            <span>관심</span>
           </button>
 
           <button
