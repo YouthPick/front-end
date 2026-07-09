@@ -5,6 +5,7 @@ import {
   CommunityBoardSortSelect,
   CommunityCategoryTabs,
   CommunitySearchBar,
+  DEFAULT_CATEGORY_VALUE,
   useCommunityBoard,
 } from '@/features/community-board';
 import { ROUTES } from '@/shared/constants';
@@ -73,7 +74,7 @@ export function CommunityPage() {
           <CommunityBoardEmptyState
             onResetFilters={() => {
               setQuery('');
-              setCategory('전체');
+              setCategory(DEFAULT_CATEGORY_VALUE);
             }}
           />
         ))}

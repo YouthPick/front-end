@@ -15,5 +15,5 @@ export const ROUTES = {
 export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES];
 
 export function buildCommunityDetailPath(postId: string): string {
-  return ROUTES.communityDetail.replace(':postId', postId);
+  return ROUTES.communityDetail.replace(':postId', encodeURIComponent(postId));
 }

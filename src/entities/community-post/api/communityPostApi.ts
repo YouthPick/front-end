@@ -1,5 +1,6 @@
 import { MOCK_API_DELAY_MS } from '@/shared/constants';
 import { delay, generateId } from '@/shared/utils';
+import type { CommunityPostCategory } from '../model/communityPost.types';
 import type { CommunityPostSortOption } from '../model/communityPostSort';
 import type { CommunityPostDto } from './communityPost.dto';
 import { MOCK_COMMUNITY_POST_DTOS } from './communityPostMockData';
@@ -69,7 +70,7 @@ export async function fetchCommunityPost(postId: string): Promise<CommunityPostD
 // 좋아요 토글 시 집계 좋아요 수를 함께 갱신한다. delta는 +1(좋아요) 또는 -1(좋아요 취소).
 export async function adjustCommunityPostLikeCount(
   postId: string,
-  delta: number,
+  delta: 1 | -1,
 ): Promise<CommunityPostDto | null> {
   await delay(MOCK_API_DELAY_MS);
   let updated: CommunityPostDto | null = null;
@@ -83,7 +84,7 @@ export async function adjustCommunityPostLikeCount(
 
 export interface CreateCommunityPostParams {
   title: string;
-  category: string;
+  category: CommunityPostCategory;
   content: string;
   authorName: string;
 }
@@ -98,7 +99,8 @@ export async function createCommunityPost(
     category: params.category,
     content: params.content,
     authorName: params.authorName,
-    createdAt: new Date().toISOString().slice(0, 10),
+    // toISOString()은 UTC 기준이라 자정 근처 KST 시간대에 하루 어긋날 수 있어 KST 기준으로 포맷한다.
+    createdAt: new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date()),
     viewCount: 0,
     commentCount: 0,
     likeCount: 0,
