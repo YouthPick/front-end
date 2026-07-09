@@ -15,7 +15,12 @@ export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps)
   return (
     <div className="rounded-3xl bg-white border border-slate-100 p-6 text-left space-y-4 shadow-sm">
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h4 className="text-xs font-extrabold text-slate-800">개인 맞춤 조건 가중치 프로필</h4>
+        <div className="space-y-0.5">
+          <span className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+            온보딩 프로필
+          </span>
+          <h4 className="text-xs font-extrabold text-slate-800">개인 맞춤 조건 가중치 프로필</h4>
+        </div>
         <button
           type="button"
           onClick={onEdit}
