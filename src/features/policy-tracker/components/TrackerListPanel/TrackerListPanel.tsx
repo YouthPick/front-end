@@ -49,7 +49,7 @@ export function TrackerListPanel({
 
         {entries.length === 0 && (
           <div className="rounded-2xl border border-dashed border-slate-200 bg-white py-12 px-4 text-center text-slate-400 text-xs">
-            이 카테고리 상태에 배정된 신청 일감이 없습니다.
+            이 카테고리 상태에 배정된 정책이 없습니다.
           </div>
         )}
       </div>
