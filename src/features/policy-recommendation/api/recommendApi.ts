@@ -1,4 +1,4 @@
-import type { Policy } from '@/entities/policy';
+import { type Policy, UNRESTRICTED_CONDITION } from '@/entities/policy';
 import type { UserProfile } from '@/entities/user';
 import { CURRENT_YEAR } from '@/shared/constants';
 
@@ -37,18 +37,35 @@ function matchesAge(age: number, ageMin: number | null, ageMax: number | null): 
   return true;
 }
 
-function matchesEligibleStatus(profile: UserProfile, eligibleStatuses: string[]): boolean {
-  if (eligibleStatuses.length === 0 || eligibleStatuses.includes('전체')) return true;
-  const userTokens = [
-    ...(EMPLOYMENT_TO_ELIGIBLE_TOKENS[profile.employmentStatus] ?? []),
-    ...(EDUCATION_TO_ELIGIBLE_TOKENS[profile.educationStatus] ?? []),
-  ];
-  return eligibleStatuses.some((status) => userTokens.includes(status));
+type EligibleStatusMatch = {
+  matched: boolean;
+  // 어느 쪽 상태 값이 실제로 일치했는지. 추천 사유 문구에 올바른 값을 표시하는 데 쓰인다.
+  matchedBy: 'employment' | 'education' | null;
+};
+
+function matchesEligibleStatus(
+  profile: UserProfile,
+  eligibleStatuses: string[],
+): EligibleStatusMatch {
+  if (eligibleStatuses.length === 0 || eligibleStatuses.includes('전체')) {
+    return { matched: true, matchedBy: null };
+  }
+  const employmentTokens = EMPLOYMENT_TO_ELIGIBLE_TOKENS[profile.employmentStatus] ?? [];
+  const educationTokens = EDUCATION_TO_ELIGIBLE_TOKENS[profile.educationStatus] ?? [];
+  if (eligibleStatuses.some((status) => employmentTokens.includes(status))) {
+    return { matched: true, matchedBy: 'employment' };
+  }
+  if (eligibleStatuses.some((status) => educationTokens.includes(status))) {
+    return { matched: true, matchedBy: 'education' };
+  }
+  return { matched: false, matchedBy: null };
 }
 
 // 결혼상태·전공: 유저가 미선택(빈 값)이거나 정책이 제한없음이면 항상 통과시키고, 그 외엔 정확히 일치해야 통과한다.
 function matchesOpenCondition(userValue: string, policyCondition: string): boolean {
-  return policyCondition === '제한없음' || userValue === '' || userValue === policyCondition;
+  return (
+    policyCondition === UNRESTRICTED_CONDITION || userValue === '' || userValue === policyCondition
+  );
 }
 
 type ConditionResult = 'neutral' | 'match' | 'mismatch';
@@ -76,6 +93,10 @@ export function buildRecommendations(
     .map((policy) => {
       let score = 55;
       const reasons: string[] = [];
+      // 연령·결혼상태·전공·소득처럼 정책이 명시적으로 요구하는 조건과 어긋나면 점수를 깎는 것만으로는
+      // 부족하다(다른 가점으로 상쇄돼 부적격 정책이 상위에 노출될 수 있음). 하드 미스매치는 별도로 표시해
+      // 아래에서 추천 목록 자체에서 제외한다.
+      let hardIneligible = false;
 
       if (policy.region === profile.region || policy.region === '전국') {
         score += 15;
@@ -90,13 +111,19 @@ export function buildRecommendations(
           reasons.push(`만 ${age}세로 지원 연령 조건에 해당합니다.`);
         } else {
           score -= 25;
+          hardIneligible = true;
         }
       }
 
-      if (matchesEligibleStatus(profile, policy.eligibleStatuses)) {
+      const eligibleResult = matchesEligibleStatus(profile, policy.eligibleStatuses);
+      if (eligibleResult.matched) {
         if (policy.eligibleStatuses.length > 0 && !policy.eligibleStatuses.includes('전체')) {
           score += 8;
-          reasons.push(`현재 상태(${profile.employmentStatus})가 정책 대상 자격에 포함됩니다.`);
+          const matchedLabel =
+            eligibleResult.matchedBy === 'education'
+              ? profile.educationStatus
+              : profile.employmentStatus;
+          reasons.push(`현재 상태(${matchedLabel})가 정책 대상 자격에 포함됩니다.`);
         }
       } else {
         score -= 6;
@@ -109,10 +136,12 @@ export function buildRecommendations(
 
       if (!matchesOpenCondition(profile.maritalStatus, policy.maritalCondition)) {
         score -= 12;
+        hardIneligible = true;
       }
 
       if (!matchesOpenCondition(profile.major, policy.majorCondition)) {
         score -= 8;
+        hardIneligible = true;
       }
 
       const specialResult = matchesSpecialConditions(profile, policy.specialConditionTags);
@@ -129,6 +158,7 @@ export function buildRecommendations(
         reasons.push('입력하신 연소득이 정책 소득 기준 이내입니다.');
       } else if (incomeResult === 'mismatch') {
         score -= 15;
+        hardIneligible = true;
       }
 
       if (reasons.length === 0) {
@@ -136,11 +166,16 @@ export function buildRecommendations(
       }
 
       return {
-        policy,
-        score: Math.min(98, Math.max(10, score)),
-        reliability: 'MEDIUM' as const,
-        reasons,
+        hardIneligible,
+        recommendation: {
+          policy,
+          score: Math.min(98, Math.max(10, score)),
+          reliability: 'MEDIUM' as const,
+          reasons,
+        },
       };
     })
+    .filter((entry) => !entry.hardIneligible)
+    .map((entry) => entry.recommendation)
     .sort((a, b) => b.score - a.score);
 }
