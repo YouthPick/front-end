@@ -11,7 +11,48 @@ function formatIncome(profile: UserProfile): string {
   return `연 ${profile.annualIncome.toLocaleString()}만원`;
 }
 
+interface ChipGroupProps {
+  label: string;
+  values: string[];
+  emptyText: string;
+  chipClassName: string;
+}
+
+function ChipGroup({ label, values, emptyText, chipClassName }: ChipGroupProps) {
+  return (
+    <div className="space-y-1.5">
+      <span className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+        {label}
+      </span>
+      <div className="flex flex-wrap gap-1">
+        {values.length > 0 ? (
+          values.map((value) => (
+            <span
+              key={value}
+              className={`rounded-md px-2 py-0.5 text-[10px] font-bold ${chipClassName}`}
+            >
+              {value}
+            </span>
+          ))
+        ) : (
+          <span className="text-[10px] text-slate-400">{emptyText}</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps) {
+  const tiles = [
+    { label: '거주지', value: `${profile.region} ${profile.subRegion}` },
+    { label: '출생연도', value: `${profile.birthYear}년생` },
+    { label: '취업상태', value: profile.employmentStatus },
+    { label: '학력', value: profile.educationStatus },
+    { label: '결혼상태', value: profile.maritalStatus },
+    { label: '전공계열', value: profile.major },
+    { label: '연소득', value: formatIncome(profile) },
+  ];
+
   return (
     <div className="rounded-3xl bg-white border border-slate-100 p-6 text-left space-y-4 shadow-sm">
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -25,70 +66,30 @@ export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps)
         </button>
       </div>
 
-      <div className="space-y-3.5 text-xs text-slate-600">
-        <div className="grid grid-cols-4 gap-2">
-          <span className="text-slate-400 font-bold">기본 거주지</span>
-          <span className="col-span-3 font-extrabold text-slate-800">
-            {profile.region} {profile.subRegion}
-          </span>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          <span className="text-slate-400 font-bold">출생연도</span>
-          <span className="col-span-3 font-extrabold text-slate-800">{profile.birthYear}년생</span>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          <span className="text-slate-400 font-bold">현재 취업상태</span>
-          <span className="col-span-3 font-extrabold text-slate-800">
-            {profile.employmentStatus}
-          </span>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          <span className="text-slate-400 font-bold">최종 학력수준</span>
-          <span className="col-span-3 font-extrabold text-slate-800">
-            {profile.educationStatus}
-          </span>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          <span className="text-slate-400 font-bold">결혼 상태</span>
-          <span className="col-span-3 font-extrabold text-slate-800">{profile.maritalStatus}</span>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          <span className="text-slate-400 font-bold">전공 계열</span>
-          <span className="col-span-3 font-extrabold text-slate-800">{profile.major}</span>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          <span className="text-slate-400 font-bold">특화 조건</span>
-          <span className="col-span-3 flex flex-wrap gap-1 font-bold text-slate-700">
-            {profile.specialConditions.length > 0 ? (
-              profile.specialConditions.map((condition) => (
-                <span key={condition} className="bg-slate-100 px-2 py-0.5 rounded-md text-[10px]">
-                  {condition}
-                </span>
-              ))
-            ) : (
-              <span className="text-[10px] text-slate-400">해당없음</span>
-            )}
-          </span>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          <span className="text-slate-400 font-bold">연소득</span>
-          <span className="col-span-3 font-extrabold text-slate-800">{formatIncome(profile)}</span>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          <span className="text-slate-400 font-bold">관심 분야 목록</span>
-          <span className="col-span-3 flex flex-wrap gap-1 font-bold text-slate-700">
-            {profile.interests.length > 0 ? (
-              profile.interests.map((interest) => (
-                <span key={interest} className="bg-slate-100 px-2 py-0.5 rounded-md text-[10px]">
-                  {interest}
-                </span>
-              ))
-            ) : (
-              <span className="text-[10px] text-slate-400">관심 분야 미설정</span>
-            )}
-          </span>
-        </div>
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+        {tiles.map((tile) => (
+          <div key={tile.label} className="rounded-xl bg-slate-50 px-3.5 py-2.5 min-w-0">
+            <span className="block text-[10px] font-bold text-slate-400">{tile.label}</span>
+            <span className="mt-0.5 block truncate text-xs font-extrabold text-slate-800">
+              {tile.value}
+            </span>
+          </div>
+        ))}
       </div>
+
+      <ChipGroup
+        label="특화 조건"
+        values={profile.specialConditions}
+        emptyText="해당없음"
+        chipClassName="bg-slate-100 text-slate-700"
+      />
+
+      <ChipGroup
+        label="관심 분야"
+        values={profile.interests}
+        emptyText="관심 분야 미설정"
+        chipClassName="bg-primary/10 text-primary"
+      />
     </div>
   );
 }
