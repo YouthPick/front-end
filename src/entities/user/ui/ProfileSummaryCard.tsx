@@ -1,3 +1,5 @@
+import { getPolicyCategoryBadgeClasses } from '@/shared/utils';
+
 import type { UserProfile } from '../model/user.types';
 
 interface ProfileSummaryCardProps {
@@ -22,7 +24,7 @@ interface ChipTileProps {
   label: string;
   values: string[];
   emptyText: string;
-  chipClassName: string;
+  chipClassName: string | ((value: string) => string);
   className?: string;
 }
 
@@ -35,7 +37,9 @@ function ChipTile({ label, values, emptyText, chipClassName, className = '' }: C
           values.map((value) => (
             <span
               key={value}
-              className={`rounded-md px-2 py-0.5 text-[10px] font-bold ${chipClassName}`}
+              className={`rounded-md px-2 py-0.5 text-[10px] font-bold ${
+                typeof chipClassName === 'function' ? chipClassName(value) : chipClassName
+              }`}
             >
               {value}
             </span>
@@ -98,7 +102,7 @@ export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps)
             label="관심분야"
             values={profile.interests}
             emptyText="관심 분야 미설정"
-            chipClassName="bg-primary/10 text-primary"
+            chipClassName={(category) => `border ${getPolicyCategoryBadgeClasses(category)}`}
           />
 
           <ChipTile

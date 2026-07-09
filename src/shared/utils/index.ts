@@ -1,3 +1,4 @@
+export { getPolicyCategoryBadgeClasses } from './categoryBadgeColors';
 export { toIsoDateString } from './date';
 export { delay } from './delay';
 export { getRedirectPath } from './navigation';
