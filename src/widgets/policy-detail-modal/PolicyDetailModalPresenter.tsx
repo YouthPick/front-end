@@ -1,4 +1,4 @@
-import { Calendar, Check, CheckCircle2, Heart, HelpCircle, X } from 'lucide-react';
+import { Calendar, Check, CheckCircle2, HelpCircle, Star, X } from 'lucide-react';
 import { motion } from 'motion/react';
 
 import { getPolicyCategoryBadgeClasses, type Policy } from '@/entities/policy';
@@ -172,11 +172,11 @@ export function PolicyDetailModalPresenter({
             aria-pressed={isSaved}
             className={`flex items-center justify-center space-x-1.5 rounded-xl border px-3.5 py-2.5 text-xs font-bold transition-all ${
               isSaved
-                ? 'bg-rose-50 border-rose-100 text-rose-500 hover:bg-rose-100/50'
-                : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-rose-500'
+                ? 'bg-yellow-50 border-yellow-100 text-yellow-500 hover:bg-yellow-100/50'
+                : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-yellow-500'
             }`}
           >
-            <Heart className={`h-4.5 w-4.5 ${isSaved ? 'fill-current' : ''}`} />
+            <Star className={`h-4.5 w-4.5 ${isSaved ? 'fill-current' : ''}`} />
             <span>{isSaved ? '담김' : '담기'}</span>
           </button>
 
