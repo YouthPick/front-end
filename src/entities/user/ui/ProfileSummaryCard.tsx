@@ -11,20 +11,19 @@ function formatIncome(profile: UserProfile): string {
   return `연 ${profile.annualIncome.toLocaleString()}만원`;
 }
 
-interface ChipGroupProps {
+interface ChipTileProps {
   label: string;
   values: string[];
   emptyText: string;
   chipClassName: string;
 }
 
-function ChipGroup({ label, values, emptyText, chipClassName }: ChipGroupProps) {
+// 값이 여러 개(뱃지 목록)라 한 줄에 안 들어갈 수 있으므로 그리드 전체 폭을 차지하는 타일로 렌더한다.
+function ChipTile({ label, values, emptyText, chipClassName }: ChipTileProps) {
   return (
-    <div className="space-y-1.5">
-      <span className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
-        {label}
-      </span>
-      <div className="flex flex-wrap gap-1">
+    <div className="col-span-2 rounded-xl bg-slate-50 px-3.5 py-2.5 sm:col-span-3">
+      <span className="block text-[10px] font-bold text-slate-400">{label}</span>
+      <div className="mt-1 flex flex-wrap gap-1">
         {values.length > 0 ? (
           values.map((value) => (
             <span
@@ -35,7 +34,7 @@ function ChipGroup({ label, values, emptyText, chipClassName }: ChipGroupProps) 
             </span>
           ))
         ) : (
-          <span className="text-[10px] text-slate-400">{emptyText}</span>
+          <span className="text-xs font-extrabold text-slate-800">{emptyText}</span>
         )}
       </div>
     </div>
@@ -75,21 +74,21 @@ export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps)
             </span>
           </div>
         ))}
+
+        <ChipTile
+          label="특화조건"
+          values={profile.specialConditions}
+          emptyText="해당없음"
+          chipClassName="bg-slate-200/70 text-slate-700"
+        />
+
+        <ChipTile
+          label="관심분야"
+          values={profile.interests}
+          emptyText="관심 분야 미설정"
+          chipClassName="bg-primary/10 text-primary"
+        />
       </div>
-
-      <ChipGroup
-        label="특화 조건"
-        values={profile.specialConditions}
-        emptyText="해당없음"
-        chipClassName="bg-slate-100 text-slate-700"
-      />
-
-      <ChipGroup
-        label="관심 분야"
-        values={profile.interests}
-        emptyText="관심 분야 미설정"
-        chipClassName="bg-primary/10 text-primary"
-      />
     </div>
   );
 }
