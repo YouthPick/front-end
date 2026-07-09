@@ -47,8 +47,8 @@ export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps)
     { label: '출생연도', value: `${profile.birthYear}년생` },
     { label: '취업상태', value: profile.employmentStatus },
     { label: '학력', value: profile.educationStatus },
-    { label: '결혼상태', value: profile.maritalStatus },
-    { label: '전공계열', value: profile.major },
+    { label: '결혼상태', value: profile.maritalStatus || '미설정' },
+    { label: '전공계열', value: profile.major || '미설정' },
     { label: '연소득', value: formatIncome(profile) },
   ];
 

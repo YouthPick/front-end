@@ -2,10 +2,9 @@ import type { UserProfile } from '@/entities/user';
 
 import { OptionButtonGrid } from './common/OptionButtonGrid';
 
-const MARITAL_STATUS_OPTIONS = ['제한없음', '미혼', '기혼'];
+const MARITAL_STATUS_OPTIONS = ['미혼', '기혼'];
 
 const MAJOR_OPTIONS = [
-  '제한없음',
   '인문계열',
   '사회계열',
   '상경계열',
@@ -39,7 +38,7 @@ export function WizardStepAdditional({
   return (
     <div className="space-y-5 animate-in fade-in duration-200">
       <div className="space-y-1">
-        <h3 className="text-base font-black text-slate-800">3. 추가 조건 (선택)</h3>
+        <h3 className="text-base font-black text-slate-800">3. 추가 조건</h3>
         <p className="text-xs text-slate-400">
           해당하는 항목만 선택해 주세요. 건너뛴 조건은 제한없음으로 간주해 매칭합니다.
         </p>

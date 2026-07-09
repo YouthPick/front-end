@@ -46,11 +46,9 @@ function matchesEligibleStatus(profile: UserProfile, eligibleStatuses: string[])
   return eligibleStatuses.some((status) => userTokens.includes(status));
 }
 
-// 결혼상태·전공: 유저가 스킵(제한없음)했거나 정책이 제한없음이면 항상 통과시키고, 그 외엔 정확히 일치해야 통과한다.
+// 결혼상태·전공: 유저가 미선택(빈 값)이거나 정책이 제한없음이면 항상 통과시키고, 그 외엔 정확히 일치해야 통과한다.
 function matchesOpenCondition(userValue: string, policyCondition: string): boolean {
-  return (
-    policyCondition === '제한없음' || userValue === '제한없음' || userValue === policyCondition
-  );
+  return policyCondition === '제한없음' || userValue === '' || userValue === policyCondition;
 }
 
 type ConditionResult = 'neutral' | 'match' | 'mismatch';
