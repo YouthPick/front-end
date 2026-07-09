@@ -4,6 +4,7 @@ export type {
   CreateCommunityPostParams,
 } from './api/communityPostApi';
 export {
+  adjustCommunityPostLikeCount,
   createCommunityPost,
   fetchCommunityPost,
   searchCommunityPosts,

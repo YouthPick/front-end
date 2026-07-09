@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { adjustCommunityPostLikeCount, communityPostKeys } from '@/entities/community-post';
+
 import { fetchLikedCommunityPostIds, toggleCommunityLike } from '../api/communityLikeApi';
 
 export const communityLikeKeys = {
@@ -20,9 +22,14 @@ export function useCommunityLike() {
   });
 
   const toggleMutation = useMutation({
-    mutationFn: toggleCommunityLike,
+    mutationFn: async (postId: string) => {
+      const result = await toggleCommunityLike(postId);
+      await adjustCommunityPostLikeCount(postId, result.liked ? 1 : -1);
+      return result;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: communityLikeKeys.all });
+      queryClient.invalidateQueries({ queryKey: communityPostKeys.all });
     },
   });
 
