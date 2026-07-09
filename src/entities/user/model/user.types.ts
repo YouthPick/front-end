@@ -2,6 +2,8 @@ export type UserRole = 'member' | 'admin';
 
 export interface AuthUser {
   name: string;
+  email: string;
+  provider: string;
   role: UserRole;
 }
 
