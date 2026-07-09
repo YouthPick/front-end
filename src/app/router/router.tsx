@@ -12,6 +12,15 @@ import { RequireOnboarded } from './RequireOnboarded';
 
 // 홈·검색·로그인 외 화면은 라우트 단위로 지연 로딩해 초기 번들을 줄인다.
 const AdminPage = lazy(() => import('@/pages/admin').then((m) => ({ default: m.AdminPage })));
+const CommunityPage = lazy(() =>
+  import('@/pages/community').then((m) => ({ default: m.CommunityPage })),
+);
+const CommunityDetailPage = lazy(() =>
+  import('@/pages/community-detail').then((m) => ({ default: m.CommunityDetailPage })),
+);
+const CommunityWritePage = lazy(() =>
+  import('@/pages/community-write').then((m) => ({ default: m.CommunityWritePage })),
+);
 const MyPage = lazy(() => import('@/pages/my').then((m) => ({ default: m.MyPage })));
 const ProfileSetupPage = lazy(() =>
   import('@/pages/profile-setup').then((m) => ({ default: m.ProfileSetupPage })),
@@ -27,6 +36,8 @@ export const router = createBrowserRouter([
     children: [
       { path: ROUTES.home, element: <HomePage /> },
       { path: ROUTES.search, element: <SearchPage /> },
+      { path: ROUTES.community, element: <CommunityPage /> },
+      { path: ROUTES.communityDetail, element: <CommunityDetailPage /> },
       { path: ROUTES.login, element: <LoginPage /> },
       {
         element: <ProtectedRoute requiredRole="admin" />,
@@ -42,6 +53,7 @@ export const router = createBrowserRouter([
           { path: ROUTES.tracker, element: <TrackerPage /> },
           { path: ROUTES.my, element: <MyPage /> },
           { path: ROUTES.profileSetup, element: <ProfileSetupPage /> },
+          { path: ROUTES.communityWrite, element: <CommunityWritePage /> },
         ],
       },
       // 존재하지 않는 경로는 홈으로 보낸다.

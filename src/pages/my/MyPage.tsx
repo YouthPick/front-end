@@ -5,6 +5,7 @@ import { AccountDangerZone, useDeleteAccount, useLogout } from '@/features/auth'
 import { useTrackers } from '@/features/policy-tracker';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
+import { LikedCommunityPosts } from '@/widgets/liked-community-posts';
 import { RecentlyViewed } from '@/widgets/recently-viewed';
 
 export function MyPage() {
@@ -106,6 +107,8 @@ export function MyPage() {
           <ProfileSummaryCard profile={profile} onEdit={() => navigate(ROUTES.profileSetup)} />
 
           <RecentlyViewed />
+
+          <LikedCommunityPosts />
 
           <AccountDangerZone
             trackerCount={trackers.length}
