@@ -34,7 +34,7 @@ export function CommentRow({
     <div className="flex gap-2.5">
       <span
         aria-hidden="true"
-        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-primary to-brand-secondary text-[10px] font-black text-white"
+        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-black text-white"
       >
         {comment.authorName[0]}
       </span>
