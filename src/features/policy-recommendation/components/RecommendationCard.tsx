@@ -53,18 +53,12 @@ export function RecommendationCard({
             추천 및 우대 조건 매칭
           </span>
           <div className="space-y-1 text-xs text-slate-600 font-semibold">
-            <p className="flex items-center text-emerald-600">
-              <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
-              {reasons[0]} <span className="text-[10px] text-slate-400 ml-1">(+25)</span>
-            </p>
-            <p className="flex items-center text-emerald-600">
-              <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
-              {reasons[1]} <span className="text-[10px] text-slate-400 ml-1">(+20)</span>
-            </p>
-            <p className="flex items-center text-emerald-600">
-              <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
-              {reasons[2]} <span className="text-[10px] text-slate-400 ml-1">(+15)</span>
-            </p>
+            {reasons.map((reason) => (
+              <p key={reason} className="flex items-center text-emerald-600">
+                <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
+                {reason}
+              </p>
+            ))}
           </div>
         </div>
 
