@@ -21,11 +21,11 @@ export function CommunityPostDetail({ post, isLiked, onToggleLike }: CommunityPo
             onClick={() => onToggleLike(post.id)}
             aria-pressed={isLiked}
             aria-label="좋아요"
-            className={`flex shrink-0 items-center gap-1 rounded-md px-1.5 py-0.5 transition-colors ${
+            className={`flex shrink-0 items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold transition-colors ${
               isLiked ? 'text-rose-500' : 'text-slate-400 hover:text-rose-400'
             }`}
           >
-            <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
+            <Heart className={`h-3.5 w-3.5 ${isLiked ? 'fill-current' : ''}`} />
             <span>{post.likeCount}</span>
           </button>
         </div>
