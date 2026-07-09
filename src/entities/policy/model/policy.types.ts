@@ -13,7 +13,7 @@ export interface Policy {
   description: string;
   target: string;
   eligibleStatuses: string[];
-  // 온보딩 프로필과의 매칭 채점용 정책 조건. null/빈 배열이면 제한없음으로 취급한다.
+  // 온보딩 프로필과의 매칭 채점용 정책 조건. 조건 없음 표현은 필드별로 다르다(policy.dto.ts 주석 참고).
   ageMin: number | null;
   ageMax: number | null;
   maritalCondition: string;
