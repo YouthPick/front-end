@@ -32,7 +32,7 @@ let trackers: TrackerItem[] = [
   },
   {
     policyId: 'p5',
-    status: '결과대기',
+    status: '신청완료',
     targetDate: '2026-06-20',
     checklist: [
       { id: 'c7', text: '서류 업로드', completed: true },

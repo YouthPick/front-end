@@ -26,7 +26,7 @@ export function MyPage() {
   // 즐겨찾기(관심)는 신청관리의 "관심" 탭으로 통합됐다. 활동 지표도 tracker status 기준으로 집계한다.
   const interestCount = trackers.filter((tracker) => tracker.status === '관심').length;
   const preparingCount = trackers.filter((tracker) => tracker.status === '준비중').length;
-  const waitingCount = trackers.filter((tracker) => tracker.status === '결과대기').length;
+  const completedCount = trackers.filter((tracker) => tracker.status === '신청완료').length;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300 max-w-3xl mx-auto">
@@ -94,13 +94,13 @@ export function MyPage() {
 
             <button
               type="button"
-              onClick={() => navigate(`${ROUTES.tracker}?tab=${encodeURIComponent('결과대기')}`)}
+              onClick={() => navigate(`${ROUTES.tracker}?tab=${encodeURIComponent('신청완료')}`)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
               <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                결과 대기목록
+                신청완료
               </span>
-              <span className="text-xl font-black text-slate-800 block mt-1">{waitingCount}</span>
+              <span className="text-xl font-black text-slate-800 block mt-1">{completedCount}</span>
             </button>
           </div>
 
