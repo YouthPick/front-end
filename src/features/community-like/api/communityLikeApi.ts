@@ -11,8 +11,10 @@ export async function fetchLikedCommunityPostIds(): Promise<string[]> {
 }
 
 export async function toggleCommunityLike(postId: string): Promise<{ liked: boolean }> {
+  // 지연 전에 현재 상태를 읽어, 짧은 시간 내 중복 호출 시 잃어버린 갱신을 방지한다.
+  const isCurrentlyLiked = likedPostIds.includes(postId);
   await delay(MOCK_API_DELAY_MS);
-  if (likedPostIds.includes(postId)) {
+  if (isCurrentlyLiked) {
     likedPostIds = likedPostIds.filter((id) => id !== postId);
     return { liked: false };
   }
