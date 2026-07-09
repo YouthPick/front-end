@@ -1,0 +1,80 @@
+import { ArrowLeftRight, ChevronRight } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useEffect, useState } from 'react';
+
+import { useCompare } from '../hooks/useCompare';
+import { CompareDetailDialog } from './CompareDetailDialog';
+import { ComparePanelPresenter } from './ComparePanelPresenter';
+
+// 메인 페이지 전용 정책 비교 독.
+// 담긴 정책이 없으면 숨기고, 담는 순간 우측에서 슬라이드-인 한다. 이후 접기/펼치기 토글이 가능하다.
+export function CompareDockContainer() {
+  const { comparingPolicies, removeCompare, clearCompare } = useCompare();
+  const [showDetailDialog, setShowDetailDialog] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const count = comparingPolicies.length;
+
+  // 비교함이 비면 다음에 다시 담았을 때 펼친 상태로 나타나도록 초기화한다.
+  useEffect(() => {
+    if (count === 0) setIsCollapsed(false);
+  }, [count]);
+
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        {count > 0 &&
+          (isCollapsed ? (
+            <motion.button
+              key="compare-tab"
+              type="button"
+              initial={{ x: 80, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 80, opacity: 0 }}
+              style={{ y: '-50%' }}
+              onClick={() => setIsCollapsed(false)}
+              aria-label={`정책 비교 열기 (${count}개 선택됨)`}
+              className="fixed right-0 top-1/2 z-40 flex items-center gap-1 rounded-l-xl bg-primary py-3 px-2.5 text-[11px] font-bold text-white shadow-lg shadow-primary/30 transition-all hover:brightness-105"
+            >
+              <ArrowLeftRight className="h-4 w-4" />
+              <span>비교 {count}</span>
+            </motion.button>
+          ) : (
+            <motion.div
+              key="compare-dock"
+              initial={{ x: 360, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 360, opacity: 0 }}
+              style={{ y: '-50%' }}
+              className="fixed right-4 top-1/2 z-40 w-[28rem] max-w-[calc(100vw-2rem)]"
+            >
+              <button
+                type="button"
+                onClick={() => setIsCollapsed(true)}
+                aria-label="정책 비교 접기"
+                className="absolute -left-3 top-4 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition-colors hover:text-slate-700"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+
+              <ComparePanelPresenter
+                comparingPolicies={comparingPolicies}
+                onOpenDetail={() => setShowDetailDialog(true)}
+                onRemove={removeCompare}
+                onClear={clearCompare}
+              />
+            </motion.div>
+          ))}
+      </AnimatePresence>
+
+      {/* 상세 비교 모달은 독(transform 컨테이너) 밖에서 렌더해 검색 페이지와 동일한 화면 중앙 모달로 통일한다. */}
+      <AnimatePresence>
+        {showDetailDialog && count >= 2 && (
+          <CompareDetailDialog
+            policies={comparingPolicies}
+            onClose={() => setShowDetailDialog(false)}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+}

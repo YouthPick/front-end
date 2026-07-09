@@ -1,68 +1,31 @@
 import { useNavigate } from 'react-router';
 
-import { type Policy, usePoliciesQuery, usePolicyDetailStore } from '@/entities/policy';
 import { ProfileSummaryCard, useAuthStore, useProfileStore } from '@/entities/user';
 import { AccountDangerZone, useDeleteAccount, useLogout } from '@/features/auth';
-import { SavedPolicyList, useBookmark } from '@/features/policy-bookmark';
 import { useTrackers } from '@/features/policy-tracker';
 import { ROUTES } from '@/shared/constants';
-import { ErrorState, Skeleton, useToast } from '@/shared/ui';
+import { ErrorState, Skeleton } from '@/shared/ui';
+import { RecentlyViewed } from '@/widgets/recently-viewed';
 
 export function MyPage() {
   const user = useAuthStore((state) => state.user);
   const profile = useProfileStore((state) => state.profile);
-  const {
-    savedPolicyIds,
-    toggleSave,
-    isLoading: isBookmarkLoading,
-    isError: isBookmarkError,
-    refetch: refetchBookmark,
-  } = useBookmark();
   const {
     data: trackers = [],
     isLoading: isTrackersLoading,
     isError: isTrackersError,
     refetch: refetchTrackers,
   } = useTrackers();
-  const {
-    data: policies = [],
-    isLoading: isPoliciesLoading,
-    isError: isPoliciesError,
-    refetch: refetchPolicies,
-  } = usePoliciesQuery();
-  const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
   const { logout } = useLogout();
   const { deleteAccount } = useDeleteAccount();
-  const { showToast } = useToast();
   const navigate = useNavigate();
 
   const userName = user?.name ?? '';
-  const savedPolicies = savedPolicyIds
-    .map((id) => policies.find((policy) => policy.id === id))
-    .filter((policy): policy is Policy => policy !== undefined);
 
+  // 즐겨찾기(관심)는 신청관리의 "관심" 탭으로 통합됐다. 활동 지표도 tracker status 기준으로 집계한다.
+  const interestCount = trackers.filter((tracker) => tracker.status === '관심').length;
   const preparingCount = trackers.filter((tracker) => tracker.status === '준비중').length;
   const waitingCount = trackers.filter((tracker) => tracker.status === '결과대기').length;
-
-  // 저장 카운트·목록은 bookmark+policies 조인, 준비/대기 지표는 trackers에 의존한다.
-  // 쿼리 딜레이가 달라 일부만 도착하면 카운트와 목록이 어긋나므로 함께 게이트한다.
-  const isDashboardLoading = isBookmarkLoading || isTrackersLoading || isPoliciesLoading;
-  const isDashboardError = isBookmarkError || isTrackersError || isPoliciesError;
-
-  const retryDashboard = () => {
-    if (isBookmarkError) refetchBookmark();
-    if (isTrackersError) refetchTrackers();
-    if (isPoliciesError) refetchPolicies();
-  };
-
-  const handleStartTracker = (policy: Policy) => {
-    navigate(`${ROUTES.tracker}?start=${policy.id}`);
-  };
-
-  const handleRestoreView = (policy: Policy) => {
-    openPolicyDetail(policy.id);
-    showToast('만료전 백업된 최종 저장 정보를 대조합니다.', 'info');
-  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300 max-w-3xl mx-auto">
@@ -87,9 +50,9 @@ export function MyPage() {
         </div>
       </div>
 
-      {isDashboardError ? (
-        <ErrorState title="내 활동 정보를 불러오지 못했습니다" onRetry={retryDashboard} />
-      ) : isDashboardLoading ? (
+      {isTrackersError ? (
+        <ErrorState title="내 활동 정보를 불러오지 못했습니다" onRetry={() => refetchTrackers()} />
+      ) : isTrackersLoading ? (
         <div className="space-y-6">
           <div className="grid grid-cols-3 gap-4">
             <Skeleton className="h-20" />
@@ -105,20 +68,18 @@ export function MyPage() {
           <div className="grid grid-cols-3 gap-4">
             <button
               type="button"
-              onClick={() => navigate(ROUTES.search)}
+              onClick={() => navigate(`${ROUTES.tracker}?tab=${encodeURIComponent('관심')}`)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
               <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                관심 정책 저장
+                관심 정책
               </span>
-              <span className="text-xl font-black text-slate-800 block mt-1">
-                {savedPolicies.length}
-              </span>
+              <span className="text-xl font-black text-slate-800 block mt-1">{interestCount}</span>
             </button>
 
             <button
               type="button"
-              onClick={() => navigate(ROUTES.tracker)}
+              onClick={() => navigate(`${ROUTES.tracker}?tab=${encodeURIComponent('준비중')}`)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
               <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
@@ -129,7 +90,7 @@ export function MyPage() {
 
             <button
               type="button"
-              onClick={() => navigate(ROUTES.tracker)}
+              onClick={() => navigate(`${ROUTES.tracker}?tab=${encodeURIComponent('결과대기')}`)}
               className="rounded-2xl border border-slate-100 bg-white p-4.5 text-center hover:border-primary/20 transition-all"
             >
               <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
@@ -141,17 +102,11 @@ export function MyPage() {
 
           <ProfileSummaryCard profile={profile} onEdit={() => navigate(ROUTES.profileSetup)} />
 
-          <SavedPolicyList
-            savedPolicies={savedPolicies}
-            onToggleSave={toggleSave}
-            onViewDetails={(policy) => openPolicyDetail(policy.id)}
-            onRestoreView={handleRestoreView}
-            onStartTracker={handleStartTracker}
-          />
+          <RecentlyViewed />
 
           <AccountDangerZone
             trackerCount={trackers.length}
-            savedCount={savedPolicies.length}
+            savedCount={interestCount}
             onLogout={logout}
             onDeleteAccount={deleteAccount}
           />

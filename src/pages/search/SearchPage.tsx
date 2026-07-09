@@ -1,5 +1,4 @@
-import { ChatbotContainer } from '@/features/chatbot';
-import { ComparePanelContainer } from '@/features/policy-compare';
+import { CompareDockContainer } from '@/features/policy-compare';
 import {
   PolicyFilterBar,
   PolicySearchBar,
@@ -7,7 +6,11 @@ import {
   usePolicySearch,
 } from '@/features/policy-search';
 import { ErrorState, Skeleton } from '@/shared/ui';
-import { PolicyCardGrid } from '@/widgets/policy-card-grid';
+import {
+  POLICY_GRID_CLASS,
+  POLICY_GRID_SKELETON_COUNT,
+  PolicyCardGrid,
+} from '@/widgets/policy-card-grid';
 
 export function SearchPage() {
   const {
@@ -59,16 +62,11 @@ export function SearchPage() {
       </div>
 
       {isLoading && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-8 grid grid-cols-1 gap-4.5 sm:grid-cols-2">
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-            <Skeleton className="h-56" />
-          </div>
-          <div className="lg:col-span-4">
-            <Skeleton className="h-48" />
-          </div>
+        <div className={POLICY_GRID_CLASS}>
+          {Array.from({ length: POLICY_GRID_SKELETON_COUNT }, (_, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: 순서가 바뀌지 않는 정적 로딩 플레이스홀더라 안정적인 id가 없다
+            <Skeleton key={index} className="h-56" />
+          ))}
         </div>
       )}
 
@@ -77,25 +75,16 @@ export function SearchPage() {
       {!isLoading &&
         !isError &&
         (policies.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8">
-              <PolicyCardGrid
-                policies={policies}
-                className="grid grid-cols-1 gap-4.5 sm:grid-cols-2"
-              />
-            </div>
-
-            <div className="lg:col-span-4 space-y-6">
-              <ComparePanelContainer />
-              <ChatbotContainer />
-            </div>
-          </div>
+          <PolicyCardGrid policies={policies} />
         ) : (
           <SearchEmptyState
             onResetAll={() => resetFilters({ clearQuery: true })}
             onShowNationwide={showNationwideOnly}
           />
         ))}
+
+      {/* 정책 비교 독 (우측 슬라이드-인, 담긴 정책이 있을 때만 노출) */}
+      <CompareDockContainer />
     </div>
   );
 }

@@ -8,13 +8,26 @@ import { ChatMessageBubble } from './ChatMessageBubble';
 interface ChatDrawerProps {
   messages: ChatMessage[];
   isLoading: boolean;
+  suggestions: string[];
+  onSuggestionClick: (query: string) => void;
   onSend: (text: string) => void;
   onClose: () => void;
 }
 
-export function ChatDrawer({ messages, isLoading, onSend, onClose }: ChatDrawerProps) {
+export function ChatDrawer({
+  messages,
+  isLoading,
+  suggestions,
+  onSuggestionClick,
+  onSend,
+  onClose,
+}: ChatDrawerProps) {
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // 아직 사용자가 질문하기 전(환영 메시지만 있는 상태)에는 추천 질문 칩을 노출한다.
+  const showSuggestions =
+    suggestions.length > 0 && !messages.some((message) => message.role === 'user');
 
   // 새 메시지·로딩 표시가 생기면 목록 맨 아래로 스크롤을 동기화한다.
   // biome-ignore lint/correctness/useExhaustiveDependencies: messages·isLoading 변화를 스크롤 트리거로 의도적으로 구독
@@ -67,6 +80,21 @@ export function ChatDrawer({ messages, isLoading, onSend, onClose }: ChatDrawerP
           {messages.map((message) => (
             <ChatMessageBubble key={message.id} message={message} />
           ))}
+
+          {showSuggestions && (
+            <div className="space-y-2">
+              {suggestions.map((suggestion) => (
+                <button
+                  key={suggestion}
+                  type="button"
+                  onClick={() => onSuggestionClick(suggestion)}
+                  className="block w-full rounded-xl border border-slate-200/60 bg-white py-2.5 px-3.5 text-left text-xs font-bold text-slate-600 transition-colors hover:bg-slate-50"
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
 
           {isLoading && (
             <div className="flex justify-start">

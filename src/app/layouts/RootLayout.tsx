@@ -1,15 +1,16 @@
 import { Suspense } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router';
 
+import { ChatbotContainer } from '@/features/chatbot';
 import { Skeleton, ToastContainer } from '@/shared/ui';
-import { Footer, NoticeBanner } from '@/widgets/footer';
+import { NoticeBanner } from '@/widgets/footer';
 import { Header } from '@/widgets/header';
 import { MobileNav } from '@/widgets/mobile-nav';
 import { PolicyDetailModalContainer } from '@/widgets/policy-detail-modal';
 
 export function RootLayout() {
   return (
-    <div className="min-h-screen flex flex-col justify-between" id="app-root">
+    <div className="min-h-screen flex flex-col justify-between pb-16 md:pb-0" id="app-root">
       <ToastContainer />
 
       <Header />
@@ -31,9 +32,9 @@ export function RootLayout() {
 
       <MobileNav />
 
-      <Footer />
-
       <PolicyDetailModalContainer />
+
+      <ChatbotContainer />
 
       <ScrollRestoration />
     </div>

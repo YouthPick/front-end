@@ -193,7 +193,7 @@ export function PolicyDetailModalPresenter({
             href={policy.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center space-x-1 rounded-xl bg-gradient-to-r from-primary to-brand-secondary py-2.5 text-xs font-bold text-white transition-all hover:brightness-105"
+            className="flex-1 inline-flex items-center justify-center space-x-1 rounded-xl bg-primary py-2.5 text-xs font-bold text-white transition-all hover:brightness-105"
           >
             <span>공식 공고 ↗</span>
           </a>

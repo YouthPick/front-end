@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { usePoliciesQuery } from '@/entities/policy';
 import { ErrorState, Skeleton } from '@/shared/ui';
@@ -9,10 +10,17 @@ import { useTrackerStartParam } from '../hooks/useTrackerStartParam';
 import { useTrackers } from '../hooks/useTrackers';
 import type { TrackerStatusTab } from '../types/tracker.types';
 import { TrackerDetailPanel } from './TrackerDetailPanel';
-import { type TrackerListEntry, TrackerListPanel } from './TrackerListPanel';
+import { TRACKER_STATUS_TABS, type TrackerListEntry, TrackerListPanel } from './TrackerListPanel';
 
 export function TrackerContainer() {
-  const [activeTab, setActiveTab] = useState<TrackerStatusTab>('전체');
+  // 마이페이지 활동 지표 등에서 `?tab=관심` 형태로 진입하면 해당 탭을 초기 탭으로 연다.
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState<TrackerStatusTab>(() => {
+    const tabParam = searchParams.get('tab');
+    return TRACKER_STATUS_TABS.includes(tabParam as TrackerStatusTab)
+      ? (tabParam as TrackerStatusTab)
+      : '전체';
+  });
   const {
     data: trackers = [],
     isLoading: isTrackersLoading,

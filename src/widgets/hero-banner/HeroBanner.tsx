@@ -1,5 +1,5 @@
-import { Bell, Briefcase, GraduationCap, Home, Search } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { Briefcase, GraduationCap, Home, Search } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import youthIllustration from '@/assets/images/youth_purple_illustration_1782457991844.jpg';
@@ -7,9 +7,6 @@ import { ROUTES } from '@/shared/constants';
 
 export function HeroBanner() {
   const [searchInput, setSearchInput] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-  const [email, setEmail] = useState('');
-  const [showDialog, setShowDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleSearchSubmit = () => {
@@ -19,17 +16,6 @@ export function HeroBanner() {
     }
     const queryString = params.toString();
     navigate(queryString ? `${ROUTES.search}?${queryString}` : ROUTES.search);
-  };
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubscribed(true);
-    setTimeout(() => {
-      setShowDialog(false);
-      setSubscribed(false);
-      setEmail('');
-    }, 2000);
   };
 
   return (
@@ -42,7 +28,7 @@ export function HeroBanner() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12">
           {/* Left text and search */}
-          <div className="space-y-6 lg:col-span-5 text-left">
+          <div className="space-y-6 lg:col-span-6 text-left">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -86,7 +72,7 @@ export function HeroBanner() {
               <button
                 type="button"
                 onClick={handleSearchSubmit}
-                className="rounded-xl bg-gradient-to-r from-primary to-brand-secondary px-5 py-2.5 text-xs font-bold text-white transition-all hover:brightness-105 active:scale-[0.98]"
+                className="rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white transition-all hover:brightness-105 active:scale-[0.98]"
                 id="hero-search-button"
               >
                 검색
@@ -94,8 +80,8 @@ export function HeroBanner() {
             </motion.div>
           </div>
 
-          {/* Middle illustration */}
-          <div className="hidden lg:block lg:col-span-4 h-60 relative">
+          {/* Right illustration */}
+          <div className="hidden lg:block lg:col-span-6 h-60 relative">
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -125,112 +111,8 @@ export function HeroBanner() {
               </div>
             </motion.div>
           </div>
-
-          {/* Right notification card */}
-          <div className="lg:col-span-3 text-left">
-            <motion.div
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="rounded-3xl border border-slate-100 bg-white p-5 shadow-md shadow-slate-100 flex flex-col justify-between h-60"
-            >
-              <div className="space-y-4">
-                <div className="flex items-start space-x-2.5">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-50 text-sky-600">
-                    <Bell className="h-4.5 w-4.5" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-bold text-slate-800 leading-tight">
-                      청년을 위한 정부 지원 정책
-                    </h3>
-                    <p className="text-[10px] text-slate-400 font-medium mt-1">알림 서비스</p>
-                  </div>
-                </div>
-                <p className="text-[11px] leading-relaxed text-slate-500 font-medium">
-                  새로운 정책 소식과 마감 임박 정책을 알림으로 받아보세요.
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setShowDialog(true)}
-                className="w-full rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-800"
-                id="alert-signup-button"
-              >
-                알림 설정하기
-              </button>
-            </motion.div>
-          </div>
         </div>
       </div>
-
-      {/* Subscription dialog */}
-      <AnimatePresence>
-        {showDialog && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
-              id="subscription-modal"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base font-bold text-slate-800">신규 청년 정책 알림 설정</h3>
-                  <button
-                    type="button"
-                    onClick={() => setShowDialog(false)}
-                    aria-label="알림 설정 닫기"
-                    className="text-slate-400 hover:text-slate-600"
-                  >
-                    ✕
-                  </button>
-                </div>
-                {!subscribed ? (
-                  <form onSubmit={handleSubscribe} className="space-y-3">
-                    <p className="text-xs leading-relaxed text-slate-500">
-                      관심 지역과 전공/분야에 일치하는 맞춤형 정부 정책이 공고될 때 가장 신속하게
-                      알림을 받아보실 수 있습니다.
-                    </p>
-                    <div className="space-y-1.5">
-                      <label
-                        className="text-[11px] font-bold text-slate-500"
-                        htmlFor="subscribe-email-input"
-                      >
-                        이메일 주소
-                      </label>
-                      <input
-                        id="subscribe-email-input"
-                        type="email"
-                        required
-                        placeholder="example@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-xs focus:border-primary focus:outline-none"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full rounded-xl bg-gradient-to-r from-primary to-brand-secondary py-2.5 text-xs font-semibold text-white hover:brightness-105"
-                    >
-                      무료 구독하기
-                    </button>
-                  </form>
-                ) : (
-                  <div className="py-6 text-center space-y-2">
-                    <span className="text-4xl">🎉</span>
-                    <h4 className="text-sm font-bold bg-gradient-to-r from-primary to-brand-secondary bg-clip-text text-transparent">
-                      알림 설정 완료!
-                    </h4>
-                    <p className="text-xs text-slate-500">매주 맞춤 추천 소식을 보내드립니다.</p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
