@@ -13,6 +13,9 @@ export function useCreateCommunityPost() {
       queryClient.invalidateQueries({ queryKey: communityPostKeys.all });
       showToast('게시글이 등록되었습니다.', 'success');
     },
+    onError: () => {
+      showToast('게시글 등록에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning');
+    },
   });
 
   return {

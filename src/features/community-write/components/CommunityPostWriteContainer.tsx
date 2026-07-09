@@ -21,13 +21,17 @@ export function CommunityPostWriteContainer() {
 
   const handleSubmit = async () => {
     if (!user || category === null || !canSubmit) return;
-    const created = await createPost({
-      title: title.trim(),
-      category,
-      content: content.trim(),
-      authorName: user.name,
-    });
-    navigate(buildCommunityDetailPath(created.id));
+    try {
+      const created = await createPost({
+        title: title.trim(),
+        category,
+        content: content.trim(),
+        authorName: user.name,
+      });
+      navigate(buildCommunityDetailPath(created.id));
+    } catch {
+      // 실패 토스트는 useCreateCommunityPost의 onError가 표시한다.
+    }
   };
 
   return (
