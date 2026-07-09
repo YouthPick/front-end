@@ -36,11 +36,8 @@ export function MyPage() {
         <h2 className="text-lg font-black text-slate-800">마이페이지</h2>
       </div>
 
-      {/* OAuth 계정 정보: 닉네임·이메일은 소셜 로그인에서 받아온 값으로, 여기서 수정할 수 없다. */}
-      <div className="rounded-3xl bg-white border border-slate-100 p-6 text-left shadow-sm space-y-4">
-        <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
-          OAuth 계정 정보
-        </span>
+      {/* 닉네임·이메일은 소셜 로그인에서 받아온 값으로, 여기서 수정할 수 없다. */}
+      <div className="rounded-3xl bg-white border border-slate-100 p-6 text-left shadow-sm">
         <div className="flex items-center space-x-4">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-primary to-brand-secondary text-lg font-black text-white">
             {userName[0]}
