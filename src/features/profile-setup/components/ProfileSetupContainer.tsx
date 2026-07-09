@@ -5,6 +5,7 @@ export function ProfileSetupContainer() {
   const {
     step,
     draft,
+    canProceed,
     newKeywordInput,
     setNewKeywordInput,
     updateDraft,
@@ -14,16 +15,19 @@ export function ProfileSetupContainer() {
     addKeyword,
     removeKeyword,
     toggleInterest,
+    toggleSpecialCondition,
   } = useProfileSetupWizard();
 
   return (
     <ProfileSetupPresenter
       step={step}
       draft={draft}
+      canProceed={canProceed}
       newKeywordInput={newKeywordInput}
       onKeywordInputChange={setNewKeywordInput}
       onUpdateDraft={updateDraft}
       onToggleInterest={toggleInterest}
+      onToggleSpecialCondition={toggleSpecialCondition}
       onAddKeyword={addKeyword}
       onRemoveKeyword={removeKeyword}
       onNext={goNext}

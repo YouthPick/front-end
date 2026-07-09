@@ -23,7 +23,9 @@ export function WizardStepInterest({
   return (
     <div className="space-y-5 animate-in fade-in duration-200">
       <div className="space-y-1">
-        <h3 className="text-base font-black text-slate-800">3. 관심 분야 및 검색 태그 키워드</h3>
+        <h3 className="text-base font-black text-slate-800">
+          4. 관심 분야 및 검색 태그 키워드 (선택)
+        </h3>
         <p className="text-xs text-slate-400">
           수천 개의 정책 중 매칭 우선순위를 높이기 위한 사용자 가중치 조절 장치입니다.
         </p>

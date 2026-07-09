@@ -1,6 +1,7 @@
 import type { UserProfile } from '@/entities/user';
 
 import { WIZARD_TOTAL_STEPS } from '../hooks/useProfileSetupWizard';
+import { WizardStepAdditional } from './WizardStepAdditional';
 import { WizardStepBasic } from './WizardStepBasic';
 import { WizardStepInterest } from './WizardStepInterest';
 import { WizardStepStatus } from './WizardStepStatus';
@@ -8,10 +9,12 @@ import { WizardStepStatus } from './WizardStepStatus';
 interface ProfileSetupPresenterProps {
   step: number;
   draft: UserProfile;
+  canProceed: boolean;
   newKeywordInput: string;
   onKeywordInputChange: (value: string) => void;
   onUpdateDraft: (patch: Partial<UserProfile>) => void;
   onToggleInterest: (interest: string) => void;
+  onToggleSpecialCondition: (condition: string) => void;
   onAddKeyword: () => void;
   onRemoveKeyword: (keyword: string) => void;
   onNext: () => void;
@@ -22,10 +25,12 @@ interface ProfileSetupPresenterProps {
 export function ProfileSetupPresenter({
   step,
   draft,
+  canProceed,
   newKeywordInput,
   onKeywordInputChange,
   onUpdateDraft,
   onToggleInterest,
+  onToggleSpecialCondition,
   onAddKeyword,
   onRemoveKeyword,
   onNext,
@@ -53,6 +58,13 @@ export function ProfileSetupPresenter({
       {step === 1 && <WizardStepBasic draft={draft} onUpdateDraft={onUpdateDraft} />}
       {step === 2 && <WizardStepStatus draft={draft} onUpdateDraft={onUpdateDraft} />}
       {step === 3 && (
+        <WizardStepAdditional
+          draft={draft}
+          onUpdateDraft={onUpdateDraft}
+          onToggleSpecialCondition={onToggleSpecialCondition}
+        />
+      )}
+      {step === 4 && (
         <WizardStepInterest
           draft={draft}
           newKeywordInput={newKeywordInput}
@@ -86,7 +98,8 @@ export function ProfileSetupPresenter({
         <button
           type="button"
           onClick={onNext}
-          className="rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:brightness-105 active:scale-95"
+          disabled={!canProceed}
+          className="rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:brightness-105 active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none disabled:hover:brightness-100 disabled:active:scale-100"
         >
           {step === WIZARD_TOTAL_STEPS ? '맞춤 추천목록 확인' : '다음 단계로'}
         </button>

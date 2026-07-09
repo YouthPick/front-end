@@ -1,5 +1,7 @@
 import type { UserProfile } from '@/entities/user';
 
+import { OptionButtonGrid } from './common/OptionButtonGrid';
+
 const EMPLOYMENT_STATUS_OPTIONS = [
   '미취업·구직',
   '재직',
@@ -10,6 +12,7 @@ const EMPLOYMENT_STATUS_OPTIONS = [
 ];
 
 const EDUCATION_STATUS_OPTIONS = [
+  '고졸 미만',
   '고교 재학',
   '고교 졸업',
   '대학 재학',
@@ -22,43 +25,6 @@ const EDUCATION_STATUS_OPTIONS = [
 interface WizardStepStatusProps {
   draft: UserProfile;
   onUpdateDraft: (patch: Partial<UserProfile>) => void;
-}
-
-interface OptionButtonGridProps {
-  label: string;
-  options: string[];
-  selected: string;
-  onSelect: (value: string) => void;
-}
-
-function OptionButtonGrid({ label, options, selected, onSelect }: OptionButtonGridProps) {
-  return (
-    <div className="space-y-2">
-      <span className="block text-xs font-extrabold text-slate-400 uppercase tracking-wider">
-        {label}
-      </span>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        {options.map((option) => {
-          const isSelected = selected === option;
-          return (
-            <button
-              key={option}
-              type="button"
-              onClick={() => onSelect(option)}
-              aria-pressed={isSelected}
-              className={`rounded-xl border py-2.5 text-xs font-bold transition-all cursor-pointer ${
-                isSelected
-                  ? 'bg-primary border-primary text-white shadow-sm'
-                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-              }`}
-            >
-              {option}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
 }
 
 export function WizardStepStatus({ draft, onUpdateDraft }: WizardStepStatusProps) {
@@ -74,14 +40,14 @@ export function WizardStepStatus({ draft, onUpdateDraft }: WizardStepStatusProps
       <OptionButtonGrid
         label="현재 취업 고용 상태"
         options={EMPLOYMENT_STATUS_OPTIONS}
-        selected={draft.employmentStatus}
+        isSelected={(option) => draft.employmentStatus === option}
         onSelect={(value) => onUpdateDraft({ employmentStatus: value })}
       />
 
       <OptionButtonGrid
         label="최종 학력 상태"
         options={EDUCATION_STATUS_OPTIONS}
-        selected={draft.educationStatus}
+        isSelected={(option) => draft.educationStatus === option}
         onSelect={(value) => onUpdateDraft({ educationStatus: value })}
       />
     </div>

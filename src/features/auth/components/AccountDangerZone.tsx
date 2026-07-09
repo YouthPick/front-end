@@ -25,8 +25,7 @@ export function AccountDangerZone({
         <span>계정 보안 및 위험 설정 구역</span>
       </h4>
       <p className="text-[11px] text-slate-400">
-        수정하신 프로필 데이터 가중치는 즉시 휘발되며, 회원 탈퇴 시 모든 신청관리 대시보드가
-        파기됩니다.
+        수정하신 맞춤 프로필 정보는 즉시 휘발되며, 회원 탈퇴 시 모든 신청관리 대시보드가 파기됩니다.
       </p>
       <div className="flex space-x-2 pt-1.5">
         <button

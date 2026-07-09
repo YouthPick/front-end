@@ -1,9 +1,8 @@
 import type { UserProfile } from '@/entities/user';
-import { REGIONS } from '@/shared/constants';
+import { CURRENT_YEAR, REGIONS } from '@/shared/constants';
 
 const BIRTH_YEAR_BASE = 1988;
 const BIRTH_YEAR_COUNT = 25;
-const CURRENT_YEAR = 2026;
 
 // 검색 필터와 달리 프로필에서 "전체" 거주지는 선택할 수 없다.
 const REGION_OPTIONS = REGIONS.filter((region) => region !== '전체');
@@ -30,10 +29,13 @@ export function WizardStepBasic({ draft, onUpdateDraft }: WizardStepBasicProps) 
         </label>
         <select
           id="wizard-birth-year"
-          value={draft.birthYear}
-          onChange={(e) => onUpdateDraft({ birthYear: parseInt(e.target.value, 10) })}
+          value={draft.birthYear || ''}
+          onChange={(e) => onUpdateDraft({ birthYear: Number(e.target.value) })}
           className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-700 outline-none"
         >
+          <option value="" disabled>
+            출생연도
+          </option>
           {Array.from({ length: BIRTH_YEAR_COUNT }, (_, i) => BIRTH_YEAR_BASE + i).map((year) => (
             <option key={year} value={year}>
               {year}년생 (만 {CURRENT_YEAR - year}세)
@@ -53,6 +55,9 @@ export function WizardStepBasic({ draft, onUpdateDraft }: WizardStepBasicProps) 
             onChange={(e) => onUpdateDraft({ region: e.target.value })}
             className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-700 outline-none"
           >
+            <option value="" disabled>
+              지역
+            </option>
             {REGION_OPTIONS.map((region) => (
               <option key={region} value={region}>
                 {region}
@@ -71,6 +76,7 @@ export function WizardStepBasic({ draft, onUpdateDraft }: WizardStepBasicProps) 
             onChange={(e) => onUpdateDraft({ subRegion: e.target.value })}
             className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-700 outline-none"
           >
+            <option value="">선택 안 함</option>
             {SUB_REGION_OPTIONS.map((subRegion) => (
               <option key={subRegion} value={subRegion}>
                 {subRegion === '기타' ? '기타 전체' : subRegion}
