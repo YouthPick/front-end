@@ -12,6 +12,14 @@ export interface Policy {
   tag: PolicyTag;
   description: string;
   target: string;
+  eligibleStatuses: string[];
+  // 온보딩 프로필과의 매칭 채점용 정책 조건. null/빈 배열이면 제한없음으로 취급한다.
+  ageMin: number | null;
+  ageMax: number | null;
+  maritalCondition: string;
+  majorCondition: string;
+  specialConditionTags: string[];
+  incomeMax: number | null;
   deadline: string;
   logoType: PolicyLogoType;
   details: string[];
