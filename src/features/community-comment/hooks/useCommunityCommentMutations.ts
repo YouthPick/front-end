@@ -9,6 +9,10 @@ import {
 } from '../api/communityCommentApi';
 import { communityCommentKeys } from './useCommunityComments';
 
+interface MutationOptions {
+  onSuccess?: () => void;
+}
+
 export function useCommunityCommentMutations(postId: string) {
   const queryClient = useQueryClient();
   const { showToast } = useToast();
@@ -26,6 +30,9 @@ export function useCommunityCommentMutations(postId: string) {
         'success',
       );
     },
+    onError: () => {
+      showToast('댓글 등록에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning');
+    },
   });
 
   const updateMutation = useMutation({
@@ -33,6 +40,9 @@ export function useCommunityCommentMutations(postId: string) {
     onSuccess: () => {
       invalidateComments();
       showToast('댓글이 수정되었습니다.', 'success');
+    },
+    onError: () => {
+      showToast('댓글 수정에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning');
     },
   });
 
@@ -42,16 +52,30 @@ export function useCommunityCommentMutations(postId: string) {
       invalidateComments();
       showToast('댓글이 삭제되었습니다.', 'info');
     },
+    onError: () => {
+      showToast('댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning');
+    },
   });
 
   return {
-    createComment: (authorName: string, authorEmail: string, content: string) =>
-      createMutation.mutate({ postId, parentId: null, authorName, authorEmail, content }),
-    createReply: (parentId: string, authorName: string, authorEmail: string, content: string) =>
-      createMutation.mutate({ postId, parentId, authorName, authorEmail, content }),
-    updateComment: (commentId: string, content: string) =>
-      updateMutation.mutate({ commentId, content }),
-    deleteComment: (commentId: string) => deleteMutation.mutate(commentId),
+    createComment: (
+      authorName: string,
+      authorEmail: string,
+      content: string,
+      options?: MutationOptions,
+    ) =>
+      createMutation.mutate({ postId, parentId: null, authorName, authorEmail, content }, options),
+    createReply: (
+      parentId: string,
+      authorName: string,
+      authorEmail: string,
+      content: string,
+      options?: MutationOptions,
+    ) => createMutation.mutate({ postId, parentId, authorName, authorEmail, content }, options),
+    updateComment: (commentId: string, content: string, options?: MutationOptions) =>
+      updateMutation.mutate({ commentId, content }, options),
+    deleteComment: (commentId: string, options?: MutationOptions) =>
+      deleteMutation.mutate(commentId, options),
     isSubmitting: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,

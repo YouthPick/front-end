@@ -17,8 +17,15 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const { data: comments = [], isLoading, isError, refetch } = useCommunityComments(postId);
-  const { createComment, createReply, updateComment, deleteComment, isSubmitting, isUpdating } =
-    useCommunityCommentMutations(postId);
+  const {
+    createComment,
+    createReply,
+    updateComment,
+    deleteComment,
+    isSubmitting,
+    isUpdating,
+    isDeleting,
+  } = useCommunityCommentMutations(postId);
 
   const [newCommentValue, setNewCommentValue] = useState('');
   const [openReplyId, setOpenReplyId] = useState<string | null>(null);
@@ -36,8 +43,9 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
 
   const handleSubmitComment = () => {
     if (!user) return;
-    createComment(user.name, user.email, newCommentValue);
-    setNewCommentValue('');
+    createComment(user.name, user.email, newCommentValue, {
+      onSuccess: () => setNewCommentValue(''),
+    });
   };
 
   const handleToggleReply = (commentId: string) => {
@@ -47,9 +55,12 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
 
   const handleSubmitReply = (commentId: string) => {
     if (!user) return;
-    createReply(commentId, user.name, user.email, replyValue);
-    setReplyValue('');
-    setOpenReplyId(null);
+    createReply(commentId, user.name, user.email, replyValue, {
+      onSuccess: () => {
+        setReplyValue('');
+        setOpenReplyId(null);
+      },
+    });
   };
 
   const handleStartEdit = (commentId: string, content: string) => {
@@ -64,15 +75,19 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
 
   const handleSubmitEdit = () => {
     if (!editingCommentId) return;
-    updateComment(editingCommentId, editValue);
-    setEditingCommentId(null);
-    setEditValue('');
+    updateComment(editingCommentId, editValue, {
+      onSuccess: () => {
+        setEditingCommentId(null);
+        setEditValue('');
+      },
+    });
   };
 
   const handleConfirmDelete = () => {
     if (!deleteTargetId) return;
-    deleteComment(deleteTargetId);
-    setDeleteTargetId(null);
+    deleteComment(deleteTargetId, {
+      onSuccess: () => setDeleteTargetId(null),
+    });
   };
 
   if (isLoading) {
@@ -149,6 +164,7 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
         cancelLabel="취소"
         onConfirm={handleConfirmDelete}
         onCancel={() => setDeleteTargetId(null)}
+        confirmDisabled={isDeleting}
       />
     </div>
   );

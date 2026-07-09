@@ -9,6 +9,7 @@ interface ConfirmDialogProps {
   cancelLabel: string;
   onConfirm: () => void;
   onCancel: () => void;
+  confirmDisabled?: boolean;
 }
 
 export function ConfirmDialog({
@@ -19,6 +20,7 @@ export function ConfirmDialog({
   cancelLabel,
   onConfirm,
   onCancel,
+  confirmDisabled = false,
 }: ConfirmDialogProps) {
   if (!open) return null;
 
@@ -45,7 +47,8 @@ export function ConfirmDialog({
           <button
             type="button"
             onClick={onConfirm}
-            className="rounded-xl bg-rose-600 text-white px-4 py-2 text-xs font-bold hover:bg-rose-700"
+            disabled={confirmDisabled}
+            className="rounded-xl bg-rose-600 text-white px-4 py-2 text-xs font-bold hover:bg-rose-700 disabled:opacity-50 disabled:hover:bg-rose-600"
           >
             {confirmLabel}
           </button>
