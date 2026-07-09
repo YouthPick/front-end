@@ -1,0 +1,67 @@
+import type { CommunityPostDto } from './communityPost.dto';
+
+export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
+  {
+    id: 'cp1',
+    title: '청년 월세 지원, 소득 기준 어떻게 계산하나요?',
+    category: '정책질문',
+    content:
+      '건강보험료 기준 중위소득 계산할 때 부모님 소득도 합산되는 건가요? 자취 중인데 혼자 신청 가능한지 궁금합니다.',
+    authorName: '토끼걸음',
+    createdAt: '2026-07-08',
+    viewCount: 132,
+    commentCount: 2,
+  },
+  {
+    id: 'cp2',
+    title: 'K-디지털 트레이닝 수료 후기 (국비지원)',
+    category: '정책후기',
+    content:
+      '6개월 과정 완주했습니다. 훈련장려금은 출석률 80% 넘으면 매달 꼬박꼬박 나왔어요. 취업 연계도 도움 많이 받았습니다.',
+    authorName: '개발자준비생',
+    createdAt: '2026-07-07',
+    viewCount: 284,
+    commentCount: 1,
+  },
+  {
+    id: 'cp3',
+    title: '오늘 면접 보고 왔는데 다들 잘 지내시나요',
+    category: '잡담',
+    content: '떨려서 물도 제대로 못 마셨네요... 다들 취준 화이팅입니다.',
+    authorName: '커피한잔',
+    createdAt: '2026-07-07',
+    viewCount: 58,
+    commentCount: 0,
+  },
+  {
+    id: 'cp4',
+    title: '청년내일채움공제 중도해지 시 환급 문의',
+    category: '정책질문',
+    content: '이직을 고민 중인데 중도 해지하면 그동안 적립된 금액이 어떻게 처리되는지 아시는 분?',
+    authorName: '이직러',
+    createdAt: '2026-07-06',
+    viewCount: 97,
+    commentCount: 0,
+  },
+  {
+    id: 'cp5',
+    title: '서울시 청년수당 3개월차 진짜 도움됐어요',
+    category: '정책후기',
+    content:
+      '구직활동 보고서만 성실히 제출하면 큰 어려움 없이 지급됩니다. 생활비 걱정 조금 덜었어요.',
+    authorName: '취준생A',
+    createdAt: '2026-07-05',
+    viewCount: 176,
+    commentCount: 3,
+  },
+  {
+    id: 'cp6',
+    title: '다들 주말에 뭐하세요',
+    category: '잡담',
+    content: '스터디 카페 vs 집 vs 도서관, 어디서 공부가 제일 잘 되는지 투표해봐요.',
+    authorName: '스터디왕',
+    createdAt: '2026-07-04',
+    viewCount: 41,
+    commentCount: 0,
+  },
+];

@@ -1,4 +1,4 @@
-import { CheckCircle2, Compass, Home, Sparkles, User } from 'lucide-react';
+import { CheckCircle2, Compass, Home, MessagesSquare, Sparkles, User } from 'lucide-react';
 import { NavLink } from 'react-router';
 
 import { useAuthStore } from '@/entities/user';
@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { to: ROUTES.home, label: '홈', icon: Home, end: true, authOnly: false },
   { to: ROUTES.search, label: '정책', icon: Compass, end: false, authOnly: false },
   { to: ROUTES.recommend, label: '추천', icon: Sparkles, end: false, authOnly: false },
+  { to: ROUTES.community, label: '커뮤니티', icon: MessagesSquare, end: false, authOnly: false },
   { to: ROUTES.tracker, label: '신청관리', icon: CheckCircle2, end: false, authOnly: true },
   { to: ROUTES.my, label: '마이', icon: User, end: false, authOnly: false },
 ];

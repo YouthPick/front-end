@@ -7,6 +7,7 @@ import { ROUTES } from '@/shared/constants';
 const MENU_ITEMS = [
   { to: ROUTES.search, label: '정책 찾기', end: false, authOnly: false },
   { to: ROUTES.recommend, label: '맞춤 추천', end: false, authOnly: false },
+  { to: ROUTES.community, label: '커뮤니티', end: false, authOnly: false },
   { to: ROUTES.tracker, label: '신청관리', end: false, authOnly: true },
 ];
 
