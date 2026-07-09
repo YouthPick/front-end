@@ -5,7 +5,6 @@ export const TRACKER_STATUS_TABS: TrackerStatusTab[] = [
   '관심',
   '준비중',
   '신청완료',
-  '결과대기',
   '종료',
 ];
 

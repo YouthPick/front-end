@@ -8,7 +8,7 @@ import { TrackerChecklist } from './TrackerChecklist';
 import { TrackerDeleteConfirm } from './TrackerDeleteConfirm';
 import { TrackerMemoEditor } from './TrackerMemoEditor';
 
-const TRACKER_STATUS_OPTIONS: TrackerStatus[] = ['관심', '준비중', '신청완료', '결과대기', '종료'];
+const TRACKER_STATUS_OPTIONS: TrackerStatus[] = ['관심', '준비중', '신청완료', '종료'];
 
 function isTrackerStatus(value: string): value is TrackerStatus {
   return (TRACKER_STATUS_OPTIONS as readonly string[]).includes(value);

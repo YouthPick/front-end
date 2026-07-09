@@ -13,8 +13,6 @@ function getStatusBadgeClasses(status: TrackerItem['status']): string {
   switch (status) {
     case '준비중':
       return 'bg-amber-50 text-amber-600 border border-amber-100';
-    case '결과대기':
-      return 'bg-blue-50 text-blue-600 border border-blue-100';
     case '신청완료':
       return 'bg-emerald-50 text-emerald-600 border border-emerald-100';
     default:

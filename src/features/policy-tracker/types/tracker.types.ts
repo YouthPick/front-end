@@ -1,4 +1,4 @@
-export type TrackerStatus = '관심' | '준비중' | '신청완료' | '결과대기' | '종료';
+export type TrackerStatus = '관심' | '준비중' | '신청완료' | '종료';
 
 export interface TrackerChecklistItem {
   id: string;

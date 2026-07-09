@@ -1,4 +1,4 @@
-import { CheckSquare, Heart, Square } from 'lucide-react';
+import { CheckSquare, Square, Star } from 'lucide-react';
 
 import type { Policy } from '../model/policy.types';
 import { PolicyCategoryBadge } from './PolicyCategoryBadge';
@@ -29,7 +29,7 @@ export function PolicyCard({
 }: PolicyCardProps) {
   return (
     <div className="relative flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-within:ring-2 focus-within:ring-primary/40">
-      {/* 카드 전체를 덮는 상세 이동 버튼. 내부 버튼(비교·찜)은 z-10으로 위에 올려 독립 동작시킨다. */}
+      {/* 카드 전체를 덮는 상세 이동 버튼. 내부 버튼(비교·관심)은 z-10으로 위에 올려 독립 동작시킨다. */}
       <button
         type="button"
         onClick={() => onViewDetails(policy)}
@@ -99,13 +99,13 @@ export function PolicyCard({
           aria-pressed={isSaved}
           className={`relative z-10 flex w-full items-center justify-center space-x-1 rounded-xl border py-2.5 text-xs font-bold transition-colors ${
             isSaved
-              ? 'bg-rose-50 border-rose-100 text-rose-500'
+              ? 'bg-yellow-50 border-yellow-100 text-yellow-500'
               : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700'
           }`}
           id={`save-toggle-${policy.id}`}
         >
-          <Heart className={`h-3.5 w-3.5 ${isSaved ? 'fill-current' : ''}`} />
-          <span>찜하기</span>
+          <Star className={`h-3.5 w-3.5 ${isSaved ? 'fill-current' : ''}`} />
+          <span>관심</span>
         </button>
       </div>
     </div>
