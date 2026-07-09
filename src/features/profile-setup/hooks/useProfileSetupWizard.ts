@@ -8,7 +8,7 @@ import { getRedirectPath } from '@/shared/utils';
 
 export const MAX_INTEREST_COUNT = 3;
 export const MAX_KEYWORD_COUNT = 5;
-export const WIZARD_TOTAL_STEPS = 3;
+export const WIZARD_TOTAL_STEPS = 4;
 
 export function useProfileSetupWizard() {
   const profile = useProfileStore((state) => state.profile);
@@ -23,6 +23,7 @@ export function useProfileSetupWizard() {
   const [step, setStep] = useState(1);
   const [draft, setDraft] = useState<UserProfile>({
     ...profile,
+    specialConditions: [...profile.specialConditions],
     interests: [...profile.interests],
     keywords: [...profile.keywords],
   });
@@ -37,12 +38,8 @@ export function useProfileSetupWizard() {
       setStep((prev) => prev + 1);
       return;
     }
-    // 관심 분야 없이 완료하면 다음 로그인에 마법사가 다시 뜨므로 최소 1개를 요구한다.
-    if (draft.interests.length === 0) {
-      showToast('관심 분야를 1개 이상 선택해 주세요.', 'warning');
-      return;
-    }
-    updateProfile(draft);
+    // 결혼상태·전공·특화조건·연소득·관심분야는 모두 선택 항목이라, 비워 두면 매칭 시 제한없음으로 간주한다.
+    updateProfile({ ...draft, isOnboarded: true });
     navigate(from ?? ROUTES.recommend, { replace: true });
     showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과 28건이 연계되었습니다.', 'success');
   };
@@ -97,6 +94,15 @@ export function useProfileSetupWizard() {
     setDraft((prev) => ({ ...prev, interests: [...prev.interests, interest] }));
   };
 
+  const toggleSpecialCondition = (condition: string) => {
+    setDraft((prev) => ({
+      ...prev,
+      specialConditions: prev.specialConditions.includes(condition)
+        ? prev.specialConditions.filter((c) => c !== condition)
+        : [...prev.specialConditions, condition],
+    }));
+  };
+
   return {
     step,
     draft,
@@ -109,5 +115,6 @@ export function useProfileSetupWizard() {
     addKeyword,
     removeKeyword,
     toggleInterest,
+    toggleSpecialCondition,
   };
 }

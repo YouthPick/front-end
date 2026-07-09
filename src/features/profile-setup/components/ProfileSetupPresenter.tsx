@@ -1,6 +1,7 @@
 import type { UserProfile } from '@/entities/user';
 
 import { WIZARD_TOTAL_STEPS } from '../hooks/useProfileSetupWizard';
+import { WizardStepAdditional } from './WizardStepAdditional';
 import { WizardStepBasic } from './WizardStepBasic';
 import { WizardStepInterest } from './WizardStepInterest';
 import { WizardStepStatus } from './WizardStepStatus';
@@ -12,6 +13,7 @@ interface ProfileSetupPresenterProps {
   onKeywordInputChange: (value: string) => void;
   onUpdateDraft: (patch: Partial<UserProfile>) => void;
   onToggleInterest: (interest: string) => void;
+  onToggleSpecialCondition: (condition: string) => void;
   onAddKeyword: () => void;
   onRemoveKeyword: (keyword: string) => void;
   onNext: () => void;
@@ -26,6 +28,7 @@ export function ProfileSetupPresenter({
   onKeywordInputChange,
   onUpdateDraft,
   onToggleInterest,
+  onToggleSpecialCondition,
   onAddKeyword,
   onRemoveKeyword,
   onNext,
@@ -53,6 +56,13 @@ export function ProfileSetupPresenter({
       {step === 1 && <WizardStepBasic draft={draft} onUpdateDraft={onUpdateDraft} />}
       {step === 2 && <WizardStepStatus draft={draft} onUpdateDraft={onUpdateDraft} />}
       {step === 3 && (
+        <WizardStepAdditional
+          draft={draft}
+          onUpdateDraft={onUpdateDraft}
+          onToggleSpecialCondition={onToggleSpecialCondition}
+        />
+      )}
+      {step === 4 && (
         <WizardStepInterest
           draft={draft}
           newKeywordInput={newKeywordInput}

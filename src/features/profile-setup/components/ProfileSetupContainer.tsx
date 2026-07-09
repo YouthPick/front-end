@@ -14,6 +14,7 @@ export function ProfileSetupContainer() {
     addKeyword,
     removeKeyword,
     toggleInterest,
+    toggleSpecialCondition,
   } = useProfileSetupWizard();
 
   return (
@@ -24,6 +25,7 @@ export function ProfileSetupContainer() {
       onKeywordInputChange={setNewKeywordInput}
       onUpdateDraft={updateDraft}
       onToggleInterest={toggleInterest}
+      onToggleSpecialCondition={toggleSpecialCondition}
       onAddKeyword={addKeyword}
       onRemoveKeyword={removeKeyword}
       onNext={goNext}
