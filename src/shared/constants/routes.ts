@@ -4,6 +4,7 @@ export const ROUTES = {
   recommend: '/recommend',
   tracker: '/tracker',
   community: '/community',
+  communityWrite: '/community/write',
   communityDetail: '/community/:postId',
   my: '/my',
   login: '/login',

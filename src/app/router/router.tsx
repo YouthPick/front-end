@@ -18,6 +18,9 @@ const CommunityPage = lazy(() =>
 const CommunityDetailPage = lazy(() =>
   import('@/pages/community-detail').then((m) => ({ default: m.CommunityDetailPage })),
 );
+const CommunityWritePage = lazy(() =>
+  import('@/pages/community-write').then((m) => ({ default: m.CommunityWritePage })),
+);
 const MyPage = lazy(() => import('@/pages/my').then((m) => ({ default: m.MyPage })));
 const ProfileSetupPage = lazy(() =>
   import('@/pages/profile-setup').then((m) => ({ default: m.ProfileSetupPage })),
@@ -50,6 +53,7 @@ export const router = createBrowserRouter([
           { path: ROUTES.tracker, element: <TrackerPage /> },
           { path: ROUTES.my, element: <MyPage /> },
           { path: ROUTES.profileSetup, element: <ProfileSetupPage /> },
+          { path: ROUTES.communityWrite, element: <CommunityWritePage /> },
         ],
       },
       // 존재하지 않는 경로는 홈으로 보낸다.
