@@ -7,7 +7,7 @@ import { ROUTES } from '@/shared/constants';
 import { RecommendationFeed } from '@/widgets/recommendation-feed';
 
 export function RecommendPage() {
-  const { profile, recommendations } = useRecommendations();
+  const { profile, recommendations, isLoading, isError } = useRecommendations();
   const navigate = useNavigate();
 
   return (
@@ -32,7 +32,11 @@ export function RecommendPage() {
         </button>
       </div>
 
-      <ProfileBriefing profile={profile} recommendationCount={recommendations.length} />
+      <ProfileBriefing
+        profile={profile}
+        recommendationCount={isLoading ? null : recommendations.length}
+        isRecommendationsError={isError}
+      />
 
       <RecommendationFeed />
 
