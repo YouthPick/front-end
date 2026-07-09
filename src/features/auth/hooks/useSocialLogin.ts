@@ -29,9 +29,9 @@ export function useSocialLogin() {
 
     const from = getRedirectPath(location.state);
 
-    // 관심 분야가 비어 있으면 최초 로그인으로 보고 프로필 설정 마법사로 안내한다.
+    // 온보딩을 완료하지 않았으면 최초 로그인으로 보고 프로필 설정 마법사로 안내한다.
     // 원래 가려던 경로(from)는 마법사 완료 후 복귀할 수 있게 state로 넘긴다.
-    if (profile.interests.length === 0) {
+    if (!profile.isOnboarded) {
       navigate(ROUTES.profileSetup, { replace: true, state: { from } });
       return;
     }
