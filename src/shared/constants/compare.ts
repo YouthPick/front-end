@@ -1,1 +1,1 @@
-export const MAX_COMPARE_COUNT = 2;
+export const MAX_COMPARE_COUNT = 3;

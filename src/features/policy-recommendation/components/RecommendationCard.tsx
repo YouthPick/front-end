@@ -10,6 +10,8 @@ interface RecommendationCardProps {
   onViewDetails: (policy: Policy) => void;
   onToggleSave: (policyId: string) => void;
   onStartTracker: (policy: Policy) => void;
+  isComparing: boolean;
+  onToggleCompare: (policy: Policy) => void;
 }
 
 export function RecommendationCard({
@@ -18,6 +20,8 @@ export function RecommendationCard({
   onViewDetails,
   onToggleSave,
   onStartTracker,
+  isComparing,
+  onToggleCompare,
 }: RecommendationCardProps) {
   const { policy, score, reasons } = recommendation;
 
@@ -100,8 +104,20 @@ export function RecommendationCard({
         </button>
         <button
           type="button"
+          onClick={() => onToggleCompare(policy)}
+          aria-pressed={isComparing}
+          className={`rounded-xl px-4 py-2 text-xs font-bold border transition-all ${
+            isComparing
+              ? 'bg-primary/10 border-primary/30 text-primary'
+              : 'bg-white border-slate-200 text-slate-500'
+          }`}
+        >
+          {isComparing ? '비교 등록됨' : '비교하기'}
+        </button>
+        <button
+          type="button"
           onClick={() => onStartTracker(policy)}
-          className="rounded-xl bg-gradient-to-r from-primary to-brand-secondary px-4.5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 transition-all"
+          className="rounded-xl bg-primary px-4.5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 transition-all"
         >
           신청관리 시작
         </button>

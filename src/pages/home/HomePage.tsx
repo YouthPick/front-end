@@ -2,18 +2,22 @@ import { useNavigate } from 'react-router';
 
 import { type PolicyCategory, usePoliciesQuery, usePolicyDetailStore } from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
-import { ChatbotContainer } from '@/features/chatbot';
+import { CompareDockContainer } from '@/features/policy-compare';
 import { RecommendationPreview, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
 import { HeroBanner } from '@/widgets/hero-banner';
-import { PolicyCardGrid } from '@/widgets/policy-card-grid';
-import { RecentlyViewed } from '@/widgets/recently-viewed';
+import {
+  POLICY_GRID_CLASS,
+  POLICY_GRID_SKELETON_COUNT,
+  PolicyCardGrid,
+} from '@/widgets/policy-card-grid';
 
 import { CategoryQuickLinks } from './components/CategoryQuickLinks';
 import { GuestRecommendCta } from './components/GuestRecommendCta';
 
-const HOME_POLICY_COUNT = 4;
+// 로딩 스켈레톤 개수를 실제 표시 개수와 같은 값으로 맞춰 드리프트를 방지한다.
+const HOME_POLICY_COUNT = POLICY_GRID_SKELETON_COUNT;
 
 export function HomePage() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -64,43 +68,41 @@ export function HomePage() {
         />
       )}
 
-      {/* Recent & grid policies split */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-4">
-        <div className="lg:col-span-8 space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="text-left">
-              <h3 className="text-sm font-extrabold text-slate-800">최근 화제인 신규 정책 소식</h3>
-              <p className="text-[10px] text-slate-400 mt-0.5">
-                전국 및 서울 등 청년들이 가장 집중해서 조회하는 핵심 소식입니다.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => navigate(ROUTES.search)}
-              className="text-xs font-bold text-slate-400 hover:text-slate-700"
-            >
-              전체보기
-            </button>
+      {/* 신규 정책 그리드 */}
+      <section className="space-y-6 pt-4">
+        <div className="flex items-center justify-between">
+          <div className="text-left">
+            <h3 className="text-sm font-extrabold text-slate-800">최근 화제인 신규 정책 소식</h3>
+            <p className="text-[10px] text-slate-400 mt-0.5">
+              전국 및 서울 등 청년들이 가장 집중해서 조회하는 핵심 소식입니다.
+            </p>
           </div>
-
-          {isLoading ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Skeleton className="h-56" />
-              <Skeleton className="h-56" />
-              <Skeleton className="h-56" />
-              <Skeleton className="h-56" />
-            </div>
-          ) : (
-            <PolicyCardGrid policies={policies.slice(0, HOME_POLICY_COUNT)} />
-          )}
+          <button
+            type="button"
+            onClick={() => navigate(ROUTES.search)}
+            className="text-xs font-bold text-slate-400 hover:text-slate-700"
+          >
+            전체보기
+          </button>
         </div>
 
-        {/* Sidebar */}
-        <div className="lg:col-span-4 space-y-6">
-          <RecentlyViewed />
-          <ChatbotContainer />
-        </div>
-      </div>
+        {isLoading ? (
+          <div className={POLICY_GRID_CLASS}>
+            {Array.from({ length: HOME_POLICY_COUNT }, (_, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: 순서가 바뀌지 않는 정적 로딩 플레이스홀더라 안정적인 id가 없다
+              <Skeleton key={index} className="h-56" />
+            ))}
+          </div>
+        ) : (
+          <PolicyCardGrid
+            policies={policies.slice(0, HOME_POLICY_COUNT)}
+            className={POLICY_GRID_CLASS}
+          />
+        )}
+      </section>
+
+      {/* 정책 비교 독 (우측 슬라이드-인, 담긴 정책이 있을 때만 노출) */}
+      <CompareDockContainer />
     </div>
   );
 }

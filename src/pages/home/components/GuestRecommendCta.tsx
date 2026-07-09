@@ -22,7 +22,7 @@ export function GuestRecommendCta({ onGetRecommendations, onBrowseAll }: GuestRe
         <button
           type="button"
           onClick={onGetRecommendations}
-          className="rounded-xl bg-gradient-to-r from-primary to-brand-secondary px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-primary/10 transition-all hover:brightness-105 active:scale-95 cursor-pointer"
+          className="rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-primary/10 transition-all hover:brightness-105 active:scale-95 cursor-pointer"
         >
           내 조건에 맞는 정책 추천받기
         </button>
