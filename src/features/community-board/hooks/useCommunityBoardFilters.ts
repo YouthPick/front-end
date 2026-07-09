@@ -1,13 +1,16 @@
 import { useSearchParams } from 'react-router';
 
+import { DEFAULT_COMMUNITY_POST_SORT, normalizeCommunityPostSort } from '@/entities/community-post';
+
 export const DEFAULT_CATEGORY_VALUE = '전체';
 
-// 검색어·카테고리 상태를 URL 쿼리스트링(`/community?q=&category=...`)과 동기화한다.
+// 검색어·카테고리·정렬 상태를 URL 쿼리스트링(`/community?q=&category=&sort=...`)과 동기화한다.
 export function useCommunityBoardFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const query = searchParams.get('q') ?? '';
   const category = searchParams.get('category') ?? DEFAULT_CATEGORY_VALUE;
+  const sort = normalizeCommunityPostSort(searchParams.get('sort'));
 
   const setQuery = (value: string) => {
     setSearchParams(
@@ -39,5 +42,20 @@ export function useCommunityBoardFilters() {
     );
   };
 
-  return { query, category, setQuery, setCategory };
+  const setSort = (value: string) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value === DEFAULT_COMMUNITY_POST_SORT) {
+          next.delete('sort');
+        } else {
+          next.set('sort', value);
+        }
+        return next;
+      },
+      { replace: true },
+    );
+  };
+
+  return { query, category, sort, setQuery, setCategory, setSort };
 }

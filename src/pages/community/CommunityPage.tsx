@@ -1,5 +1,6 @@
 import {
   CommunityBoardEmptyState,
+  CommunityBoardSortSelect,
   CommunityCategoryTabs,
   CommunitySearchBar,
   useCommunityBoard,
@@ -12,8 +13,18 @@ import {
 } from '@/widgets/community-post-grid';
 
 export function CommunityPage() {
-  const { query, category, posts, isLoading, isError, reload, setQuery, setCategory } =
-    useCommunityBoard();
+  const {
+    query,
+    category,
+    sort,
+    posts,
+    isLoading,
+    isError,
+    reload,
+    setQuery,
+    setCategory,
+    setSort,
+  } = useCommunityBoard();
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -27,7 +38,10 @@ export function CommunityPage() {
 
       <CommunitySearchBar query={query} onQueryChange={setQuery} />
 
-      <CommunityCategoryTabs activeCategory={category} onCategoryChange={setCategory} />
+      <div className="flex items-center justify-between gap-2">
+        <CommunityCategoryTabs activeCategory={category} onCategoryChange={setCategory} />
+        <CommunityBoardSortSelect sort={sort} onSortChange={setSort} />
+      </div>
 
       {isLoading && (
         <div className={COMMUNITY_POST_GRID_CLASS}>
