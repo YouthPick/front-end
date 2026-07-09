@@ -7,4 +7,5 @@ export interface CommunityPostDto {
   createdAt: string;
   viewCount: number;
   commentCount: number;
+  likeCount: number;
 }

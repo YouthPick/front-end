@@ -9,4 +9,5 @@ export interface CommunityPost {
   createdAt: string;
   viewCount: number;
   commentCount: number;
+  likeCount: number;
 }

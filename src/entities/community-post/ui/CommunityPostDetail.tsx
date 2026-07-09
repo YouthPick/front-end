@@ -26,6 +26,7 @@ export function CommunityPostDetail({ post, isLiked, onToggleLike }: CommunityPo
             }`}
           >
             <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
+            <span>{post.likeCount}</span>
           </button>
         </div>
         <div className="flex items-center gap-3 text-[11px] font-bold text-slate-400">

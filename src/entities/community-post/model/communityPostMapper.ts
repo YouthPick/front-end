@@ -16,6 +16,7 @@ export function mapCommunityPostDtoToPost(dto: CommunityPostDto): CommunityPost 
     createdAt: dto.createdAt,
     viewCount: dto.viewCount,
     commentCount: dto.commentCount,
+    likeCount: dto.likeCount,
   };
 }
 

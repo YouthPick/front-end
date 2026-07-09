@@ -11,6 +11,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     createdAt: '2026-07-08',
     viewCount: 132,
     commentCount: 2,
+    likeCount: 21,
   },
   {
     id: 'cp2',
@@ -22,6 +23,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     createdAt: '2026-07-07',
     viewCount: 284,
     commentCount: 1,
+    likeCount: 45,
   },
   {
     id: 'cp3',
@@ -32,6 +34,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     createdAt: '2026-07-07',
     viewCount: 58,
     commentCount: 0,
+    likeCount: 5,
   },
   {
     id: 'cp4',
@@ -42,6 +45,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     createdAt: '2026-07-06',
     viewCount: 97,
     commentCount: 0,
+    likeCount: 9,
   },
   {
     id: 'cp5',
@@ -53,6 +57,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     createdAt: '2026-07-05',
     viewCount: 176,
     commentCount: 3,
+    likeCount: 38,
   },
   {
     id: 'cp6',
@@ -63,5 +68,6 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     createdAt: '2026-07-04',
     viewCount: 41,
     commentCount: 0,
+    likeCount: 3,
   },
 ];

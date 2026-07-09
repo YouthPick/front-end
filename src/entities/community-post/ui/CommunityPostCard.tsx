@@ -64,6 +64,7 @@ export function CommunityPostCard({
             }`}
           >
             <Heart className={`h-3.5 w-3.5 ${isLiked ? 'fill-current' : ''}`} />
+            <span>{post.likeCount}</span>
           </button>
         </div>
       </div>
