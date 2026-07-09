@@ -53,7 +53,7 @@ export function useProfileSetupWizard() {
     // 결혼상태·전공·특화조건·연소득·관심분야는 모두 선택 항목이라, 비워 두면 매칭 시 제한없음으로 간주한다.
     updateProfile({ ...draft, isOnboarded: true });
     navigate(from ?? ROUTES.recommend, { replace: true });
-    showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과 28건이 연계되었습니다.', 'success');
+    showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과를 확인해보세요.', 'success');
   };
 
   const goPrev = () => {

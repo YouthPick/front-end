@@ -2,9 +2,10 @@ import type { UserProfile } from '@/entities/user';
 
 interface ProfileBriefingProps {
   profile: UserProfile;
+  recommendationCount: number;
 }
 
-export function ProfileBriefing({ profile }: ProfileBriefingProps) {
+export function ProfileBriefing({ profile, recommendationCount }: ProfileBriefingProps) {
   return (
     <div className="rounded-3xl bg-slate-50 border border-slate-100 p-5 text-left grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
       <div className="md:col-span-8 space-y-1.5">
@@ -42,7 +43,7 @@ export function ProfileBriefing({ profile }: ProfileBriefingProps) {
       </div>
       <div className="md:col-span-4 border-t md:border-t-0 md:border-l border-slate-200/80 pt-3 md:pt-0 md:pl-5 space-y-1">
         <span className="text-[10px] font-extrabold text-slate-400 block">통합 매칭 수</span>
-        <span className="text-lg font-black text-slate-800">총 28건 추천</span>
+        <span className="text-lg font-black text-slate-800">총 {recommendationCount}건 추천</span>
       </div>
     </div>
   );
