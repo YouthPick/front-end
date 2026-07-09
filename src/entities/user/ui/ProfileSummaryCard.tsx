@@ -5,10 +5,17 @@ interface ProfileSummaryCardProps {
   onEdit: () => void;
 }
 
+const UNSET_LABEL = '미설정';
+
 function formatIncome(profile: UserProfile): string {
   if (profile.incomeUnknown) return '소득 무관';
-  if (profile.annualIncome === null) return '미설정';
+  if (profile.annualIncome === null) return UNSET_LABEL;
   return `연 ${profile.annualIncome.toLocaleString()}만원`;
+}
+
+function formatRegion(profile: UserProfile): string {
+  if (!profile.region) return UNSET_LABEL;
+  return profile.subRegion ? `${profile.region} ${profile.subRegion}` : profile.region;
 }
 
 interface ChipTileProps {
@@ -43,12 +50,12 @@ function ChipTile({ label, values, emptyText, chipClassName, className = '' }: C
 
 export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps) {
   const tiles = [
-    { label: '거주지', value: `${profile.region} ${profile.subRegion}` },
-    { label: '출생연도', value: `${profile.birthYear}년생` },
-    { label: '취업상태', value: profile.employmentStatus },
-    { label: '학력', value: profile.educationStatus },
-    { label: '결혼상태', value: profile.maritalStatus || '미설정' },
-    { label: '전공계열', value: profile.major || '미설정' },
+    { label: '거주지', value: formatRegion(profile) },
+    { label: '출생연도', value: profile.birthYear ? `${profile.birthYear}년생` : UNSET_LABEL },
+    { label: '취업상태', value: profile.employmentStatus || UNSET_LABEL },
+    { label: '학력', value: profile.educationStatus || UNSET_LABEL },
+    { label: '결혼상태', value: profile.maritalStatus || UNSET_LABEL },
+    { label: '전공계열', value: profile.major || UNSET_LABEL },
     { label: '연소득', value: formatIncome(profile) },
   ];
 
