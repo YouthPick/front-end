@@ -21,16 +21,17 @@ export function CommunityPostGrid({
   const { isLiked, toggleLike } = useCommunityLike();
 
   return (
-    <div className={className}>
+    <ul className={`list-none ${className}`}>
       {posts.map((post) => (
-        <CommunityPostCard
-          key={post.id}
-          post={post}
-          onSelect={(target) => navigate(buildCommunityDetailPath(target.id))}
-          isLiked={isLiked(post.id)}
-          onToggleLike={toggleLike}
-        />
+        <li key={post.id}>
+          <CommunityPostCard
+            post={post}
+            onSelect={(target) => navigate(buildCommunityDetailPath(target.id))}
+            isLiked={isLiked(post.id)}
+            onToggleLike={toggleLike}
+          />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

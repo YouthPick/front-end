@@ -17,7 +17,10 @@ export function CommunitySearchBar({ query, onQueryChange }: CommunitySearchBarP
         id="community-search-input"
         aria-label="커뮤니티 게시글 검색어 입력"
       />
-      <Search className="absolute right-4.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+      <Search
+        className="absolute right-4.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+        aria-hidden="true"
+      />
     </div>
   );
 }

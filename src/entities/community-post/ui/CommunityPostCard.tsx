@@ -17,14 +17,14 @@ export function CommunityPostCard({
   onToggleLike,
 }: CommunityPostCardProps) {
   return (
-    <div className="relative flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-within:ring-2 focus-within:ring-primary/40">
+    <article className="relative flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-within:ring-2 focus-within:ring-primary/40">
       {/* 카드 전체를 덮는 상세 이동 버튼. 좋아요 버튼은 z-10으로 위에 올려 독립 동작시킨다. */}
       <button
         type="button"
         onClick={() => onSelect(post)}
         aria-label={`${post.title} 게시글 보기`}
         title={post.title}
-        className="absolute inset-0 rounded-2xl focus:outline-none"
+        className="absolute inset-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       />
 
       <div className="space-y-2.5">
@@ -45,11 +45,11 @@ export function CommunityPostCard({
         <div className="flex items-center justify-between border-t border-slate-100/75 pt-3 text-[10px] font-bold text-slate-400">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <Eye className="h-3 w-3" />
+              <Eye className="h-3 w-3" aria-hidden="true" />
               {post.viewCount}
             </span>
             <span className="flex items-center gap-1">
-              <MessageCircle className="h-3 w-3" />
+              <MessageCircle className="h-3 w-3" aria-hidden="true" />
               {post.commentCount}
             </span>
           </div>
@@ -58,7 +58,7 @@ export function CommunityPostCard({
             type="button"
             onClick={() => onToggleLike(post.id)}
             aria-pressed={isLiked}
-            aria-label="좋아요"
+            aria-label={isLiked ? '좋아요 취소' : '좋아요'}
             className={`relative z-10 flex items-center gap-1 rounded-md px-1.5 py-0.5 transition-colors ${
               isLiked ? 'text-rose-500' : 'text-slate-400 hover:text-rose-400'
             }`}
@@ -68,6 +68,6 @@ export function CommunityPostCard({
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

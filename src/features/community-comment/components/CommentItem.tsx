@@ -58,7 +58,12 @@ export function CommentItem({
         onDelete={() => onDeleteRequest(comment.id)}
         actions={
           canReply && (
-            <button type="button" onClick={onToggleReply} className="text-primary hover:underline">
+            <button
+              type="button"
+              onClick={onToggleReply}
+              aria-expanded={isReplyOpen}
+              className="text-primary hover:underline"
+            >
               답글
             </button>
           )

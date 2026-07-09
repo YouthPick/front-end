@@ -20,7 +20,7 @@ export function CommunityPostDetail({ post, isLiked, onToggleLike }: CommunityPo
             type="button"
             onClick={() => onToggleLike(post.id)}
             aria-pressed={isLiked}
-            aria-label="좋아요"
+            aria-label={isLiked ? '좋아요 취소' : '좋아요'}
             className={`flex shrink-0 items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold transition-colors ${
               isLiked ? 'text-rose-500' : 'text-slate-400 hover:text-rose-400'
             }`}
@@ -34,11 +34,11 @@ export function CommunityPostDetail({ post, isLiked, onToggleLike }: CommunityPo
           <span className="text-slate-200">·</span>
           <span>{post.createdAt}</span>
           <span className="flex items-center gap-1">
-            <Eye className="h-3 w-3" />
+            <Eye className="h-3 w-3" aria-hidden="true" />
             {post.viewCount}
           </span>
           <span className="flex items-center gap-1">
-            <MessageCircle className="h-3 w-3" />
+            <MessageCircle className="h-3 w-3" aria-hidden="true" />
             {post.commentCount}
           </span>
         </div>
