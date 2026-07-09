@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import { useAuthStore } from '@/entities/user';
 import { ROUTES } from '@/shared/constants';
-import { ErrorState, Skeleton } from '@/shared/ui';
+import { ConfirmDialog, ErrorState, Skeleton } from '@/shared/ui';
 import { useCommunityCommentMutations } from '../hooks/useCommunityCommentMutations';
 import { useCommunityComments } from '../hooks/useCommunityComments';
 import { CommentForm } from './CommentForm';
@@ -17,11 +17,15 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const { data: comments = [], isLoading, isError, refetch } = useCommunityComments(postId);
-  const { createComment, createReply, isSubmitting } = useCommunityCommentMutations(postId);
+  const { createComment, createReply, updateComment, deleteComment, isSubmitting, isUpdating } =
+    useCommunityCommentMutations(postId);
 
   const [newCommentValue, setNewCommentValue] = useState('');
   const [openReplyId, setOpenReplyId] = useState<string | null>(null);
   const [replyValue, setReplyValue] = useState('');
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const topLevelComments = comments.filter((comment) => comment.parentId === null);
   const repliesByParentId = comments.reduce<Record<string, typeof comments>>((acc, comment) => {
@@ -32,7 +36,7 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
 
   const handleSubmitComment = () => {
     if (!user) return;
-    createComment(user.name, newCommentValue);
+    createComment(user.name, user.email, newCommentValue);
     setNewCommentValue('');
   };
 
@@ -43,9 +47,32 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
 
   const handleSubmitReply = (commentId: string) => {
     if (!user) return;
-    createReply(commentId, user.name, replyValue);
+    createReply(commentId, user.name, user.email, replyValue);
     setReplyValue('');
     setOpenReplyId(null);
+  };
+
+  const handleStartEdit = (commentId: string, content: string) => {
+    setEditingCommentId(commentId);
+    setEditValue(content);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingCommentId(null);
+    setEditValue('');
+  };
+
+  const handleSubmitEdit = () => {
+    if (!editingCommentId) return;
+    updateComment(editingCommentId, editValue);
+    setEditingCommentId(null);
+    setEditValue('');
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteTargetId) return;
+    deleteComment(deleteTargetId);
+    setDeleteTargetId(null);
   };
 
   if (isLoading) {
@@ -65,7 +92,7 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
     <div className="space-y-4">
       <h3 className="text-sm font-extrabold text-slate-800">댓글 {comments.length}</h3>
 
-      {isAuthenticated ? (
+      {isAuthenticated && user ? (
         <CommentForm
           value={newCommentValue}
           onChange={setNewCommentValue}
@@ -93,17 +120,36 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
               key={comment.id}
               comment={comment}
               replies={repliesByParentId[comment.id] ?? []}
+              currentUserEmail={user?.email ?? null}
               canReply={isAuthenticated}
               isReplyOpen={openReplyId === comment.id}
               replyValue={replyValue}
-              isSubmitting={isSubmitting}
+              isSubmittingReply={isSubmitting}
               onToggleReply={() => handleToggleReply(comment.id)}
               onReplyValueChange={setReplyValue}
               onSubmitReply={() => handleSubmitReply(comment.id)}
+              editingCommentId={editingCommentId}
+              editValue={editValue}
+              isUpdating={isUpdating}
+              onStartEdit={handleStartEdit}
+              onEditValueChange={setEditValue}
+              onCancelEdit={handleCancelEdit}
+              onSubmitEdit={handleSubmitEdit}
+              onDeleteRequest={setDeleteTargetId}
             />
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={deleteTargetId !== null}
+        title="댓글을 삭제하시겠습니까?"
+        description="삭제한 댓글은 복구할 수 없습니다. 답글이 있는 댓글은 답글도 함께 삭제됩니다."
+        confirmLabel="삭제"
+        cancelLabel="취소"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 }

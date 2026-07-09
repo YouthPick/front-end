@@ -7,6 +7,7 @@ export function mapCommunityCommentDtoToComment(dto: CommunityCommentDto): Commu
     postId: dto.postId,
     parentId: dto.parentId,
     authorName: dto.authorName,
+    authorEmail: dto.authorEmail,
     content: dto.content,
     createdAt: dto.createdAt,
   };

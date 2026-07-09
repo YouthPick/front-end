@@ -21,6 +21,7 @@ export interface CreateCommunityCommentParams {
   postId: string;
   parentId: string | null;
   authorName: string;
+  authorEmail: string;
   content: string;
 }
 
@@ -33,9 +34,36 @@ export async function createCommunityComment(
     postId: params.postId,
     parentId: params.parentId,
     authorName: params.authorName,
+    authorEmail: params.authorEmail,
     content: params.content,
     createdAt: new Date().toISOString().slice(0, 10),
   };
   comments = [...comments, newComment];
   return cloneDto(newComment);
+}
+
+export interface UpdateCommunityCommentParams {
+  commentId: string;
+  content: string;
+}
+
+export async function updateCommunityComment(
+  params: UpdateCommunityCommentParams,
+): Promise<CommunityCommentDto | null> {
+  await delay(MOCK_API_DELAY_MS);
+  let updated: CommunityCommentDto | null = null;
+  comments = comments.map((comment) => {
+    if (comment.id !== params.commentId) return comment;
+    updated = { ...comment, content: params.content };
+    return updated;
+  });
+  return updated ? cloneDto(updated) : null;
+}
+
+export async function deleteCommunityComment(commentId: string): Promise<void> {
+  await delay(MOCK_API_DELAY_MS);
+  // 대댓글은 부모 댓글과 함께 정리한다.
+  comments = comments.filter(
+    (comment) => comment.id !== commentId && comment.parentId !== commentId,
+  );
 }

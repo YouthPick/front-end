@@ -3,6 +3,7 @@ export interface CommunityComment {
   postId: string;
   parentId: string | null;
   authorName: string;
+  authorEmail: string;
   content: string;
   createdAt: string;
 }
