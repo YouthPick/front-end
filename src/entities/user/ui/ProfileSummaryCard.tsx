@@ -16,12 +16,12 @@ interface ChipTileProps {
   values: string[];
   emptyText: string;
   chipClassName: string;
+  className?: string;
 }
 
-// 값이 여러 개(뱃지 목록)라 한 줄에 안 들어갈 수 있으므로 그리드 전체 폭을 차지하는 타일로 렌더한다.
-function ChipTile({ label, values, emptyText, chipClassName }: ChipTileProps) {
+function ChipTile({ label, values, emptyText, chipClassName, className = '' }: ChipTileProps) {
   return (
-    <div className="col-span-2 rounded-xl bg-slate-50 px-3.5 py-2.5 sm:col-span-3">
+    <div className={`rounded-xl bg-slate-50 px-3.5 py-2.5 ${className}`}>
       <span className="block text-[10px] font-bold text-slate-400">{label}</span>
       <div className="mt-1 flex flex-wrap gap-1">
         {values.length > 0 ? (
@@ -75,19 +75,32 @@ export function ProfileSummaryCard({ profile, onEdit }: ProfileSummaryCardProps)
           </div>
         ))}
 
+        {/* 연소득(1칸) 옆에 나란히 붙도록 2칸 폭으로 배치. sm 3열 그리드에서 정확히 한 행을 채운다. */}
         <ChipTile
           label="특화조건"
           values={profile.specialConditions}
           emptyText="해당없음"
           chipClassName="bg-slate-200/70 text-slate-700"
+          className="col-span-2"
         />
 
-        <ChipTile
-          label="관심분야"
-          values={profile.interests}
-          emptyText="관심 분야 미설정"
-          chipClassName="bg-primary/10 text-primary"
-        />
+        {/* 관심분야·추가 키워드는 온보딩에서 같은 단계로 수집되지만 매칭 비중이 달라(관심분야는 채점에 반영, 키워드는 미반영)
+            타일은 유지하되 1:1 비율로 한 줄에 배치한다. */}
+        <div className="col-span-2 grid grid-cols-2 gap-2.5 sm:col-span-3">
+          <ChipTile
+            label="관심분야"
+            values={profile.interests}
+            emptyText="관심 분야 미설정"
+            chipClassName="bg-primary/10 text-primary"
+          />
+
+          <ChipTile
+            label="추가 키워드"
+            values={profile.keywords}
+            emptyText="추가 키워드 미설정"
+            chipClassName="bg-sky-50 text-sky-600"
+          />
+        </div>
       </div>
     </div>
   );
