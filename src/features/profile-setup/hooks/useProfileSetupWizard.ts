@@ -63,8 +63,9 @@ export function useProfileSetupWizard() {
   };
 
   const skip = () => {
-    navigate(from ?? ROUTES.home, { replace: true });
-    showToast('설정 마법사가 일시적으로 보류되었습니다.', 'info');
+    // 원래 가려던 경로(from)가 온보딩을 요구하는 화면(예: 맞춤 추천)이면 그리로 돌아가는 순간
+    // 다시 마법사로 튕기므로, 스킵은 항상 홈으로 보낸다.
+    navigate(ROUTES.home, { replace: true });
   };
 
   const addKeyword = () => {
