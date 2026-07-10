@@ -17,25 +17,7 @@ export function RecentlyViewed() {
 
   return (
     <div className="rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm text-left">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-slate-800">최근 본 정책</h3>
-        <button
-          type="button"
-          className="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center space-x-0.5 cursor-pointer"
-        >
-          <span>전체 보기</span>
-          <svg
-            className="h-3 w-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={3}
-            aria-hidden="true"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
+      <h3 className="text-sm font-bold text-slate-800">최근 본 정책</h3>
 
       <div className="mt-4 divide-y divide-slate-100">
         {isLoading && (
