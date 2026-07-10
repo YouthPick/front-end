@@ -1,10 +1,9 @@
 import { usePolicySearchQuery } from '@/entities/policy';
+import { SEARCH_DEBOUNCE_MS } from '@/shared/constants';
 import { useDebouncedValue } from '@/shared/hooks';
 import { useToast } from '@/shared/ui';
 
 import { useSearchFilters } from './useSearchFilters';
-
-const SEARCH_DEBOUNCE_MS = 300;
 
 // 검색 화면 use case: URL 필터 상태 + 서버(mock) 검색 질의를 묶는다.
 export function usePolicySearch() {

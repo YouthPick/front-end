@@ -1,9 +1,8 @@
 import { useCommunityPostSearchQuery } from '@/entities/community-post';
+import { SEARCH_DEBOUNCE_MS } from '@/shared/constants';
 import { useDebouncedValue } from '@/shared/hooks';
 
 import { useCommunityBoardFilters } from './useCommunityBoardFilters';
-
-const SEARCH_DEBOUNCE_MS = 300;
 
 // 커뮤니티 목록 화면 use case: URL 필터 상태 + 서버(mock) 검색 질의를 묶는다.
 export function useCommunityBoard() {
