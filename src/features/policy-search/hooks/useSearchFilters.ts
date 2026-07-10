@@ -1,5 +1,7 @@
 import { useSearchParams } from 'react-router';
 
+import { useUrlSyncedSearchQuery } from '@/shared/hooks';
+
 import type { PolicySearchFilterKey, PolicySearchFilters } from '../types/policySearch.types';
 
 export const DEFAULT_FILTER_VALUE = '전체';
@@ -9,28 +11,13 @@ const FILTER_KEYS: PolicySearchFilterKey[] = ['region', 'status', 'category', 'a
 // 검색어·필터 상태를 URL 쿼리스트링(`/search?q=&region=...`)과 동기화한다.
 export function useSearchFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [query, setQuery] = useUrlSyncedSearchQuery('q');
 
-  const query = searchParams.get('q') ?? '';
   const filters: PolicySearchFilters = {
     region: searchParams.get('region') ?? DEFAULT_FILTER_VALUE,
     status: searchParams.get('status') ?? DEFAULT_FILTER_VALUE,
     category: searchParams.get('category') ?? DEFAULT_FILTER_VALUE,
     age: searchParams.get('age') ?? DEFAULT_FILTER_VALUE,
-  };
-
-  const setQuery = (value: string) => {
-    setSearchParams(
-      (prev) => {
-        const next = new URLSearchParams(prev);
-        if (value === '') {
-          next.delete('q');
-        } else {
-          next.set('q', value);
-        }
-        return next;
-      },
-      { replace: true },
-    );
   };
 
   const setFilter = (key: PolicySearchFilterKey, value: string) => {
@@ -62,6 +49,9 @@ export function useSearchFilters() {
       },
       { replace: true },
     );
+    if (options.clearQuery) {
+      setQuery('');
+    }
   };
 
   const showNationwideOnly = () => {

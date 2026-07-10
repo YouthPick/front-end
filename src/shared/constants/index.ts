@@ -4,3 +4,4 @@ export { CURRENT_YEAR } from './date';
 export { REGIONS } from './regions';
 export type { RoutePath } from './routes';
 export { buildCommunityDetailPath, ROUTES } from './routes';
+export { SEARCH_DEBOUNCE_MS } from './search';
