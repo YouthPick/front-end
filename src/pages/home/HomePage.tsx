@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router';
 
 import { type PolicyCategory, usePoliciesQuery, usePolicyDetailStore } from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
-import { CompareDockContainer } from '@/features/policy-compare';
 import { RecommendationPreview, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
@@ -100,9 +99,6 @@ export function HomePage() {
           />
         )}
       </section>
-
-      {/* 정책 비교 독 (우측 슬라이드-인, 담긴 정책이 있을 때만 노출) */}
-      <CompareDockContainer />
     </div>
   );
 }

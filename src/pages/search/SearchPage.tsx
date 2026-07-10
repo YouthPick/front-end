@@ -1,4 +1,3 @@
-import { CompareDockContainer } from '@/features/policy-compare';
 import {
   PolicyFilterBar,
   PolicySearchBar,
@@ -82,9 +81,6 @@ export function SearchPage() {
             onShowNationwide={showNationwideOnly}
           />
         ))}
-
-      {/* 정책 비교 독 (우측 슬라이드-인, 담긴 정책이 있을 때만 노출) */}
-      <CompareDockContainer />
     </div>
   );
 }

@@ -1,22 +1,24 @@
 import { ArrowLeftRight, ChevronRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useCompare } from '../hooks/useCompare';
 import { CompareDetailDialog } from './CompareDetailDialog';
 import { ComparePanelPresenter } from './ComparePanelPresenter';
 
-// 메인 페이지 전용 정책 비교 독.
+// RootLayout에 상시 마운트되는 정책 비교 독.
 // 담긴 정책이 없으면 숨기고, 담는 순간 우측에서 슬라이드-인 한다. 이후 접기/펼치기 토글이 가능하다.
 export function CompareDockContainer() {
   const { comparingPolicies, removeCompare, clearCompare } = useCompare();
   const [showDetailDialog, setShowDetailDialog] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const count = comparingPolicies.length;
+  const prevCountRef = useRef(count);
 
-  // 비교함이 비면 다음에 다시 담았을 때 펼친 상태로 나타나도록 초기화한다.
+  // 비교함이 비거나(다음 담기를 위한 초기화) 접힌 상태에서 새로 담으면 펼쳐서 보여준다.
   useEffect(() => {
-    if (count === 0) setIsCollapsed(false);
+    if (count === 0 || count > prevCountRef.current) setIsCollapsed(false);
+    prevCountRef.current = count;
   }, [count]);
 
   return (

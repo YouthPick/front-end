@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router';
 
 import { ChatbotContainer } from '@/features/chatbot';
+import { CompareDockContainer } from '@/features/policy-compare';
 import { Skeleton, ToastContainer } from '@/shared/ui';
 import { NoticeBanner } from '@/widgets/footer';
 import { Header } from '@/widgets/header';
@@ -33,6 +34,8 @@ export function RootLayout() {
       <MobileNav />
 
       <PolicyDetailModalContainer />
+
+      <CompareDockContainer />
 
       <ChatbotContainer />
 
