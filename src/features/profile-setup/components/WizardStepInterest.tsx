@@ -27,7 +27,7 @@ export function WizardStepInterest({
           4. 관심 분야 및 검색 태그 키워드 (선택)
         </h3>
         <p className="text-xs text-slate-400">
-          수천 개의 정책 중 매칭 우선순위를 높이기 위한 사용자 가중치 조절 장치입니다.
+          수천 개의 정책 중 나에게 맞는 정책을 우선적으로 찾아주는 맞춤 프로필 정보입니다.
         </p>
       </div>
 

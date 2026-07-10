@@ -19,7 +19,7 @@ export function RecommendPage() {
           </span>
           <h2 className="text-lg font-black text-slate-800">나만을 위한 1:1 맞춤 청년정책 추천</h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            회원님의 맞춤 프로필 가중치를 기반으로 상위 일치하는 자격을 자동 순위화했습니다.
+            회원님의 맞춤 프로필 정보를 기반으로 상위 일치하는 자격을 자동 순위화했습니다.
           </p>
         </div>
         <button

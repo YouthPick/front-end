@@ -1,4 +1,4 @@
-import { LogOut, ShieldAlert } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { useState } from 'react';
 
 import { ConfirmDialog } from '@/shared/ui';
@@ -20,10 +20,6 @@ export function AccountDangerZone({
 
   return (
     <div className="rounded-3xl border border-rose-100 bg-rose-50/20 p-5 text-left space-y-3.5">
-      <h4 className="text-xs font-extrabold text-rose-800 flex items-center">
-        <ShieldAlert className="h-4.5 w-4.5 text-rose-600 mr-1.5" />
-        <span>계정 보안 및 위험 설정 구역</span>
-      </h4>
       <p className="text-[11px] text-slate-400">
         수정하신 맞춤 프로필 정보는 즉시 휘발되며, 회원 탈퇴 시 모든 신청관리 대시보드가 파기됩니다.
       </p>
