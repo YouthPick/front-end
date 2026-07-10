@@ -26,6 +26,8 @@ export function CommunityPage() {
     isError,
     reload,
     setQuery,
+    submitQuery,
+    resetQuery,
     setCategory,
     setSort,
   } = useCommunityBoard();
@@ -48,7 +50,7 @@ export function CommunityPage() {
         </Link>
       </div>
 
-      <CommunitySearchBar query={query} onQueryChange={setQuery} />
+      <CommunitySearchBar query={query} onQueryChange={setQuery} onSubmit={submitQuery} />
 
       <div className="flex items-center justify-between gap-2">
         <CommunityCategoryTabs activeCategory={category} onCategoryChange={setCategory} />
@@ -73,7 +75,7 @@ export function CommunityPage() {
         ) : (
           <CommunityBoardEmptyState
             onResetFilters={() => {
-              setQuery('');
+              resetQuery();
               setCategory(DEFAULT_CATEGORY_VALUE);
             }}
           />

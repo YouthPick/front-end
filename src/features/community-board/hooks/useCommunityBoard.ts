@@ -1,32 +1,39 @@
 import { useCommunityPostSearchQuery } from '@/entities/community-post';
-import { SEARCH_DEBOUNCE_MS } from '@/shared/constants';
-import { useDebouncedValue } from '@/shared/hooks';
 
 import { useCommunityBoardFilters } from './useCommunityBoardFilters';
 
 // 커뮤니티 목록 화면 use case: URL 필터 상태 + 서버(mock) 검색 질의를 묶는다.
 export function useCommunityBoard() {
-  const { query, category, sort, setQuery, setCategory, setSort } = useCommunityBoardFilters();
-
-  // 검색 질의는 디바운스해 keystroke마다 refetch되지 않게 한다(URL 동기화는 훅 내부에서 별도 디바운스).
-  const debouncedQuery = useDebouncedValue(query, SEARCH_DEBOUNCE_MS);
+  const {
+    query,
+    draftQuery,
+    setDraftQuery,
+    submitQuery,
+    resetQuery,
+    category,
+    sort,
+    setCategory,
+    setSort,
+  } = useCommunityBoardFilters();
 
   const {
     data: posts = [],
     isLoading,
     isError,
     refetch,
-  } = useCommunityPostSearchQuery({ query: debouncedQuery, category, sort });
+  } = useCommunityPostSearchQuery({ query, category, sort });
 
   return {
-    query,
+    query: draftQuery,
     category,
     sort,
     posts,
     isLoading,
     isError,
     reload: refetch,
-    setQuery,
+    setQuery: setDraftQuery,
+    submitQuery,
+    resetQuery,
     setCategory,
     setSort,
   };
