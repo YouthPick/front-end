@@ -401,7 +401,27 @@ if (response.status === 400) showToast("잘못된 요청입니다.");
 - 추천 정책: Degraded 고려 (추천 엔진 장애 → 최신 정책 목록 제공)
 - 관리자 페이지: Stale 고려 (정책 데이터 갱신됨 → 새로고침 안내)
 
-## 11. React 코딩 컨벤션
+## 11. 코드 포맷팅 규칙
+
+포맷은 사람이 손으로 맞추지 않고 Biome(`biome.json`)가 강제한다. 아래 값이 이 프로젝트의 포맷 컨벤션이며, 임의로 다른 스타일(다른 들여쓰기 폭, 다른 quote 등)을 섞지 않는다.
+
+| 항목 | 값 |
+| --- | --- |
+| 들여쓰기 | space, 2칸 |
+| 한 줄 길이 | 100자 |
+| Quote (JS/TS) | single(`'`) |
+| Quote (JSX) | double(`"`) |
+| 세미콜론 | 항상 사용 |
+| Trailing comma | 항상 사용(`all`) |
+| 중괄호 안 공백 | `{ a }`처럼 공백 포함 |
+| import 정렬 | 저장 시 자동 정리(`organizeImports`) |
+
+- `.claude/hooks/format-on-save.sh`가 Edit/Write 직후 변경 파일을 `biome check --write`로 자동 포맷·import 정리한다. 사람이 직접 들여쓰기/quote/세미콜론을 맞출 필요가 없다.
+- `pnpm run lint`(= `biome check . && tsc --noEmit`)가 CI(`ci.yml`)에서 포맷·lint·타입을 강제한다. 로컬에서 포맷이 어긋나면 `pnpm run format` 또는 `pnpm run check`로 맞춘다.
+- 포맷 규칙 자체를 바꾸고 싶으면 `biome.json`을 수정하고, 이 표도 함께 갱신한다. 개별 파일에서 Biome 규칙과 다른 스타일을 임의로 쓰지 않는다.
+- `.css` 파일과 `.claude/workflows`는 Biome 대상에서 제외된다(`biome.json`의 `files.includes` 참고).
+
+## 12. React 코딩 컨벤션
 
 - 함수 컴포넌트를 사용한다.
 - component 이름은 PascalCase, hook 이름은 `use` + camelCase를 사용한다.
@@ -415,7 +435,7 @@ if (response.status === 400) showToast("잘못된 요청입니다.");
 - 접근성을 위해 semantic HTML, `button type="button"`, `aria-label`, focus 가능 상태를 고려한다.
 - `target="_blank"` 링크에는 `rel="noopener noreferrer"`를 붙인다.
 
-## 12. TypeScript 코딩 컨벤션
+## 13. TypeScript 코딩 컨벤션
 
 - `any`는 금지한다. 알 수 없는 값은 `unknown`을 사용하고 type guard로 좁힌다.
 - `@ts-ignore`는 금지한다. 정말 필요하면 `@ts-expect-error`와 이유 주석을 남긴다.
@@ -443,7 +463,7 @@ const data = response as Policy[];
 function parse(value: any) {}
 ```
 
-## 13. 디자인 시스템 규칙
+## 14. 디자인 시스템 규칙
 
 디자인은 반드시 현재 디자인 시스템을 따른다. 임의 색상, 임의 radius, 임의 그림자, 임의 폰트를 남발하지 않는다. 공통 UI는 shadcn/ui와 `shared/ui`를 우선 활용한다.
 
@@ -467,7 +487,7 @@ function parse(value: any) {}
 - contrast 확인 없이 흐린 텍스트/CTA 색상 추가
 - 디자인 시스템과 다른 radius/shadow/spacing을 임의 도입
 
-## 14. 네이밍 규칙
+## 15. 네이밍 규칙
 
 | 종류 | 형식 | 예시 |
 | --- | --- | --- |
@@ -487,11 +507,11 @@ function parse(value: any) {}
 
 금지: `card.tsx`, `list.tsx`, `data.ts`, `temp.ts`, `util.ts`, `test2.ts`
 
-## 15. 반응형 기준
+## 16. 반응형 기준
 
 필수 확인 해상도: `390px`, `768px`, `1440px`. 최소 390px 모바일 환경에서 깨지지 않아야 한다.
 
-## 16. 테스트 / 검증 규칙
+## 17. 테스트 / 검증 규칙
 
 기본 검증 명령:
 
@@ -509,7 +529,7 @@ corepack pnpm run build
 - 상태 로직 변경: hook 또는 순수 함수 단위 테스트 추가 우선 고려
 - Docker/Compose 관련 변경: `docker compose config`, build, runtime smoke를 로컬 가능 범위로 검증. Docker가 없으면 PR 검증 결과에 명시한다.
 
-## 17. PR 전 체크리스트
+## 18. PR 전 체크리스트
 
 - [ ] GitHub Issue를 만들고 issue 번호 브랜치에서 작업했다.
 - [ ] 레이어 의존 방향(`app → pages → widgets → features → entities → shared`)을 지켰고, feature → feature import를 만들지 않았다.
