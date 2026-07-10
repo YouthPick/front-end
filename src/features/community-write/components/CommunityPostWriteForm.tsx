@@ -1,10 +1,11 @@
-import { COMMUNITY_POST_CATEGORIES, type CommunityPostCategory } from '@/entities/community-post';
+import {
+  COMMUNITY_POST_CATEGORIES,
+  type CommunityPostCategory,
+  isPolicyAttachableCategory,
+} from '@/entities/community-post';
 import type { Policy } from '@/entities/policy';
 
 import { PolicyAttachField } from './PolicyAttachField';
-
-// 정책 첨부는 정책과 직접 관련된 카테고리에서만 의미가 있다.
-const POLICY_ATTACHABLE_CATEGORIES: CommunityPostCategory[] = ['정책질문', '정책후기'];
 
 interface CommunityPostWriteFormProps {
   category: CommunityPostCategory | null;
@@ -37,7 +38,7 @@ export function CommunityPostWriteForm({
   isSubmitting,
   canSubmit,
 }: CommunityPostWriteFormProps) {
-  const showPolicyAttachment = category !== null && POLICY_ATTACHABLE_CATEGORIES.includes(category);
+  const showPolicyAttachment = category !== null && isPolicyAttachableCategory(category);
   return (
     <div className="space-y-5 rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm">
       <div className="space-y-2">

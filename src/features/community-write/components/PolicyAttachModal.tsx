@@ -1,14 +1,16 @@
 import { Search, X } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { type Policy, PolicyCategoryBadge } from '@/entities/policy';
 import { useBodyScrollLock } from '@/shared/hooks';
-import { ErrorState, Skeleton } from '@/shared/ui';
+import { EmptyState, ErrorState, Skeleton } from '@/shared/ui';
 
 import { usePolicyAttachSearch } from '../hooks/usePolicyAttachSearch';
 
 const DIALOG_TITLE_ID = 'policy-attach-modal-title';
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 interface PolicyAttachModalProps {
   onClose: () => void;
@@ -18,6 +20,9 @@ interface PolicyAttachModalProps {
 export function PolicyAttachModal({ onClose, onSelect }: PolicyAttachModalProps) {
   useBodyScrollLock();
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
@@ -25,6 +30,38 @@ export function PolicyAttachModal({ onClose, onSelect }: PolicyAttachModalProps)
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
+
+  // 모달이 열려 있는 동안 포커스를 내부로 가두고, 닫히면 이전에 포커스했던 요소(트리거 버튼)로 복원한다.
+  // onClose가 매 렌더 새 함수여도 재실행되지 않도록 마운트/언마운트 시 한 번만 동작시킨다.
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    searchInputRef.current?.focus();
+
+    const handleTabKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab' || !dialogRef.current) return;
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleTabKey);
+    return () => {
+      document.removeEventListener('keydown', handleTabKey);
+      previouslyFocused?.focus();
+    };
+  }, []);
 
   const { draftQuery, setDraftQuery, submitSearch, policies, isLoading, isError, reload } =
     usePolicyAttachSearch();
@@ -39,6 +76,7 @@ export function PolicyAttachModal({ onClose, onSelect }: PolicyAttachModalProps)
       }}
     >
       <motion.div
+        ref={dialogRef}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
@@ -65,6 +103,7 @@ export function PolicyAttachModal({ onClose, onSelect }: PolicyAttachModalProps)
         <div className="mt-4 flex gap-2">
           <div className="relative flex-1">
             <input
+              ref={searchInputRef}
               type="text"
               value={draftQuery}
               onChange={(e) => setDraftQuery(e.target.value)}
@@ -97,9 +136,11 @@ export function PolicyAttachModal({ onClose, onSelect }: PolicyAttachModalProps)
           {isError && <ErrorState title="정책을 불러오지 못했습니다" onRetry={() => reload()} />}
 
           {!isLoading && !isError && policies.length === 0 && (
-            <p className="py-8 text-center text-xs font-bold text-slate-400">
-              검색 결과가 없습니다.
-            </p>
+            <EmptyState
+              icon="🔍"
+              title="검색 결과가 없습니다"
+              description="다른 검색어로 다시 시도해 보세요."
+            />
           )}
 
           {!isLoading &&

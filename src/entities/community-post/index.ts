@@ -11,7 +11,9 @@ export {
 } from './api/communityPostApi';
 export {
   COMMUNITY_POST_CATEGORIES,
+  isPolicyAttachableCategory,
   normalizeCommunityPostCategory,
+  POLICY_ATTACHABLE_CATEGORIES,
 } from './model/communityCategories';
 export type {
   AttachedPolicySummary,
