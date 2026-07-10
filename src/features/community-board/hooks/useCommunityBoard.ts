@@ -9,7 +9,7 @@ export function useCommunityBoard() {
     draftQuery,
     setDraftQuery,
     submitQuery,
-    resetQuery,
+    resetFilters,
     category,
     sort,
     setCategory,
@@ -33,7 +33,7 @@ export function useCommunityBoard() {
     reload: refetch,
     setQuery: setDraftQuery,
     submitQuery,
-    resetQuery,
+    resetFilters,
     setCategory,
     setSort,
   };

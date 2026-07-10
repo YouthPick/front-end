@@ -31,10 +31,5 @@ export function useSubmittableUrlQuery(key: string) {
 
   const submitQuery = () => applyQuery(draftQuery);
 
-  const resetQuery = () => {
-    setDraftQuery('');
-    applyQuery('');
-  };
-
-  return { query, draftQuery, setDraftQuery, submitQuery, resetQuery };
+  return { query, draftQuery, setDraftQuery, submitQuery };
 }

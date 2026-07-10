@@ -12,7 +12,7 @@ const FILTER_KEYS: PolicySearchFilterKey[] = ['region', 'status', 'category', 'a
 // 검색어는 입력 중엔 draftQuery로만 반영하고, 제출(버튼/Enter)했을 때만 실제 검색과 URL에 반영한다.
 export function useSearchFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { query, draftQuery, setDraftQuery, submitQuery, resetQuery } = useSubmittableUrlQuery('q');
+  const { query, draftQuery, setDraftQuery, submitQuery } = useSubmittableUrlQuery('q');
 
   const filters: PolicySearchFilters = {
     region: searchParams.get('region') ?? DEFAULT_FILTER_VALUE,
@@ -51,7 +51,7 @@ export function useSearchFilters() {
       { replace: true },
     );
     if (options.clearQuery) {
-      resetQuery();
+      setDraftQuery('');
     }
   };
 
