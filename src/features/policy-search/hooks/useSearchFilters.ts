@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router';
 
-import { useUrlSyncedSearchQuery } from '@/shared/hooks';
+import { useSubmittableUrlQuery } from '@/shared/hooks';
 
 import type { PolicySearchFilterKey, PolicySearchFilters } from '../types/policySearch.types';
 
@@ -9,9 +9,10 @@ export const DEFAULT_FILTER_VALUE = '전체';
 const FILTER_KEYS: PolicySearchFilterKey[] = ['region', 'status', 'category', 'age'];
 
 // 검색어·필터 상태를 URL 쿼리스트링(`/search?q=&region=...`)과 동기화한다.
+// 검색어는 입력 중엔 draftQuery로만 반영하고, 제출(버튼/Enter)했을 때만 실제 검색과 URL에 반영한다.
 export function useSearchFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [query, setQuery] = useUrlSyncedSearchQuery('q');
+  const { query, draftQuery, setDraftQuery, submitQuery, resetQuery } = useSubmittableUrlQuery('q');
 
   const filters: PolicySearchFilters = {
     region: searchParams.get('region') ?? DEFAULT_FILTER_VALUE,
@@ -50,7 +51,7 @@ export function useSearchFilters() {
       { replace: true },
     );
     if (options.clearQuery) {
-      setQuery('');
+      resetQuery();
     }
   };
 
@@ -58,5 +59,14 @@ export function useSearchFilters() {
     setSearchParams(new URLSearchParams({ region: '전국' }), { replace: true });
   };
 
-  return { query, filters, setQuery, setFilter, resetFilters, showNationwideOnly };
+  return {
+    query,
+    draftQuery,
+    setDraftQuery,
+    submitQuery,
+    filters,
+    setFilter,
+    resetFilters,
+    showNationwideOnly,
+  };
 }
