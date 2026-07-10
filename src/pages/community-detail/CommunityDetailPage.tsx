@@ -1,7 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router';
 
 import { CommunityPostDetail, useCommunityPostQuery } from '@/entities/community-post';
-import { CommentListContainer } from '@/features/community-comment';
+import { CommentListContainer, useCommunityComments } from '@/features/community-comment';
 import { useCommunityLike } from '@/features/community-like';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
@@ -23,6 +23,7 @@ interface CommunityDetailPageContentProps {
 function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps) {
   const { data: post, isLoading, isError, refetch } = useCommunityPostQuery(postId);
   const { isLiked, toggleLike } = useCommunityLike();
+  const { data: comments } = useCommunityComments(postId);
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in duration-300">
@@ -48,7 +49,11 @@ function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps)
 
       {!isLoading && !isError && post && (
         <>
-          <CommunityPostDetail post={post} isLiked={isLiked(post.id)} onToggleLike={toggleLike} />
+          <CommunityPostDetail
+            post={{ ...post, commentCount: comments?.length ?? post.commentCount }}
+            isLiked={isLiked(post.id)}
+            onToggleLike={toggleLike}
+          />
           <CommentListContainer postId={post.id} />
         </>
       )}
