@@ -1,12 +1,21 @@
 import { COMMUNITY_POST_CATEGORIES, type CommunityPostCategory } from '@/entities/community-post';
+import type { Policy } from '@/entities/policy';
+
+import { PolicyAttachField } from './PolicyAttachField';
+
+// 정책 첨부는 정책과 직접 관련된 카테고리에서만 의미가 있다.
+const POLICY_ATTACHABLE_CATEGORIES: CommunityPostCategory[] = ['정책질문', '정책후기'];
 
 interface CommunityPostWriteFormProps {
   category: CommunityPostCategory | null;
   title: string;
   content: string;
+  attachedPolicy: Policy | null;
   onCategoryChange: (category: CommunityPostCategory) => void;
   onTitleChange: (value: string) => void;
   onContentChange: (value: string) => void;
+  onAttachPolicy: (policy: Policy) => void;
+  onRemoveAttachedPolicy: () => void;
   onSubmit: () => void;
   onCancel: () => void;
   isSubmitting: boolean;
@@ -17,14 +26,18 @@ export function CommunityPostWriteForm({
   category,
   title,
   content,
+  attachedPolicy,
   onCategoryChange,
   onTitleChange,
   onContentChange,
+  onAttachPolicy,
+  onRemoveAttachedPolicy,
   onSubmit,
   onCancel,
   isSubmitting,
   canSubmit,
 }: CommunityPostWriteFormProps) {
+  const showPolicyAttachment = category !== null && POLICY_ATTACHABLE_CATEGORIES.includes(category);
   return (
     <div className="space-y-5 rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm">
       <div className="space-y-2">
@@ -47,6 +60,14 @@ export function CommunityPostWriteForm({
           ))}
         </div>
       </div>
+
+      {showPolicyAttachment && (
+        <PolicyAttachField
+          attachedPolicy={attachedPolicy}
+          onAttach={onAttachPolicy}
+          onRemove={onRemoveAttachedPolicy}
+        />
+      )}
 
       <div className="space-y-2">
         <label htmlFor="community-write-title" className="block text-xs font-bold text-slate-600">

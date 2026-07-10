@@ -1,15 +1,22 @@
 import { Eye, Heart, MessageCircle } from 'lucide-react';
 
 import type { CommunityPost } from '../model/communityPost.types';
+import { AttachedPolicyPreview } from './AttachedPolicyPreview';
 import { CommunityCategoryBadge } from './CommunityCategoryBadge';
 
 interface CommunityPostDetailProps {
   post: CommunityPost;
   isLiked: boolean;
   onToggleLike: (postId: string) => void;
+  onViewAttachedPolicy: (policyId: string) => void;
 }
 
-export function CommunityPostDetail({ post, isLiked, onToggleLike }: CommunityPostDetailProps) {
+export function CommunityPostDetail({
+  post,
+  isLiked,
+  onToggleLike,
+  onViewAttachedPolicy,
+}: CommunityPostDetailProps) {
   return (
     <article className="space-y-4 rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm">
       <div className="space-y-2.5">
@@ -47,6 +54,10 @@ export function CommunityPostDetail({ post, isLiked, onToggleLike }: CommunityPo
       <p className="whitespace-pre-line text-xs leading-relaxed text-slate-700 border-t border-slate-100/75 pt-4">
         {post.content}
       </p>
+
+      {post.attachedPolicy && (
+        <AttachedPolicyPreview policy={post.attachedPolicy} onView={onViewAttachedPolicy} />
+      )}
     </article>
   );
 }
