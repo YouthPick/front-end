@@ -1,5 +1,5 @@
 import { MOCK_API_DELAY_MS } from '@/shared/constants';
-import { delay } from '@/shared/utils';
+import { delay, matchesTextQuery } from '@/shared/utils';
 import type { PolicyDto, RecentlyViewedPolicyDto } from './policy.dto';
 import { MOCK_POLICY_DTOS, RECENTLY_VIEWED_POLICY_DTOS } from './policyMockData';
 
@@ -22,13 +22,8 @@ function normalizeCategory(value: string): string {
 }
 
 function matchesSearchParams(policy: PolicyDto, params: PolicySearchParams): boolean {
-  const query = params.query?.trim().toLowerCase() ?? '';
-  if (query !== '') {
-    const matchesQuery =
-      policy.title.toLowerCase().includes(query) ||
-      policy.category.toLowerCase().includes(query) ||
-      policy.description.toLowerCase().includes(query);
-    if (!matchesQuery) return false;
+  if (!matchesTextQuery([policy.title, policy.category, policy.description], params.query)) {
+    return false;
   }
 
   if (params.region && params.region !== '전체' && policy.region !== '전국') {

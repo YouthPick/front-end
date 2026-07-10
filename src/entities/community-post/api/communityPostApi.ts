@@ -1,5 +1,5 @@
 import { MOCK_API_DELAY_MS } from '@/shared/constants';
-import { delay, generateId } from '@/shared/utils';
+import { delay, generateId, matchesTextQuery } from '@/shared/utils';
 import type { CommunityPostCategory } from '../model/communityPost.types';
 import type { CommunityPostSortOption } from '../model/communityPostSort';
 import type { CommunityPostDto } from './communityPost.dto';
@@ -20,11 +20,8 @@ function cloneDto(dto: CommunityPostDto): CommunityPostDto {
 }
 
 function matchesSearchParams(post: CommunityPostDto, params: CommunityPostSearchParams): boolean {
-  const query = params.query?.trim().toLowerCase() ?? '';
-  if (query !== '') {
-    const matchesQuery =
-      post.title.toLowerCase().includes(query) || post.content.toLowerCase().includes(query);
-    if (!matchesQuery) return false;
+  if (!matchesTextQuery([post.title, post.content], params.query)) {
+    return false;
   }
 
   if (params.category && params.category !== '전체' && post.category !== params.category) {

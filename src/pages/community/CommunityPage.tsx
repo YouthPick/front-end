@@ -5,7 +5,6 @@ import {
   CommunityBoardSortSelect,
   CommunityCategoryTabs,
   CommunitySearchBar,
-  DEFAULT_CATEGORY_VALUE,
   useCommunityBoard,
 } from '@/features/community-board';
 import { ROUTES } from '@/shared/constants';
@@ -26,6 +25,8 @@ export function CommunityPage() {
     isError,
     reload,
     setQuery,
+    submitQuery,
+    resetFilters,
     setCategory,
     setSort,
   } = useCommunityBoard();
@@ -48,7 +49,7 @@ export function CommunityPage() {
         </Link>
       </div>
 
-      <CommunitySearchBar query={query} onQueryChange={setQuery} />
+      <CommunitySearchBar query={query} onQueryChange={setQuery} onSubmit={submitQuery} />
 
       <div className="flex items-center justify-between gap-2">
         <CommunityCategoryTabs activeCategory={category} onCategoryChange={setCategory} />
@@ -71,12 +72,7 @@ export function CommunityPage() {
         (posts.length > 0 ? (
           <CommunityPostGrid posts={posts} />
         ) : (
-          <CommunityBoardEmptyState
-            onResetFilters={() => {
-              setQuery('');
-              setCategory(DEFAULT_CATEGORY_VALUE);
-            }}
-          />
+          <CommunityBoardEmptyState onResetFilters={resetFilters} />
         ))}
     </div>
   );

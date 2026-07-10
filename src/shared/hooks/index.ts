@@ -1,2 +1,2 @@
 export { useBodyScrollLock } from './useBodyScrollLock';
-export { useDebouncedValue } from './useDebouncedValue';
+export { useSubmittableUrlQuery } from './useSubmittableUrlQuery';
