@@ -28,7 +28,7 @@ reviews:
   path_instructions:
     - path: "src/**"
       instructions: |
-        이 프로젝트는 rules.md의 규칙을 따른다. 리뷰 시 아래 사항을 중점적으로 확인한다.
+        이 프로젝트는 .claude/rules.md의 규칙을 따른다. 리뷰 시 아래 사항을 중점적으로 확인한다.
 
         FSD(Feature-Sliced Design) 구조:
         - 레이어 의존 방향은 app → pages → widgets → features → entities → shared 만 허용된다.
