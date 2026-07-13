@@ -1,12 +1,22 @@
-import { COMMUNITY_POST_CATEGORIES, type CommunityPostCategory } from '@/entities/community-post';
+import {
+  COMMUNITY_POST_CATEGORIES,
+  type CommunityPostCategory,
+  isPolicyAttachableCategory,
+} from '@/entities/community-post';
+import type { Policy } from '@/entities/policy';
+
+import { PolicyAttachField } from './PolicyAttachField';
 
 interface CommunityPostWriteFormProps {
   category: CommunityPostCategory | null;
   title: string;
   content: string;
+  attachedPolicy: Policy | null;
   onCategoryChange: (category: CommunityPostCategory) => void;
   onTitleChange: (value: string) => void;
   onContentChange: (value: string) => void;
+  onAttachPolicy: (policy: Policy) => void;
+  onRemoveAttachedPolicy: () => void;
   onSubmit: () => void;
   onCancel: () => void;
   isSubmitting: boolean;
@@ -17,14 +27,18 @@ export function CommunityPostWriteForm({
   category,
   title,
   content,
+  attachedPolicy,
   onCategoryChange,
   onTitleChange,
   onContentChange,
+  onAttachPolicy,
+  onRemoveAttachedPolicy,
   onSubmit,
   onCancel,
   isSubmitting,
   canSubmit,
 }: CommunityPostWriteFormProps) {
+  const showPolicyAttachment = category !== null && isPolicyAttachableCategory(category);
   return (
     <div className="space-y-5 rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm">
       <div className="space-y-2">
@@ -47,6 +61,14 @@ export function CommunityPostWriteForm({
           ))}
         </div>
       </div>
+
+      {showPolicyAttachment && (
+        <PolicyAttachField
+          attachedPolicy={attachedPolicy}
+          onAttach={onAttachPolicy}
+          onRemove={onRemoveAttachedPolicy}
+        />
+      )}
 
       <div className="space-y-2">
         <label htmlFor="community-write-title" className="block text-xs font-bold text-slate-600">

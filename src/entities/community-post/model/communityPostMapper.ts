@@ -22,6 +22,7 @@ export function mapCommunityPostDtoToPost(dto: CommunityPostDto): CommunityPost 
     viewCount: dto.viewCount,
     commentCount: dto.commentCount,
     likeCount: dto.likeCount,
+    attachedPolicy: dto.attachedPolicy ? { ...dto.attachedPolicy } : null,
   };
 }
 

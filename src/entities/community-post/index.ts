@@ -11,9 +11,15 @@ export {
 } from './api/communityPostApi';
 export {
   COMMUNITY_POST_CATEGORIES,
+  isPolicyAttachableCategory,
   normalizeCommunityPostCategory,
+  POLICY_ATTACHABLE_CATEGORIES,
 } from './model/communityCategories';
-export type { CommunityPost, CommunityPostCategory } from './model/communityPost.types';
+export type {
+  AttachedPolicySummary,
+  CommunityPost,
+  CommunityPostCategory,
+} from './model/communityPost.types';
 export {
   mapCommunityPostDtosToPosts,
   mapCommunityPostDtoToPost,
@@ -29,6 +35,7 @@ export {
   DEFAULT_COMMUNITY_POST_SORT,
   normalizeCommunityPostSort,
 } from './model/communityPostSort';
+export { AttachedPolicyPreview } from './ui/AttachedPolicyPreview';
 export {
   CommunityCategoryBadge,
   getCommunityCategoryBadgeClasses,
