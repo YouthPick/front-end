@@ -2,12 +2,12 @@ import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
+  type OnChangeFn,
   type SortingState,
   useReactTable,
 } from '@tanstack/react-table';
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react';
-import { type ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
 
 import { EmptyState } from '../EmptyState';
 import { ErrorState } from '../ErrorState';
@@ -31,6 +31,10 @@ interface DataTableProps<T> {
   pageSize: number;
   totalCount: number;
   onPageChange: (page: number) => void;
+  // data는 이미 서버(mock)에서 정렬·페이지네이션된 한 페이지 분량이라 클라이언트 재정렬을 하지 않는다.
+  // 정렬 상태는 호출부가 소유하고 쿼리 파라미터로 반영해야 하므로 항상 controlled + manualSorting으로 동작한다.
+  sorting?: SortingState;
+  onSortingChange?: OnChangeFn<SortingState>;
 }
 
 export function DataTable<T>({
@@ -50,17 +54,19 @@ export function DataTable<T>({
   pageSize,
   totalCount,
   onPageChange,
+  sorting,
+  onSortingChange,
 }: DataTableProps<T>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const canInteractSort = Boolean(onSortingChange);
 
   const table = useReactTable({
     data,
     columns,
-    state: { sorting },
-    onSortingChange: setSorting,
+    state: sorting ? { sorting } : undefined,
+    onSortingChange,
+    manualSorting: true,
     getRowId,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -74,9 +80,10 @@ export function DataTable<T>({
 
       {isLoading && (
         <div className="space-y-2">
-          <Skeleton className="h-9" />
-          <Skeleton className="h-9" />
-          <Skeleton className="h-9" />
+          {Array.from({ length: Math.min(pageSize, 10) }, (_, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: 순서가 바뀌지 않는 정적 로딩 플레이스홀더라 안정적인 id가 없다
+            <Skeleton key={index} className="h-9" />
+          ))}
         </div>
       )}
 
@@ -94,11 +101,23 @@ export function DataTable<T>({
                 {table.getHeaderGroups().map((headerGroup) => (
                   <tr key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
-                      const canSort = header.column.getCanSort();
+                      const canSort = canInteractSort && header.column.getCanSort();
                       const sortDirection = header.column.getIsSorted();
 
                       return (
-                        <th key={header.id} className="py-2.5 px-3 text-left">
+                        <th
+                          key={header.id}
+                          className="py-2.5 px-3 text-left"
+                          aria-sort={
+                            canSort
+                              ? sortDirection === 'asc'
+                                ? 'ascending'
+                                : sortDirection === 'desc'
+                                  ? 'descending'
+                                  : 'none'
+                              : undefined
+                          }
+                        >
                           {header.isPlaceholder ? null : canSort ? (
                             <button
                               type="button"
