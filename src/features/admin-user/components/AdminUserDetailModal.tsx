@@ -1,7 +1,8 @@
 import { X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { AdminUser, AdminUserProfile, UserRole } from '@/entities/user';
+import { useBodyScrollLock } from '@/shared/hooks';
 import { ConfirmDialog, EmptyState, Skeleton } from '@/shared/ui';
 import { formatDateTime } from '@/shared/utils';
 
@@ -40,13 +41,32 @@ export function AdminUserDetailModal({
   const [pendingRole, setPendingRole] = useState<UserRole | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  useBodyScrollLock(user !== null);
+
+  // Escape 키로 닫기
+  useEffect(() => {
+    if (!user) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [user, onClose]);
+
   if (!user) return null;
 
   const isDeleted = user.deletedAt !== null;
   const nextRole: UserRole = user.role === 'admin' ? 'member' : 'admin';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+    // biome-ignore lint/a11y/noStaticElementInteractions: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    // biome-ignore lint/a11y/useKeyWithClickEvents: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <div
         role="dialog"
         aria-modal="true"

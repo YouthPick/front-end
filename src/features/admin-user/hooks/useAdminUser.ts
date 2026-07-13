@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useAdminUsersQuery } from '@/entities/user';
+import { type AdminUser, useAdminUsersQuery } from '@/entities/user';
 import { DEFAULT_ADMIN_PAGE_SIZE } from '@/shared/constants';
 
 import { useAdminUserFilters } from './useAdminUserFilters';
@@ -32,7 +32,10 @@ export function useAdminUser() {
     provider,
   });
 
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  // 선택된 사용자 객체 자체를 들고 있는다. 필터링된 목록에서 매번 다시 찾으면(.find),
+  // role 변경/탈퇴 처리 후 그 사용자가 현재 필터 조건에서 빠지는 순간 모달이 안내 없이
+  // 사라진다. 최신 값은 mutation 성공 시 이 setter로 직접 갱신한다.
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
 
   return {
     users: data?.items ?? [],
@@ -50,8 +53,8 @@ export function useAdminUser() {
     onProviderChange: setProvider,
     onPageChange: setPage,
     onReset: resetFilters,
-    selectedUserId,
-    onSelectUser: setSelectedUserId,
-    onCloseDetail: () => setSelectedUserId(null),
+    selectedUser,
+    onSelectUser: setSelectedUser,
+    onCloseDetail: () => setSelectedUser(null),
   };
 }

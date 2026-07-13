@@ -19,15 +19,13 @@ export function AdminUserContainer() {
     onProviderChange,
     onPageChange,
     onReset,
-    selectedUserId,
+    selectedUser,
     onSelectUser,
     onCloseDetail,
   } = useAdminUser();
 
-  const selectedUser = users.find((user) => user.id === selectedUserId) ?? null;
-
   const { profile, isProfileLoading, changeRole, isRoleChanging, deleteUser, isDeleting } =
-    useAdminUserDetail(selectedUserId);
+    useAdminUserDetail(selectedUser?.id ?? null, onSelectUser);
 
   return (
     <AdminUserPresenter
@@ -49,7 +47,7 @@ export function AdminUserContainer() {
       selectedUser={selectedUser}
       profile={profile}
       isProfileLoading={isProfileLoading}
-      onSelectUser={(user) => onSelectUser(user.id)}
+      onSelectUser={onSelectUser}
       onCloseDetail={onCloseDetail}
       onChangeRole={changeRole}
       isRoleChanging={isRoleChanging}
