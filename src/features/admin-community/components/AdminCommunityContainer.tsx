@@ -31,8 +31,12 @@ export function AdminCommunityContainer() {
   const {
     comments,
     isCommentsLoading,
+    isCommentsError,
+    reloadComments,
     attachments,
     isAttachmentsLoading,
+    isAttachmentsError,
+    reloadAttachments,
     deletePost,
     isDeletingPost,
     deleteComment,
@@ -61,8 +65,12 @@ export function AdminCommunityContainer() {
       selectedPost={selectedPost}
       comments={comments}
       isCommentsLoading={isCommentsLoading}
+      isCommentsError={isCommentsError}
+      onReloadComments={reloadComments}
       attachments={attachments}
       isAttachmentsLoading={isAttachmentsLoading}
+      isAttachmentsError={isAttachmentsError}
+      onReloadAttachments={reloadAttachments}
       onSelectPost={(post) => onSelectPost(post.id)}
       onCloseDetail={onCloseDetail}
       onDeletePost={deletePost}

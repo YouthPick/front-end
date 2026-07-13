@@ -6,6 +6,7 @@ import type {
   AdminCommunityPost,
 } from '@/entities/community-post';
 import { DataTable } from '@/shared/ui';
+import { formatDateTime } from '@/shared/utils';
 
 import { AdminCommunityDetailModal } from './AdminCommunityDetailModal';
 import { AdminCommunityFilters } from './AdminCommunityFilters';
@@ -31,8 +32,12 @@ interface AdminCommunityPresenterProps {
   selectedPost: AdminCommunityPost | null;
   comments: AdminCommunityComment[];
   isCommentsLoading: boolean;
+  isCommentsError: boolean;
+  onReloadComments: () => void;
   attachments: AdminAttachment[];
   isAttachmentsLoading: boolean;
+  isAttachmentsError: boolean;
+  onReloadAttachments: () => void;
   onSelectPost: (post: AdminCommunityPost) => void;
   onCloseDetail: () => void;
   onDeletePost: () => void;
@@ -62,8 +67,12 @@ export function AdminCommunityPresenter({
   selectedPost,
   comments,
   isCommentsLoading,
+  isCommentsError,
+  onReloadComments,
   attachments,
   isAttachmentsLoading,
+  isAttachmentsError,
+  onReloadAttachments,
   onSelectPost,
   onCloseDetail,
   onDeletePost,
@@ -95,6 +104,7 @@ export function AdminCommunityPresenter({
     {
       accessorKey: 'createdAt',
       header: '작성일',
+      cell: ({ getValue }) => formatDateTime(getValue<string>()),
     },
     {
       id: 'status',
@@ -162,8 +172,12 @@ export function AdminCommunityPresenter({
         post={selectedPost}
         comments={comments}
         isCommentsLoading={isCommentsLoading}
+        isCommentsError={isCommentsError}
+        onReloadComments={onReloadComments}
         attachments={attachments}
         isAttachmentsLoading={isAttachmentsLoading}
+        isAttachmentsError={isAttachmentsError}
+        onReloadAttachments={onReloadAttachments}
         onClose={onCloseDetail}
         onDeletePost={onDeletePost}
         isDeletingPost={isDeletingPost}

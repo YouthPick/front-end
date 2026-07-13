@@ -15,13 +15,32 @@ interface AdminCommunityDetailModalProps {
   post: AdminCommunityPost | null;
   comments: AdminCommunityComment[];
   isCommentsLoading: boolean;
+  isCommentsError: boolean;
+  onReloadComments: () => void;
   attachments: AdminAttachment[];
   isAttachmentsLoading: boolean;
+  isAttachmentsError: boolean;
+  onReloadAttachments: () => void;
   onClose: () => void;
   onDeletePost: () => void;
   isDeletingPost: boolean;
   onDeleteComment: (commentId: string) => void;
   isDeletingComment: boolean;
+}
+
+function InlineErrorRow({ title, onRetry }: { title: string; onRetry: () => void }) {
+  return (
+    <div className="flex items-center justify-between rounded-xl border border-rose-100 bg-rose-50/30 px-3 py-2">
+      <span className="text-xs font-bold text-rose-600">{title}</span>
+      <button
+        type="button"
+        onClick={onRetry}
+        className="rounded-lg px-2 py-1 text-[10px] font-bold text-rose-600 hover:bg-rose-100/50"
+      >
+        다시 시도
+      </button>
+    </div>
+  );
 }
 
 function formatFileSize(bytes: number): string {
@@ -32,8 +51,12 @@ export function AdminCommunityDetailModal({
   post,
   comments,
   isCommentsLoading,
+  isCommentsError,
+  onReloadComments,
   attachments,
   isAttachmentsLoading,
+  isAttachmentsError,
+  onReloadAttachments,
   onClose,
   onDeletePost,
   isDeletingPost,
@@ -91,10 +114,13 @@ export function AdminCommunityDetailModal({
             첨부파일
           </span>
           {isAttachmentsLoading && <Skeleton className="h-8" />}
-          {!isAttachmentsLoading && attachments.length === 0 && (
+          {!isAttachmentsLoading && isAttachmentsError && (
+            <InlineErrorRow title="첨부파일을 불러오지 못했습니다." onRetry={onReloadAttachments} />
+          )}
+          {!isAttachmentsLoading && !isAttachmentsError && attachments.length === 0 && (
             <p className="text-xs text-slate-400">첨부파일이 없습니다.</p>
           )}
-          {!isAttachmentsLoading && attachments.length > 0 && (
+          {!isAttachmentsLoading && !isAttachmentsError && attachments.length > 0 && (
             <ul className="space-y-1">
               {attachments.map((attachment) => (
                 <li
@@ -114,12 +140,16 @@ export function AdminCommunityDetailModal({
           <span className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">
             댓글
           </span>
-          {isCommentsLoading ? (
+          {isCommentsLoading && (
             <div className="space-y-1.5">
               <Skeleton className="h-8" />
               <Skeleton className="h-8" />
             </div>
-          ) : (
+          )}
+          {!isCommentsLoading && isCommentsError && (
+            <InlineErrorRow title="댓글을 불러오지 못했습니다." onRetry={onReloadComments} />
+          )}
+          {!isCommentsLoading && !isCommentsError && (
             <AdminCommunityCommentTree
               comments={comments}
               onDeleteComment={setPendingDeleteCommentId}

@@ -1,6 +1,13 @@
 import type { AdminCommunityComment } from '@/entities/community-post';
 import { formatDateTime } from '@/shared/utils';
 
+// Tailwind 표준 spacing 스케일(ml-4=1rem 단위)로 답글 깊이를 표현한다. 이후 깊이는 더 이상 들여쓰지 않는다.
+const INDENT_CLASS_BY_DEPTH = ['ml-0', 'ml-4', 'ml-8', 'ml-12', 'ml-16'];
+
+function getIndentClass(depth: number): string {
+  return INDENT_CLASS_BY_DEPTH[Math.min(depth, INDENT_CLASS_BY_DEPTH.length - 1)];
+}
+
 interface AdminCommunityCommentTreeProps {
   comments: AdminCommunityComment[];
   onDeleteComment: (commentId: string) => void;
@@ -24,7 +31,7 @@ function CommentNode({
   const replies = childrenByParentId.get(comment.id) ?? [];
 
   return (
-    <li style={{ marginLeft: depth * 16 }}>
+    <li className={getIndentClass(depth)}>
       <div className="rounded-xl border border-slate-100 bg-slate-50/60 p-2.5">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
