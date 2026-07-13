@@ -1,0 +1,1 @@
+export { AdminSearchLogsPage } from './AdminSearchLogsPage';

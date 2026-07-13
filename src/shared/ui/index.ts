@@ -1,4 +1,5 @@
 export { ConfirmDialog } from './ConfirmDialog';
+export { DataTable } from './DataTable';
 export { EmptyState } from './EmptyState';
 export { ErrorState } from './ErrorState';
 export { Skeleton } from './Skeleton';
