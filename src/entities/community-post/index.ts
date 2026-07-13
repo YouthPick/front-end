@@ -42,3 +42,4 @@ export {
 } from './ui/CommunityCategoryBadge';
 export { CommunityPostCard } from './ui/CommunityPostCard';
 export { CommunityPostDetail } from './ui/CommunityPostDetail';
+export { CommunityPostPreviewList } from './ui/CommunityPostPreviewList';

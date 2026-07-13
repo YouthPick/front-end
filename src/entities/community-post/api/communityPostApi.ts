@@ -13,6 +13,7 @@ export interface CommunityPostSearchParams {
   query?: string;
   category?: string;
   sort?: CommunityPostSortOption;
+  authorId?: string;
 }
 
 function cloneDto(dto: CommunityPostDto): CommunityPostDto {
@@ -25,6 +26,10 @@ function matchesSearchParams(post: CommunityPostDto, params: CommunityPostSearch
   }
 
   if (params.category && params.category !== '전체' && post.category !== params.category) {
+    return false;
+  }
+
+  if (params.authorId && post.authorId !== params.authorId) {
     return false;
   }
 
@@ -83,6 +88,7 @@ export interface CreateCommunityPostParams {
   title: string;
   category: CommunityPostCategory;
   content: string;
+  authorId: string;
   authorName: string;
   attachedPolicy?: AttachedPolicySummary | null;
 }
@@ -96,6 +102,7 @@ export async function createCommunityPost(
     title: params.title,
     category: params.category,
     content: params.content,
+    authorId: params.authorId,
     authorName: params.authorName,
     // toISOString()은 UTC 기준이라 자정 근처 KST 시간대에 하루 어긋날 수 있어 KST 기준으로 포맷한다.
     createdAt: new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date()),

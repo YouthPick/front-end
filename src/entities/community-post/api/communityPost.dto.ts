@@ -10,6 +10,7 @@ export interface CommunityPostDto {
   title: string;
   category: string;
   content: string;
+  authorId: string;
   authorName: string;
   createdAt: string;
   viewCount: number;

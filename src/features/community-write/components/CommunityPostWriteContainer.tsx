@@ -35,6 +35,7 @@ export function CommunityPostWriteContainer() {
         title: title.trim(),
         category,
         content: content.trim(),
+        authorId: user.id,
         authorName: user.name,
         attachedPolicy: attachedPolicy
           ? {

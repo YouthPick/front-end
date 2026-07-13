@@ -1,0 +1,1 @@
+export { MyCommunityPosts } from './MyCommunityPosts';
