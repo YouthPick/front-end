@@ -1,3 +1,10 @@
+export interface AttachedPolicySummaryDto {
+  id: string;
+  title: string;
+  category: string;
+  deadline: string;
+}
+
 export interface CommunityPostDto {
   id: string;
   title: string;
@@ -8,4 +15,5 @@ export interface CommunityPostDto {
   viewCount: number;
   commentCount: number;
   likeCount: number;
+  attachedPolicy: AttachedPolicySummaryDto | null;
 }

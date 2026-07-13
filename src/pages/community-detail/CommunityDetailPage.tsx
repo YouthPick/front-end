@@ -1,6 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router';
 
 import { CommunityPostDetail, useCommunityPostQuery } from '@/entities/community-post';
+import { usePolicyDetailStore } from '@/entities/policy';
 import { CommentListContainer } from '@/features/community-comment';
 import { useCommunityLike } from '@/features/community-like';
 import { ROUTES } from '@/shared/constants';
@@ -23,6 +24,7 @@ interface CommunityDetailPageContentProps {
 function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps) {
   const { data: post, isLoading, isError, refetch } = useCommunityPostQuery(postId);
   const { isLiked, toggleLike } = useCommunityLike();
+  const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in duration-300">
@@ -48,7 +50,12 @@ function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps)
 
       {!isLoading && !isError && post && (
         <>
-          <CommunityPostDetail post={post} isLiked={isLiked(post.id)} onToggleLike={toggleLike} />
+          <CommunityPostDetail
+            post={post}
+            isLiked={isLiked(post.id)}
+            onToggleLike={toggleLike}
+            onViewAttachedPolicy={openPolicyDetail}
+          />
           <CommentListContainer postId={post.id} />
         </>
       )}

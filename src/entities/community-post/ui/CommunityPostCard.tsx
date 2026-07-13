@@ -1,4 +1,4 @@
-import { Eye, Heart, MessageCircle } from 'lucide-react';
+import { Eye, Heart, MessageCircle, Paperclip } from 'lucide-react';
 
 import type { CommunityPost } from '../model/communityPost.types';
 import { CommunityCategoryBadge } from './CommunityCategoryBadge';
@@ -30,6 +30,15 @@ export function CommunityPostCard({
       <div className="space-y-2.5">
         <div className="flex items-center gap-1.5">
           <CommunityCategoryBadge category={post.category} />
+          {post.attachedPolicy && (
+            <span
+              className="flex items-center gap-0.5 rounded-md border border-primary/20 bg-primary/5 px-1.5 py-0.5 text-[10px] font-bold text-primary"
+              title={`첨부된 정책: ${post.attachedPolicy.title}`}
+            >
+              <Paperclip className="h-2.5 w-2.5" aria-hidden="true" />
+              정책첨부
+            </span>
+          )}
           <span className="text-[10px] font-bold text-slate-400">{post.authorName}</span>
           <span className="text-slate-200">·</span>
           <span className="text-[10px] font-bold text-slate-400">{post.createdAt}</span>

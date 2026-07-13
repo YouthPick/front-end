@@ -1,6 +1,6 @@
 import { MOCK_API_DELAY_MS } from '@/shared/constants';
 import { delay, generateId, matchesTextQuery } from '@/shared/utils';
-import type { CommunityPostCategory } from '../model/communityPost.types';
+import type { AttachedPolicySummary, CommunityPostCategory } from '../model/communityPost.types';
 import type { CommunityPostSortOption } from '../model/communityPostSort';
 import type { CommunityPostDto } from './communityPost.dto';
 import { MOCK_COMMUNITY_POST_DTOS } from './communityPostMockData';
@@ -16,7 +16,7 @@ export interface CommunityPostSearchParams {
 }
 
 function cloneDto(dto: CommunityPostDto): CommunityPostDto {
-  return { ...dto };
+  return { ...dto, attachedPolicy: dto.attachedPolicy ? { ...dto.attachedPolicy } : null };
 }
 
 function matchesSearchParams(post: CommunityPostDto, params: CommunityPostSearchParams): boolean {
@@ -84,6 +84,7 @@ export interface CreateCommunityPostParams {
   category: CommunityPostCategory;
   content: string;
   authorName: string;
+  attachedPolicy?: AttachedPolicySummary | null;
 }
 
 export async function createCommunityPost(
@@ -101,6 +102,7 @@ export async function createCommunityPost(
     viewCount: 0,
     commentCount: 0,
     likeCount: 0,
+    attachedPolicy: params.attachedPolicy ?? null,
   };
   posts = [newPost, ...posts];
   return cloneDto(newPost);

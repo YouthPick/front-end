@@ -12,6 +12,12 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     viewCount: 132,
     commentCount: 2,
     likeCount: 21,
+    attachedPolicy: {
+      id: 'p2',
+      title: '청년 월세 한시 특별지원',
+      category: '주거',
+      deadline: '2025.06.30',
+    },
   },
   {
     id: 'cp2',
@@ -24,6 +30,12 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     viewCount: 284,
     commentCount: 1,
     likeCount: 45,
+    attachedPolicy: {
+      id: 'p3',
+      title: 'K-디지털 트레이닝 (국비지원)',
+      category: '교육',
+      deadline: '2025.07.15',
+    },
   },
   {
     id: 'cp3',
@@ -35,6 +47,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     viewCount: 58,
     commentCount: 0,
     likeCount: 5,
+    attachedPolicy: null,
   },
   {
     id: 'cp4',
@@ -46,6 +59,12 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     viewCount: 97,
     commentCount: 0,
     likeCount: 9,
+    attachedPolicy: {
+      id: 'p4',
+      title: '청년내일채움공제',
+      category: '일자리',
+      deadline: '2025.08.31',
+    },
   },
   {
     id: 'cp5',
@@ -58,6 +77,12 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     viewCount: 176,
     commentCount: 3,
     likeCount: 38,
+    attachedPolicy: {
+      id: 'p7',
+      title: '서울시 청년수당',
+      category: '복지·문화',
+      deadline: '2025.09.30',
+    },
   },
   {
     id: 'cp6',
@@ -69,5 +94,6 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     viewCount: 41,
     commentCount: 0,
     likeCount: 3,
+    attachedPolicy: null,
   },
 ];
