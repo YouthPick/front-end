@@ -1,5 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useLocation, useNavigate } from 'react-router';
 
+import { useAuthStore } from '@/entities/user';
+import { ROUTES } from '@/shared/constants';
 import { useToast } from '@/shared/ui';
 
 import { fetchBookmarkedPolicyIds, toggleBookmark } from '../api/bookmarkApi';
@@ -11,6 +14,9 @@ export const bookmarkKeys = {
 export function useBookmark() {
   const queryClient = useQueryClient();
   const { showToast } = useToast();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     data: savedPolicyIds = [],
@@ -36,10 +42,19 @@ export function useBookmark() {
 
   const isSaved = (policyId: string) => savedPolicyIds.includes(policyId);
 
+  const toggleSave = (policyId: string) => {
+    if (!isAuthenticated) {
+      showToast('로그인이 필요한 기능입니다. 로그인 화면으로 안내합니다.', 'info');
+      navigate(ROUTES.login, { state: { from: location.pathname + location.search } });
+      return;
+    }
+    toggleMutation.mutate(policyId);
+  };
+
   return {
     savedPolicyIds,
     isSaved,
-    toggleSave: (policyId: string) => toggleMutation.mutate(policyId),
+    toggleSave,
     isLoading,
     isError,
     refetch,
