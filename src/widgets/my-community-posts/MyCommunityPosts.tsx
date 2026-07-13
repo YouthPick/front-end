@@ -1,26 +1,25 @@
-import { Heart } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 import { CommunityCategoryBadge } from '@/entities/community-post';
-import { useLikedCommunityPosts } from '@/features/community-like';
+import { useMyCommunityPosts } from '@/features/community-my-posts';
 import { buildCommunityDetailPath, ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
 
 const PREVIEW_COUNT = 5;
 
-export function LikedCommunityPosts() {
-  const { likedPosts, isLoading, isError, refetch, toggleLike } = useLikedCommunityPosts();
+export function MyCommunityPosts() {
+  const { posts, isLoading, isError, refetch } = useMyCommunityPosts();
   const navigate = useNavigate();
 
-  const previewPosts = likedPosts.slice(0, PREVIEW_COUNT);
+  const previewPosts = posts.slice(0, PREVIEW_COUNT);
 
   return (
     <div className="rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm text-left">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-slate-800">좋아요한 게시글</h3>
+        <h3 className="text-sm font-bold text-slate-800">내가 작성한 글</h3>
         <button
           type="button"
-          onClick={() => navigate(ROUTES.myLikedPosts)}
+          onClick={() => navigate(ROUTES.myPosts)}
           className="text-xs font-bold text-slate-400 hover:text-slate-700"
         >
           전체보기
@@ -36,13 +35,11 @@ export function LikedCommunityPosts() {
         )}
 
         {!isLoading && isError && (
-          <ErrorState title="좋아요한 게시글을 불러오지 못했습니다" onRetry={refetch} />
+          <ErrorState title="내가 작성한 게시글을 불러오지 못했습니다" onRetry={refetch} />
         )}
 
         {!isLoading && !isError && previewPosts.length === 0 && (
-          <p className="py-6 text-center text-xs text-slate-400">
-            아직 좋아요한 게시글이 없습니다.
-          </p>
+          <p className="py-6 text-center text-xs text-slate-400">아직 작성한 게시글이 없습니다.</p>
         )}
 
         {!isLoading && !isError && previewPosts.length > 0 && (
@@ -64,14 +61,9 @@ export function LikedCommunityPosts() {
                     {post.title}
                   </span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => toggleLike(post.id)}
-                  aria-label="좋아요 취소"
-                  className="relative z-10 shrink-0 pl-2 text-rose-500"
-                >
-                  <Heart className="h-3.5 w-3.5 fill-current" />
-                </button>
+                <span className="relative z-10 shrink-0 pl-2 text-[10px] font-bold text-slate-400">
+                  {post.createdAt}
+                </span>
               </div>
             ))}
           </div>

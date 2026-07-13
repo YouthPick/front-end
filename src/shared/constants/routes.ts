@@ -7,6 +7,8 @@ export const ROUTES = {
   communityWrite: '/community/write',
   communityDetail: '/community/:postId',
   my: '/my',
+  myLikedPosts: '/my/liked',
+  myPosts: '/my/posts',
   login: '/login',
   profileSetup: '/profile/setup',
   admin: '/admin',

@@ -22,6 +22,12 @@ const CommunityWritePage = lazy(() =>
   import('@/pages/community-write').then((m) => ({ default: m.CommunityWritePage })),
 );
 const MyPage = lazy(() => import('@/pages/my').then((m) => ({ default: m.MyPage })));
+const MyLikedPostsPage = lazy(() =>
+  import('@/pages/my-liked-posts').then((m) => ({ default: m.MyLikedPostsPage })),
+);
+const MyPostsPage = lazy(() =>
+  import('@/pages/my-posts').then((m) => ({ default: m.MyPostsPage })),
+);
 const ProfileSetupPage = lazy(() =>
   import('@/pages/profile-setup').then((m) => ({ default: m.ProfileSetupPage })),
 );
@@ -52,6 +58,8 @@ export const router = createBrowserRouter([
           },
           { path: ROUTES.tracker, element: <TrackerPage /> },
           { path: ROUTES.my, element: <MyPage /> },
+          { path: ROUTES.myLikedPosts, element: <MyLikedPostsPage /> },
+          { path: ROUTES.myPosts, element: <MyPostsPage /> },
           { path: ROUTES.profileSetup, element: <ProfileSetupPage /> },
           { path: ROUTES.communityWrite, element: <CommunityWritePage /> },
         ],

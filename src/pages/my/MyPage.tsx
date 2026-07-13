@@ -6,6 +6,7 @@ import { useTrackers } from '@/features/policy-tracker';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
 import { LikedCommunityPosts } from '@/widgets/liked-community-posts';
+import { MyCommunityPosts } from '@/widgets/my-community-posts';
 import { RecentlyViewed } from '@/widgets/recently-viewed';
 
 export function MyPage() {
@@ -109,6 +110,8 @@ export function MyPage() {
           <RecentlyViewed />
 
           <LikedCommunityPosts />
+
+          <MyCommunityPosts />
 
           <AccountDangerZone
             trackerCount={trackers.length}
