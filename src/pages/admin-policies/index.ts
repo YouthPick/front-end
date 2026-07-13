@@ -1,0 +1,1 @@
+export { AdminPoliciesPage } from './AdminPoliciesPage';

@@ -10,6 +10,14 @@ export const ROUTES = {
   login: '/login',
   profileSetup: '/profile/setup',
   admin: '/admin',
+  adminLogsLogin: '/admin/logs/login',
+  adminLogsApplication: '/admin/logs/application',
+  adminLogsSearch: '/admin/logs/search',
+  adminLogsBatch: '/admin/logs/batch',
+  adminUsers: '/admin/users',
+  adminPolicies: '/admin/policies',
+  adminApplications: '/admin/applications',
+  adminCommunity: '/admin/community',
 } as const;
 
 export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES];

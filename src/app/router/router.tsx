@@ -5,6 +5,7 @@ import { HomePage } from '@/pages/home';
 import { LoginPage } from '@/pages/login';
 import { SearchPage } from '@/pages/search';
 import { ROUTES } from '@/shared/constants';
+import { AdminLayout } from '@/widgets/admin-layout';
 
 import { RootLayout } from '../layouts/RootLayout';
 import { ProtectedRoute } from './ProtectedRoute';
@@ -12,6 +13,30 @@ import { RequireOnboarded } from './RequireOnboarded';
 
 // 홈·검색·로그인 외 화면은 라우트 단위로 지연 로딩해 초기 번들을 줄인다.
 const AdminPage = lazy(() => import('@/pages/admin').then((m) => ({ default: m.AdminPage })));
+const AdminLoginLogsPage = lazy(() =>
+  import('@/pages/admin-logs-login').then((m) => ({ default: m.AdminLoginLogsPage })),
+);
+const AdminApplicationLogsPage = lazy(() =>
+  import('@/pages/admin-logs-application').then((m) => ({ default: m.AdminApplicationLogsPage })),
+);
+const AdminSearchLogsPage = lazy(() =>
+  import('@/pages/admin-logs-search').then((m) => ({ default: m.AdminSearchLogsPage })),
+);
+const AdminBatchLogsPage = lazy(() =>
+  import('@/pages/admin-logs-batch').then((m) => ({ default: m.AdminBatchLogsPage })),
+);
+const AdminUsersPage = lazy(() =>
+  import('@/pages/admin-users').then((m) => ({ default: m.AdminUsersPage })),
+);
+const AdminPoliciesPage = lazy(() =>
+  import('@/pages/admin-policies').then((m) => ({ default: m.AdminPoliciesPage })),
+);
+const AdminApplicationsPage = lazy(() =>
+  import('@/pages/admin-applications').then((m) => ({ default: m.AdminApplicationsPage })),
+);
+const AdminCommunityPage = lazy(() =>
+  import('@/pages/admin-community').then((m) => ({ default: m.AdminCommunityPage })),
+);
 const CommunityPage = lazy(() =>
   import('@/pages/community').then((m) => ({ default: m.CommunityPage })),
 );
@@ -41,7 +66,22 @@ export const router = createBrowserRouter([
       { path: ROUTES.login, element: <LoginPage /> },
       {
         element: <ProtectedRoute requiredRole="admin" />,
-        children: [{ path: ROUTES.admin, element: <AdminPage /> }],
+        children: [
+          {
+            element: <AdminLayout />,
+            children: [
+              { path: ROUTES.admin, element: <AdminPage /> },
+              { path: ROUTES.adminLogsLogin, element: <AdminLoginLogsPage /> },
+              { path: ROUTES.adminLogsApplication, element: <AdminApplicationLogsPage /> },
+              { path: ROUTES.adminLogsSearch, element: <AdminSearchLogsPage /> },
+              { path: ROUTES.adminLogsBatch, element: <AdminBatchLogsPage /> },
+              { path: ROUTES.adminUsers, element: <AdminUsersPage /> },
+              { path: ROUTES.adminPolicies, element: <AdminPoliciesPage /> },
+              { path: ROUTES.adminApplications, element: <AdminApplicationsPage /> },
+              { path: ROUTES.adminCommunity, element: <AdminCommunityPage /> },
+            ],
+          },
+        ],
       },
       {
         element: <ProtectedRoute />,
