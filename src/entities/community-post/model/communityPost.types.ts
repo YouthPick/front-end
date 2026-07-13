@@ -14,6 +14,7 @@ export interface CommunityPost {
   title: string;
   category: CommunityPostCategory;
   content: string;
+  authorId: string;
   authorName: string;
   createdAt: string;
   viewCount: number;

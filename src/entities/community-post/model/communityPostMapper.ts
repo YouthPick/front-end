@@ -17,6 +17,7 @@ export function mapCommunityPostDtoToPost(dto: CommunityPostDto): CommunityPost 
     title: dto.title,
     category,
     content: dto.content,
+    authorId: dto.authorId,
     authorName: dto.authorName,
     createdAt: dto.createdAt,
     viewCount: dto.viewCount,

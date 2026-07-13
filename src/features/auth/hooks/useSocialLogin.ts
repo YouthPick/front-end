@@ -22,15 +22,19 @@ export function useSocialLogin() {
   const socialLogin = (provider: string, role: UserRole = 'member') => {
     // 데모 전용 관리자 진입: 실제 서비스에서는 서버가 계정 role을 내려준다.
     if (role === 'admin') {
-      login({ name: '관리자', email: 'admin@youthpick.dev', provider: '데모', role });
+      const adminEmail = 'admin@youthpick.dev';
+      login({ id: adminEmail, name: '관리자', email: adminEmail, provider: '데모', role });
       showToast('관리자 데모 계정으로 로그인되었습니다.', 'success');
       navigate(ROUTES.admin, { replace: true });
       return;
     }
 
+    // mock 로그인이라 별도 사용자 id 발급처가 없어, provider별로 고정된 email을 id로 재사용한다.
+    const email = MOCK_EMAIL_BY_PROVIDER[provider] ?? 'mingi.dev@youthpick.dev';
     login({
+      id: email,
       name: '민지',
-      email: MOCK_EMAIL_BY_PROVIDER[provider] ?? 'mingi.dev@youthpick.dev',
+      email,
       provider,
       role,
     });
