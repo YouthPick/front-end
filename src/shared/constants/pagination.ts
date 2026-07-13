@@ -1,0 +1,1 @@
+export const DEFAULT_ADMIN_PAGE_SIZE = 10;
