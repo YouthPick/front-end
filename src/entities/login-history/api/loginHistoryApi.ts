@@ -1,6 +1,6 @@
 import { MOCK_API_DELAY_MS } from '@/shared/constants';
 import type { PageParams, PageResult } from '@/shared/types';
-import { delay } from '@/shared/utils';
+import { delay, paginate } from '@/shared/utils';
 
 import type { LoginHistoryDto } from './loginHistory.dto';
 import { MOCK_LOGIN_HISTORY_DTOS } from './loginHistoryMockData';
@@ -19,13 +19,7 @@ export async function fetchLoginHistories(
   const filtered = MOCK_LOGIN_HISTORY_DTOS.filter((history) =>
     params.userId ? history.userId === params.userId : true,
   );
-  const start = (params.page - 1) * params.pageSize;
-  const items = filtered.slice(start, start + params.pageSize).map((dto) => ({ ...dto }));
+  const paged = paginate(filtered, params.page, params.pageSize);
 
-  return {
-    items,
-    page: params.page,
-    pageSize: params.pageSize,
-    totalCount: filtered.length,
-  };
+  return { ...paged, items: paged.items.map((dto) => ({ ...dto })) };
 }

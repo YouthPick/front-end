@@ -1,6 +1,6 @@
 import { MOCK_API_DELAY_MS } from '@/shared/constants';
 import type { PageParams, PageResult } from '@/shared/types';
-import { delay, matchesTextQuery } from '@/shared/utils';
+import { delay, matchesTextQuery, paginate } from '@/shared/utils';
 
 import type { ApplicationLogDto, ApplicationLogLevel } from './applicationLog.dto';
 import { MOCK_APPLICATION_LOG_DTOS } from './applicationLogMockData';
@@ -29,13 +29,7 @@ export async function fetchApplicationLogs(
   const filtered = MOCK_APPLICATION_LOG_DTOS.filter((log) =>
     matchesApplicationLogParams(log, params),
   );
-  const start = (params.page - 1) * params.pageSize;
-  const items = filtered.slice(start, start + params.pageSize).map((dto) => ({ ...dto }));
+  const paged = paginate(filtered, params.page, params.pageSize);
 
-  return {
-    items,
-    page: params.page,
-    pageSize: params.pageSize,
-    totalCount: filtered.length,
-  };
+  return { ...paged, items: paged.items.map((dto) => ({ ...dto })) };
 }
