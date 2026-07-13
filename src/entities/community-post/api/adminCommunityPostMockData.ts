@@ -1,0 +1,142 @@
+import type {
+  AdminAttachmentDto,
+  AdminCommunityCommentDto,
+  AdminCommunityPostDto,
+} from './adminCommunityPost.dto';
+
+export const MOCK_ADMIN_COMMUNITY_POST_DTOS: AdminCommunityPostDto[] = [
+  {
+    id: 'cp1',
+    title: '청년 월세 지원, 소득 기준 어떻게 계산하나요?',
+    category: '정책질문',
+    content:
+      '건강보험료 기준 중위소득 계산할 때 부모님 소득도 합산되는 건가요? 자취 중인데 혼자 신청 가능한지 궁금합니다.',
+    authorId: 'user-1',
+    authorName: '토끼걸음',
+    createdAt: '2026-07-08',
+    viewCount: 132,
+    deletedAt: null,
+  },
+  {
+    id: 'cp2',
+    title: 'K-디지털 트레이닝 수료 후기 (국비지원)',
+    category: '정책후기',
+    content:
+      '6개월 과정 완주했습니다. 훈련장려금은 출석률 80% 넘으면 매달 꼬박꼬박 나왔어요. 취업 연계도 도움 많이 받았습니다.',
+    authorId: 'user-2',
+    authorName: '개발자준비생',
+    createdAt: '2026-07-07',
+    viewCount: 284,
+    deletedAt: null,
+  },
+  {
+    id: 'cp3',
+    title: '오늘 면접 보고 왔어요',
+    category: '잡담',
+    content: '긴장했는데 그래도 후련하네요. 결과 기다리는 중입니다.',
+    authorId: 'user-3',
+    authorName: '면접러',
+    createdAt: '2026-07-06',
+    viewCount: 58,
+    deletedAt: null,
+  },
+  {
+    id: 'cp4',
+    title: '청년내일채움공제 서류 관련 질문',
+    category: '정책질문',
+    content: '재직증명서는 어디서 발급받나요? 회사에 요청하면 되는건지 궁금합니다.',
+    authorId: 'user-4',
+    authorName: '중소기업직장인',
+    createdAt: '2026-07-05',
+    viewCount: 97,
+    deletedAt: null,
+  },
+  {
+    id: 'cp5',
+    title: '부적절한 홍보성 게시글(삭제됨)',
+    category: '잡담',
+    content: '이 게시글은 커뮤니티 운영 정책 위반으로 삭제 처리되었습니다.',
+    authorId: 'user-5',
+    authorName: '스팸계정',
+    createdAt: '2026-07-04',
+    viewCount: 12,
+    deletedAt: '2026-07-09T10:00:00.000Z',
+  },
+  {
+    id: 'cp6',
+    title: '서울시 청년수당 후기 공유합니다',
+    category: '정책후기',
+    content:
+      '매달 50만원씩 6개월 받았습니다. 구직활동 보고서 제출이 조금 번거롭지만 도움이 많이 됐어요.',
+    authorId: 'user-6',
+    authorName: '수당받은청년',
+    createdAt: '2026-07-03',
+    viewCount: 210,
+    deletedAt: null,
+  },
+];
+
+export const MOCK_ADMIN_COMMUNITY_COMMENT_DTOS: AdminCommunityCommentDto[] = [
+  {
+    id: 'cc1',
+    postId: 'cp1',
+    parentCommentId: null,
+    authorName: '월세지원러',
+    content: '부모님과 세대 분리가 되어 있으면 부모님 소득은 합산되지 않아요!',
+    createdAt: '2026-07-08T09:10:00.000Z',
+    deletedAt: null,
+  },
+  {
+    id: 'cc2',
+    postId: 'cp1',
+    parentCommentId: 'cc1',
+    authorName: '토끼걸음',
+    content: '오 감사합니다! 주민등록등본으로 확인하면 되겠네요.',
+    createdAt: '2026-07-08T09:20:00.000Z',
+    deletedAt: null,
+  },
+  {
+    id: 'cc3',
+    postId: 'cp1',
+    parentCommentId: null,
+    authorName: '악성댓글러',
+    content: '이 댓글은 신고 누적으로 삭제 처리되었습니다.',
+    createdAt: '2026-07-08T11:00:00.000Z',
+    deletedAt: '2026-07-09T10:05:00.000Z',
+  },
+  {
+    id: 'cc4',
+    postId: 'cp2',
+    parentCommentId: null,
+    authorName: '취준생B',
+    content: '저도 이번에 신청하려고 하는데 후기 감사합니다!',
+    createdAt: '2026-07-07T14:00:00.000Z',
+    deletedAt: null,
+  },
+  {
+    id: 'cc5',
+    postId: 'cp4',
+    parentCommentId: null,
+    authorName: '인사팀출신',
+    content: '인사팀에 요청하면 보통 당일 발급됩니다.',
+    createdAt: '2026-07-05T16:00:00.000Z',
+    deletedAt: null,
+  },
+];
+
+export const MOCK_ADMIN_ATTACHMENT_DTOS: AdminAttachmentDto[] = [
+  {
+    id: 'att1',
+    postId: 'cp2',
+    fileKey: 'community/cp2/certificate.png',
+    fileSize: 482_300,
+    createdAt: '2026-07-07T09:00:00.000Z',
+  },
+  {
+    id: 'att2',
+    postId: 'cp6',
+    fileKey: 'community/cp6/payment-history.pdf',
+    fileSize: 1_204_500,
+    createdAt: '2026-07-03T08:30:00.000Z',
+  },
+];
