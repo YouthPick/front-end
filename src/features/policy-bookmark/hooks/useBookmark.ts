@@ -45,7 +45,10 @@ export function useBookmark() {
   const toggleSave = (policyId: string) => {
     if (!isAuthenticated) {
       showToast('로그인이 필요한 기능입니다. 로그인 화면으로 안내합니다.', 'info');
-      navigate(ROUTES.login, { state: { from: location.pathname + location.search } });
+      navigate(ROUTES.login, {
+        state: { from: location.pathname + location.search },
+        replace: true,
+      });
       return;
     }
     toggleMutation.mutate(policyId);
