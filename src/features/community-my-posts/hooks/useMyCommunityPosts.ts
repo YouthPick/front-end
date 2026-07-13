@@ -9,7 +9,7 @@ export function useMyCommunityPosts() {
     isLoading,
     isError,
     refetch,
-  } = useCommunityPostSearchQuery({ authorId: userId ?? '' });
+  } = useCommunityPostSearchQuery({ authorId: userId ?? '' }, { enabled: userId !== undefined });
 
   return { posts, isLoading, isError, refetch };
 }
