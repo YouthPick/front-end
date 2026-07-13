@@ -1,7 +1,6 @@
 import { Edit3 } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
-import { CompareDockContainer } from '@/features/policy-compare';
 import { ProfileBriefing, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
 import { RecommendationFeed } from '@/widgets/recommendation-feed';
@@ -39,9 +38,6 @@ export function RecommendPage() {
       />
 
       <RecommendationFeed />
-
-      {/* 정책 비교 독 (우측 슬라이드-인, 담긴 정책이 있을 때만 노출) */}
-      <CompareDockContainer />
     </div>
   );
 }
