@@ -1,6 +1,8 @@
 import { X } from 'lucide-react';
+import { useEffect } from 'react';
 
 import type { ApplicationLog } from '@/entities/application-log';
+import { useBodyScrollLock } from '@/shared/hooks';
 import { formatDateTime } from '@/shared/utils';
 
 interface ApplicationLogDetailModalProps {
@@ -20,10 +22,29 @@ function DetailRow({ label, value }: { label: string; value: string }) {
 }
 
 export function ApplicationLogDetailModal({ log, onClose }: ApplicationLogDetailModalProps) {
+  useBodyScrollLock(log !== null);
+
+  // Escape 키로 닫기
+  useEffect(() => {
+    if (!log) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [log, onClose]);
+
   if (!log) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+    // biome-ignore lint/a11y/noStaticElementInteractions: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    // biome-ignore lint/a11y/useKeyWithClickEvents: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <div
         role="dialog"
         aria-modal="true"
