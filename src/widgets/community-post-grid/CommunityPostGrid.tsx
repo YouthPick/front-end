@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router';
 
 import { type CommunityPost, CommunityPostCard } from '@/entities/community-post';
+import { useCommunityCommentCounts } from '@/features/community-comment';
 import { useCommunityLike } from '@/features/community-like';
 import { buildCommunityDetailPath } from '@/shared/constants';
 
@@ -19,13 +20,14 @@ export function CommunityPostGrid({
 }: CommunityPostGridProps) {
   const navigate = useNavigate();
   const { isLiked, toggleLike } = useCommunityLike();
+  const commentCounts = useCommunityCommentCounts(posts.map((post) => post.id));
 
   return (
     <ul className={`list-none ${className}`}>
       {posts.map((post) => (
         <li key={post.id}>
           <CommunityPostCard
-            post={post}
+            post={{ ...post, commentCount: commentCounts[post.id] ?? post.commentCount }}
             onSelect={(target) => navigate(buildCommunityDetailPath(target.id))}
             isLiked={isLiked(post.id)}
             onToggleLike={toggleLike}

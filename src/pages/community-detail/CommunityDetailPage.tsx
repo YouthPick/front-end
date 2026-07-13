@@ -2,7 +2,7 @@ import { Link, Navigate, useParams } from 'react-router';
 
 import { CommunityPostDetail, useCommunityPostQuery } from '@/entities/community-post';
 import { usePolicyDetailStore } from '@/entities/policy';
-import { CommentListContainer } from '@/features/community-comment';
+import { CommentListContainer, useCommunityComments } from '@/features/community-comment';
 import { useCommunityLike } from '@/features/community-like';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Skeleton } from '@/shared/ui';
@@ -24,6 +24,7 @@ interface CommunityDetailPageContentProps {
 function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps) {
   const { data: post, isLoading, isError, refetch } = useCommunityPostQuery(postId);
   const { isLiked, toggleLike } = useCommunityLike();
+  const { data: comments } = useCommunityComments(postId);
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
 
   return (
@@ -51,7 +52,7 @@ function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps)
       {!isLoading && !isError && post && (
         <>
           <CommunityPostDetail
-            post={post}
+            post={{ ...post, commentCount: comments?.length ?? post.commentCount }}
             isLiked={isLiked(post.id)}
             onToggleLike={toggleLike}
             onViewAttachedPolicy={openPolicyDetail}
