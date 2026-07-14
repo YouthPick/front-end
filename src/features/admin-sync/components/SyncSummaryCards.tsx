@@ -1,6 +1,6 @@
 import { Skeleton } from '@/shared/ui';
 
-import { useSyncSummary } from '../hooks/useSyncHistory';
+import { useSyncSummary } from '../hooks/useSyncSummary';
 import type { SyncSummary } from '../types/adminSync.types';
 
 const CARD_METAS = [

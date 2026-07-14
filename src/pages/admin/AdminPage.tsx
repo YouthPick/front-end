@@ -1,16 +1,10 @@
 import { Loader2, RefreshCw } from 'lucide-react';
+import { Link } from 'react-router';
 
-import {
-  AdminQaNote,
-  SyncHistoryTable,
-  SyncSummaryCards,
-  useRunSync,
-  useSyncHistory,
-} from '@/features/admin-sync';
-import { ErrorState, Skeleton } from '@/shared/ui';
+import { AdminQaNote, SyncSummaryCards, useRunSync } from '@/features/admin-sync';
+import { ROUTES } from '@/shared/constants';
 
 export function AdminPage() {
-  const { data: syncHistory = [], isLoading, isError, refetch } = useSyncHistory();
   const { runSync, isSyncing } = useRunSync();
 
   return (
@@ -49,13 +43,15 @@ export function AdminPage() {
 
       <SyncSummaryCards />
 
-      {isLoading && <Skeleton className="h-48" />}
-
-      {isError && (
-        <ErrorState title="동기화 이력을 불러오지 못했습니다" onRetry={() => refetch()} />
-      )}
-
-      {!isLoading && !isError && <SyncHistoryTable logs={syncHistory} />}
+      <Link
+        to={ROUTES.adminLogsBatch}
+        className="block rounded-3xl border border-slate-100 bg-white p-5 text-left shadow-sm hover:bg-slate-50"
+      >
+        <h4 className="text-xs font-extrabold text-slate-800">배치 작업 로그 전체 보기</h4>
+        <p className="mt-1 text-xs text-slate-400">
+          공공데이터 동기화 이력을 필터·페이지네이션과 함께 확인합니다. →
+        </p>
+      </Link>
 
       <AdminQaNote />
     </div>
