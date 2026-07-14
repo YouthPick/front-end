@@ -1,3 +1,12 @@
+export type { AdminPolicyDto, AdminPolicyVisibilityStatus } from './api/adminPolicy.dto';
+export {
+  type AdminPolicySearchParams,
+  type AdminPolicyUpdateInput,
+  fetchAdminPolicies,
+  setAdminPolicyVisibility,
+  softDeleteAdminPolicy,
+  updateAdminPolicy,
+} from './api/adminPolicyApi';
 export type { PolicyDto, RecentlyViewedPolicyDto } from './api/policy.dto';
 export type { PolicySearchParams } from './api/policyApi';
 export {
@@ -6,6 +15,15 @@ export {
   fetchRecentlyViewedPolicies,
   searchPolicies,
 } from './api/policyApi';
+export type { AdminPolicy } from './model/adminPolicy.types';
+export { mapAdminPolicyDtoToAdminPolicy } from './model/adminPolicyMapper';
+export {
+  adminPolicyKeys,
+  useAdminPoliciesQuery,
+  useSetAdminPolicyVisibilityMutation,
+  useSoftDeleteAdminPolicyMutation,
+  useUpdateAdminPolicyMutation,
+} from './model/adminPolicyQueries';
 export type {
   Policy,
   PolicyCategory,
