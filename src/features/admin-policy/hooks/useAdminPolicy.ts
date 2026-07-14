@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useAdminPoliciesQuery } from '@/entities/policy';
+import { type AdminPolicy, useAdminPoliciesQuery } from '@/entities/policy';
 import { DEFAULT_ADMIN_PAGE_SIZE } from '@/shared/constants';
 
 import { useAdminPolicyFilters } from './useAdminPolicyFilters';
@@ -34,7 +34,10 @@ export function useAdminPolicy() {
     endDate: endDate || undefined,
   });
 
-  const [selectedPolicyId, setSelectedPolicyId] = useState<string | null>(null);
+  // 선택된 정책 객체 자체를 들고 있는다. 필터링된 목록에서 매번 다시 찾으면(.find),
+  // 노출 상태 토글/저장/삭제 후 그 정책이 현재 필터(카테고리/공개상태) 조건에서 빠지는 순간
+  // 모달이 안내 없이 사라진다. 최신 값은 mutation 성공 시 이 setter로 직접 갱신한다.
+  const [selectedPolicy, setSelectedPolicy] = useState<AdminPolicy | null>(null);
 
   return {
     policies: data?.items ?? [],
@@ -53,8 +56,8 @@ export function useAdminPolicy() {
     onDateRangeChange: setDateRange,
     onPageChange: setPage,
     onReset: resetFilters,
-    selectedPolicyId,
-    onSelectPolicy: setSelectedPolicyId,
-    onCloseDetail: () => setSelectedPolicyId(null),
+    selectedPolicy,
+    onSelectPolicy: setSelectedPolicy,
+    onCloseDetail: () => setSelectedPolicy(null),
   };
 }

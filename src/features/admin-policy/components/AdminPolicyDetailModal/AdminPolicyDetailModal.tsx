@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type {
   AdminPolicy,
@@ -8,6 +8,7 @@ import type {
 } from '@/entities/policy';
 import { POLICY_CATEGORIES } from '@/entities/policy';
 import type { Region } from '@/entities/region';
+import { useBodyScrollLock } from '@/shared/hooks';
 import { ConfirmDialog } from '@/shared/ui';
 import { formatDateTime } from '@/shared/utils';
 
@@ -54,11 +55,33 @@ export function AdminPolicyDetailModal({
 }: AdminPolicyDetailModalProps) {
   const [draft, setDraft] = useState<AdminPolicyUpdateInput | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const initializedPolicyIdRef = useRef<string | null>(null);
 
-  // 다른 정책을 선택하거나 모달을 다시 열면 편집 중이던 draft를 최신 정책 값으로 되돌린다.
+  // 다른 정책으로 바뀌거나(id 변경) 모달을 다시 열 때만 draft를 정책 값으로 초기화한다.
+  // policy는 노출 토글/저장 등 mutation 성공 시마다 새 객체로 갱신되므로, 매번 초기화하면
+  // 같은 정책을 편집하는 도중에도 입력 중이던 내용이 서버 값으로 덮어써진다.
   useEffect(() => {
-    setDraft(policy ? buildDraftFromPolicy(policy) : null);
+    if (!policy) {
+      initializedPolicyIdRef.current = null;
+      setDraft(null);
+      return;
+    }
+    if (initializedPolicyIdRef.current === policy.id) return;
+    initializedPolicyIdRef.current = policy.id;
+    setDraft(buildDraftFromPolicy(policy));
   }, [policy]);
+
+  useBodyScrollLock(policy !== null);
+
+  // Escape 키로 닫기
+  useEffect(() => {
+    if (!policy) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [policy, onClose]);
 
   if (!policy || !draft) return null;
 
@@ -85,7 +108,14 @@ export function AdminPolicyDetailModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-8">
+    // biome-ignore lint/a11y/noStaticElementInteractions: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    // biome-ignore lint/a11y/useKeyWithClickEvents: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-8"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <div
         role="dialog"
         aria-modal="true"

@@ -20,12 +20,10 @@ export function AdminPolicyContainer() {
     onDateRangeChange,
     onPageChange,
     onReset,
-    selectedPolicyId,
+    selectedPolicy,
     onSelectPolicy,
     onCloseDetail,
   } = useAdminPolicy();
-
-  const selectedPolicy = policies.find((policy) => policy.id === selectedPolicyId) ?? null;
 
   const {
     regions,
@@ -36,7 +34,7 @@ export function AdminPolicyContainer() {
     isTogglingVisibility,
     deletePolicy,
     isDeleting,
-  } = useAdminPolicyDetail(selectedPolicyId);
+  } = useAdminPolicyDetail(selectedPolicy?.id ?? null, onSelectPolicy);
 
   return (
     <AdminPolicyPresenter
@@ -59,7 +57,7 @@ export function AdminPolicyContainer() {
       selectedPolicy={selectedPolicy}
       regions={regions}
       isRegionsLoading={isRegionsLoading}
-      onSelectPolicy={(policy) => onSelectPolicy(policy.id)}
+      onSelectPolicy={onSelectPolicy}
       onCloseDetail={onCloseDetail}
       onSave={saveChanges}
       isSaving={isSaving}
