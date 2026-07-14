@@ -3,7 +3,7 @@ import { delay } from '@/shared/utils';
 
 // 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
 
-let likedPostIds: string[] = ['cp2', 'cp5'];
+let likedPostIds: string[] = ['cp2', 'cp5', 'cp7', 'cp9', 'cp11', 'cp13', 'cp15'];
 
 export async function fetchLikedCommunityPostIds(): Promise<string[]> {
   await delay(MOCK_API_DELAY_MS);
