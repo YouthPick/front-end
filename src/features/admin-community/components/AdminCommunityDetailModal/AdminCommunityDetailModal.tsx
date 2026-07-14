@@ -1,13 +1,13 @@
 import { Paperclip, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type {
   AdminAttachment,
   AdminCommunityComment,
   AdminCommunityPost,
 } from '@/entities/community-post';
+import { useBodyScrollLock } from '@/shared/hooks';
 import { ConfirmDialog, Skeleton } from '@/shared/ui';
-import { formatDateTime } from '@/shared/utils';
 
 import { AdminCommunityCommentTree } from './AdminCommunityCommentTree';
 
@@ -66,12 +66,30 @@ export function AdminCommunityDetailModal({
   const [showDeletePostConfirm, setShowDeletePostConfirm] = useState(false);
   const [pendingDeleteCommentId, setPendingDeleteCommentId] = useState<string | null>(null);
 
+  useBodyScrollLock(post !== null);
+
+  useEffect(() => {
+    if (!post) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [post, onClose]);
+
   if (!post) return null;
 
   const isDeleted = post.deletedAt !== null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-8">
+    // biome-ignore lint/a11y/noStaticElementInteractions: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    // biome-ignore lint/a11y/useKeyWithClickEvents: 배경 클릭 닫기 — 키보드 동등 기능은 위 Escape 핸들러로 제공한다
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-8"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <div
         role="dialog"
         aria-modal="true"
@@ -104,7 +122,7 @@ export function AdminCommunityDetailModal({
           <h4 className="mt-1.5 text-sm font-black text-slate-800">{post.title}</h4>
           <p className="mt-1 text-xs text-slate-600 leading-relaxed">{post.content}</p>
           <p className="mt-2 text-[10px] text-slate-400">
-            {post.authorName} ({post.authorId}) · {formatDateTime(post.createdAt)} · 조회{' '}
+            {post.authorName} ({post.authorId}) · {post.createdAt} · 조회{' '}
             {post.viewCount.toLocaleString('ko-KR')}
           </p>
         </div>

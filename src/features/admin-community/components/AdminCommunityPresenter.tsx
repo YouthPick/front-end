@@ -6,7 +6,6 @@ import type {
   AdminCommunityPost,
 } from '@/entities/community-post';
 import { DataTable } from '@/shared/ui';
-import { formatDateTime } from '@/shared/utils';
 
 import { AdminCommunityDetailModal } from './AdminCommunityDetailModal';
 import { AdminCommunityFilters } from './AdminCommunityFilters';
@@ -104,7 +103,6 @@ export function AdminCommunityPresenter({
     {
       accessorKey: 'createdAt',
       header: '작성일',
-      cell: ({ getValue }) => formatDateTime(getValue<string>()),
     },
     {
       id: 'status',
