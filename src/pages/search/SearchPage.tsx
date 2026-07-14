@@ -4,7 +4,7 @@ import {
   SearchEmptyState,
   usePolicySearch,
 } from '@/features/policy-search';
-import { ErrorState, Skeleton } from '@/shared/ui';
+import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import {
   POLICY_GRID_CLASS,
   POLICY_GRID_SKELETON_COUNT,
@@ -16,6 +16,10 @@ export function SearchPage() {
     query,
     filters,
     policies,
+    page,
+    pageItems,
+    pageCount,
+    setPage,
     isLoading,
     isError,
     reload,
@@ -74,7 +78,10 @@ export function SearchPage() {
       {!isLoading &&
         !isError &&
         (policies.length > 0 ? (
-          <PolicyCardGrid policies={policies} />
+          <>
+            <PolicyCardGrid policies={pageItems} />
+            <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
+          </>
         ) : (
           <SearchEmptyState
             onResetAll={() => resetFilters({ clearQuery: true })}

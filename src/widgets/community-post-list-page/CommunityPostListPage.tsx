@@ -1,10 +1,13 @@
 import type { CommunityPost } from '@/entities/community-post';
-import { EmptyState, ErrorState, Skeleton } from '@/shared/ui';
+import { usePagination } from '@/shared/hooks';
+import { EmptyState, ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import {
   COMMUNITY_POST_GRID_CLASS,
   COMMUNITY_POST_GRID_SKELETON_COUNT,
   CommunityPostGrid,
 } from '@/widgets/community-post-grid';
+
+const LIST_PAGE_SIZE = COMMUNITY_POST_GRID_SKELETON_COUNT;
 
 interface CommunityPostListPageProps {
   breadcrumb: string;
@@ -29,6 +32,8 @@ export function CommunityPostListPage({
   onRetry,
   emptyTitle,
 }: CommunityPostListPageProps) {
+  const { page, pageItems, pageCount, setPage } = usePagination(posts, LIST_PAGE_SIZE);
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="text-left space-y-1">
@@ -53,7 +58,10 @@ export function CommunityPostListPage({
       {!isLoading &&
         !isError &&
         (posts.length > 0 ? (
-          <CommunityPostGrid posts={posts} />
+          <>
+            <CommunityPostGrid posts={pageItems} />
+            <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
+          </>
         ) : (
           <EmptyState title={emptyTitle} />
         ))}

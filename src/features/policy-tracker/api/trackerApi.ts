@@ -40,6 +40,50 @@ let trackers: TrackerItem[] = [
     ],
     memo: '결과 발표는 공식 홈페이지 고시 예정',
   },
+  {
+    policyId: 'p3',
+    status: '준비중',
+    targetDate: '2026-07-15',
+    checklist: [
+      { id: 'c9', text: '수강 신청서 작성', completed: true },
+      { id: 'c10', text: '재직/재학 증명서 발급', completed: false },
+    ],
+    memo: '개강 전까지 훈련장려금 계좌 개설 완료하기',
+  },
+  {
+    policyId: 'p6',
+    status: '관심',
+    targetDate: '2026-08-01',
+    checklist: [{ id: 'c11', text: '희망 강좌 목록 조사', completed: false }],
+    memo: '',
+  },
+  {
+    policyId: 'p7',
+    status: '신청완료',
+    targetDate: '2026-06-30',
+    checklist: [
+      { id: 'c12', text: '구직활동 보고서 제출', completed: true },
+      { id: 'c13', text: '진로 프로그램 참여 신청', completed: true },
+    ],
+    memo: '매달 말일까지 보고서 제출 필수',
+  },
+  {
+    policyId: 'p8',
+    status: '종료',
+    targetDate: '2026-05-15',
+    checklist: [
+      { id: 'c14', text: '가입 신청', completed: true },
+      { id: 'c15', text: '첫 회차 저축 이체', completed: true },
+    ],
+    memo: '3년 만기 예정일 캘린더에 등록해두기',
+  },
+  {
+    policyId: 'p9',
+    status: '준비중',
+    targetDate: '2026-07-01',
+    checklist: [{ id: 'c16', text: '만 19세 확인 서류 준비', completed: false }],
+    memo: '선착순 마감이라 신청 오픈 시각 확인 필요',
+  },
 ];
 
 function cloneTracker(tracker: TrackerItem): TrackerItem {

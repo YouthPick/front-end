@@ -4,7 +4,8 @@ import { type PolicyCategory, usePoliciesQuery, usePolicyDetailStore } from '@/e
 import { useAuthStore } from '@/entities/user';
 import { RecommendationPreview, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
-import { ErrorState, Skeleton } from '@/shared/ui';
+import { usePagination } from '@/shared/hooks';
+import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import { HeroBanner } from '@/widgets/hero-banner';
 import {
   POLICY_GRID_CLASS,
@@ -29,6 +30,7 @@ export function HomePage() {
     reload: reloadRecommendations,
   } = useRecommendations();
   const { data: policies = [], isLoading } = usePoliciesQuery();
+  const { page, pageItems, pageCount, setPage } = usePagination(policies, HOME_POLICY_COUNT);
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
   const navigate = useNavigate();
 
@@ -93,10 +95,10 @@ export function HomePage() {
             ))}
           </div>
         ) : (
-          <PolicyCardGrid
-            policies={policies.slice(0, HOME_POLICY_COUNT)}
-            className={POLICY_GRID_CLASS}
-          />
+          <>
+            <PolicyCardGrid policies={pageItems} className={POLICY_GRID_CLASS} />
+            <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
+          </>
         )}
       </section>
     </div>
