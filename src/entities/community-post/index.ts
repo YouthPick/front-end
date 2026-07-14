@@ -1,3 +1,16 @@
+export type {
+  AdminAttachmentDto,
+  AdminCommunityCommentDto,
+  AdminCommunityPostDto,
+} from './api/adminCommunityPost.dto';
+export {
+  type AdminCommunityPostSearchParams,
+  fetchAdminCommunityAttachments,
+  fetchAdminCommunityComments,
+  fetchAdminCommunityPosts,
+  softDeleteAdminCommunityComment,
+  softDeleteAdminCommunityPost,
+} from './api/adminCommunityPostApi';
 export type { CommunityPostDto } from './api/communityPost.dto';
 export type {
   CommunityPostSearchParams,
@@ -9,6 +22,24 @@ export {
   fetchCommunityPost,
   searchCommunityPosts,
 } from './api/communityPostApi';
+export type {
+  AdminAttachment,
+  AdminCommunityComment,
+  AdminCommunityPost,
+} from './model/adminCommunityPost.types';
+export {
+  mapAdminAttachmentDtoToAdminAttachment,
+  mapAdminCommunityCommentDtoToAdminCommunityComment,
+  mapAdminCommunityPostDtoToAdminCommunityPost,
+} from './model/adminCommunityPostMapper';
+export {
+  adminCommunityPostKeys,
+  useAdminCommunityAttachmentsQuery,
+  useAdminCommunityCommentsQuery,
+  useAdminCommunityPostsQuery,
+  useSoftDeleteAdminCommunityCommentMutation,
+  useSoftDeleteAdminCommunityPostMutation,
+} from './model/adminCommunityPostQueries';
 export {
   COMMUNITY_POST_CATEGORIES,
   isPolicyAttachableCategory,
