@@ -10,6 +10,9 @@ import { MOCK_APPLICATION_LOG_DTOS } from './applicationLogMockData';
 export interface ApplicationLogSearchParams extends PageParams {
   logLevel?: ApplicationLogLevel;
   keyword?: string;
+  // "YYYY-MM-DD" 형식. 각각 해당일 00:00:00 이상, 23:59:59.999 이하(KST 기준)로 포함한다.
+  startDate?: string;
+  endDate?: string;
 }
 
 function matchesApplicationLogParams(
@@ -18,6 +21,15 @@ function matchesApplicationLogParams(
 ): boolean {
   if (params.logLevel && log.logLevel !== params.logLevel) return false;
   if (!matchesTextQuery([log.message, log.traceId, log.requestUri], params.keyword)) return false;
+
+  const createdAt = new Date(log.createdAt).getTime();
+  if (params.startDate && createdAt < new Date(`${params.startDate}T00:00:00+09:00`).getTime()) {
+    return false;
+  }
+  if (params.endDate && createdAt > new Date(`${params.endDate}T23:59:59.999+09:00`).getTime()) {
+    return false;
+  }
+
   return true;
 }
 
