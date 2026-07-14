@@ -1,3 +1,5 @@
+import { Pagination } from '@/shared/ui';
+
 import type { TrackerItem, TrackerStatusTab } from '../../types/tracker.types';
 import { TrackerCard } from './TrackerCard';
 import { TrackerStatusTabs } from './TrackerStatusTabs';
@@ -14,6 +16,9 @@ interface TrackerListPanelProps {
   selectedPolicyId: string | null;
   onTabChange: (tab: TrackerStatusTab) => void;
   onSelect: (policyId: string) => void;
+  page: number;
+  pageCount: number;
+  onPageChange: (page: number) => void;
 }
 
 export function TrackerListPanel({
@@ -23,6 +28,9 @@ export function TrackerListPanel({
   selectedPolicyId,
   onTabChange,
   onSelect,
+  page,
+  pageCount,
+  onPageChange,
 }: TrackerListPanelProps) {
   return (
     <div className="lg:col-span-5 space-y-5 text-left">
@@ -53,6 +61,8 @@ export function TrackerListPanel({
           </div>
         )}
       </div>
+
+      <Pagination page={page} pageCount={pageCount} onPageChange={onPageChange} />
     </div>
   );
 }

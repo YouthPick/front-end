@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 import { usePoliciesQuery } from '@/entities/policy';
+import { usePagination } from '@/shared/hooks';
 import { ErrorState, Skeleton } from '@/shared/ui';
 
 import { useTrackerMutations } from '../hooks/useTrackerMutations';
@@ -11,6 +12,8 @@ import { useTrackers } from '../hooks/useTrackers';
 import type { TrackerStatusTab } from '../types/tracker.types';
 import { TrackerDetailPanel } from './TrackerDetailPanel';
 import { TRACKER_STATUS_TABS, type TrackerListEntry, TrackerListPanel } from './TrackerListPanel';
+
+const TRACKER_PAGE_SIZE = 5;
 
 export function TrackerContainer() {
   // 마이페이지 활동 지표 등에서 `?tab=관심` 형태로 진입하면 해당 탭을 초기 탭으로 연다.
@@ -43,6 +46,21 @@ export function TrackerContainer() {
   const isLoading = isTrackersLoading || isPoliciesLoading;
   const isError = isTrackersError || isPoliciesError;
 
+  // 로딩/에러 중에도 훅 호출 순서를 지키기 위해 조기 return보다 위에서 계산한다.
+  const entries: TrackerListEntry[] = trackers
+    .filter((tracker) => activeTab === '전체' || tracker.status === activeTab)
+    .map((tracker) => ({
+      tracker,
+      policyTitle: policies.find((policy) => policy.id === tracker.policyId)?.title ?? '',
+    }))
+    .filter((entry) => entry.policyTitle !== '');
+  const { page, pageItems, pageCount, setPage } = usePagination(entries, TRACKER_PAGE_SIZE);
+
+  const handleTabChange = (tab: TrackerStatusTab) => {
+    setActiveTab(tab);
+    setPage(1);
+  };
+
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -70,14 +88,6 @@ export function TrackerContainer() {
     );
   }
 
-  const entries: TrackerListEntry[] = trackers
-    .filter((tracker) => activeTab === '전체' || tracker.status === activeTab)
-    .map((tracker) => ({
-      tracker,
-      policyTitle: policies.find((policy) => policy.id === tracker.policyId)?.title ?? '',
-    }))
-    .filter((entry) => entry.policyTitle !== '');
-
   const activeTracker = trackers.find((tracker) => tracker.policyId === selectedPolicyId) ?? null;
   const activePolicy = activeTracker
     ? (policies.find((policy) => policy.id === activeTracker.policyId) ?? null)
@@ -90,11 +100,14 @@ export function TrackerContainer() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <TrackerListPanel
           trackers={trackers}
-          entries={entries}
+          entries={pageItems}
           activeTab={activeTab}
           selectedPolicyId={selectedPolicyId}
-          onTabChange={setActiveTab}
+          onTabChange={handleTabChange}
           onSelect={selectTracker}
+          page={page}
+          pageCount={pageCount}
+          onPageChange={setPage}
         />
 
         <div className="lg:col-span-7">

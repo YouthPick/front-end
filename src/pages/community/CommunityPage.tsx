@@ -8,7 +8,7 @@ import {
   useCommunityBoard,
 } from '@/features/community-board';
 import { ROUTES } from '@/shared/constants';
-import { ErrorState, Skeleton } from '@/shared/ui';
+import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import {
   COMMUNITY_POST_GRID_CLASS,
   COMMUNITY_POST_GRID_SKELETON_COUNT,
@@ -21,6 +21,10 @@ export function CommunityPage() {
     category,
     sort,
     posts,
+    page,
+    pageItems,
+    pageCount,
+    setPage,
     isLoading,
     isError,
     reload,
@@ -70,7 +74,10 @@ export function CommunityPage() {
       {!isLoading &&
         !isError &&
         (posts.length > 0 ? (
-          <CommunityPostGrid posts={posts} />
+          <>
+            <CommunityPostGrid posts={pageItems} />
+            <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
+          </>
         ) : (
           <CommunityBoardEmptyState onResetFilters={resetFilters} />
         ))}
