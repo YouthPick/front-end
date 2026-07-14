@@ -1,6 +1,9 @@
 import { useState } from 'react';
 
-import { useAdminPolicyApplicationsQuery } from '@/entities/policy-application';
+import {
+  type AdminPolicyApplication,
+  useAdminPolicyApplicationsQuery,
+} from '@/entities/policy-application';
 import { DEFAULT_ADMIN_PAGE_SIZE } from '@/shared/constants';
 
 import { useAdminApplicationFilters } from './useAdminApplicationFilters';
@@ -41,7 +44,12 @@ export function useAdminApplication() {
     deadlineEnd: deadlineEnd || undefined,
   });
 
-  const [selectedApplicationId, setSelectedApplicationId] = useState<string | null>(null);
+  // 선택된 신청 객체 자체를 들고 있는다. 필터링된 목록에서 매번 다시 찾으면(.find),
+  // 상태 변경 성공 후 그 신청이 현재 상태 필터에서 빠지는 순간 모달이 안내 없이 사라진다.
+  // 최신 값은 mutation 성공 시 이 setter로 직접 갱신한다.
+  const [selectedApplication, setSelectedApplication] = useState<AdminPolicyApplication | null>(
+    null,
+  );
 
   return {
     applications: data?.items ?? [],
@@ -64,8 +72,8 @@ export function useAdminApplication() {
     onDeadlineRangeChange: setDeadlineRange,
     onPageChange: setPage,
     onReset: resetFilters,
-    selectedApplicationId,
-    onSelectApplication: setSelectedApplicationId,
-    onCloseDetail: () => setSelectedApplicationId(null),
+    selectedApplication,
+    onSelectApplication: setSelectedApplication,
+    onCloseDetail: () => setSelectedApplication(null),
   };
 }

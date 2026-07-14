@@ -24,16 +24,13 @@ export function AdminApplicationContainer() {
     onDeadlineRangeChange,
     onPageChange,
     onReset,
-    selectedApplicationId,
+    selectedApplication,
     onSelectApplication,
     onCloseDetail,
   } = useAdminApplication();
 
-  const selectedApplication =
-    applications.find((application) => application.id === selectedApplicationId) ?? null;
-
   const { checklist, isChecklistLoading, changeStatus, isChangingStatus } =
-    useAdminApplicationDetail(selectedApplicationId);
+    useAdminApplicationDetail(selectedApplication?.id ?? null, onSelectApplication);
 
   return (
     <AdminApplicationPresenter
@@ -60,7 +57,7 @@ export function AdminApplicationContainer() {
       selectedApplication={selectedApplication}
       checklist={checklist}
       isChecklistLoading={isChecklistLoading}
-      onSelectApplication={(application) => onSelectApplication(application.id)}
+      onSelectApplication={onSelectApplication}
       onCloseDetail={onCloseDetail}
       onChangeStatus={changeStatus}
       isChangingStatus={isChangingStatus}
