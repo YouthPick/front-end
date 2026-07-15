@@ -4,6 +4,7 @@ export interface PolicyDto {
   category: string;
   region: string;
   tag: string;
+  organizationName: string;
   description: string;
   target: string;
   eligibleStatuses: string[];

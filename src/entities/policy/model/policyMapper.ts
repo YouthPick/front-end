@@ -26,6 +26,7 @@ export function mapPolicyDtoToPolicy(dto: PolicyDto): Policy | null {
     category,
     region: dto.region,
     tag: toPolicyTag(dto.tag),
+    organizationName: dto.organizationName,
     description: dto.description,
     target: dto.target,
     eligibleStatuses: [...dto.eligibleStatuses],
