@@ -10,6 +10,8 @@ export const ROUTES = {
   myLikedPosts: '/my/liked',
   myPosts: '/my/posts',
   login: '/login',
+  // 백엔드 OAuthProperties.frontend-callback-uri와 반드시 동일한 경로여야 한다.
+  oauthCallback: '/oauth/callback',
   profileSetup: '/profile/setup',
   admin: '/admin',
   adminLogsLogin: '/admin/logs/login',
