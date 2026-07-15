@@ -20,7 +20,8 @@ export function parseApiError(error: unknown): ApiErrorResponse | null {
   if (!axios.isAxiosError(error) || !error.response) return null;
 
   const data: unknown = error.response.data;
-  if (typeof data !== 'object' || data === null || !('code' in data)) return null;
+  if (typeof data !== 'object' || data === null) return null;
+  if (!('code' in data) || typeof (data as { code: unknown }).code !== 'string') return null;
 
   return data as ApiErrorResponse;
 }

@@ -25,6 +25,7 @@ export function useOAuthCallback() {
   useEffect(() => {
     if (ranOnceRef.current) return;
     ranOnceRef.current = true;
+    let cancelled = false;
 
     async function completeLogin() {
       const code = searchParams.get('code');
@@ -32,14 +33,19 @@ export function useOAuthCallback() {
       const { provider, redirectTo } = consumeOAuthSession();
 
       if (!code || !state || !provider) {
-        setErrorMessage('로그인 정보가 올바르지 않습니다. 로그인 화면에서 다시 시도해 주세요.');
+        if (!cancelled) {
+          setErrorMessage('로그인 정보가 올바르지 않습니다. 로그인 화면에서 다시 시도해 주세요.');
+        }
         return;
       }
 
       try {
         const tokenDto = await exchangeOAuthCallback(provider, code, state);
+        if (cancelled) return;
         setAccessToken(tokenDto.accessToken);
         const userDto = await fetchCurrentUser();
+        if (cancelled) return;
+
         const providerLabel = getProviderLabel(provider);
         login(mapAuthUserDtoToAuthUser(userDto, providerLabel));
         showToast(
@@ -53,11 +59,14 @@ export function useOAuthCallback() {
         }
         navigate(isInternalPath(redirectTo) ? redirectTo : ROUTES.home, { replace: true });
       } catch (error) {
-        setErrorMessage(getAuthErrorMessage(parseApiError(error)));
+        if (!cancelled) setErrorMessage(getAuthErrorMessage(parseApiError(error)));
       }
     }
 
     completeLogin();
+    return () => {
+      cancelled = true;
+    };
   }, [searchParams, navigate, login, profile.isOnboarded, showToast]);
 
   return { errorMessage };

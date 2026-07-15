@@ -1,11 +1,13 @@
 // 서비스 내부 경로인지 확인한다. 외부 주소로의 open redirect를 막기 위해 "/"로 시작하고
-// "//"나 "://"를 포함하지 않는 값만 허용한다.
+// "//", "://", "\"(브라우저가 프로토콜-상대 경로로 해석할 수 있는 백슬래시)를
+// 포함하지 않는 값만 허용한다.
 export function isInternalPath(value: unknown): value is string {
   return (
     typeof value === 'string' &&
     value.startsWith('/') &&
     !value.startsWith('//') &&
-    !value.includes('://')
+    !value.includes('://') &&
+    !value.includes('\\')
   );
 }
 

@@ -26,6 +26,8 @@ interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
+const REFRESH_TOKEN_PATH = '/v1/auth/token/refresh';
+
 let refreshPromise: Promise<string> | null = null;
 
 // apiClient 자체가 아닌 별도 axios 인스턴스로 호출해, 이 응답 인터셉터가 refresh 요청에는 재귀 적용되지 않게 한다.
@@ -51,8 +53,14 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as RetryableRequestConfig | undefined;
+    const isRefreshRequest = originalRequest?.url?.includes(REFRESH_TOKEN_PATH) ?? false;
 
-    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry &&
+      !isRefreshRequest
+    ) {
       originalRequest._retry = true;
       try {
         const token = await requestNewAccessToken();
