@@ -19,7 +19,7 @@ export function MyPage() {
     refetch: refetchTrackers,
   } = useTrackers();
   const { logout } = useLogout();
-  const { deleteAccount } = useDeleteAccount();
+  const { deleteAccount, isDeleting } = useDeleteAccount();
   const navigate = useNavigate();
 
   const userName = user?.name ?? '';
@@ -118,6 +118,7 @@ export function MyPage() {
             savedCount={interestCount}
             onLogout={logout}
             onDeleteAccount={deleteAccount}
+            isDeleting={isDeleting}
           />
         </>
       )}
