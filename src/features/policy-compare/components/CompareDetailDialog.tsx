@@ -120,7 +120,11 @@ export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogPr
                 className={`${getPolicyCellClass(index)} text-xs text-slate-600 space-y-1.5 leading-relaxed`}
               >
                 {policy.details.length > 0 ? (
-                  policy.details.map((detail) => <p key={detail}>• {detail}</p>)
+                  <ul>
+                    {policy.details.map((detail) => (
+                      <li key={detail}>• {detail}</li>
+                    ))}
+                  </ul>
                 ) : (
                   <p className="text-slate-400">정보 없음</p>
                 )}
