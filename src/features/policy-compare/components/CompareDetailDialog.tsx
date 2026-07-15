@@ -17,7 +17,7 @@ interface CompareDetailDialogProps {
 const COMPARE_ROWS: { label: string; render: (policy: Policy) => string }[] = [
   { label: '카테고리', render: (policy) => policy.category },
   { label: '소속 지역', render: (policy) => policy.region },
-  { label: '주관기관', render: (policy) => policy.organizationName },
+  { label: '주관기관', render: (policy) => policy.organizationName || '정보 없음' },
   { label: '지원 연령', render: (policy) => policy.target },
   { label: '정책 소개', render: (policy) => policy.description },
   { label: '지원내용', render: (policy) => policy.supportContent ?? '정보 없음' },
