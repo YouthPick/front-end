@@ -4,7 +4,9 @@ export interface AuthUser {
   id: string;
   name: string;
   email: string;
-  provider: string;
+  // 로그인에 사용한 소셜 제공자. 콜백 직후에만 알 수 있고, 새로고침 후 세션 복원(/auth/me) 시점에는
+  // 서버가 내려주지 않아 비어 있을 수 있다.
+  provider?: string;
   role: UserRole;
 }
 

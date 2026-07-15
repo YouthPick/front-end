@@ -1,6 +1,6 @@
 import { ArrowLeft, Sparkles } from 'lucide-react';
 
-import type { UserRole } from '@/entities/user';
+import type { OAuthProviderId } from '../api/auth.dto';
 
 // 소셜 채널 공식 브랜드 컬러/규격 — 디자인 토큰 대상이 아닌 각 사 브랜드 가이드 고정값.
 // 카카오: https://developers.kakao.com/docs/latest/ko/kakaologin/design-guide
@@ -55,11 +55,16 @@ function GoogleSymbol() {
 }
 
 interface SocialLoginPanelProps {
-  onSocialLogin: (provider: string, role?: UserRole) => void;
+  onSocialLogin: (provider: OAuthProviderId) => void;
   onBackToHome: () => void;
+  isRedirecting: boolean;
 }
 
-export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPanelProps) {
+export function SocialLoginPanel({
+  onSocialLogin,
+  onBackToHome,
+  isRedirecting,
+}: SocialLoginPanelProps) {
   return (
     <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm text-center space-y-6">
       <div className="space-y-2">
@@ -80,8 +85,9 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
       <div className="space-y-2.5">
         <button
           type="button"
-          onClick={() => onSocialLogin('카카오')}
-          className={`flex w-full items-center justify-center space-x-3 rounded-xl py-3 text-sm font-extrabold hover:brightness-95 transition-all cursor-pointer ${KAKAO_BRAND_CLASSES}`}
+          disabled={isRedirecting}
+          onClick={() => onSocialLogin('kakao')}
+          className={`flex w-full items-center justify-center space-x-3 rounded-xl py-3 text-sm font-extrabold hover:brightness-95 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${KAKAO_BRAND_CLASSES}`}
         >
           <KakaoSymbol />
           <span>카카오 아이디로 로그인</span>
@@ -89,8 +95,9 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
 
         <button
           type="button"
-          onClick={() => onSocialLogin('네이버')}
-          className={`flex w-full items-center justify-center space-x-3 rounded-xl py-3 text-sm font-extrabold hover:brightness-95 transition-all cursor-pointer ${NAVER_BRAND_CLASSES}`}
+          disabled={isRedirecting}
+          onClick={() => onSocialLogin('naver')}
+          className={`flex w-full items-center justify-center space-x-3 rounded-xl py-3 text-sm font-extrabold hover:brightness-95 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${NAVER_BRAND_CLASSES}`}
         >
           <NaverSymbol />
           <span>네이버 아이디로 로그인</span>
@@ -98,8 +105,9 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
 
         <button
           type="button"
-          onClick={() => onSocialLogin('Google')}
-          className={`flex w-full items-center justify-center space-x-3 rounded-xl py-3 text-sm font-extrabold hover:bg-black/5 transition-all cursor-pointer ${GOOGLE_BRAND_CLASSES}`}
+          disabled={isRedirecting}
+          onClick={() => onSocialLogin('google')}
+          className={`flex w-full items-center justify-center space-x-3 rounded-xl py-3 text-sm font-extrabold hover:bg-black/5 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${GOOGLE_BRAND_CLASSES}`}
         >
           <GoogleSymbol />
           <span>Google 아이디로 로그인</span>
@@ -117,7 +125,7 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
         </p>
       </div>
 
-      <div className="flex items-center justify-center space-x-4">
+      <div className="flex items-center justify-center">
         <button
           type="button"
           onClick={onBackToHome}
@@ -125,13 +133,6 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>비회원 홈 화면으로 돌아가기</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => onSocialLogin('데모', 'admin')}
-          className="text-xs text-slate-400 hover:text-slate-600 font-bold underline underline-offset-2"
-        >
-          관리자 데모 로그인
         </button>
       </div>
     </div>

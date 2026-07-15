@@ -49,7 +49,7 @@ export function MyPage() {
             <p className="text-[11px] text-slate-400 truncate">{user?.email}</p>
             <p className="text-[11px] text-slate-400 flex items-center">
               <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 mr-1.5 animate-ping" />
-              <span>{user?.provider} 계정 연동 간편 로그인 사용 중</span>
+              <span>{user?.provider ? `${user.provider} 계정 연동 ` : ''}간편 로그인 사용 중</span>
             </p>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router';
 
 import { HomePage } from '@/pages/home';
 import { LoginPage } from '@/pages/login';
+import { OAuthCallbackPage } from '@/pages/oauth-callback';
 import { SearchPage } from '@/pages/search';
 import { ROUTES } from '@/shared/constants';
 import { AdminLayout } from '@/widgets/admin-layout';
@@ -70,6 +71,7 @@ export const router = createBrowserRouter([
       { path: ROUTES.community, element: <CommunityPage /> },
       { path: ROUTES.communityDetail, element: <CommunityDetailPage /> },
       { path: ROUTES.login, element: <LoginPage /> },
+      { path: ROUTES.oauthCallback, element: <OAuthCallbackPage /> },
       {
         element: <ProtectedRoute requiredRole="admin" />,
         children: [
