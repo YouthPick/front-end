@@ -1,35 +1,37 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useAuthStore } from '@/entities/user';
-import { setAccessToken } from '@/shared/api';
+import { requestNewAccessToken } from '@/shared/api';
 
-import { fetchCurrentUser, refreshAccessToken } from '../api/authApi';
+import { fetchCurrentUser } from '../api/authApi';
 import { mapAuthUserDtoToAuthUser } from '../api/authMapper';
 
 // 앱 시작 시 1회, HttpOnly refresh 쿠키로 세션 복원을 시도한다. provider는 /auth/me에 없어 알 수 없다.
+// AuthBootstrap은 앱 루트에 고정 마운트되어 실질적으로 언마운트되지 않으므로 cleanup은 두지 않고,
+// ranOnceRef로 React StrictMode의 개발 모드 이펙트 이중 실행에도 복원 시도가 정확히 한 번만
+// 일어나도록 막는다 — 그렇지 않으면 1회용으로 회전되는 refresh token이 동시 요청 중 하나 때문에
+// 401로 실패할 수 있다.
 export function useAuthBootstrap() {
   const login = useAuthStore((state) => state.login);
   const setInitializing = useAuthStore((state) => state.setInitializing);
+  const ranOnceRef = useRef(false);
 
   useEffect(() => {
-    let cancelled = false;
+    if (ranOnceRef.current) return;
+    ranOnceRef.current = true;
 
     async function restoreSession() {
       try {
-        const tokenDto = await refreshAccessToken();
-        setAccessToken(tokenDto.accessToken);
+        await requestNewAccessToken();
         const userDto = await fetchCurrentUser();
-        if (!cancelled) login(mapAuthUserDtoToAuthUser(userDto));
+        login(mapAuthUserDtoToAuthUser(userDto));
       } catch {
         // refresh 쿠키가 없거나 만료된 경우: 비로그인 상태로 둔다.
       } finally {
-        if (!cancelled) setInitializing(false);
+        setInitializing(false);
       }
     }
 
     restoreSession();
-    return () => {
-      cancelled = true;
-    };
   }, [login, setInitializing]);
 }

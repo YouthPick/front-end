@@ -31,7 +31,10 @@ const REFRESH_TOKEN_PATH = '/v1/auth/token/refresh';
 let refreshPromise: Promise<string> | null = null;
 
 // apiClient 자체가 아닌 별도 axios 인스턴스로 호출해, 이 응답 인터셉터가 refresh 요청에는 재귀 적용되지 않게 한다.
-function requestNewAccessToken(): Promise<string> {
+// 동시에 여러 곳(예: 401 재시도, 앱 부팅 시 세션 복원)에서 호출돼도 refreshPromise로 단일 요청만
+// 실제로 나가게 한다 — refresh token이 1회용으로 회전되는 백엔드에서 동시 요청 중 하나가 401로
+// 실패하는 것을 방지한다.
+export function requestNewAccessToken(): Promise<string> {
   if (!refreshPromise) {
     refreshPromise = axios
       .post<{ data: { accessToken: string } }>(`${API_BASE_URL}/v1/auth/token/refresh`, null, {
