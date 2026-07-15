@@ -8,6 +8,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '일자리',
     region: '서울특별시',
     tag: 'HIGH',
+    organizationName: '고용노동부',
     description:
       'IT 분야 실무 경험과 교육을 제공하고 취업 연계를 지원하는 고용노동부 주관 사업입니다.',
     target: '만 19~34세',
@@ -35,6 +36,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '주거',
     region: '서울특별시',
     tag: '추천',
+    organizationName: '국토교통부',
     description:
       '서울 및 전국 무주택 청년의 주거비 부담 경감을 위해 실제 납부하는 월세를 지원합니다.',
     target: '만 19~34세',
@@ -62,6 +64,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '교육',
     region: '서울특별시',
     tag: 'HIGH',
+    organizationName: '고용노동부',
     description:
       '디지털, AI, 신기술 핵심 실무 중심 교육을 통해 고소득 기술 취업 역량을 극대화하는 과정입니다.',
     target: '만 19~34세',
@@ -89,6 +92,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '일자리',
     region: '경기도',
     tag: 'NEW',
+    organizationName: '중소벤처기업부',
     description:
       '중소기업 취업 청년의 자산 형성을 지원하여 장기 근속을 유도하고 대기업과의 격차를 완화합니다.',
     target: '만 15~34세',
@@ -116,6 +120,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '주거',
     region: '서울특별시',
     tag: '추천',
+    organizationName: '국토교통부',
     description:
       '주거급여 수급 가구 중 학업이나 취업으로 부모와 타 지역에 거주하는 청년에게 별도로 급여를 지급합니다.',
     target: '만 19~30세',
@@ -143,6 +148,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '교육',
     region: '전국',
     tag: 'NEW',
+    organizationName: '고용노동부',
     description:
       '취업준비생 및 이직 희망 청년이 스스로 직업 능력을 개발하도록 평생교육 배움 비용을 보조합니다.',
     target: '전체',
@@ -171,6 +177,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '복지·문화',
     region: '서울특별시',
     tag: 'HIGH',
+    organizationName: '서울특별시',
     description:
       '서울 거주 미취업 청년들의 안정적인 구직활동과 진로 개척을 돕기 위해 생계 보조 청년 수당을 지급합니다.',
     target: '만 19~34세',
@@ -198,6 +205,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '복지·문화',
     region: '부산광역시',
     tag: '추천',
+    organizationName: '보건복지부',
     description:
       '일하는 청년들이 주거, 취업 등으로 인한 자립 기반을 갖출 수 있도록 정부가 목돈을 함께 마련해 줍니다.',
     target: '만 19~34세',
@@ -225,6 +233,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '복지·문화',
     region: '전국',
     tag: 'NEW',
+    organizationName: '문화체육관광부',
     description:
       '사회에 첫 발을 내딛는 청년들에게 다채로운 문화생활과 연극, 전시, 음악 관람 비용을 전폭적으로 제공합니다.',
     target: '만 19세',
@@ -252,6 +261,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '참여·권리',
     region: '전국',
     tag: '추천',
+    organizationName: '인사혁신처',
     description:
       '중앙 행정 기관의 입법, 사업 진행 등의 부처 행정 실무를 인턴십으로 체험하고 참관할 기회를 제공합니다.',
     target: '만 19~34세',
@@ -279,6 +289,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '일자리',
     region: '전국',
     tag: 'NEW',
+    organizationName: '중소벤처기업부',
     description:
       '예비 창업자 및 창업 3년 이내 청년에게 사업화 자금과 멘토링을 함께 지원하는 사업입니다.',
     target: '만 19~39세',
@@ -306,6 +317,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '복지·문화',
     region: '전국',
     tag: '추천',
+    organizationName: '국토교통부',
     description:
       '월 15회 이상 대중교통을 이용하는 청년에게 지출 금액 일부를 다음 달에 환급해 줍니다.',
     target: '만 19~34세',
@@ -333,6 +345,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '주거',
     region: '경기도',
     tag: 'HIGH',
+    organizationName: '경기도',
     description: '무주택 청년의 전세자금 대출 이자 부담을 낮춰 안정적인 주거 마련을 지원합니다.',
     target: '만 19~39세',
     eligibleStatuses: ['전체'],
@@ -359,6 +372,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '참여·권리',
     region: '전국',
     tag: 'NEW',
+    organizationName: '국무조정실',
     description:
       '청년 정책 기획 단계부터 직접 참여해 의견을 제안하고 정책 모니터링 활동을 수행합니다.',
     target: '만 19~34세',
@@ -386,6 +400,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     category: '일자리',
     region: '전국',
     tag: 'NEW',
+    organizationName: '확인 불가',
     description: '현재 공식 원본을 확인할 수 없습니다. 저장한 기록과 메모는 유지됩니다.',
     target: '전체',
     eligibleStatuses: ['전체'],

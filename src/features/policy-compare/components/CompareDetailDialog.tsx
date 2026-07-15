@@ -17,10 +17,12 @@ interface CompareDetailDialogProps {
 const COMPARE_ROWS: { label: string; render: (policy: Policy) => string }[] = [
   { label: '카테고리', render: (policy) => policy.category },
   { label: '소속 지역', render: (policy) => policy.region },
+  { label: '주관기관', render: (policy) => policy.organizationName },
   { label: '지원 연령', render: (policy) => policy.target },
   { label: '정책 소개', render: (policy) => policy.description },
   { label: '지원내용', render: (policy) => policy.supportContent ?? '정보 없음' },
   { label: '신청자격', render: (policy) => policy.additionalQualification ?? '정보 없음' },
+  { label: '참여제한사항', render: (policy) => policy.participationRestriction ?? '정보 없음' },
 ];
 
 // 정책 칸끼리 옅은 세로선으로 구분한다(첫 칸 제외). 라벨 칸은 구분선 없이 오른쪽 여백만 둔다.
@@ -115,10 +117,14 @@ export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogPr
             {policies.map((policy, index) => (
               <div
                 key={policy.id}
-                className={`${getPolicyCellClass(index)} text-[10px] text-slate-600 space-y-1.5 leading-relaxed`}
+                className={`${getPolicyCellClass(index)} text-xs text-slate-600 leading-relaxed`}
               >
                 {policy.details.length > 0 ? (
-                  policy.details.map((detail) => <p key={detail}>• {detail}</p>)
+                  <ul className="space-y-1.5">
+                    {policy.details.map((detail) => (
+                      <li key={detail}>• {detail}</li>
+                    ))}
+                  </ul>
                 ) : (
                   <p className="text-slate-400">정보 없음</p>
                 )}

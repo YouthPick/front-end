@@ -10,6 +10,7 @@ export interface Policy {
   category: PolicyCategory;
   region: string;
   tag: PolicyTag;
+  organizationName: string;
   description: string;
   target: string;
   eligibleStatuses: string[];
