@@ -117,10 +117,10 @@ export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogPr
             {policies.map((policy, index) => (
               <div
                 key={policy.id}
-                className={`${getPolicyCellClass(index)} text-xs text-slate-600 space-y-1.5 leading-relaxed`}
+                className={`${getPolicyCellClass(index)} text-xs text-slate-600 leading-relaxed`}
               >
                 {policy.details.length > 0 ? (
-                  <ul>
+                  <ul className="space-y-1.5">
                     {policy.details.map((detail) => (
                       <li key={detail}>• {detail}</li>
                     ))}
