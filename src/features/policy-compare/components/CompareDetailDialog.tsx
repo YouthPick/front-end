@@ -13,12 +13,14 @@ interface CompareDetailDialogProps {
   onClose: () => void;
 }
 
-// 텍스트 한 줄로 표현되는 비교 항목. 상세(details)는 리스트라 별도로 렌더한다.
+// 텍스트 한 줄로 표현되는 비교 항목. 기타 안내사항(details)은 리스트라 별도로 렌더한다.
 const COMPARE_ROWS: { label: string; render: (policy: Policy) => string }[] = [
   { label: '카테고리', render: (policy) => policy.category },
   { label: '소속 지역', render: (policy) => policy.region },
   { label: '지원 연령', render: (policy) => policy.target },
   { label: '정책 소개', render: (policy) => policy.description },
+  { label: '지원내용', render: (policy) => policy.supportContent ?? '정보 없음' },
+  { label: '신청자격', render: (policy) => policy.additionalQualification ?? '정보 없음' },
 ];
 
 // 정책 칸끼리 옅은 세로선으로 구분한다(첫 칸 제외). 라벨 칸은 구분선 없이 오른쪽 여백만 둔다.
@@ -105,19 +107,21 @@ export function CompareDetailDialog({ policies, onClose }: CompareDetailDialogPr
             </div>
           ))}
 
-          {/* 상세 혜택 및 요건 (리스트) */}
+          {/* 기타 안내사항 (리스트) */}
           <div className="flex">
             <div className="w-28 shrink-0 whitespace-nowrap pr-4 text-left text-xs font-bold text-slate-500">
-              상세 혜택 및 요건
+              기타 안내사항
             </div>
             {policies.map((policy, index) => (
               <div
                 key={policy.id}
                 className={`${getPolicyCellClass(index)} text-[10px] text-slate-600 space-y-1.5 leading-relaxed`}
               >
-                {policy.details.map((detail) => (
-                  <p key={detail}>• {detail}</p>
-                ))}
+                {policy.details.length > 0 ? (
+                  policy.details.map((detail) => <p key={detail}>• {detail}</p>)
+                ) : (
+                  <p className="text-slate-400">정보 없음</p>
+                )}
               </div>
             ))}
           </div>

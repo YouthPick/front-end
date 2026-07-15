@@ -22,6 +22,14 @@ export interface Policy {
   incomeMax: number | null;
   deadline: string;
   logoType: PolicyLogoType;
+  // 상세 화면에 필드별로 노출하는 구조화된 혜택/신청 정보. 값이 없으면 null.
+  supportContent: string | null;
+  additionalQualification: string | null;
+  applicationMethod: string | null;
+  submissionDocuments: string | null;
+  screeningMethod: string | null;
+  participationRestriction: string | null;
+  // 위 필드로 분류되지 않는 기타 안내사항(자유 텍스트 목록)
   details: string[];
   link: string;
   isSourceMissing: boolean;
