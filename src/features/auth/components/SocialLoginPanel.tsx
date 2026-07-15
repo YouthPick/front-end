@@ -2,9 +2,57 @@ import { ArrowLeft, Sparkles } from 'lucide-react';
 
 import type { UserRole } from '@/entities/user';
 
-// 소셜 채널 공식 브랜드 컬러 — 디자인 토큰 대상이 아닌 외부 브랜드 가이드 고정값.
-const KAKAO_BRAND_CLASSES = 'bg-[#FEE500] text-[#191919]';
+// 소셜 채널 공식 브랜드 컬러/규격 — 디자인 토큰 대상이 아닌 각 사 브랜드 가이드 고정값.
+// 카카오: https://developers.kakao.com/docs/latest/ko/kakaologin/design-guide
+// 구글: https://developers.google.com/identity/branding-guidelines
+const KAKAO_BRAND_CLASSES = 'bg-[#FEE500] text-black/85';
 const NAVER_BRAND_CLASSES = 'bg-[#03C75A] text-white';
+const GOOGLE_BRAND_CLASSES = 'bg-white text-[#1F1F1F] border border-[#747775]';
+
+function KakaoSymbol() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 shrink-0" aria-hidden="true">
+      <path
+        fill="#000000"
+        d="M12 4C6.477 4 2 7.523 2 11.86c0 2.783 1.826 5.234 4.583 6.646-.2.75-.727 2.725-.833 3.148-.13.523.19.516.402.375.166-.11 2.646-1.797 3.72-2.53.7.103 1.42.157 2.128.157 5.523 0 10-3.523 10-7.796C22 7.523 17.523 4 12 4Z"
+      />
+    </svg>
+  );
+}
+
+function NaverSymbol() {
+  return (
+    <span
+      className="flex h-4 w-4 shrink-0 items-center justify-center text-[13px] font-black leading-none text-white"
+      aria-hidden="true"
+    >
+      N
+    </span>
+  );
+}
+
+function GoogleSymbol() {
+  return (
+    <svg viewBox="0 0 48 48" className="h-4 w-4 shrink-0" aria-hidden="true">
+      <path
+        fill="#4285F4"
+        d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"
+      />
+      <path
+        fill="#EA4335"
+        d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"
+      />
+    </svg>
+  );
+}
 
 interface SocialLoginPanelProps {
   onSocialLogin: (provider: string, role?: UserRole) => void;
@@ -33,28 +81,28 @@ export function SocialLoginPanel({ onSocialLogin, onBackToHome }: SocialLoginPan
         <button
           type="button"
           onClick={() => onSocialLogin('카카오')}
-          className={`flex w-full items-center justify-center space-x-3 rounded-2xl py-3 text-xs font-extrabold hover:brightness-95 transition-all cursor-pointer ${KAKAO_BRAND_CLASSES}`}
+          className={`flex w-full items-center justify-center space-x-3 rounded-xl py-3 text-sm font-extrabold hover:brightness-95 transition-all cursor-pointer ${KAKAO_BRAND_CLASSES}`}
         >
-          <span className="text-sm font-black">💬</span>
-          <span>카카오톡으로 3초만에 계속하기</span>
+          <KakaoSymbol />
+          <span>카카오 아이디로 로그인</span>
         </button>
 
         <button
           type="button"
           onClick={() => onSocialLogin('네이버')}
-          className={`flex w-full items-center justify-center space-x-3 rounded-2xl py-3 text-xs font-extrabold hover:brightness-95 transition-all cursor-pointer ${NAVER_BRAND_CLASSES}`}
+          className={`flex w-full items-center justify-center space-x-3 rounded-xl py-3 text-sm font-extrabold hover:brightness-95 transition-all cursor-pointer ${NAVER_BRAND_CLASSES}`}
         >
-          <span className="text-sm font-black">N</span>
-          <span>네이버 아이디로 편리하게 로그인</span>
+          <NaverSymbol />
+          <span>네이버 아이디로 로그인</span>
         </button>
 
         <button
           type="button"
           onClick={() => onSocialLogin('Google')}
-          className="flex w-full items-center justify-center space-x-3 rounded-2xl border border-slate-200 bg-white py-3 text-xs font-extrabold text-slate-700 hover:bg-slate-50 transition-all cursor-pointer shadow-sm"
+          className={`flex w-full items-center justify-center space-x-3 rounded-xl py-3 text-sm font-extrabold hover:bg-black/5 transition-all cursor-pointer ${GOOGLE_BRAND_CLASSES}`}
         >
-          <span className="text-sm font-black">G</span>
-          <span>Google 계정 연동으로 시작하기</span>
+          <GoogleSymbol />
+          <span>Google 아이디로 로그인</span>
         </button>
       </div>
 
