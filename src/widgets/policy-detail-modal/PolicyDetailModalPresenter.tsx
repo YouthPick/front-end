@@ -1,7 +1,54 @@
-import { Calendar, Check, CheckCircle2, HelpCircle, Star, X } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import {
+  Ban,
+  Calendar,
+  Check,
+  CheckCircle2,
+  ClipboardCheck,
+  ClipboardList,
+  FileText,
+  HelpCircle,
+  Info,
+  Star,
+  UserCheck,
+  X,
+} from 'lucide-react';
 import { motion } from 'motion/react';
 
 import { getPolicyCategoryBadgeClasses, type Policy } from '@/entities/policy';
+
+interface PolicyDetailField {
+  key: string;
+  label: string;
+  icon: LucideIcon;
+  value: string | null;
+}
+
+function getPolicyDetailFields(policy: Policy): PolicyDetailField[] {
+  return [
+    { key: 'support', label: '지원내용', icon: CheckCircle2, value: policy.supportContent },
+    {
+      key: 'qualification',
+      label: '신청자격',
+      icon: UserCheck,
+      value: policy.additionalQualification,
+    },
+    { key: 'method', label: '신청방법', icon: ClipboardList, value: policy.applicationMethod },
+    { key: 'documents', label: '제출서류', icon: FileText, value: policy.submissionDocuments },
+    {
+      key: 'screening',
+      label: '심사(선발)방법',
+      icon: ClipboardCheck,
+      value: policy.screeningMethod,
+    },
+    {
+      key: 'restriction',
+      label: '참여제한사항',
+      icon: Ban,
+      value: policy.participationRestriction,
+    },
+  ];
+}
 
 interface PolicyDetailModalPresenterProps {
   policy: Policy;
@@ -22,6 +69,11 @@ export function PolicyDetailModalPresenter({
   onStartTracker,
   onClose,
 }: PolicyDetailModalPresenterProps) {
+  const detailFields = getPolicyDetailFields(policy).filter(
+    (field): field is PolicyDetailField & { value: string } => Boolean(field.value),
+  );
+  const hasAnyDetail = detailFields.length > 0 || policy.details.length > 0;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
       <motion.div
@@ -147,21 +199,41 @@ export function PolicyDetailModalPresenter({
             </div>
           </div>
 
-          {/* Bullet point lists of details */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-bold text-slate-800 flex items-center">
-              <CheckCircle2 className="h-4 w-4 text-primary mr-1" />
-              <span>상세 혜택 및 신청요건</span>
-            </h3>
-            <ul className="space-y-2 text-xs text-slate-600 pl-1 leading-relaxed">
-              {policy.details.map((detail) => (
-                <li key={detail} className="flex items-start">
-                  <span className="mr-1.5 text-primary">•</span>
-                  <span>{detail}</span>
-                </li>
+          {/* Field-by-field benefit/application info sections */}
+          {hasAnyDetail ? (
+            <div className="space-y-4">
+              {detailFields.map((field) => (
+                <div key={field.key} className="space-y-1.5">
+                  <h3 className="text-xs font-bold text-slate-800 flex items-center">
+                    <field.icon className="h-4 w-4 text-primary mr-1 shrink-0" />
+                    <span>{field.label}</span>
+                  </h3>
+                  <p className="text-xs text-slate-600 pl-5 leading-relaxed">{field.value}</p>
+                </div>
               ))}
-            </ul>
-          </div>
+
+              {policy.details.length > 0 && (
+                <div className="space-y-1.5">
+                  <h3 className="text-xs font-bold text-slate-800 flex items-center">
+                    <Info className="h-4 w-4 text-primary mr-1 shrink-0" />
+                    <span>기타 안내사항</span>
+                  </h3>
+                  <ul className="space-y-2 text-xs text-slate-600 pl-5 leading-relaxed">
+                    {policy.details.map((detail) => (
+                      <li key={detail} className="flex items-start">
+                        <span className="mr-1.5 text-primary">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-xs text-slate-400 font-medium">
+              등록된 상세 혜택·신청요건 정보가 없습니다.
+            </p>
+          )}
         </div>
 
         {/* Modal footer actions */}
