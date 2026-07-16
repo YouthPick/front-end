@@ -25,11 +25,6 @@ export async function exchangeOAuthCallback(
   return response.data.data;
 }
 
-export async function refreshAccessToken(): Promise<AccessTokenDto> {
-  const response = await apiClient.post<ApiEnvelope<AccessTokenDto>>('/v1/auth/token/refresh');
-  return response.data.data;
-}
-
 export async function requestLogout(): Promise<void> {
   await apiClient.post('/v1/auth/logout');
 }
