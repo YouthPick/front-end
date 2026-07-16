@@ -48,6 +48,13 @@ function deriveTag(applicationEndDate: string | null): PolicyTag {
   return diffDays >= 0 && diffDays <= DEADLINE_SOON_DAYS ? '마감임박' : 'NEW';
 }
 
+// 원본 URL에 프로토콜이 없는 값(예: 'www.work.go.kr')이 섞여 있다 — 그대로 href에 넣으면
+// 상대경로로 해석돼 우리 페이지로 이동하므로 https를 보정한다. 없으면 ''(Presenter가 버튼 숨김).
+function toExternalLink(url: string | null): string {
+  if (!url) return '';
+  return /^https?:\/\//.test(url) ? url : `https://${url}`;
+}
+
 // 상세의 적용 지역 목록을 카드 지역 라벨과 같은 규칙으로 요약한다: 없음→'전국', 1개→시도명, 여러 개→'첫 시도 외 N'.
 function regionsToLabel(regions: PolicyRegionDto[]): string {
   const provinces = [
@@ -128,7 +135,7 @@ export function mapPolicyDetailToPolicy(dto: PolicyDetailDto): Policy | null {
     screeningMethod: dto.screeningMethod,
     participationRestriction: dto.participationRestriction,
     details: [],
-    link: dto.applicationUrl ?? dto.referenceUrl1 ?? '',
+    link: toExternalLink(dto.applicationUrl ?? dto.referenceUrl1),
     isSourceMissing: false,
   };
 }
