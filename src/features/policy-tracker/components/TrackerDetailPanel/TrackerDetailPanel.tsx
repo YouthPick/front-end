@@ -22,6 +22,7 @@ interface TrackerDetailPanelProps {
   onToggleChecklistItem: (itemId: string) => void;
   onDeleteChecklistItem: (itemId: string) => void;
   onAddChecklistItem: (text: string) => void;
+  onEditChecklistItem: (itemId: string, text: string) => void;
   onSaveMemo: (memo: string) => void;
   onDeleteTracker: () => void;
 }
@@ -34,6 +35,7 @@ export function TrackerDetailPanel({
   onToggleChecklistItem,
   onDeleteChecklistItem,
   onAddChecklistItem,
+  onEditChecklistItem,
   onSaveMemo,
   onDeleteTracker,
 }: TrackerDetailPanelProps) {
@@ -95,9 +97,15 @@ export function TrackerDetailPanel({
             id="tracker-date-input"
             type="date"
             value={tracker.targetDate}
+            max={tracker.policyDeadline || undefined}
             onChange={(e) => onUpdateDate(e.target.value)}
             className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700 outline-none focus:bg-white focus:border-primary"
           />
+          {tracker.policyDeadline && (
+            <p className="text-[10px] text-slate-400">
+              * 정책 신청 마감일({tracker.policyDeadline})을 넘겨 설정할 수 없습니다.
+            </p>
+          )}
         </div>
       </div>
 
@@ -120,6 +128,7 @@ export function TrackerDetailPanel({
         onToggleItem={onToggleChecklistItem}
         onDeleteItem={onDeleteChecklistItem}
         onAddItem={onAddChecklistItem}
+        onEditItem={onEditChecklistItem}
       />
 
       <TrackerMemoEditor key={tracker.policyId} initialMemo={tracker.memo} onSave={onSaveMemo} />
