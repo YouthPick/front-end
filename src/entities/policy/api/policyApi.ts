@@ -31,6 +31,17 @@ export async function fetchPolicies(): Promise<PolicyCardDto[]> {
   return response.data.data;
 }
 
+// 홈 그리드용 서버 페이지네이션 — 페이지를 넘길 때마다 해당 페이지만 받아온다. page는 0-base.
+export async function fetchPolicyCardPage(
+  page: number,
+  size: number,
+): Promise<ApiPageEnvelope<PolicyCardDto>> {
+  const response = await apiClient.get<ApiPageEnvelope<PolicyCardDto>>('/v1/policies', {
+    params: { page, size },
+  });
+  return response.data;
+}
+
 export async function searchPolicies(params: PolicySearchParams): Promise<PolicyCardDto[]> {
   // 백엔드 검색은 keyword/region/category만 받는다. status·age 필터는 아직 미지원(검색 작업에서 연결).
   const response = await apiClient.get<ApiPageEnvelope<PolicyCardDto>>('/v1/policies', {

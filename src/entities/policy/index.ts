@@ -48,6 +48,7 @@ export {
 export {
   policyKeys,
   usePoliciesQuery,
+  usePolicyCardPageQuery,
   usePolicyDetailQuery,
   usePolicySearchQuery,
   useRecentlyViewedPoliciesQuery,

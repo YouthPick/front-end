@@ -3,6 +3,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   fetchPolicies,
   fetchPolicy,
+  fetchPolicyCardPage,
   fetchRecentlyViewedPolicies,
   type PolicySearchParams,
   searchPolicies,
@@ -17,6 +18,7 @@ import {
 export const policyKeys = {
   all: ['policies'] as const,
   list: (params: PolicySearchParams) => ['policies', 'list', params] as const,
+  page: (page: number, size: number) => ['policies', 'page', page, size] as const,
   detail: (policyId: string) => ['policies', 'detail', policyId] as const,
   recentlyViewed: ['policies', 'recently-viewed'] as const,
 };
@@ -25,6 +27,23 @@ export function usePoliciesQuery() {
   return useQuery({
     queryKey: policyKeys.all,
     queryFn: async () => mapPolicyCardsToPolicies(await fetchPolicies()),
+  });
+}
+
+// 홈 그리드 서버 페이지네이션. page는 1-base(UI 기준)로 받아 서버 0-base로 변환한다.
+export function usePolicyCardPageQuery(page: number, size: number) {
+  return useQuery({
+    queryKey: policyKeys.page(page, size),
+    queryFn: async () => {
+      const envelope = await fetchPolicyCardPage(page - 1, size);
+      return {
+        policies: mapPolicyCardsToPolicies(envelope.data),
+        totalPages: envelope.meta.totalPages,
+        totalCount: envelope.meta.totalCount,
+      };
+    },
+    // 페이지 전환 시 이전 페이지를 유지해 스켈레톤 깜빡임을 막는다.
+    placeholderData: keepPreviousData,
   });
 }
 

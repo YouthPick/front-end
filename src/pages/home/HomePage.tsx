@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { type PolicyCategory, usePoliciesQuery, usePolicyDetailStore } from '@/entities/policy';
+import {
+  type PolicyCategory,
+  usePolicyCardPageQuery,
+  usePolicyDetailStore,
+} from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
 import { RecommendationPreview, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
-import { usePagination } from '@/shared/hooks';
 import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import { HeroBanner } from '@/widgets/hero-banner';
 import {
@@ -29,8 +33,10 @@ export function HomePage() {
     isError: isRecommendationsError,
     reload: reloadRecommendations,
   } = useRecommendations();
-  const { data: policies = [], isLoading } = usePoliciesQuery();
-  const { page, pageItems, pageCount, setPage } = usePagination(policies, HOME_POLICY_COUNT);
+  const [page, setPage] = useState(1);
+  const { data: policyPage, isLoading } = usePolicyCardPageQuery(page, HOME_POLICY_COUNT);
+  const pageItems = policyPage?.policies ?? [];
+  const pageCount = policyPage?.totalPages ?? 1;
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
   const navigate = useNavigate();
 
