@@ -7,8 +7,10 @@ export function getPolicyCategoryBadgeClasses(category: string): string {
     case '주거':
       return 'bg-blue-50 text-blue-600 border-blue-100';
     case '교육':
+    case '교육·직업훈련':
       return 'bg-teal-50 text-teal-600 border-teal-100';
     case '복지·문화':
+    case '금융·복지·문화':
       return 'bg-rose-50 text-rose-600 border-rose-100';
     default:
       return 'bg-amber-50 text-amber-600 border-amber-100';

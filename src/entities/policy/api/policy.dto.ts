@@ -3,10 +3,11 @@
 
 // GET /v1/policies 목록 카드 (백엔드 PolicyCardResponse)
 // minAge/maxAge null = 나이 제한 없음, applicationEndDate null = 상시/일정 미정, regionLabel null = 지역 정보 없음.
+// category는 DB nullable — 실데이터에 null 존재. 매퍼가 걸러낸다.
 export interface PolicyCardDto {
   id: number;
   title: string;
-  category: string;
+  category: string | null;
   description: string | null;
   minAge: number | null;
   maxAge: number | null;
@@ -29,7 +30,7 @@ export interface PolicyDetailDto {
   description: string | null;
   supportContent: string | null;
   keywords: string | null;
-  category: string;
+  category: string | null;
   middleCategory: string | null;
   organizationName: string | null;
   minAge: number | null;

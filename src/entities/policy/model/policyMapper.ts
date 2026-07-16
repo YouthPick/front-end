@@ -17,9 +17,9 @@ import { UNRESTRICTED_CONDITION } from './policyConditions';
 const LOGO_TYPE_BY_CATEGORY: Record<PolicyCategory, PolicyLogoType> = {
   일자리: 'job',
   주거: 'home',
-  교육: 'education',
-  복지·문화: 'heart',
-  참여·권리: 'hand',
+  교육·직업훈련: 'education',
+  금융·복지·문화: 'heart',
+  참여·기반: 'hand',
 };
 
 // 마감일이 이 일수 이내로 남으면 '마감임박' 태그를 붙인다.

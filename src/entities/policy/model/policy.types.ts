@@ -1,4 +1,5 @@
-export type PolicyCategory = '일자리' | '주거' | '교육' | '복지·문화' | '참여·권리';
+// 온통청년 대분류(lclsfNm) 실제 값 기준. 구분자만 U+00B7(·)로 정규화 — policyCategories.ts 참고.
+export type PolicyCategory = '일자리' | '주거' | '교육·직업훈련' | '금융·복지·문화' | '참여·기반';
 
 export type PolicyTag = 'HIGH' | '추천' | 'NEW' | '마감임박';
 
