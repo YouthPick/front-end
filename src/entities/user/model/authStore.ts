@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 import { clearAccessToken, subscribeSessionExpired } from '@/shared/api';
 
+import { useProfileStore } from './profileStore';
 import type { AuthUser } from './user.types';
 
 interface AuthStore {
@@ -22,6 +23,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   login: (user) => set({ user, isAuthenticated: true }),
   logout: () => {
     clearAccessToken();
+    // 기기 공용 브라우저에서 다른 사용자가 로그인해도 이전 사용자의 온보딩 상태가 남지 않게 한다.
+    useProfileStore.getState().resetProfile();
     set({ user: null, isAuthenticated: false });
   },
   setInitializing: (isInitializing) => set({ isInitializing }),
