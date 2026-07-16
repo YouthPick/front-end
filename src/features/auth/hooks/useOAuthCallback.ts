@@ -22,10 +22,12 @@ export function useOAuthCallback() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const ranOnceRef = useRef(false);
 
+  // searchParams/navigate/login/profile.isOnboarded/showToast가 바뀌어도 재실행하지 않는다.
+  // code는 1회용이라 재교환하면 실패하므로, ranOnceRef로 최초 마운트 시 정확히 한 번만 실행한다.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 의도적으로 최초 마운트 시 1회만 실행
   useEffect(() => {
     if (ranOnceRef.current) return;
     ranOnceRef.current = true;
-    let cancelled = false;
 
     async function completeLogin() {
       const code = searchParams.get('code');
@@ -33,18 +35,14 @@ export function useOAuthCallback() {
       const { provider, redirectTo } = consumeOAuthSession();
 
       if (!code || !state || !provider) {
-        if (!cancelled) {
-          setErrorMessage('로그인 정보가 올바르지 않습니다. 로그인 화면에서 다시 시도해 주세요.');
-        }
+        setErrorMessage('로그인 정보가 올바르지 않습니다. 로그인 화면에서 다시 시도해 주세요.');
         return;
       }
 
       try {
         const tokenDto = await exchangeOAuthCallback(provider, code, state);
-        if (cancelled) return;
         setAccessToken(tokenDto.accessToken);
         const userDto = await fetchCurrentUser();
-        if (cancelled) return;
 
         const providerLabel = getProviderLabel(provider);
         login(mapAuthUserDtoToAuthUser(userDto, providerLabel));
@@ -59,15 +57,12 @@ export function useOAuthCallback() {
         }
         navigate(isInternalPath(redirectTo) ? redirectTo : ROUTES.home, { replace: true });
       } catch (error) {
-        if (!cancelled) setErrorMessage(getAuthErrorMessage(parseApiError(error)));
+        setErrorMessage(getAuthErrorMessage(parseApiError(error)));
       }
     }
 
     completeLogin();
-    return () => {
-      cancelled = true;
-    };
-  }, [searchParams, navigate, login, profile.isOnboarded, showToast]);
+  }, []);
 
   return { errorMessage };
 }
