@@ -4,23 +4,9 @@ import type {
   PolicyRegionDto,
   RecentlyViewedPolicyDto,
 } from '../api/policy.dto';
-import type {
-  Policy,
-  PolicyCategory,
-  PolicyLogoType,
-  PolicyTag,
-  RecentlyViewedPolicy,
-} from './policy.types';
+import type { Policy, PolicyTag, RecentlyViewedPolicy } from './policy.types';
 import { normalizePolicyCategory } from './policyCategories';
 import { UNRESTRICTED_CONDITION } from './policyConditions';
-
-const LOGO_TYPE_BY_CATEGORY: Record<PolicyCategory, PolicyLogoType> = {
-  일자리: 'job',
-  주거: 'home',
-  교육·직업훈련: 'education',
-  금융·복지·문화: 'heart',
-  참여·기반: 'hand',
-};
 
 // 마감일이 이 일수 이내로 남으면 '마감임박' 태그를 붙인다.
 const DEADLINE_SOON_DAYS = 7;
@@ -65,10 +51,9 @@ function regionsToLabel(regions: PolicyRegionDto[]): string {
   return `${provinces[0]} 외 ${provinces.length - 1}`;
 }
 
-// 카테고리를 식별할 수 없는 DTO는 null을 반환하므로 caller가 걸러낸다.
-export function mapPolicyCardToPolicy(dto: PolicyCardDto): Policy | null {
-  const category = normalizePolicyCategory(dto.category);
-  if (!category) return null;
+// 카테고리를 식별할 수 없는 정책도 숨기지 않고 '기타'로 노출한다 — 서버 페이지당 개수와 화면 개수를 일치시킨다.
+export function mapPolicyCardToPolicy(dto: PolicyCardDto): Policy {
+  const category = normalizePolicyCategory(dto.category) ?? '기타';
 
   return {
     id: String(dto.id),
@@ -88,7 +73,6 @@ export function mapPolicyCardToPolicy(dto: PolicyCardDto): Policy | null {
     specialConditionTags: [],
     incomeMax: null,
     deadline: formatDeadline(dto.applicationEndDate),
-    logoType: LOGO_TYPE_BY_CATEGORY[category],
     supportContent: null,
     additionalQualification: null,
     applicationMethod: null,
@@ -102,13 +86,12 @@ export function mapPolicyCardToPolicy(dto: PolicyCardDto): Policy | null {
 }
 
 export function mapPolicyCardsToPolicies(dtos: PolicyCardDto[]): Policy[] {
-  return dtos.map(mapPolicyCardToPolicy).filter((policy): policy is Policy => policy !== null);
+  return dtos.map(mapPolicyCardToPolicy);
 }
 
 // 상세 응답을 UI Policy로. 카드에 없던 혜택/신청 정보까지 채운다.
-export function mapPolicyDetailToPolicy(dto: PolicyDetailDto): Policy | null {
-  const category = normalizePolicyCategory(dto.category);
-  if (!category) return null;
+export function mapPolicyDetailToPolicy(dto: PolicyDetailDto): Policy {
+  const category = normalizePolicyCategory(dto.category) ?? '기타';
 
   return {
     id: String(dto.id),
@@ -127,7 +110,6 @@ export function mapPolicyDetailToPolicy(dto: PolicyDetailDto): Policy | null {
     specialConditionTags: [],
     incomeMax: dto.incomeMaxAmount,
     deadline: formatDeadline(dto.applicationEndDate),
-    logoType: LOGO_TYPE_BY_CATEGORY[category],
     supportContent: dto.supportContent,
     additionalQualification: dto.additionalQualification,
     applicationMethod: dto.applicationMethod,
@@ -140,15 +122,10 @@ export function mapPolicyDetailToPolicy(dto: PolicyDetailDto): Policy | null {
   };
 }
 
-export function mapRecentlyViewedDtoToModel(
-  dto: RecentlyViewedPolicyDto,
-): RecentlyViewedPolicy | null {
-  const category = normalizePolicyCategory(dto.category);
-  if (!category) return null;
-
+export function mapRecentlyViewedDtoToModel(dto: RecentlyViewedPolicyDto): RecentlyViewedPolicy {
   return {
     id: dto.id,
-    category,
+    category: normalizePolicyCategory(dto.category) ?? '기타',
     title: dto.title,
     viewedDate: dto.date,
   };

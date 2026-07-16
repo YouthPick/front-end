@@ -32,7 +32,6 @@ export {
 export type {
   Policy,
   PolicyCategory,
-  PolicyLogoType,
   PolicyTag,
   RecentlyViewedPolicy,
 } from './model/policy.types';
