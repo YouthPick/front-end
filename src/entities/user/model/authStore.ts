@@ -20,7 +20,16 @@ export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   isAuthenticated: false,
   isInitializing: true,
-  login: (user) => set({ user, isAuthenticated: true }),
+  login: (user) => {
+    // logout 없이 탭/브라우저를 닫은 뒤 같은 기기에서 다른 사용자가 로그인하는 경우를 대비해,
+    // 저장된 프로필의 소유자(userId)가 새로 로그인한 사용자와 다르면 이전 온보딩 상태를 버린다.
+    const profileStore = useProfileStore.getState();
+    if (profileStore.userId !== null && profileStore.userId !== user.id) {
+      profileStore.resetProfile();
+    }
+    useProfileStore.getState().setUserId(user.id);
+    set({ user, isAuthenticated: true });
+  },
   logout: () => {
     clearAccessToken();
     // 기기 공용 브라우저에서 다른 사용자가 로그인해도 이전 사용자의 온보딩 상태가 남지 않게 한다.
