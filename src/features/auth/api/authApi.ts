@@ -38,3 +38,7 @@ export async function fetchCurrentUser(): Promise<AuthUserDto> {
   const response = await apiClient.get<ApiEnvelope<AuthUserDto>>('/v1/auth/me');
   return response.data.data;
 }
+
+export async function requestAccountDeletion(): Promise<void> {
+  await apiClient.delete('/v1/users');
+}

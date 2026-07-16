@@ -8,6 +8,7 @@ interface AccountDangerZoneProps {
   savedCount: number;
   onLogout: () => void;
   onDeleteAccount: () => void;
+  isDeleting: boolean;
 }
 
 export function AccountDangerZone({
@@ -15,6 +16,7 @@ export function AccountDangerZone({
   savedCount,
   onLogout,
   onDeleteAccount,
+  isDeleting,
 }: AccountDangerZoneProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -27,7 +29,8 @@ export function AccountDangerZone({
         <button
           type="button"
           onClick={onLogout}
-          className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 flex items-center space-x-1"
+          disabled={isDeleting}
+          className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 flex items-center space-x-1 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <LogOut className="h-3.5 w-3.5 text-slate-400" />
           <span>로그아웃</span>
@@ -35,7 +38,8 @@ export function AccountDangerZone({
         <button
           type="button"
           onClick={() => setShowDeleteConfirm(true)}
-          className="rounded-xl bg-rose-50 border border-rose-100 px-4 py-2 text-xs font-bold text-rose-600 hover:bg-rose-100/50"
+          disabled={isDeleting}
+          className="rounded-xl bg-rose-50 border border-rose-100 px-4 py-2 text-xs font-bold text-rose-600 hover:bg-rose-100/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           회원 탈퇴 진행
         </button>
@@ -53,12 +57,11 @@ export function AccountDangerZone({
             이 즉각적으로 복구 불가능하게 안전 소멸 처리됩니다.
           </>
         }
-        confirmLabel="확인, 탈퇴 승인"
+        confirmLabel={isDeleting ? '처리 중...' : '확인, 탈퇴 승인'}
         cancelLabel="이전으로 복귀"
-        onConfirm={() => {
-          setShowDeleteConfirm(false);
-          onDeleteAccount();
-        }}
+        confirmDisabled={isDeleting}
+        cancelDisabled={isDeleting}
+        onConfirm={onDeleteAccount}
         onCancel={() => setShowDeleteConfirm(false)}
       />
     </div>
