@@ -1,37 +1,63 @@
-export interface PolicyDto {
-  id: string;
+// 백엔드 공개 정책 API 응답 DTO. 목록(카드)과 상세를 분리해 정의한다.
+// UI model(Policy)로의 변환은 policyMapper가 담당한다.
+
+// GET /v1/policies 목록 카드 (백엔드 PolicyCardResponse)
+// minAge/maxAge null = 나이 제한 없음, applicationEndDate null = 상시/일정 미정, regionLabel null = 지역 정보 없음.
+export interface PolicyCardDto {
+  id: number;
   title: string;
   category: string;
-  region: string;
-  tag: string;
-  organizationName: string;
-  description: string;
-  target: string;
-  eligibleStatuses: string[];
-  // 아래는 온보딩 프로필과의 매칭 채점에 쓰이는 정책 조건. 조건 없음은 필드별로 다르게 표현한다:
-  // ageMin/ageMax/incomeMax는 null, specialConditionTags는 빈 배열, maritalCondition/majorCondition은
-  // UNRESTRICTED_CONDITION('제한없음') 문자열로 나타낸다.
-  ageMin: number | null;
-  ageMax: number | null;
-  maritalCondition: string;
-  majorCondition: string;
-  specialConditionTags: string[];
-  incomeMax: number | null;
-  deadline: string;
-  logoType: string;
-  // 상세 화면에 필드별로 노출하는 구조화된 혜택/신청 정보. 값이 없으면 null.
+  description: string | null;
+  minAge: number | null;
+  maxAge: number | null;
+  applicationEndDate: string | null;
+  regionLabel: string | null;
+}
+
+// 상세 응답의 적용 지역 (백엔드 RegionResponse)
+export interface PolicyRegionDto {
+  regionCode: string;
+  provinceName: string;
+  districtName: string;
+}
+
+// GET /v1/policies/{id} 상세 (백엔드 PolicyDetailResponse)
+export interface PolicyDetailDto {
+  id: number;
+  policyNo: string;
+  title: string;
+  description: string | null;
   supportContent: string | null;
+  keywords: string | null;
+  category: string;
+  middleCategory: string | null;
+  organizationName: string | null;
+  minAge: number | null;
+  maxAge: number | null;
+  incomeConditionCode: string | null;
+  incomeMaxAmount: number | null;
+  incomeEtcContent: string | null;
   additionalQualification: string | null;
+  participationRestriction: string | null;
+  applicationPeriodType: string | null;
+  applicationStartDate: string | null;
+  applicationEndDate: string | null;
+  businessPeriodBegin: string | null;
+  businessPeriodEnd: string | null;
+  businessPeriodEtc: string | null;
+  supportScaleCount: number | null;
+  firstComeFirstServed: boolean;
+  applicationUrl: string | null;
+  referenceUrl1: string | null;
+  referenceUrl2: string | null;
   applicationMethod: string | null;
   submissionDocuments: string | null;
   screeningMethod: string | null;
-  participationRestriction: string | null;
-  // 위 필드로 분류되지 않는 기타 안내사항(자유 텍스트 목록)
-  details: string[];
-  link: string;
-  isSourceMissing?: boolean;
+  viewCount: number;
+  regions: PolicyRegionDto[];
 }
 
+// 최근 본 정책 카드. 회원 전용 실 API(#75) 연동은 이번 범위(#82) 밖 — 목데이터 유지.
 export interface RecentlyViewedPolicyDto {
   id: string;
   category: string;

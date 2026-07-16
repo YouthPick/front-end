@@ -2,32 +2,47 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import {
   fetchPolicies,
+  fetchPolicy,
   fetchRecentlyViewedPolicies,
   type PolicySearchParams,
   searchPolicies,
 } from '../api/policyApi';
 import type { RecentlyViewedPolicy } from './policy.types';
-import { mapPolicyDtosToPolicies, mapRecentlyViewedDtoToModel } from './policyMapper';
+import {
+  mapPolicyCardsToPolicies,
+  mapPolicyDetailToPolicy,
+  mapRecentlyViewedDtoToModel,
+} from './policyMapper';
 
 export const policyKeys = {
   all: ['policies'] as const,
   list: (params: PolicySearchParams) => ['policies', 'list', params] as const,
+  detail: (policyId: string) => ['policies', 'detail', policyId] as const,
   recentlyViewed: ['policies', 'recently-viewed'] as const,
 };
 
 export function usePoliciesQuery() {
   return useQuery({
     queryKey: policyKeys.all,
-    queryFn: async () => mapPolicyDtosToPolicies(await fetchPolicies()),
+    queryFn: async () => mapPolicyCardsToPolicies(await fetchPolicies()),
   });
 }
 
 export function usePolicySearchQuery(params: PolicySearchParams) {
   return useQuery({
     queryKey: policyKeys.list(params),
-    queryFn: async () => mapPolicyDtosToPolicies(await searchPolicies(params)),
+    queryFn: async () => mapPolicyCardsToPolicies(await searchPolicies(params)),
     // 파라미터 변경 시 이전 결과를 유지해 스켈레톤 flash와 '총 0건' 깜빡임을 막는다.
     placeholderData: keepPreviousData,
+  });
+}
+
+// 정책 상세는 목록 카드에 없는 필드(혜택·신청정보 등)를 담고 있어 클릭 시 별도로 조회한다.
+export function usePolicyDetailQuery(policyId: string | null) {
+  return useQuery({
+    queryKey: policyKeys.detail(policyId ?? ''),
+    queryFn: async () => mapPolicyDetailToPolicy(await fetchPolicy(policyId as string)),
+    enabled: policyId != null,
   });
 }
 

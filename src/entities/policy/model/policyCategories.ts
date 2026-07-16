@@ -8,9 +8,9 @@ export const POLICY_CATEGORIES: readonly PolicyCategory[] = [
   '참여·권리',
 ];
 
-// 외부 데이터에 전각 가운뎃점(・)이 섞여 들어오는 사례를 표준 가운뎃점(·)으로 통일한다.
+// 백엔드 category는 온통청년 대분류 원본(예: '복지문화', '참여권리')이라 가운뎃점이 없거나
+// 전각(・)이 섞일 수 있다. 가운뎃점을 무시하고 5개 표준 분류와 매칭한다. 매칭 불가는 null.
 export function normalizePolicyCategory(value: string): PolicyCategory | null {
-  const normalized = value.replace(/・/g, '·');
-  const matched = POLICY_CATEGORIES.find((category) => category === normalized);
-  return matched ?? null;
+  const stripped = value.replace(/[·・]/g, '');
+  return POLICY_CATEGORIES.find((category) => category.replace(/·/g, '') === stripped) ?? null;
 }
