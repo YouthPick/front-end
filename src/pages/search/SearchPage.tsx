@@ -15,7 +15,7 @@ export function SearchPage() {
   const {
     query,
     filters,
-    policies,
+    totalCount,
     page,
     pageItems,
     pageCount,
@@ -48,8 +48,8 @@ export function SearchPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 text-left">
         <div>
           <span className="text-xs text-slate-500 font-semibold">
-            총 <span className="text-primary font-bold">{policies.length}건</span>의 청년 정책이
-            정밀 필터링되었습니다.
+            총 <span className="text-primary font-bold">{totalCount}건</span>의 청년 정책이 정밀
+            필터링되었습니다.
           </span>
         </div>
         <div className="flex items-center space-x-1">
@@ -77,7 +77,7 @@ export function SearchPage() {
 
       {!isLoading &&
         !isError &&
-        (policies.length > 0 ? (
+        (totalCount > 0 ? (
           <>
             <PolicyCardGrid policies={pageItems} />
             <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />

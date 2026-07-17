@@ -49,6 +49,7 @@ export {
   usePoliciesQuery,
   usePolicyCardPageQuery,
   usePolicyDetailQuery,
+  usePolicySearchPageQuery,
   usePolicySearchQuery,
   useRecentlyViewedPoliciesQuery,
 } from './model/policyQueries';

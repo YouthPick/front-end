@@ -4,6 +4,7 @@ import {
   fetchPolicies,
   fetchPolicy,
   fetchPolicyCardPage,
+  fetchPolicySearchPage,
   fetchRecentlyViewedPolicies,
   type PolicySearchParams,
   searchPolicies,
@@ -19,6 +20,8 @@ export const policyKeys = {
   all: ['policies'] as const,
   list: (params: PolicySearchParams) => ['policies', 'list', params] as const,
   page: (page: number, size: number) => ['policies', 'page', page, size] as const,
+  searchPage: (params: PolicySearchParams, page: number, size: number) =>
+    ['policies', 'search-page', params, page, size] as const,
   detail: (policyId: string) => ['policies', 'detail', policyId] as const,
   recentlyViewed: ['policies', 'recently-viewed'] as const,
 };
@@ -27,6 +30,22 @@ export function usePoliciesQuery() {
   return useQuery({
     queryKey: policyKeys.all,
     queryFn: async () => mapPolicyCardsToPolicies(await fetchPolicies()),
+  });
+}
+
+// 검색 화면 서버 페이지네이션 — 필터가 바뀌면 key가 바뀌어 1페이지부터 다시 조회된다. page는 1-base.
+export function usePolicySearchPageQuery(params: PolicySearchParams, page: number, size: number) {
+  return useQuery({
+    queryKey: policyKeys.searchPage(params, page, size),
+    queryFn: async () => {
+      const envelope = await fetchPolicySearchPage(params, page - 1, size);
+      return {
+        policies: mapPolicyCardsToPolicies(envelope.data),
+        totalPages: envelope.meta.totalPages,
+        totalCount: envelope.meta.totalCount,
+      };
+    },
+    placeholderData: keepPreviousData,
   });
 }
 

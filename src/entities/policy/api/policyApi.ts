@@ -56,6 +56,25 @@ export async function searchPolicies(params: PolicySearchParams): Promise<Policy
   return response.data.data;
 }
 
+// 검색 화면 서버 페이지네이션. category는 백엔드가 필터링하고,
+// keyword·region·status·age는 아직 서버 미지원(#36 검색 작업에서 연결) — 파라미터만 미리 보낸다.
+export async function fetchPolicySearchPage(
+  params: PolicySearchParams,
+  page: number,
+  size: number,
+): Promise<ApiPageEnvelope<PolicyCardDto>> {
+  const response = await apiClient.get<ApiPageEnvelope<PolicyCardDto>>('/v1/policies', {
+    params: {
+      keyword: toFilterParam(params.query),
+      region: toFilterParam(params.region),
+      category: toFilterParam(params.category),
+      page,
+      size,
+    },
+  });
+  return response.data;
+}
+
 // 404(P001)면 apiClient가 예외를 던진다 — caller(상세 쿼리)가 에러 상태로 처리한다.
 export async function fetchPolicy(policyId: string): Promise<PolicyDetailDto> {
   const response = await apiClient.get<{ data: PolicyDetailDto }>(`/v1/policies/${policyId}`);
