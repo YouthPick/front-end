@@ -17,7 +17,12 @@ export function useAdminPolicyDetail(
   policyId: string | null,
   onUpdated: (policy: AdminPolicy) => void,
 ) {
-  const { data: regions = [], isLoading: isRegionsLoading } = useRegionsQuery();
+  const {
+    data: regions = [],
+    isLoading: isRegionsLoading,
+    isError: isRegionsError,
+    refetch: refetchRegions,
+  } = useRegionsQuery();
   const { showToast } = useToast();
 
   const updateMutation = useUpdateAdminPolicyMutation();
@@ -73,6 +78,8 @@ export function useAdminPolicyDetail(
   return {
     regions,
     isRegionsLoading,
+    isRegionsError,
+    onRetryRegions: refetchRegions,
     saveChanges,
     isSaving: updateMutation.isPending,
     toggleVisibility,
