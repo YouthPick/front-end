@@ -1,26 +1,7 @@
 import type { UserProfile } from '@/entities/user';
 
+import { EDUCATION_STATUS_OPTIONS, EMPLOYMENT_STATUS_OPTIONS } from '../model/profileOptions';
 import { OptionButtonGrid } from './common/OptionButtonGrid';
-
-const EMPLOYMENT_STATUS_OPTIONS = [
-  '미취업·구직',
-  '재직',
-  '자영업',
-  '프리랜서',
-  '창업·창업준비',
-  '기타',
-];
-
-const EDUCATION_STATUS_OPTIONS = [
-  '고졸 미만',
-  '고교 재학',
-  '고교 졸업',
-  '대학 재학',
-  '대졸 예정',
-  '대학 졸업',
-  '석·박사',
-  '기타',
-];
 
 interface WizardStepStatusProps {
   draft: UserProfile;
@@ -39,14 +20,14 @@ export function WizardStepStatus({ draft, onUpdateDraft }: WizardStepStatusProps
 
       <OptionButtonGrid
         label="현재 취업 고용 상태"
-        options={EMPLOYMENT_STATUS_OPTIONS}
+        options={EMPLOYMENT_STATUS_OPTIONS.map((option) => option.label)}
         isSelected={(option) => draft.employmentStatus === option}
         onSelect={(value) => onUpdateDraft({ employmentStatus: value })}
       />
 
       <OptionButtonGrid
         label="최종 학력 상태"
-        options={EDUCATION_STATUS_OPTIONS}
+        options={EDUCATION_STATUS_OPTIONS.map((option) => option.label)}
         isSelected={(option) => draft.educationStatus === option}
         onSelect={(value) => onUpdateDraft({ educationStatus: value })}
       />

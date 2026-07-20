@@ -1,28 +1,11 @@
 import type { UserProfile } from '@/entities/user';
 
+import {
+  MAJOR_OPTIONS,
+  MARITAL_STATUS_OPTIONS,
+  SPECIAL_CONDITION_OPTIONS,
+} from '../model/profileOptions';
 import { OptionButtonGrid } from './common/OptionButtonGrid';
-
-const MARITAL_STATUS_OPTIONS = ['미혼', '기혼'];
-
-const MAJOR_OPTIONS = [
-  '인문계열',
-  '사회계열',
-  '상경계열',
-  '공학계열',
-  '자연계열',
-  '예체능계열',
-  '기타',
-];
-
-const SPECIAL_CONDITION_OPTIONS = [
-  '여성',
-  '기초생활수급자',
-  '한부모가정',
-  '장애인',
-  '농업인',
-  '군인·제대군인',
-  '지역인재',
-];
 
 interface WizardStepAdditionalProps {
   draft: UserProfile;
@@ -46,21 +29,21 @@ export function WizardStepAdditional({
 
       <OptionButtonGrid
         label="결혼 상태"
-        options={MARITAL_STATUS_OPTIONS}
+        options={MARITAL_STATUS_OPTIONS.map((option) => option.label)}
         isSelected={(option) => draft.maritalStatus === option}
         onSelect={(value) => onUpdateDraft({ maritalStatus: value })}
       />
 
       <OptionButtonGrid
         label="전공 계열"
-        options={MAJOR_OPTIONS}
+        options={MAJOR_OPTIONS.map((option) => option.label)}
         isSelected={(option) => draft.major === option}
         onSelect={(value) => onUpdateDraft({ major: value })}
       />
 
       <OptionButtonGrid
         label="특화 조건 (해당 시 복수 선택)"
-        options={SPECIAL_CONDITION_OPTIONS}
+        options={SPECIAL_CONDITION_OPTIONS.map((option) => option.label)}
         isSelected={(option) => draft.specialConditions.includes(option)}
         onSelect={onToggleSpecialCondition}
       />
