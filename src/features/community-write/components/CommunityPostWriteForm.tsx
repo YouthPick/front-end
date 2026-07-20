@@ -22,6 +22,7 @@ interface CommunityPostWriteFormProps {
   onCancel: () => void;
   isSubmitting: boolean;
   canSubmit: boolean;
+  submitLabel?: string;
 }
 
 export function CommunityPostWriteForm({
@@ -38,6 +39,7 @@ export function CommunityPostWriteForm({
   onCancel,
   isSubmitting,
   canSubmit,
+  submitLabel = '등록하기',
 }: CommunityPostWriteFormProps) {
   const showPolicyAttachment = category !== null && isPolicyAttachableCategory(category);
   return (
@@ -112,7 +114,7 @@ export function CommunityPostWriteForm({
           disabled={!canSubmit || isSubmitting}
           className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white transition-all hover:brightness-105 disabled:opacity-40 disabled:hover:brightness-100"
         >
-          등록하기
+          {submitLabel}
         </button>
       </div>
     </div>

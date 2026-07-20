@@ -1,11 +1,18 @@
-import { Link, Navigate, useParams } from 'react-router';
-
-import { CommunityPostDetail, useCommunityPostQuery } from '@/entities/community-post';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Link, Navigate, useNavigate, useParams } from 'react-router';
+import {
+  CommunityPostDetail,
+  communityPostKeys,
+  deleteCommunityPost,
+  useCommunityPostQuery,
+} from '@/entities/community-post';
 import { usePolicyDetailStore } from '@/entities/policy';
+import { useAuthStore } from '@/entities/user';
 import { CommentListContainer, useCommunityComments } from '@/features/community-comment';
 import { useCommunityLike } from '@/features/community-like';
-import { ROUTES } from '@/shared/constants';
-import { ErrorState, Skeleton } from '@/shared/ui';
+import { buildCommunityEditPath, ROUTES } from '@/shared/constants';
+import { ConfirmDialog, ErrorState, Skeleton, useToast } from '@/shared/ui';
 
 export function CommunityDetailPage() {
   const { postId } = useParams<{ postId: string }>();
@@ -25,7 +32,25 @@ function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps)
   const { data: post, isLoading, isError, refetch } = useCommunityPostQuery(postId);
   const { isLiked, toggleLike } = useCommunityLike();
   const { data: comments } = useCommunityComments(postId);
+  const user = useAuthStore((state) => state.user);
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { showToast } = useToast();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteCommunityPost(postId),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: communityPostKeys.detail(postId) });
+      queryClient.invalidateQueries({ queryKey: communityPostKeys.all });
+      showToast('게시글을 삭제했습니다.', 'success');
+      navigate(ROUTES.community, { replace: true });
+    },
+    onError: () => showToast('게시글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning'),
+  });
+
+  const canManage = post !== undefined && post !== null && user?.id === post.authorId;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in duration-300">
@@ -56,10 +81,24 @@ function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps)
             isLiked={isLiked(post.id)}
             onToggleLike={toggleLike}
             onViewAttachedPolicy={openPolicyDetail}
+            canManage={canManage}
+            onEdit={() => navigate(buildCommunityEditPath(post.id))}
+            onDelete={() => setIsDeleteDialogOpen(true)}
           />
           <CommentListContainer postId={post.id} />
         </>
       )}
+
+      <ConfirmDialog
+        open={isDeleteDialogOpen}
+        title="게시글을 삭제하시겠습니까?"
+        description="삭제한 게시글은 복구할 수 없습니다."
+        confirmLabel="삭제"
+        cancelLabel="취소"
+        onConfirm={() => deleteMutation.mutate()}
+        onCancel={() => setIsDeleteDialogOpen(false)}
+        confirmDisabled={deleteMutation.isPending}
+      />
     </div>
   );
 }

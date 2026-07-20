@@ -10,14 +10,6 @@ export function CommunityWritePage() {
         <h2 className="text-lg font-black text-slate-800">게시글 작성</h2>
       </div>
 
-      <div
-        role="status"
-        aria-live="polite"
-        className="rounded-xl border border-amber-200 bg-amber-50/30 px-4 py-2.5 text-[11px] font-bold text-amber-700"
-      >
-        임시 작성 화면입니다. 추후 에디터 라이브러리 도입 시 UI가 교체될 예정입니다.
-      </div>
-
       <CommunityPostWriteContainer />
     </div>
   );

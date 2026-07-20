@@ -6,6 +6,7 @@ export const ROUTES = {
   community: '/community',
   communityWrite: '/community/write',
   communityDetail: '/community/:postId',
+  communityEdit: '/community/:postId/edit',
   my: '/my',
   myLikedPosts: '/my/liked',
   myPosts: '/my/posts',
@@ -28,4 +29,8 @@ export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES];
 
 export function buildCommunityDetailPath(postId: string): string {
   return ROUTES.communityDetail.replace(':postId', encodeURIComponent(postId));
+}
+
+export function buildCommunityEditPath(postId: string): string {
+  return ROUTES.communityEdit.replace(':postId', encodeURIComponent(postId));
 }

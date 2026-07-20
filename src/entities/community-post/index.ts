@@ -19,8 +19,10 @@ export type {
 export {
   adjustCommunityPostLikeCount,
   createCommunityPost,
+  deleteCommunityPost,
   fetchCommunityPost,
   searchCommunityPosts,
+  updateCommunityPost,
 } from './api/communityPostApi';
 export type {
   AdminAttachment,

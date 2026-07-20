@@ -17,4 +17,5 @@ export interface CommunityPostDto {
   commentCount: number;
   likeCount: number;
   attachedPolicy: AttachedPolicySummaryDto | null;
+  policyId?: string | null;
 }
