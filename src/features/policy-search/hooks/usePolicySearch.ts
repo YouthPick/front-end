@@ -10,7 +10,7 @@ import { useSearchFilters } from './useSearchFilters';
 const SEARCH_PAGE_SIZE = 6;
 
 // 검색 화면 use case: URL 필터 상태 + 서버 페이지네이션 검색 질의를 묶는다.
-// category는 서버가 필터링하고, keyword·region·status·age는 #36 검색 작업에서 서버 연결 예정.
+// keyword·region·category·age는 서버가 필터링한다(#86/#87). status는 서버 미지원으로 보류.
 export function usePolicySearch() {
   const {
     query,
