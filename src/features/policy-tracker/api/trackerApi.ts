@@ -9,7 +9,8 @@ const DEFAULT_TARGET_DATE = '2026-06-30';
 
 let trackers: TrackerItem[] = [
   {
-    policyId: '1',
+    policyId: 'p1',
+    policyDeadline: '2026-06-25',
     status: '준비중',
     targetDate: '2026-06-25',
     checklist: [
@@ -21,7 +22,8 @@ let trackers: TrackerItem[] = [
     memo: '교육 일정과 면접 일정이 겹치는지 확인할 것',
   },
   {
-    policyId: '2',
+    policyId: 'p2',
+    policyDeadline: '2026-07-10',
     status: '관심',
     targetDate: '2026-07-10',
     checklist: [
@@ -31,7 +33,8 @@ let trackers: TrackerItem[] = [
     memo: '월세 이체 내역 3개월분 미리 출력해두기',
   },
   {
-    policyId: '5',
+    policyId: 'p5',
+    policyDeadline: '2026-06-20',
     status: '신청완료',
     targetDate: '2026-06-20',
     checklist: [
@@ -41,7 +44,8 @@ let trackers: TrackerItem[] = [
     memo: '결과 발표는 공식 홈페이지 고시 예정',
   },
   {
-    policyId: '3',
+    policyId: 'p3',
+    policyDeadline: '2026-07-15',
     status: '준비중',
     targetDate: '2026-07-15',
     checklist: [
@@ -51,14 +55,16 @@ let trackers: TrackerItem[] = [
     memo: '개강 전까지 훈련장려금 계좌 개설 완료하기',
   },
   {
-    policyId: '6',
+    policyId: 'p6',
+    policyDeadline: '2026-08-01',
     status: '관심',
     targetDate: '2026-08-01',
     checklist: [{ id: 'c11', text: '희망 강좌 목록 조사', completed: false }],
     memo: '',
   },
   {
-    policyId: '7',
+    policyId: 'p7',
+    policyDeadline: '2026-06-30',
     status: '신청완료',
     targetDate: '2026-06-30',
     checklist: [
@@ -68,7 +74,8 @@ let trackers: TrackerItem[] = [
     memo: '매달 말일까지 보고서 제출 필수',
   },
   {
-    policyId: '8',
+    policyId: 'p8',
+    policyDeadline: '2026-05-15',
     status: '종료',
     targetDate: '2026-05-15',
     checklist: [
@@ -78,7 +85,8 @@ let trackers: TrackerItem[] = [
     memo: '3년 만기 예정일 캘린더에 등록해두기',
   },
   {
-    policyId: '9',
+    policyId: 'p9',
+    policyDeadline: '2026-07-01',
     status: '준비중',
     targetDate: '2026-07-01',
     checklist: [{ id: 'c16', text: '만 19세 확인 서류 준비', completed: false }],
@@ -127,6 +135,7 @@ export async function startTracker(
 
   const newTracker: TrackerItem = {
     policyId,
+    policyDeadline: toIsoDateString(deadline) ?? '',
     status: '준비중',
     targetDate: toIsoDateString(deadline) ?? DEFAULT_TARGET_DATE,
     checklist: [
@@ -164,6 +173,18 @@ export async function addChecklistItem(
   return updateTracker(policyId, (tracker) => ({
     ...tracker,
     checklist: [...tracker.checklist, { id: generateId(), text, completed: false }],
+  }));
+}
+
+export async function editChecklistItem(
+  policyId: string,
+  itemId: string,
+  text: string,
+): Promise<TrackerItem | null> {
+  await delay(MOCK_API_DELAY_MS);
+  return updateTracker(policyId, (tracker) => ({
+    ...tracker,
+    checklist: tracker.checklist.map((item) => (item.id === itemId ? { ...item, text } : item)),
   }));
 }
 

@@ -26,7 +26,7 @@ export function TrackerMemoEditor({ initialMemo, onSave }: TrackerMemoEditorProp
         placeholder="이곳에 이 정책 준비시 고려할 일정을 메모해 두세요. 예: 서류 제출시 담당 사무소 유선확인 필요 등"
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
-        className="w-full rounded-2xl border border-slate-200 p-3 text-xs focus:outline-none focus:border-primary bg-slate-50/20"
+        className="w-full resize-none overflow-y-auto rounded-2xl border border-slate-200 p-3 text-xs focus:outline-none focus:border-primary bg-slate-50/20"
       />
       <div className="flex items-center justify-between text-[11px] text-slate-400">
         <span>

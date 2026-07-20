@@ -264,14 +264,16 @@ export function PolicyDetailModalPresenter({
             <span>신청관리 시작</span>
           </button>
 
-          <a
-            href={policy.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center space-x-1 rounded-xl bg-primary py-2.5 text-xs font-bold text-white transition-all hover:brightness-105"
-          >
-            <span>공식 공고 ↗</span>
-          </a>
+          {policy.link && (
+            <a
+              href={policy.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center space-x-1 rounded-xl bg-primary py-2.5 text-xs font-bold text-white transition-all hover:brightness-105"
+            >
+              <span>공식 공고 ↗</span>
+            </a>
+          )}
         </div>
       </motion.div>
     </div>

@@ -6,6 +6,7 @@ import {
   addChecklistItem,
   deleteChecklistItem,
   deleteTracker,
+  editChecklistItem,
   saveTrackerMemo,
   toggleChecklistItem,
   updateTrackerDate,
@@ -64,6 +65,18 @@ export function useTrackerMutations() {
     },
   });
 
+  const editChecklistMutation = useMutation({
+    mutationFn: ({ policyId, itemId, text }: { policyId: string; itemId: string; text: string }) =>
+      editChecklistItem(policyId, itemId, text),
+    onSuccess: () => {
+      invalidateTrackers();
+      showToast('체크리스트 내용이 수정되었습니다.', 'success');
+    },
+    onError: () => {
+      showToast('체크리스트 수정에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning');
+    },
+  });
+
   const deleteChecklistMutation = useMutation({
     mutationFn: ({ policyId, itemId }: { policyId: string; itemId: string }) =>
       deleteChecklistItem(policyId, itemId),
@@ -97,6 +110,8 @@ export function useTrackerMutations() {
       dateMutation.mutate({ policyId, targetDate }),
     addChecklistItem: (policyId: string, text: string) =>
       addChecklistMutation.mutate({ policyId, text }),
+    editChecklistItem: (policyId: string, itemId: string, text: string) =>
+      editChecklistMutation.mutate({ policyId, itemId, text }),
     toggleChecklistItem: (policyId: string, itemId: string) =>
       toggleChecklistMutation.mutate({ policyId, itemId }),
     deleteChecklistItem: (policyId: string, itemId: string) =>

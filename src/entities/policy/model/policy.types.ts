@@ -1,8 +1,14 @@
-export type PolicyCategory = '일자리' | '주거' | '교육' | '복지·문화' | '참여·권리';
+// 온통청년 대분류(lclsfNm) 실제 값 기준. 구분자만 U+00B7(·)로 정규화 — policyCategories.ts 참고.
+// '기타'는 원본 category가 없거나(null) 식별 불가일 때의 표시용 fallback — 필터 목록(POLICY_CATEGORIES)에는 없다.
+export type PolicyCategory =
+  | '일자리'
+  | '주거'
+  | '교육·직업훈련'
+  | '금융·복지·문화'
+  | '참여·기반'
+  | '기타';
 
 export type PolicyTag = 'HIGH' | '추천' | 'NEW' | '마감임박';
-
-export type PolicyLogoType = 'job' | 'home' | 'education' | 'heart' | 'hand';
 
 export interface Policy {
   id: string;
@@ -22,7 +28,6 @@ export interface Policy {
   specialConditionTags: string[];
   incomeMax: number | null;
   deadline: string;
-  logoType: PolicyLogoType;
   // 상세 화면에 필드별로 노출하는 구조화된 혜택/신청 정보. 값이 없으면 null.
   supportContent: string | null;
   additionalQualification: string | null;
