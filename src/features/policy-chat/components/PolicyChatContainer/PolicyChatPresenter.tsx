@@ -72,7 +72,7 @@ export function PolicyChatPresenter({
 
   return (
     <section
-      className="rounded-2xl border border-slate-100 bg-slate-50/50 p-4 space-y-3"
+      className="flex flex-col rounded-2xl border border-slate-100 bg-slate-50/50 p-4 space-y-3 lg:h-full"
       aria-labelledby="policy-chat-heading"
     >
       <div className="flex items-center justify-between gap-3">
@@ -99,7 +99,7 @@ export function PolicyChatPresenter({
       </div>
 
       {status === 'error' && errorMessage ? (
-        <div className="rounded-2xl border border-rose-100 bg-rose-50/50 p-4 text-center space-y-2">
+        <div className="rounded-2xl border border-rose-100 bg-rose-50/50 p-4 text-center space-y-2 lg:flex lg:flex-1 lg:flex-col lg:items-center lg:justify-center">
           <AlertCircle className="mx-auto h-5 w-5 text-rose-500" aria-hidden="true" />
           <p className="text-xs font-bold text-rose-700">{errorMessage}</p>
           <button
@@ -114,7 +114,7 @@ export function PolicyChatPresenter({
         <div
           ref={listRef}
           onScroll={handleScroll}
-          className="max-h-64 overflow-y-auto rounded-2xl border border-slate-100 bg-white p-3 space-y-3"
+          className="max-h-64 overflow-y-auto rounded-2xl border border-slate-100 bg-white p-3 space-y-3 lg:max-h-none lg:min-h-0 lg:flex-1"
           aria-live="polite"
           aria-busy={status === 'loading'}
         >
@@ -214,7 +214,7 @@ export function PolicyChatPresenter({
 
 export function PolicyChatDisabledState() {
   return (
-    <section className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-center space-y-2">
+    <section className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-center space-y-2 lg:h-full">
       <LockKeyhole className="mx-auto h-5 w-5 text-slate-400" aria-hidden="true" />
       <p className="text-xs font-bold text-slate-600">이 정책은 지금 채팅을 이용할 수 없습니다</p>
       <p className="text-[10px] leading-relaxed text-slate-400">
@@ -226,7 +226,7 @@ export function PolicyChatDisabledState() {
 
 export function PolicyChatLoginRequiredState() {
   return (
-    <section className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-center space-y-2">
+    <section className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-center space-y-2 lg:h-full">
       <LockKeyhole className="mx-auto h-5 w-5 text-slate-400" aria-hidden="true" />
       <p className="text-xs font-bold text-slate-600">로그인 후 정책 대화를 이용할 수 있습니다</p>
       <p className="text-[10px] leading-relaxed text-slate-400">

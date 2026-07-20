@@ -81,11 +81,11 @@ export function PolicyDetailModalPresenter({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl"
+        className="flex w-full max-w-lg flex-col rounded-3xl bg-white p-6 shadow-2xl lg:h-[82vh] lg:max-w-4xl xl:max-w-5xl"
         id="policy-detail-modal"
       >
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+        <div className="flex shrink-0 items-start justify-between border-b border-slate-100 pb-4">
           <div className="text-left space-y-1.5">
             <div className="flex items-center space-x-2">
               <span
@@ -109,138 +109,143 @@ export function PolicyDetailModalPresenter({
           </button>
         </div>
 
-        {/* Content body */}
-        <div className="mt-4 space-y-5 text-left max-h-[58vh] overflow-y-auto pr-1">
-          {/* Recommendation basis panel */}
-          {isRecommendation && (
-            <div className="rounded-2xl border border-primary/25 bg-primary/[0.01] p-4.5 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-extrabold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                  회원님과의 조건 분석 결과
-                </span>
-                <span className="text-[9px] font-bold text-slate-400">
-                  데이터 신뢰도: <span className="text-emerald-500 font-extrabold">MEDIUM</span>
-                </span>
-              </div>
-              <div className="flex items-baseline space-x-1.5">
-                <span className="text-2xl font-black text-primary">{recommendationScore}점</span>
-                <span className="text-xs text-slate-400 font-bold">유사도 매칭</span>
-              </div>
+        {/* Content body: 상세 정보 컬럼 + 정책 채팅 컬럼(lg 이상에서 나란히, 그 아래는 세로로 쌓임) */}
+        <div className="mt-4 min-h-0 lg:flex lg:flex-1 lg:gap-5">
+          <div className="space-y-5 text-left max-h-[58vh] overflow-y-auto pr-1 lg:h-full lg:max-h-none lg:min-h-0 lg:min-w-0 lg:flex-1">
+            {/* Recommendation basis panel */}
+            {isRecommendation && (
+              <div className="rounded-2xl border border-primary/25 bg-primary/[0.01] p-4.5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                    회원님과의 조건 분석 결과
+                  </span>
+                  <span className="text-[9px] font-bold text-slate-400">
+                    데이터 신뢰도: <span className="text-emerald-500 font-extrabold">MEDIUM</span>
+                  </span>
+                </div>
+                <div className="flex items-baseline space-x-1.5">
+                  <span className="text-2xl font-black text-primary">{recommendationScore}점</span>
+                  <span className="text-xs text-slate-400 font-bold">유사도 매칭</span>
+                </div>
 
-              <div className="space-y-2 pt-2 border-t border-slate-100">
-                <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
-                  일치하는 조건
-                </span>
-                <div className="space-y-1.5 text-xs text-slate-600 font-medium">
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center text-emerald-600">
-                      <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
-                      거주지역이 서울특별시로 일치합니다.
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-bold">+25</span>
+                <div className="space-y-2 pt-2 border-t border-slate-100">
+                  <span className="block text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+                    일치하는 조건
+                  </span>
+                  <div className="space-y-1.5 text-xs text-slate-600 font-medium">
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center text-emerald-600">
+                        <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
+                        거주지역이 서울특별시로 일치합니다.
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-bold">+25</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center text-emerald-600">
+                        <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
+                        관심 분야인 {policy.category} 정책입니다.
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-bold">+20</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center text-emerald-600">
+                        <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
+                        취업상태 조건이 일치합니다.
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-bold">+15</span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center text-emerald-600">
-                      <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
-                      관심 분야인 {policy.category} 정책입니다.
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-bold">+20</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center text-emerald-600">
-                      <Check className="h-3.5 w-3.5 mr-1 shrink-0" />
-                      취업상태 조건이 일치합니다.
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-bold">+15</span>
+                </div>
+
+                <div className="space-y-1.5 pt-1">
+                  <span className="block text-[9px] font-extrabold text-amber-500 uppercase tracking-wider">
+                    확인 필요 사항
+                  </span>
+                  <div className="space-y-1 text-[11px] text-slate-500 leading-normal">
+                    <p className="flex items-start">
+                      <span className="text-amber-500 mr-1">•</span>
+                      세부 소득요건은 공식 공고에서 자격 자가진단으로 확인해야 합니다.
+                    </p>
+                    <p className="flex items-start">
+                      <span className="text-amber-500 mr-1">•</span>
+                      추가 신청자격 및 제출서류 조건이 변경되었는지 공고에서 대조하세요.
+                    </p>
                   </div>
                 </div>
               </div>
+            )}
 
-              <div className="space-y-1.5 pt-1">
-                <span className="block text-[9px] font-extrabold text-amber-500 uppercase tracking-wider">
-                  확인 필요 사항
-                </span>
-                <div className="space-y-1 text-[11px] text-slate-500 leading-normal">
-                  <p className="flex items-start">
-                    <span className="text-amber-500 mr-1">•</span>
-                    세부 소득요건은 공식 공고에서 자격 자가진단으로 확인해야 합니다.
-                  </p>
-                  <p className="flex items-start">
-                    <span className="text-amber-500 mr-1">•</span>
-                    추가 신청자격 및 제출서류 조건이 변경되었는지 공고에서 대조하세요.
-                  </p>
+            {/* Intro description */}
+            <div className="rounded-2xl bg-slate-50/50 border border-slate-100 p-4">
+              <p className="text-xs leading-relaxed text-slate-600 font-medium">
+                {policy.description}
+              </p>
+            </div>
+
+            {/* Quick info row */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-center space-x-3 rounded-2xl bg-primary/5 p-3 border border-primary/10">
+                <Calendar className="h-5 w-5 text-primary" />
+                <div>
+                  <span className="block text-[10px] text-slate-400">신청 마감</span>
+                  <span className="text-xs font-bold text-slate-700">{policy.deadline}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3 rounded-2xl bg-blue-50/50 p-3 border border-blue-50">
+                <HelpCircle className="h-5 w-5 text-blue-600" />
+                <div>
+                  <span className="block text-[10px] text-slate-400">지원 대상</span>
+                  <span className="text-xs font-bold text-slate-700">{policy.target}</span>
                 </div>
               </div>
             </div>
-          )}
 
-          {/* Intro description */}
-          <div className="rounded-2xl bg-slate-50/50 border border-slate-100 p-4">
-            <p className="text-xs leading-relaxed text-slate-600 font-medium">
-              {policy.description}
-            </p>
+            {/* Field-by-field benefit/application info sections */}
+            {hasAnyDetail ? (
+              <div className="space-y-4">
+                {detailFields.map((field) => (
+                  <div key={field.key} className="space-y-1.5">
+                    <h3 className="text-xs font-bold text-slate-800 flex items-center">
+                      <field.icon className="h-4 w-4 text-primary mr-1 shrink-0" />
+                      <span>{field.label}</span>
+                    </h3>
+                    <p className="text-xs text-slate-600 pl-5 leading-relaxed">{field.value}</p>
+                  </div>
+                ))}
+
+                {policy.details.length > 0 && (
+                  <div className="space-y-1.5">
+                    <h3 className="text-xs font-bold text-slate-800 flex items-center">
+                      <Info className="h-4 w-4 text-primary mr-1 shrink-0" />
+                      <span>기타 안내사항</span>
+                    </h3>
+                    <ul className="space-y-2 text-xs text-slate-600 pl-5 leading-relaxed">
+                      {policy.details.map((detail) => (
+                        <li key={detail} className="flex items-start">
+                          <span className="mr-1.5 text-primary">•</span>
+                          <span>{detail}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-400 font-medium">
+                등록된 상세 혜택·신청요건 정보가 없습니다.
+              </p>
+            )}
           </div>
 
-          <PolicyChatContainer policyId={policy.id} />
-
-          {/* Quick info row */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex items-center space-x-3 rounded-2xl bg-primary/5 p-3 border border-primary/10">
-              <Calendar className="h-5 w-5 text-primary" />
-              <div>
-                <span className="block text-[10px] text-slate-400">신청 마감</span>
-                <span className="text-xs font-bold text-slate-700">{policy.deadline}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-3 rounded-2xl bg-blue-50/50 p-3 border border-blue-50">
-              <HelpCircle className="h-5 w-5 text-blue-600" />
-              <div>
-                <span className="block text-[10px] text-slate-400">지원 대상</span>
-                <span className="text-xs font-bold text-slate-700">{policy.target}</span>
-              </div>
-            </div>
+          {/* 정책 채팅: lg 이상에서는 오른쪽에 모달 높이만큼 길게, 그 아래에서는 상세 정보 다음에 표시 */}
+          <div className="mt-5 lg:mt-0 lg:h-full lg:min-h-0 lg:w-96 lg:shrink-0">
+            <PolicyChatContainer policyId={policy.id} />
           </div>
-
-          {/* Field-by-field benefit/application info sections */}
-          {hasAnyDetail ? (
-            <div className="space-y-4">
-              {detailFields.map((field) => (
-                <div key={field.key} className="space-y-1.5">
-                  <h3 className="text-xs font-bold text-slate-800 flex items-center">
-                    <field.icon className="h-4 w-4 text-primary mr-1 shrink-0" />
-                    <span>{field.label}</span>
-                  </h3>
-                  <p className="text-xs text-slate-600 pl-5 leading-relaxed">{field.value}</p>
-                </div>
-              ))}
-
-              {policy.details.length > 0 && (
-                <div className="space-y-1.5">
-                  <h3 className="text-xs font-bold text-slate-800 flex items-center">
-                    <Info className="h-4 w-4 text-primary mr-1 shrink-0" />
-                    <span>기타 안내사항</span>
-                  </h3>
-                  <ul className="space-y-2 text-xs text-slate-600 pl-5 leading-relaxed">
-                    {policy.details.map((detail) => (
-                      <li key={detail} className="flex items-start">
-                        <span className="mr-1.5 text-primary">•</span>
-                        <span>{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          ) : (
-            <p className="text-xs text-slate-400 font-medium">
-              등록된 상세 혜택·신청요건 정보가 없습니다.
-            </p>
-          )}
         </div>
 
         {/* Modal footer actions */}
-        <div className="mt-6 flex items-center gap-2 border-t border-slate-100 pt-4">
+        <div className="mt-6 flex shrink-0 items-center gap-2 border-t border-slate-100 pt-4">
           <button
             type="button"
             onClick={() => onToggleSave(policy.id)}
