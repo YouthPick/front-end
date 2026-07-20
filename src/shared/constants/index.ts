@@ -4,4 +4,4 @@ export { CURRENT_YEAR } from './date';
 export { DEFAULT_ADMIN_PAGE_SIZE } from './pagination';
 export { REGIONS } from './regions';
 export type { RoutePath } from './routes';
-export { buildCommunityDetailPath, ROUTES } from './routes';
+export { buildCommunityDetailPath, buildCommunityEditPath, ROUTES } from './routes';

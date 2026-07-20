@@ -1,10 +1,20 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const apiClientMock = vi.hoisted(() => ({ get: vi.fn(), post: vi.fn() }));
+const apiClientMock = vi.hoisted(() => ({
+  delete: vi.fn(),
+  get: vi.fn(),
+  patch: vi.fn(),
+  post: vi.fn(),
+}));
 
 vi.mock('@/shared/api', () => ({ apiClient: apiClientMock }));
 
-import { createCommunityPost, fetchCommunityPost } from './communityPostApi';
+import {
+  createCommunityPost,
+  deleteCommunityPost,
+  fetchCommunityPost,
+  updateCommunityPost,
+} from './communityPostApi';
 
 describe('커뮤니티 게시글 생성 API', () => {
   beforeEach(() => {
@@ -71,5 +81,47 @@ describe('커뮤니티 게시글 생성 API', () => {
       authorName: '정원',
     });
     expect(apiClientMock.get).toHaveBeenCalledWith('/v1/posts/91');
+  });
+
+  it('게시글 수정 시 이미지 첨부 URL까지 실제 PATCH API에 전달한다', async () => {
+    apiClientMock.patch.mockResolvedValue({
+      data: {
+        data: {
+          id: 91,
+          authorId: 3,
+          authorNickname: '정원',
+          policyId: null,
+          policyTitle: null,
+          category: 'FREE',
+          title: '수정된 글',
+          content: '<img src="/api/v1/files/2e5c2c2f-22c7-43a9-8d2c-8902a29b2b21">',
+          viewCount: 0,
+          createdAt: '2026-07-20T10:00:00',
+        },
+      },
+    });
+
+    await updateCommunityPost('91', {
+      title: '수정된 글',
+      category: '잡담',
+      content: '<img src="/api/v1/files/2e5c2c2f-22c7-43a9-8d2c-8902a29b2b21">',
+      authorId: '3',
+      authorName: '정원',
+    });
+
+    expect(apiClientMock.patch).toHaveBeenCalledWith('/v1/posts/91', {
+      category: 'FREE',
+      title: '수정된 글',
+      content: '<img src="/api/v1/files/2e5c2c2f-22c7-43a9-8d2c-8902a29b2b21">',
+      policyId: null,
+      attachmentUrls: ['/api/v1/files/2e5c2c2f-22c7-43a9-8d2c-8902a29b2b21'],
+    });
+  });
+
+  it('게시글 삭제 시 실제 DELETE API를 호출한다', async () => {
+    apiClientMock.delete.mockResolvedValue({ data: { data: null } });
+
+    await expect(deleteCommunityPost('91')).resolves.toBeUndefined();
+    expect(apiClientMock.delete).toHaveBeenCalledWith('/v1/posts/91');
   });
 });

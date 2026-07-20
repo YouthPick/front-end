@@ -1,23 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { type CommunityPostCategory, isPolicyAttachableCategory } from '@/entities/community-post';
-import type { Policy } from '@/entities/policy';
+import {
+  type CommunityPostCategory,
+  isPolicyAttachableCategory,
+  useCommunityPostQuery,
+} from '@/entities/community-post';
+import { type Policy, usePolicyDetailQuery } from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
 import { buildCommunityDetailPath, ROUTES } from '@/shared/constants';
 
 import { useCreateCommunityPost } from '../hooks/useCreateCommunityPost';
 import { CommunityPostWriteForm } from './CommunityPostWriteForm';
 
-export function CommunityPostWriteContainer() {
+interface CommunityPostWriteContainerProps {
+  postId?: string;
+}
+
+export function CommunityPostWriteContainer({ postId }: CommunityPostWriteContainerProps) {
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
-  const { createPost, isSubmitting } = useCreateCommunityPost();
+  const { createPost, updatePost, isSubmitting } = useCreateCommunityPost();
+  const { data: existingPost } = useCommunityPostQuery(postId ?? '', {
+    enabled: postId !== undefined,
+  });
+  const { data: existingPolicy } = usePolicyDetailQuery(existingPost?.policyId ?? null);
 
   const [category, setCategory] = useState<CommunityPostCategory | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [attachedPolicy, setAttachedPolicy] = useState<Policy | null>(null);
+
+  useEffect(() => {
+    if (!existingPost) return;
+    setCategory(existingPost.category);
+    setTitle(existingPost.title);
+    setContent(existingPost.content);
+  }, [existingPost]);
+
+  useEffect(() => {
+    if (existingPolicy) setAttachedPolicy(existingPolicy);
+  }, [existingPolicy]);
 
   const isContentEmpty = (html: string) => {
     const clean = html.replace(/<[^>]*>/g, '').trim();
@@ -25,8 +48,13 @@ export function CommunityPostWriteContainer() {
     return clean === '' && !hasImage;
   };
 
+  const needsPolicy = category !== null && isPolicyAttachableCategory(category);
   const canSubmit =
-    category !== null && title.trim() !== '' && content.trim() !== '' && !isContentEmpty(content);
+    category !== null &&
+    title.trim() !== '' &&
+    content.trim() !== '' &&
+    !isContentEmpty(content) &&
+    (!needsPolicy || attachedPolicy !== null);
 
   const handleCategoryChange = (next: CommunityPostCategory) => {
     setCategory(next);
@@ -37,25 +65,27 @@ export function CommunityPostWriteContainer() {
 
   const handleSubmit = async () => {
     if (!user || category === null || !canSubmit) return;
+    const params = {
+      title: title.trim(),
+      category,
+      content: content.trim(),
+      authorId: user.id,
+      authorName: user.name,
+      attachedPolicy: attachedPolicy
+        ? {
+            id: attachedPolicy.id,
+            title: attachedPolicy.title,
+            category: attachedPolicy.category,
+            deadline: attachedPolicy.deadline,
+          }
+        : null,
+    };
+
     try {
-      const created = await createPost({
-        title: title.trim(),
-        category,
-        content: content.trim(),
-        authorId: user.id,
-        authorName: user.name,
-        attachedPolicy: attachedPolicy
-          ? {
-              id: attachedPolicy.id,
-              title: attachedPolicy.title,
-              category: attachedPolicy.category,
-              deadline: attachedPolicy.deadline,
-            }
-          : null,
-      });
-      navigate(buildCommunityDetailPath(created.id));
+      const saved = postId ? await updatePost({ postId, params }) : await createPost(params);
+      navigate(buildCommunityDetailPath(saved.id));
     } catch {
-      // 실패 토스트는 useCreateCommunityPost의 onError가 표시한다.
+      // 실패 토스트는 mutation hook이 표시한다.
     }
   };
 
@@ -71,9 +101,10 @@ export function CommunityPostWriteContainer() {
       onAttachPolicy={setAttachedPolicy}
       onRemoveAttachedPolicy={() => setAttachedPolicy(null)}
       onSubmit={handleSubmit}
-      onCancel={() => navigate(ROUTES.community)}
+      onCancel={() => navigate(postId ? buildCommunityDetailPath(postId) : ROUTES.community)}
       isSubmitting={isSubmitting}
       canSubmit={canSubmit}
+      submitLabel={postId ? '수정하기' : '등록하기'}
     />
   );
 }

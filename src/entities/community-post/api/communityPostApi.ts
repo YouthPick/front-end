@@ -142,7 +142,27 @@ function mapPostDetailToCommunityPost(dto: PostDetailResponseDto): CommunityPost
     commentCount: 0,
     likeCount: 0,
     attachedPolicy: null,
+    policyId: dto.policyId === null ? null : String(dto.policyId),
   };
+}
+
+export async function updateCommunityPost(
+  postId: string,
+  params: CreateCommunityPostParams,
+): Promise<CommunityPostDto> {
+  const response = await apiClient.patch<{ data: PostDetailResponseDto }>(`/v1/posts/${postId}`, {
+    category: categoryToApi[params.category],
+    title: params.title,
+    content: params.content,
+    policyId: params.attachedPolicy ? Number(params.attachedPolicy.id) : null,
+    attachmentUrls: extractUploadedImageUrls(params.content),
+  });
+
+  return mapPostDetailToCommunityPost(response.data.data);
+}
+
+export async function deleteCommunityPost(postId: string): Promise<void> {
+  await apiClient.delete(`/v1/posts/${postId}`);
 }
 
 export async function createCommunityPost(

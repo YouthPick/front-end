@@ -21,4 +21,5 @@ export interface CommunityPost {
   commentCount: number;
   likeCount: number;
   attachedPolicy: AttachedPolicySummary | null;
+  policyId?: string | null;
 }

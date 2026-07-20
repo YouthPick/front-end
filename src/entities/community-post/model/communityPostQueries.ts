@@ -26,12 +26,13 @@ export function useCommunityPostSearchQuery(
   });
 }
 
-export function useCommunityPostQuery(postId: string) {
+export function useCommunityPostQuery(postId: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: communityPostKeys.detail(postId),
     queryFn: async () => {
       const dto = await fetchCommunityPost(postId);
       return dto ? mapCommunityPostDtoToPost(dto) : null;
     },
+    enabled: options?.enabled,
   });
 }
