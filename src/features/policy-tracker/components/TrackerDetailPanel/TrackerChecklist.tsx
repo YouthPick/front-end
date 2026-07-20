@@ -7,10 +7,10 @@ const CHECKLIST_MESSAGE_MAX_LENGTH = 500;
 
 interface TrackerChecklistProps {
   checklist: TrackerChecklistItem[];
-  onToggleItem: (itemId: string) => void;
-  onDeleteItem: (itemId: string) => void;
+  onToggleItem: (itemId: number) => void;
+  onDeleteItem: (itemId: number) => void;
   onAddItem: (text: string) => void;
-  onEditItem: (itemId: string, text: string) => void;
+  onEditItem: (itemId: number, text: string) => void;
 }
 
 export function TrackerChecklist({
@@ -22,7 +22,7 @@ export function TrackerChecklist({
 }: TrackerChecklistProps) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newItemText, setNewItemText] = useState('');
-  const [editingItemId, setEditingItemId] = useState<string | null>(null);
+  const [editingItemId, setEditingItemId] = useState<number | null>(null);
   const [editingText, setEditingText] = useState('');
 
   const handleAdd = () => {

@@ -1,34 +1,106 @@
-import { MOCK_API_DELAY_MS } from '@/shared/constants';
-import { delay, generateId, toIsoDateString } from '@/shared/utils';
+import { type ApiPageEnvelope, apiClient } from '@/shared/api';
 
-import type { TrackerItem, TrackerStatus } from '../types/tracker.types';
+import type { TrackerChecklistItem, TrackerItem, TrackerStatus } from '../types/tracker.types';
 
-// 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
+export type ApplicationStatusDto = 'INTERESTED' | 'PREPARING' | 'APPLIED' | 'COMPLETED';
 
-const DEFAULT_TARGET_DATE = '2026-06-30';
-
-let trackers: TrackerItem[] = [];
-
-function cloneTracker(tracker: TrackerItem): TrackerItem {
-  return { ...tracker, checklist: tracker.checklist.map((item) => ({ ...item })) };
+export interface PolicyApplicationDto {
+  id: number;
+  policyId: number;
+  policyTitle: string;
+  policyCategory: string;
+  policyApplicationEndDate: string | null;
+  status: ApplicationStatusDto;
+  memo: string | null;
+  endAt: string | null;
+  createdAt: string;
 }
 
-function updateTracker(
-  policyId: string,
-  updater: (tracker: TrackerItem) => TrackerItem,
-): TrackerItem | null {
-  let updated: TrackerItem | null = null;
-  trackers = trackers.map((tracker) => {
-    if (tracker.policyId !== policyId) return tracker;
-    updated = updater(tracker);
-    return updated;
-  });
-  return updated ? cloneTracker(updated) : null;
+export interface PolicyApplicationChecklistDto {
+  id: number;
+  policyApplicationId: number;
+  message: string;
+  checked: boolean;
+  createdAt: string;
+}
+
+const trackerStatusByApiStatus: Record<ApplicationStatusDto, TrackerStatus> = {
+  INTERESTED: '관심',
+  PREPARING: '준비중',
+  APPLIED: '신청완료',
+  COMPLETED: '종료',
+};
+
+const apiStatusByTrackerStatus: Record<TrackerStatus, ApplicationStatusDto> = {
+  관심: 'INTERESTED',
+  준비중: 'PREPARING',
+  신청완료: 'APPLIED',
+  종료: 'COMPLETED',
+};
+
+function toDateInputValue(value: string | null): string {
+  return value?.slice(0, 10) ?? '';
+}
+
+function toIsoDateTime(value: string): string | undefined {
+  if (!value) return undefined;
+  return `${value}T00:00:00`;
+}
+
+function toPolicyId(policyId: string): number {
+  const parsedPolicyId = Number(policyId);
+  if (!Number.isSafeInteger(parsedPolicyId)) {
+    throw new Error('유효하지 않은 정책 ID입니다.');
+  }
+  return parsedPolicyId;
+}
+
+export function toApiApplicationStatus(status: TrackerStatus): ApplicationStatusDto {
+  return apiStatusByTrackerStatus[status];
+}
+
+export function mapPolicyApplicationToTracker(
+  application: PolicyApplicationDto,
+  checklist: PolicyApplicationChecklistDto[],
+): TrackerItem {
+  return {
+    applicationId: application.id,
+    policyId: String(application.policyId),
+    policyDeadline: toDateInputValue(application.policyApplicationEndDate),
+    status: trackerStatusByApiStatus[application.status],
+    targetDate: toDateInputValue(application.endAt),
+    checklist: checklist.map((item) => ({
+      id: item.id,
+      text: item.message,
+      completed: item.checked,
+    })),
+    memo: application.memo ?? '',
+  };
+}
+
+async function fetchChecklist(applicationId: number): Promise<PolicyApplicationChecklistDto[]> {
+  const response = await apiClient.get<ApiPageEnvelope<PolicyApplicationChecklistDto>>(
+    `/v1/policy-application-checklists/application/${applicationId}`,
+    { params: { size: 100 } },
+  );
+  return response.data.data;
 }
 
 export async function fetchTrackers(): Promise<TrackerItem[]> {
-  await delay(MOCK_API_DELAY_MS);
-  return trackers.map(cloneTracker);
+  const response = await apiClient.get<ApiPageEnvelope<PolicyApplicationDto>>(
+    '/v1/policy-applications',
+    {
+      params: { size: 100 },
+    },
+  );
+  const applications = response.data.data;
+  const checklists = await Promise.all(
+    applications.map((application) => fetchChecklist(application.id)),
+  );
+
+  return applications.map((application, index) =>
+    mapPolicyApplicationToTracker(application, checklists[index] ?? []),
+  );
 }
 
 export interface StartTrackerResult {
@@ -36,103 +108,76 @@ export interface StartTrackerResult {
   created: boolean;
 }
 
-// 이미 등록된 정책이면 기존 항목을 반환한다(중복 생성 방지).
 export async function startTracker(
   policyId: string,
   deadline: string,
 ): Promise<StartTrackerResult> {
-  await delay(MOCK_API_DELAY_MS);
-
-  const existing = trackers.find((tracker) => tracker.policyId === policyId);
+  const existing = (await fetchTrackers()).find((tracker) => tracker.policyId === policyId);
   if (existing) {
-    return { tracker: cloneTracker(existing), created: false };
+    return { tracker: existing, created: false };
   }
 
-  const newTracker: TrackerItem = {
-    policyId,
-    policyDeadline: toIsoDateString(deadline) ?? '',
-    status: '준비중',
-    targetDate: toIsoDateString(deadline) ?? DEFAULT_TARGET_DATE,
-    checklist: [
-      { id: generateId(), text: '기본 제출 서류 취합', completed: false },
-      { id: generateId(), text: '공고 상세 자격요건 검증', completed: false },
-      { id: generateId(), text: '지원서 및 온라인 제출 완료', completed: false },
-    ],
+  const response = await apiClient.post<{ data: PolicyApplicationDto }>('/v1/policy-applications', {
+    policyId: toPolicyId(policyId),
+    status: 'PREPARING',
     memo: '',
+    endAt: toIsoDateTime(deadline),
+  });
+
+  return {
+    tracker: mapPolicyApplicationToTracker(response.data.data, []),
+    created: true,
   };
-  trackers = [...trackers, newTracker];
-  return { tracker: cloneTracker(newTracker), created: true };
 }
 
 export async function updateTrackerStatus(
-  policyId: string,
+  applicationId: number,
   status: TrackerStatus,
-): Promise<TrackerItem | null> {
-  await delay(MOCK_API_DELAY_MS);
-  return updateTracker(policyId, (tracker) => ({ ...tracker, status }));
+): Promise<TrackerItem> {
+  const response = await apiClient.patch<{ data: PolicyApplicationDto }>(
+    `/v1/policy-applications/${applicationId}/status`,
+    undefined,
+    { params: { status: toApiApplicationStatus(status) } },
+  );
+  return mapPolicyApplicationToTracker(response.data.data, await fetchChecklist(applicationId));
 }
 
 export async function updateTrackerDate(
-  policyId: string,
+  applicationId: number,
   targetDate: string,
-): Promise<TrackerItem | null> {
-  await delay(MOCK_API_DELAY_MS);
-  return updateTracker(policyId, (tracker) => ({ ...tracker, targetDate }));
+): Promise<TrackerItem> {
+  const response = await apiClient.patch<{ data: PolicyApplicationDto }>(
+    `/v1/policy-applications/${applicationId}/end-at`,
+    undefined,
+    { params: { endAt: toIsoDateTime(targetDate) } },
+  );
+  return mapPolicyApplicationToTracker(response.data.data, await fetchChecklist(applicationId));
 }
 
-export async function addChecklistItem(
-  policyId: string,
-  text: string,
-): Promise<TrackerItem | null> {
-  await delay(MOCK_API_DELAY_MS);
-  return updateTracker(policyId, (tracker) => ({
-    ...tracker,
-    checklist: [...tracker.checklist, { id: generateId(), text, completed: false }],
-  }));
+export async function addChecklistItem(applicationId: number, text: string): Promise<void> {
+  await apiClient.post('/v1/policy-application-checklists', { applicationId, message: text });
 }
 
-export async function editChecklistItem(
-  policyId: string,
-  itemId: string,
-  text: string,
-): Promise<TrackerItem | null> {
-  await delay(MOCK_API_DELAY_MS);
-  return updateTracker(policyId, (tracker) => ({
-    ...tracker,
-    checklist: tracker.checklist.map((item) => (item.id === itemId ? { ...item, text } : item)),
-  }));
+export async function editChecklistItem(itemId: number, text: string): Promise<void> {
+  await apiClient.patch(`/v1/policy-application-checklists/${itemId}`, { message: text });
 }
 
-export async function toggleChecklistItem(
-  policyId: string,
-  itemId: string,
-): Promise<TrackerItem | null> {
-  await delay(MOCK_API_DELAY_MS);
-  return updateTracker(policyId, (tracker) => ({
-    ...tracker,
-    checklist: tracker.checklist.map((item) =>
-      item.id === itemId ? { ...item, completed: !item.completed } : item,
-    ),
-  }));
+export async function toggleChecklistItem(item: TrackerChecklistItem): Promise<void> {
+  await apiClient.patch(
+    `/v1/policy-application-checklists/${item.id}/${item.completed ? 'uncheck' : 'check'}`,
+  );
 }
 
-export async function deleteChecklistItem(
-  policyId: string,
-  itemId: string,
-): Promise<TrackerItem | null> {
-  await delay(MOCK_API_DELAY_MS);
-  return updateTracker(policyId, (tracker) => ({
-    ...tracker,
-    checklist: tracker.checklist.filter((item) => item.id !== itemId),
-  }));
+export async function deleteChecklistItem(itemId: number): Promise<void> {
+  await apiClient.delete(`/v1/policy-application-checklists/${itemId}`);
 }
 
-export async function saveTrackerMemo(policyId: string, memo: string): Promise<TrackerItem | null> {
-  await delay(MOCK_API_DELAY_MS);
-  return updateTracker(policyId, (tracker) => ({ ...tracker, memo }));
+export async function saveTrackerMemo(applicationId: number, memo: string): Promise<void> {
+  await apiClient.patch(`/v1/policy-applications/${applicationId}/memo`, undefined, {
+    params: { memo },
+  });
 }
 
-export async function deleteTracker(policyId: string): Promise<void> {
-  await delay(MOCK_API_DELAY_MS);
-  trackers = trackers.filter((tracker) => tracker.policyId !== policyId);
+export async function deleteTracker(applicationId: number): Promise<void> {
+  await apiClient.delete(`/v1/policy-applications/${applicationId}`);
 }

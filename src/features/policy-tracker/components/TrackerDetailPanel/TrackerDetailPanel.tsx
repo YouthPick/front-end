@@ -19,10 +19,10 @@ interface TrackerDetailPanelProps {
   policy: Policy;
   onUpdateStatus: (status: TrackerStatus) => void;
   onUpdateDate: (targetDate: string) => void;
-  onToggleChecklistItem: (itemId: string) => void;
-  onDeleteChecklistItem: (itemId: string) => void;
+  onToggleChecklistItem: (itemId: number) => void;
+  onDeleteChecklistItem: (itemId: number) => void;
   onAddChecklistItem: (text: string) => void;
-  onEditChecklistItem: (itemId: string, text: string) => void;
+  onEditChecklistItem: (itemId: number, text: string) => void;
   onSaveMemo: (memo: string) => void;
   onDeleteTracker: () => void;
 }

@@ -12,7 +12,7 @@ import {
   updateTrackerDate,
   updateTrackerStatus,
 } from '../api/trackerApi';
-import type { TrackerItem, TrackerStatus } from '../types/tracker.types';
+import type { TrackerChecklistItem, TrackerStatus } from '../types/tracker.types';
 import { trackerKeys } from './useTrackers';
 
 export function useTrackerMutations() {
@@ -24,8 +24,8 @@ export function useTrackerMutations() {
   };
 
   const statusMutation = useMutation({
-    mutationFn: ({ policyId, status }: { policyId: string; status: TrackerStatus }) =>
-      updateTrackerStatus(policyId, status),
+    mutationFn: ({ applicationId, status }: { applicationId: number; status: TrackerStatus }) =>
+      updateTrackerStatus(applicationId, status),
     onSuccess: (_, { status }) => {
       invalidateTrackers();
       showToast(`신청관리 상태가 [${status}]로 갱신되었습니다.`, 'success');
@@ -33,8 +33,8 @@ export function useTrackerMutations() {
   });
 
   const dateMutation = useMutation({
-    mutationFn: ({ policyId, targetDate }: { policyId: string; targetDate: string }) =>
-      updateTrackerDate(policyId, targetDate),
+    mutationFn: ({ applicationId, targetDate }: { applicationId: number; targetDate: string }) =>
+      updateTrackerDate(applicationId, targetDate),
     onSuccess: (_, { targetDate }) => {
       invalidateTrackers();
       showToast(`제출 마감일정이 변경되었습니다: ${targetDate}`, 'info');
@@ -42,8 +42,8 @@ export function useTrackerMutations() {
   });
 
   const addChecklistMutation = useMutation({
-    mutationFn: ({ policyId, text }: { policyId: string; text: string }) =>
-      addChecklistItem(policyId, text),
+    mutationFn: ({ applicationId, text }: { applicationId: number; text: string }) =>
+      addChecklistItem(applicationId, text),
     onSuccess: () => {
       invalidateTrackers();
       showToast('체크리스트 준비 일감이 추가되었습니다.', 'success');
@@ -51,23 +51,13 @@ export function useTrackerMutations() {
   });
 
   const toggleChecklistMutation = useMutation({
-    mutationFn: ({ policyId, itemId }: { policyId: string; itemId: string }) =>
-      toggleChecklistItem(policyId, itemId),
-    // 토글은 고빈도 조작이라 전체 invalidate 대신 반환된 항목만 캐시에 반영한다.
-    onSuccess: (updated) => {
-      if (!updated) {
-        invalidateTrackers();
-        return;
-      }
-      queryClient.setQueryData<TrackerItem[]>(trackerKeys.all, (prev) =>
-        prev?.map((tracker) => (tracker.policyId === updated.policyId ? updated : tracker)),
-      );
-    },
+    mutationFn: (item: TrackerChecklistItem) => toggleChecklistItem(item),
+    onSuccess: invalidateTrackers,
   });
 
   const editChecklistMutation = useMutation({
-    mutationFn: ({ policyId, itemId, text }: { policyId: string; itemId: string; text: string }) =>
-      editChecklistItem(policyId, itemId, text),
+    mutationFn: ({ itemId, text }: { itemId: number; text: string }) =>
+      editChecklistItem(itemId, text),
     onSuccess: () => {
       invalidateTrackers();
       showToast('체크리스트 내용이 수정되었습니다.', 'success');
@@ -78,8 +68,7 @@ export function useTrackerMutations() {
   });
 
   const deleteChecklistMutation = useMutation({
-    mutationFn: ({ policyId, itemId }: { policyId: string; itemId: string }) =>
-      deleteChecklistItem(policyId, itemId),
+    mutationFn: (itemId: number) => deleteChecklistItem(itemId),
     onSuccess: () => {
       invalidateTrackers();
       showToast('준비할 일감이 삭제되었습니다.', 'info');
@@ -87,37 +76,35 @@ export function useTrackerMutations() {
   });
 
   const memoMutation = useMutation({
-    mutationFn: ({ policyId, memo }: { policyId: string; memo: string }) =>
-      saveTrackerMemo(policyId, memo),
+    mutationFn: ({ applicationId, memo }: { applicationId: number; memo: string }) =>
+      saveTrackerMemo(applicationId, memo),
     onSuccess: () => {
       invalidateTrackers();
-      showToast('📝 개인 기록 메모가 성공적으로 저장되었습니다.', 'success');
+      showToast('개인 기록 메모가 저장되었습니다.', 'success');
     },
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (policyId: string) => deleteTracker(policyId),
+    mutationFn: (applicationId: number) => deleteTracker(applicationId),
     onSuccess: () => {
       invalidateTrackers();
-      showToast('신청관리 목록에서 안전하게 삭제되었습니다.', 'warning');
+      showToast('신청관리 목록에서 삭제되었습니다.', 'warning');
     },
   });
 
   return {
-    updateStatus: (policyId: string, status: TrackerStatus) =>
-      statusMutation.mutate({ policyId, status }),
-    updateDate: (policyId: string, targetDate: string) =>
-      dateMutation.mutate({ policyId, targetDate }),
-    addChecklistItem: (policyId: string, text: string) =>
-      addChecklistMutation.mutate({ policyId, text }),
-    editChecklistItem: (policyId: string, itemId: string, text: string) =>
-      editChecklistMutation.mutate({ policyId, itemId, text }),
-    toggleChecklistItem: (policyId: string, itemId: string) =>
-      toggleChecklistMutation.mutate({ policyId, itemId }),
-    deleteChecklistItem: (policyId: string, itemId: string) =>
-      deleteChecklistMutation.mutate({ policyId, itemId }),
-    saveMemo: (policyId: string, memo: string) => memoMutation.mutate({ policyId, memo }),
-    deleteTracker: (policyId: string, options?: { onSuccess?: () => void }) =>
-      deleteMutation.mutate(policyId, { onSuccess: options?.onSuccess }),
+    updateStatus: (applicationId: number, status: TrackerStatus) =>
+      statusMutation.mutate({ applicationId, status }),
+    updateDate: (applicationId: number, targetDate: string) =>
+      dateMutation.mutate({ applicationId, targetDate }),
+    addChecklistItem: (applicationId: number, text: string) =>
+      addChecklistMutation.mutate({ applicationId, text }),
+    editChecklistItem: (itemId: number, text: string) =>
+      editChecklistMutation.mutate({ itemId, text }),
+    toggleChecklistItem: (item: TrackerChecklistItem) => toggleChecklistMutation.mutate(item),
+    deleteChecklistItem: (itemId: number) => deleteChecklistMutation.mutate(itemId),
+    saveMemo: (applicationId: number, memo: string) => memoMutation.mutate({ applicationId, memo }),
+    deleteTracker: (applicationId: number, options?: { onSuccess?: () => void }) =>
+      deleteMutation.mutate(applicationId, { onSuccess: options?.onSuccess }),
   };
 }

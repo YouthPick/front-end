@@ -1,21 +1,51 @@
-import { MOCK_API_DELAY_MS } from '@/shared/constants';
-import { delay } from '@/shared/utils';
+import { type ApiPageEnvelope, apiClient } from '@/shared/api';
 
-// 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
+interface PolicyApplicationBookmarkDto {
+  id: number;
+  policyId: number;
+  status: 'INTERESTED' | 'PREPARING' | 'APPLIED' | 'COMPLETED';
+}
 
-let savedPolicyIds: string[] = [];
+async function fetchApplications(): Promise<PolicyApplicationBookmarkDto[]> {
+  const response = await apiClient.get<ApiPageEnvelope<PolicyApplicationBookmarkDto>>(
+    '/v1/policy-applications',
+    { params: { size: 100 } },
+  );
+  return response.data.data;
+}
 
 export async function fetchBookmarkedPolicyIds(): Promise<string[]> {
-  await delay(MOCK_API_DELAY_MS);
-  return [...savedPolicyIds];
+  const applications = await fetchApplications();
+  return applications
+    .filter((application) => application.status === 'INTERESTED')
+    .map((application) => String(application.policyId));
 }
 
 export async function toggleBookmark(policyId: string): Promise<{ saved: boolean }> {
-  await delay(MOCK_API_DELAY_MS);
-  if (savedPolicyIds.includes(policyId)) {
-    savedPolicyIds = savedPolicyIds.filter((id) => id !== policyId);
+  const numericPolicyId = Number(policyId);
+  if (!Number.isSafeInteger(numericPolicyId)) {
+    throw new Error('유효하지 않은 정책 ID입니다.');
+  }
+
+  const applications = await fetchApplications();
+  const existing = applications.find((application) => application.policyId === numericPolicyId);
+
+  if (existing?.status === 'INTERESTED') {
+    await apiClient.delete(`/v1/policy-applications/${existing.id}`);
     return { saved: false };
   }
-  savedPolicyIds = [...savedPolicyIds, policyId];
+
+  if (existing) {
+    await apiClient.patch(`/v1/policy-applications/${existing.id}/status`, undefined, {
+      params: { status: 'INTERESTED' },
+    });
+    return { saved: true };
+  }
+
+  await apiClient.post('/v1/policy-applications', {
+    policyId: numericPolicyId,
+    status: 'INTERESTED',
+    memo: '',
+  });
   return { saved: true };
 }
