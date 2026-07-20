@@ -14,7 +14,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 2,
     likeCount: 21,
     attachedPolicy: {
-      id: 'p2',
+      id: '2',
       title: '청년 월세 한시 특별지원',
       category: '주거',
       deadline: '2025.06.30',
@@ -33,7 +33,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 1,
     likeCount: 45,
     attachedPolicy: {
-      id: 'p3',
+      id: '3',
       title: 'K-디지털 트레이닝 (국비지원)',
       category: '교육',
       deadline: '2025.07.15',
@@ -64,7 +64,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 0,
     likeCount: 9,
     attachedPolicy: {
-      id: 'p4',
+      id: '4',
       title: '청년내일채움공제',
       category: '일자리',
       deadline: '2025.08.31',
@@ -83,7 +83,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 3,
     likeCount: 38,
     attachedPolicy: {
-      id: 'p7',
+      id: '7',
       title: '서울시 청년수당',
       category: '복지·문화',
       deadline: '2025.09.30',
@@ -115,7 +115,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 4,
     likeCount: 27,
     attachedPolicy: {
-      id: 'p11',
+      id: '11',
       title: '청년 창업 지원금',
       category: '일자리',
       deadline: '2025.08.20',
@@ -133,7 +133,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 1,
     likeCount: 12,
     attachedPolicy: {
-      id: 'p12',
+      id: '12',
       title: '청년 대중교통비 지원 (K-패스)',
       category: '복지·문화',
       deadline: '2025.12.31',
@@ -152,7 +152,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 2,
     likeCount: 19,
     attachedPolicy: {
-      id: 'p13',
+      id: '13',
       title: '청년 전세자금 대출 이자 지원',
       category: '주거',
       deadline: '2025.09.30',
@@ -184,7 +184,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 1,
     likeCount: 22,
     attachedPolicy: {
-      id: 'p14',
+      id: '14',
       title: '청년 정책참여단 모집',
       category: '참여·권리',
       deadline: '2025.07.31',
@@ -202,7 +202,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 0,
     likeCount: 8,
     attachedPolicy: {
-      id: 'p6',
+      id: '6',
       title: '국민내일배움카드',
       category: '교육',
       deadline: '2025.12.31',
@@ -221,7 +221,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 2,
     likeCount: 31,
     attachedPolicy: {
-      id: 'p2',
+      id: '2',
       title: '청년 월세 한시 특별지원',
       category: '주거',
       deadline: '2025.06.30',
@@ -254,7 +254,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 5,
     likeCount: 52,
     attachedPolicy: {
-      id: 'p7',
+      id: '7',
       title: '서울시 청년수당',
       category: '복지·문화',
       deadline: '2025.09.30',
@@ -272,7 +272,7 @@ export const MOCK_COMMUNITY_POST_DTOS: CommunityPostDto[] = [
     commentCount: 3,
     likeCount: 44,
     attachedPolicy: {
-      id: 'p8',
+      id: '8',
       title: '청년내일저축계좌',
       category: '복지·문화',
       deadline: '2025.10.15',
