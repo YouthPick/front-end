@@ -12,8 +12,8 @@ export interface PolicySearchParams {
   age?: string;
 }
 
-// ponytail: 첫 페이지 N건만 받아 클라이언트가 카드 그리드를 페이지네이션한다.
-// 서버 페이지네이션 연결은 검색 화면 작업에서 처리한다.
+// ponytail: 최신 LIST_PAGE_SIZE건만 받는 '요약 전체 목록'. 현재 소비자는 추천(useRecommendations)과
+// 비교함 독(#90에서 교체 예정)뿐이다. 전량 채점이 필요해지면 백엔드 추천 API로 이관한다.
 const LIST_PAGE_SIZE = 100;
 
 const DEFAULT_FILTER = '전체';
@@ -25,10 +25,7 @@ function toFilterParam(value: string | undefined): string | undefined {
 }
 
 export async function fetchPolicies(): Promise<PolicyCardDto[]> {
-  const response = await apiClient.get<ApiPageEnvelope<PolicyCardDto>>('/v1/policies', {
-    params: { page: 0, size: LIST_PAGE_SIZE },
-  });
-  return response.data.data;
+  return (await fetchPolicyCardPage(0, LIST_PAGE_SIZE)).data;
 }
 
 // 홈 그리드용 서버 페이지네이션 — 페이지를 넘길 때마다 해당 페이지만 받아온다. page는 0-base.

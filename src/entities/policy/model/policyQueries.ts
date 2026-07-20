@@ -1,5 +1,8 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
+import type { ApiPageEnvelope } from '@/shared/api';
+
+import type { PolicyCardDto } from '../api/policy.dto';
 import {
   fetchPolicies,
   fetchPolicy,
@@ -33,18 +36,20 @@ export function usePoliciesQuery() {
   });
 }
 
+// 페이지 envelope → 뷰모델. toPageResult(shared)는 totalPages가 없어 목록 훅 공용으로 여기 둔다.
+function mapPolicyPageEnvelope(envelope: ApiPageEnvelope<PolicyCardDto>) {
+  return {
+    policies: mapPolicyCardsToPolicies(envelope.data),
+    totalPages: envelope.meta.totalPages,
+    totalCount: envelope.meta.totalCount,
+  };
+}
+
 // 검색 화면 서버 페이지네이션 — 필터가 바뀌면 key가 바뀌어 1페이지부터 다시 조회된다. page는 1-base.
 export function usePolicySearchPageQuery(params: PolicySearchParams, page: number, size: number) {
   return useQuery({
     queryKey: policyKeys.searchPage(params, page, size),
-    queryFn: async () => {
-      const envelope = await fetchPolicySearchPage(params, page - 1, size);
-      return {
-        policies: mapPolicyCardsToPolicies(envelope.data),
-        totalPages: envelope.meta.totalPages,
-        totalCount: envelope.meta.totalCount,
-      };
-    },
+    queryFn: async () => mapPolicyPageEnvelope(await fetchPolicySearchPage(params, page - 1, size)),
     placeholderData: keepPreviousData,
   });
 }
@@ -53,14 +58,7 @@ export function usePolicySearchPageQuery(params: PolicySearchParams, page: numbe
 export function usePolicyCardPageQuery(page: number, size: number) {
   return useQuery({
     queryKey: policyKeys.page(page, size),
-    queryFn: async () => {
-      const envelope = await fetchPolicyCardPage(page - 1, size);
-      return {
-        policies: mapPolicyCardsToPolicies(envelope.data),
-        totalPages: envelope.meta.totalPages,
-        totalCount: envelope.meta.totalCount,
-      };
-    },
+    queryFn: async () => mapPolicyPageEnvelope(await fetchPolicyCardPage(page - 1, size)),
     // 페이지 전환 시 이전 페이지를 유지해 스켈레톤 깜빡임을 막는다.
     placeholderData: keepPreviousData,
   });

@@ -34,7 +34,12 @@ export function HomePage() {
     reload: reloadRecommendations,
   } = useRecommendations();
   const [page, setPage] = useState(1);
-  const { data: policyPage, isLoading } = usePolicyCardPageQuery(page, HOME_POLICY_COUNT);
+  const {
+    data: policyPage,
+    isLoading,
+    isError: isPoliciesError,
+    refetch: refetchPolicies,
+  } = usePolicyCardPageQuery(page, HOME_POLICY_COUNT);
   const pageItems = policyPage?.policies ?? [];
   const pageCount = policyPage?.totalPages ?? 1;
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
@@ -93,7 +98,12 @@ export function HomePage() {
           </button>
         </div>
 
-        {isLoading ? (
+        {isPoliciesError ? (
+          <ErrorState
+            title="신규 정책 목록을 불러오지 못했습니다"
+            onRetry={() => refetchPolicies()}
+          />
+        ) : isLoading ? (
           <div className={POLICY_GRID_CLASS}>
             {Array.from({ length: HOME_POLICY_COUNT }, (_, index) => (
               // biome-ignore lint/suspicious/noArrayIndexKey: 순서가 바뀌지 않는 정적 로딩 플레이스홀더라 안정적인 id가 없다

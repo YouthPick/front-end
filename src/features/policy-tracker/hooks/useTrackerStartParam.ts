@@ -18,8 +18,8 @@ export function useTrackerStartParam() {
 
   const startMutation = useMutation({
     mutationFn: async (policyId: string) => {
+      // 미존재 정책은 fetchPolicy가 404로 throw한다 — onError 토스트로 이어진다.
       const policy = mapPolicyDetailToPolicy(await fetchPolicy(policyId));
-      if (!policy) throw new Error(`정책을 찾을 수 없습니다: ${policyId}`);
       const result = await startTracker(policyId, policy.deadline);
       return { ...result, policyId, policyTitle: policy.title };
     },

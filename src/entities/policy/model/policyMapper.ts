@@ -26,11 +26,16 @@ function formatDeadline(applicationEndDate: string | null): string {
 }
 
 // 백엔드가 태그를 주지 않으므로 마감일 기준으로 파생한다. 마감 임박이면 '마감임박', 아니면 'NEW'.
+// 'YYYY-MM-DD'를 new Date(문자열)로 파싱하면 UTC 자정으로 해석돼 KST 00~09시에 하루 오차가
+// 나므로, 로컬 자정끼리의 달력일 차이로 계산한다. 마감 당일(diff 0)은 '마감임박'.
 function deriveTag(applicationEndDate: string | null): PolicyTag {
   if (!applicationEndDate) return 'NEW';
-  const end = new Date(applicationEndDate);
-  if (Number.isNaN(end.getTime())) return 'NEW';
-  const diffDays = Math.ceil((end.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  const [year, month, day] = applicationEndDate.split('-').map(Number);
+  if (!year || !month || !day) return 'NEW';
+  const end = new Date(year, month - 1, day);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diffDays = Math.round((end.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
   return diffDays >= 0 && diffDays <= DEADLINE_SOON_DAYS ? '마감임박' : 'NEW';
 }
 
