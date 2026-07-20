@@ -1,14 +1,15 @@
 import type { Region } from '@/entities/region';
-import type { OnboardingProfileRequestDto, UserProfile } from '@/entities/user';
-
 import {
   codeForLabel,
   EDUCATION_STATUS_OPTIONS,
   EMPLOYMENT_STATUS_OPTIONS,
   MAJOR_OPTIONS,
   MARITAL_STATUS_OPTIONS,
+  type OnboardingProfileRequestDto,
   SPECIAL_CONDITION_OPTIONS,
-} from './profileOptions';
+  type UserProfile,
+} from '@/entities/user';
+
 import { resolveRegionCode } from './resolveRegionCode';
 
 // UI는 한글 라벨로 상태를 들고 있다가, 백엔드에 보낼 때만 코드로 변환한다(제출 실패 시 사용자에게

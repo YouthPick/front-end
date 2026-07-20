@@ -1,9 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { usePublicRegionsQuery } from '@/entities/region';
 import {
+  myProfileKeys,
   type OnboardingProfileRequestDto,
   submitOnboardingProfile,
   type UserProfile,
@@ -35,6 +36,7 @@ export function useProfileSetupWizard() {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
   // WizardStepBasic도 같은 쿼리를 구독하므로 캐시를 공유해 중복 요청이 나가지 않는다.
   const { data: regions = [] } = usePublicRegionsQuery();
 
@@ -86,6 +88,7 @@ export function useProfileSetupWizard() {
     try {
       await submitMutation.mutateAsync({ userId, request });
       updateProfile({ ...draft, isOnboarded: true });
+      queryClient.invalidateQueries({ queryKey: myProfileKeys.all });
       navigate(from ?? ROUTES.recommend, { replace: true });
       showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과를 확인해보세요.', 'success');
     } catch (error) {

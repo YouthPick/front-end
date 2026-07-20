@@ -1,17 +1,24 @@
 import { useNavigate } from 'react-router';
 
-import { ProfileSummaryCard, useAuthStore, useProfileStore } from '@/entities/user';
+import { ProfileSummaryCard, useAuthStore } from '@/entities/user';
 import { AccountDangerZone, useDeleteAccount, useLogout } from '@/features/auth';
+import { useMyProfile } from '@/features/my-profile';
 import { useTrackers } from '@/features/policy-tracker';
 import { ROUTES } from '@/shared/constants';
-import { ErrorState, Skeleton } from '@/shared/ui';
+import { EmptyState, ErrorState, Skeleton } from '@/shared/ui';
 import { LikedCommunityPosts } from '@/widgets/liked-community-posts';
 import { MyCommunityPosts } from '@/widgets/my-community-posts';
 import { RecentlyViewed } from '@/widgets/recently-viewed';
 
 export function MyPage() {
   const user = useAuthStore((state) => state.user);
-  const profile = useProfileStore((state) => state.profile);
+  const {
+    profile,
+    isOnboarded,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+    refetch: refetchProfile,
+  } = useMyProfile();
   const {
     data: trackers = [],
     isLoading: isTrackersLoading,
@@ -105,7 +112,30 @@ export function MyPage() {
             </button>
           </div>
 
-          <ProfileSummaryCard profile={profile} onEdit={() => navigate(ROUTES.profileSetup)} />
+          {isProfileError ? (
+            <ErrorState
+              title="프로필 정보를 불러오지 못했습니다"
+              onRetry={() => refetchProfile()}
+            />
+          ) : isProfileLoading ? (
+            <Skeleton className="h-64" />
+          ) : isOnboarded && profile ? (
+            <ProfileSummaryCard profile={profile} onEdit={() => navigate(ROUTES.profileSetup)} />
+          ) : (
+            <EmptyState
+              icon="📝"
+              title="맞춤 프로필이 아직 없습니다"
+              description="프로필을 설정하면 나에게 맞는 정책을 추천받을 수 있어요."
+            >
+              <button
+                type="button"
+                onClick={() => navigate(ROUTES.profileSetup)}
+                className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground hover:opacity-90"
+              >
+                프로필 설정하기
+              </button>
+            </EmptyState>
+          )}
 
           <RecentlyViewed />
 

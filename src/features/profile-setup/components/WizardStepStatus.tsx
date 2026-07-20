@@ -1,6 +1,9 @@
-import type { UserProfile } from '@/entities/user';
+import {
+  EDUCATION_STATUS_OPTIONS,
+  EMPLOYMENT_STATUS_OPTIONS,
+  type UserProfile,
+} from '@/entities/user';
 
-import { EDUCATION_STATUS_OPTIONS, EMPLOYMENT_STATUS_OPTIONS } from '../model/profileOptions';
 import { OptionButtonGrid } from './common/OptionButtonGrid';
 
 interface WizardStepStatusProps {

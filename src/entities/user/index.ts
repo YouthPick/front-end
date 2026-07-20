@@ -25,6 +25,17 @@ export {
   useUpdateAdminUserRoleMutation,
 } from './model/adminUserQueries';
 export { useAuthStore } from './model/authStore';
+export { myProfileKeys, useMyProfileQuery } from './model/myProfileQueries';
+export {
+  codeForLabel,
+  EDUCATION_STATUS_OPTIONS,
+  EMPLOYMENT_STATUS_OPTIONS,
+  labelForCode,
+  MAJOR_OPTIONS,
+  MARITAL_STATUS_OPTIONS,
+  type ProfileOption,
+  SPECIAL_CONDITION_OPTIONS,
+} from './model/profileOptions';
 export { useProfileStore } from './model/profileStore';
 export type { AuthUser, UserProfile, UserRole } from './model/user.types';
 export { ProfileSummaryCard } from './ui/ProfileSummaryCard';
