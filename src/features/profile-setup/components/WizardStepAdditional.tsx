@@ -1,10 +1,10 @@
-import type { UserProfile } from '@/entities/user';
-
 import {
   MAJOR_OPTIONS,
   MARITAL_STATUS_OPTIONS,
   SPECIAL_CONDITION_OPTIONS,
-} from '../model/profileOptions';
+  type UserProfile,
+} from '@/entities/user';
+
 import { OptionButtonGrid } from './common/OptionButtonGrid';
 
 interface WizardStepAdditionalProps {

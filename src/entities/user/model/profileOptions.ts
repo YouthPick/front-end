@@ -1,6 +1,5 @@
 // 온보딩 화면에 노출하는 한글 라벨과, 백엔드 제출 시 보낼 코드값을 한 곳에서 짝지어 관리한다.
-// 옵션을 추가/변경할 때 라벨과 코드가 따로 노는 것을 막기 위해 Wizard 컴포넌트는 이 목록에서 라벨만 뽑아 쓰고,
-// 제출 시에는 codeForLabel로 같은 목록에서 코드를 찾는다.
+// 온보딩 제출(코드로 변환)과 마이페이지 조회(코드를 라벨로 역변환) 양쪽에서 쓰이므로 entities/user에 둔다.
 export interface ProfileOption {
   label: string;
   code: string;
@@ -53,4 +52,8 @@ export const SPECIAL_CONDITION_OPTIONS: ProfileOption[] = [
 
 export function codeForLabel(options: ProfileOption[], label: string): string | null {
   return options.find((option) => option.label === label)?.code ?? null;
+}
+
+export function labelForCode(options: ProfileOption[], code: string): string | null {
+  return options.find((option) => option.code === code)?.label ?? null;
 }
