@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { useAuthStore } from '@/entities/user';
@@ -17,6 +18,8 @@ export function useBookmark() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const navigate = useNavigate();
   const location = useLocation();
+  // React Query의 isPending은 다음 렌더에서야 반영되므로, 같은 이벤트 루프의 연속 클릭은 ref로 즉시 차단한다.
+  const isTogglingRef = useRef(false);
 
   const {
     data: savedPolicyIds = [],
@@ -39,6 +42,9 @@ export function useBookmark() {
         showToast('관심 정책 목록에서 해제되었습니다.', 'info');
       }
     },
+    onSettled: () => {
+      isTogglingRef.current = false;
+    },
   });
 
   const isSaved = (policyId: string) => savedPolicyIds.includes(policyId);
@@ -52,6 +58,8 @@ export function useBookmark() {
       });
       return;
     }
+    if (isTogglingRef.current) return;
+    isTogglingRef.current = true;
     toggleMutation.mutate(policyId);
   };
 
