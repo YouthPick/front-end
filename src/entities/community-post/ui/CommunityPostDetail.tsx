@@ -51,9 +51,11 @@ export function CommunityPostDetail({
         </div>
       </div>
 
-      <p className="whitespace-pre-line text-xs leading-relaxed text-slate-700 border-t border-slate-100/75 pt-4">
-        {post.content}
-      </p>
+      <div
+        className="text-xs leading-relaxed text-slate-700 border-t border-slate-100/75 pt-4 wysiwyg-content"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: WYSIWYG HTML 본문 렌더링에 필요
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
 
       {post.attachedPolicy && (
         <AttachedPolicyPreview policy={post.attachedPolicy} onView={onViewAttachedPolicy} />

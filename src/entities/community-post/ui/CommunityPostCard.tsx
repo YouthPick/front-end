@@ -1,5 +1,5 @@
 import { Eye, Heart, MessageCircle, Paperclip } from 'lucide-react';
-
+import { stripHtml } from '@/shared/utils';
 import type { CommunityPost } from '../model/communityPost.types';
 import { CommunityCategoryBadge } from './CommunityCategoryBadge';
 
@@ -48,7 +48,7 @@ export function CommunityPostCard({
           {post.title}
         </h3>
         <p className="line-clamp-2 min-h-9 text-[11px] leading-relaxed text-slate-400 font-medium">
-          {post.content}
+          {stripHtml(post.content)}
         </p>
 
         <div className="flex items-center justify-between border-t border-slate-100/75 pt-3 text-[10px] font-bold text-slate-400">
