@@ -1,8 +1,5 @@
 import { type ApiPageEnvelope, apiClient } from '@/shared/api';
-import { MOCK_API_DELAY_MS } from '@/shared/constants';
-import { delay } from '@/shared/utils';
 import type { PolicyCardDto, PolicyDetailDto, RecentlyViewedPolicyDto } from './policy.dto';
-import { RECENTLY_VIEWED_POLICY_DTOS } from './policyMockData';
 
 export interface PolicySearchParams {
   query?: string;
@@ -79,7 +76,5 @@ export async function fetchPolicy(policyId: string): Promise<PolicyDetailDto> {
 }
 
 export async function fetchRecentlyViewedPolicies(): Promise<RecentlyViewedPolicyDto[]> {
-  // ponytail: 회원 전용 최근 본 정책(#75)은 이번 범위 밖 — 목데이터 유지. 실 API 연동은 별도 이슈.
-  await delay(MOCK_API_DELAY_MS);
-  return RECENTLY_VIEWED_POLICY_DTOS.map((dto) => ({ ...dto }));
+  return [];
 }
