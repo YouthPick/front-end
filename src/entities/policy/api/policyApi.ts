@@ -24,6 +24,19 @@ function toFilterParam(value: string | undefined): string | undefined {
   return value;
 }
 
+// 연령 필터 라벨 → 백엔드 ageMin/ageMax 구간. 키는 policy-search의 AGES 라벨과 문자열이
+// 정확히 일치해야 한다(어긋나면 조용히 무필터). '전체'/미지정은 빈 객체 → 파라미터 미전송.
+// 백엔드(#86/#87)는 정책 자격 구간과의 겹침으로 판정하고 min/maxAge 0·NULL은 제한없음 처리한다.
+const AGE_RANGE_BY_LABEL: Record<string, { ageMin?: number; ageMax?: number }> = {
+  '만 19~34세': { ageMin: 19, ageMax: 34 },
+  '만 18세 이하': { ageMax: 18 },
+  '만 35세 이상': { ageMin: 35 },
+};
+
+function toAgeParams(age: string | undefined): { ageMin?: number; ageMax?: number } {
+  return AGE_RANGE_BY_LABEL[age ?? ''] ?? {};
+}
+
 export async function fetchPolicies(): Promise<PolicyCardDto[]> {
   const response = await apiClient.get<ApiPageEnvelope<PolicyCardDto>>('/v1/policies', {
     params: { page: 0, size: LIST_PAGE_SIZE },
@@ -43,7 +56,7 @@ export async function fetchPolicyCardPage(
 }
 
 export async function searchPolicies(params: PolicySearchParams): Promise<PolicyCardDto[]> {
-  // 백엔드 검색은 keyword/region/category만 받는다. status·age 필터는 아직 미지원(검색 작업에서 연결).
+  // 커뮤니티 정책 첨부 검색 용도 — 호출부가 keyword만 쓴다. status는 서버 미지원.
   const response = await apiClient.get<ApiPageEnvelope<PolicyCardDto>>('/v1/policies', {
     params: {
       keyword: toFilterParam(params.query),
@@ -56,8 +69,8 @@ export async function searchPolicies(params: PolicySearchParams): Promise<Policy
   return response.data.data;
 }
 
-// 검색 화면 서버 페이지네이션. category는 백엔드가 필터링하고,
-// keyword·region·status·age는 아직 서버 미지원(#36 검색 작업에서 연결) — 파라미터만 미리 보낸다.
+// 검색 화면 서버 페이지네이션. keyword·region·category·age(→ ageMin/ageMax)는 백엔드가
+// 필터링한다(#86/#87). status는 아직 서버 미지원 — 보내지 않는다.
 export async function fetchPolicySearchPage(
   params: PolicySearchParams,
   page: number,
@@ -68,6 +81,7 @@ export async function fetchPolicySearchPage(
       keyword: toFilterParam(params.query),
       region: toFilterParam(params.region),
       category: toFilterParam(params.category),
+      ...toAgeParams(params.age),
       page,
       size,
     },
