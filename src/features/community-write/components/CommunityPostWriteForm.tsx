@@ -86,8 +86,11 @@ export function CommunityPostWriteForm({
       </div>
 
       <div className="space-y-2">
-        <span className="block text-xs font-bold text-slate-600">내용</span>
+        <label htmlFor="community-write-content" className="block text-xs font-bold text-slate-600">
+          내용
+        </label>
         <RichTextEditor
+          id="community-write-content"
           content={content}
           onChange={onContentChange}
           placeholder="내용을 입력해 주세요"

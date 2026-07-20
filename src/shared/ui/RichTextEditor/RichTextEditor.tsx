@@ -19,6 +19,7 @@ import { useRef, useState } from 'react';
 import { uploadFile } from '@/shared/api/fileApi';
 
 interface RichTextEditorProps {
+  id?: string;
   content: string;
   onChange: (content: string) => void;
   placeholder?: string;
@@ -26,6 +27,7 @@ interface RichTextEditorProps {
 }
 
 export function RichTextEditor({
+  id,
   content,
   onChange,
   placeholder = '내용을 입력해 주세요...',
@@ -46,6 +48,11 @@ export function RichTextEditor({
       onChange(editor.getHTML());
     },
     editable: !disabled && !isUploading,
+    editorProps: {
+      attributes: {
+        ...(id ? { id } : {}),
+      },
+    },
   });
 
   if (!editor) {
