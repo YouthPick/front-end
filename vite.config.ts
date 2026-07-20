@@ -16,6 +16,8 @@ export default defineConfig(() => {
       proxy: {
         '/api': 'http://localhost:8080',
       },
+      // 내부 네트워크의 다른 PC에서 접속할 수 있도록 모든 인터페이스에 바인딩한다.
+      host: true,
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',

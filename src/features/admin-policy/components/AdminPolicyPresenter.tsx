@@ -31,6 +31,8 @@ interface AdminPolicyPresenterProps {
   selectedPolicy: AdminPolicy | null;
   regions: Region[];
   isRegionsLoading: boolean;
+  isRegionsError: boolean;
+  onRetryRegions: () => void;
   onSelectPolicy: (policy: AdminPolicy) => void;
   onCloseDetail: () => void;
   onSave: (input: AdminPolicyUpdateInput) => void;
@@ -61,6 +63,8 @@ export function AdminPolicyPresenter({
   selectedPolicy,
   regions,
   isRegionsLoading,
+  isRegionsError,
+  onRetryRegions,
   onSelectPolicy,
   onCloseDetail,
   onSave,
@@ -170,6 +174,8 @@ export function AdminPolicyPresenter({
         policy={selectedPolicy}
         regions={regions}
         isRegionsLoading={isRegionsLoading}
+        isRegionsError={isRegionsError}
+        onRetryRegions={onRetryRegions}
         onClose={onCloseDetail}
         onSave={onSave}
         isSaving={isSaving}

@@ -141,6 +141,9 @@ export function TrackerContainer() {
               onAddChecklistItem={(text) =>
                 mutations.addChecklistItem(activeTracker.policyId, text)
               }
+              onEditChecklistItem={(itemId, text) =>
+                mutations.editChecklistItem(activeTracker.policyId, itemId, text)
+              }
               onSaveMemo={(memo) => mutations.saveMemo(activeTracker.policyId, memo)}
               onDeleteTracker={() =>
                 mutations.deleteTracker(activeTracker.policyId, { onSuccess: clearSelection })

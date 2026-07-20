@@ -1,10 +1,12 @@
 import type { Region } from '@/entities/region';
 import { getRegionLabel } from '@/entities/region';
-import { Skeleton } from '@/shared/ui';
+import { ErrorState, Skeleton } from '@/shared/ui';
 
 interface AdminPolicyRegionPickerProps {
   regions: Region[];
   isLoading: boolean;
+  isError: boolean;
+  onRetry: () => void;
   selectedRegionCodes: string[];
   onToggleRegion: (regionCode: string) => void;
 }
@@ -12,6 +14,8 @@ interface AdminPolicyRegionPickerProps {
 export function AdminPolicyRegionPicker({
   regions,
   isLoading,
+  isError,
+  onRetry,
   selectedRegionCodes,
   onToggleRegion,
 }: AdminPolicyRegionPickerProps) {
@@ -22,6 +26,10 @@ export function AdminPolicyRegionPicker({
         <Skeleton className="h-6" />
       </div>
     );
+  }
+
+  if (isError) {
+    return <ErrorState title="지역 목록을 불러오지 못했습니다" onRetry={onRetry} />;
   }
 
   return (

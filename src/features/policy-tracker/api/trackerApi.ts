@@ -10,6 +10,7 @@ const DEFAULT_TARGET_DATE = '2026-06-30';
 let trackers: TrackerItem[] = [
   {
     policyId: 'p1',
+    policyDeadline: '2026-06-25',
     status: '준비중',
     targetDate: '2026-06-25',
     checklist: [
@@ -22,6 +23,7 @@ let trackers: TrackerItem[] = [
   },
   {
     policyId: 'p2',
+    policyDeadline: '2026-07-10',
     status: '관심',
     targetDate: '2026-07-10',
     checklist: [
@@ -32,6 +34,7 @@ let trackers: TrackerItem[] = [
   },
   {
     policyId: 'p5',
+    policyDeadline: '2026-06-20',
     status: '신청완료',
     targetDate: '2026-06-20',
     checklist: [
@@ -42,6 +45,7 @@ let trackers: TrackerItem[] = [
   },
   {
     policyId: 'p3',
+    policyDeadline: '2026-07-15',
     status: '준비중',
     targetDate: '2026-07-15',
     checklist: [
@@ -52,6 +56,7 @@ let trackers: TrackerItem[] = [
   },
   {
     policyId: 'p6',
+    policyDeadline: '2026-08-01',
     status: '관심',
     targetDate: '2026-08-01',
     checklist: [{ id: 'c11', text: '희망 강좌 목록 조사', completed: false }],
@@ -59,6 +64,7 @@ let trackers: TrackerItem[] = [
   },
   {
     policyId: 'p7',
+    policyDeadline: '2026-06-30',
     status: '신청완료',
     targetDate: '2026-06-30',
     checklist: [
@@ -69,6 +75,7 @@ let trackers: TrackerItem[] = [
   },
   {
     policyId: 'p8',
+    policyDeadline: '2026-05-15',
     status: '종료',
     targetDate: '2026-05-15',
     checklist: [
@@ -79,6 +86,7 @@ let trackers: TrackerItem[] = [
   },
   {
     policyId: 'p9',
+    policyDeadline: '2026-07-01',
     status: '준비중',
     targetDate: '2026-07-01',
     checklist: [{ id: 'c16', text: '만 19세 확인 서류 준비', completed: false }],
@@ -127,6 +135,7 @@ export async function startTracker(
 
   const newTracker: TrackerItem = {
     policyId,
+    policyDeadline: toIsoDateString(deadline) ?? '',
     status: '준비중',
     targetDate: toIsoDateString(deadline) ?? DEFAULT_TARGET_DATE,
     checklist: [
@@ -164,6 +173,18 @@ export async function addChecklistItem(
   return updateTracker(policyId, (tracker) => ({
     ...tracker,
     checklist: [...tracker.checklist, { id: generateId(), text, completed: false }],
+  }));
+}
+
+export async function editChecklistItem(
+  policyId: string,
+  itemId: string,
+  text: string,
+): Promise<TrackerItem | null> {
+  await delay(MOCK_API_DELAY_MS);
+  return updateTracker(policyId, (tracker) => ({
+    ...tracker,
+    checklist: tracker.checklist.map((item) => (item.id === itemId ? { ...item, text } : item)),
   }));
 }
 
