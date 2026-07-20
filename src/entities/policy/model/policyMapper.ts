@@ -46,14 +46,18 @@ function toExternalLink(url: string | null): string {
   return /^https?:\/\//.test(url) ? url : `https://${url}`;
 }
 
-// 상세의 적용 지역 목록을 카드 지역 라벨과 같은 규칙으로 요약한다: 없음→'전국', 1개→시도명, 여러 개→'첫 시도 외 N'.
+// 시도명 목록을 카드·상세 공통 규칙으로 요약한다: 없음→'전국', 1개→시도명, 여러 개→'첫 시도 외 N'.
+// 백엔드는 원본 시도명 목록만 내려주고(카드: PolicyCardResponse.provinces, 상세: PolicyDetailResponse.regions),
+// "전국"/"외 N" 같은 표시 문구 조립은 여기 프론트에서만 한다.
+function provincesToLabel(provinces: string[]): string {
+  const distinct = [...new Set(provinces.filter(Boolean))].sort();
+  if (distinct.length === 0) return '전국';
+  if (distinct.length === 1) return distinct[0];
+  return `${distinct[0]} 외 ${distinct.length - 1}`;
+}
+
 function regionsToLabel(regions: PolicyRegionDto[]): string {
-  const provinces = [
-    ...new Set(regions.map((region) => region.provinceName).filter(Boolean)),
-  ].sort();
-  if (provinces.length === 0) return '전국';
-  if (provinces.length === 1) return provinces[0];
-  return `${provinces[0]} 외 ${provinces.length - 1}`;
+  return provincesToLabel(regions.map((region) => region.provinceName));
 }
 
 // 카테고리를 식별할 수 없는 정책도 숨기지 않고 '기타'로 노출한다 — 서버 페이지당 개수와 화면 개수를 일치시킨다.
@@ -64,7 +68,7 @@ export function mapPolicyCardToPolicy(dto: PolicyCardDto): Policy {
     id: String(dto.id),
     title: dto.title,
     category,
-    region: dto.regionLabel ?? '전국',
+    region: provincesToLabel(dto.provinces),
     tag: deriveTag(dto.applicationEndDate),
     // 카드 응답에 없는 상세 필드는 상세 조회에서 채운다.
     organizationName: '',
