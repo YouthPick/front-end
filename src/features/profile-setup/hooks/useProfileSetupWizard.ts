@@ -1,10 +1,21 @@
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import { type UserProfile, useProfileStore } from '@/entities/user';
+import { usePublicRegionsQuery } from '@/entities/region';
+import {
+  type OnboardingProfileRequestDto,
+  submitOnboardingProfile,
+  type UserProfile,
+  useAuthStore,
+  useProfileStore,
+} from '@/entities/user';
 import { ROUTES } from '@/shared/constants';
 import { useToast } from '@/shared/ui';
 import { getRedirectPath } from '@/shared/utils';
+
+import { buildOnboardingRequest } from '../model/buildOnboardingRequest';
+import { getOnboardingErrorMessage } from '../model/onboardingErrors';
 
 export const MAX_INTEREST_COUNT = 3;
 export const MAX_KEYWORD_COUNT = 5;
@@ -20,9 +31,12 @@ function isStepComplete(step: number, draft: UserProfile): boolean {
 export function useProfileSetupWizard() {
   const profile = useProfileStore((state) => state.profile);
   const updateProfile = useProfileStore((state) => state.updateProfile);
+  const userId = useAuthStore((state) => state.user?.id);
   const { showToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  // WizardStepBasic도 같은 쿼리를 구독하므로 캐시를 공유해 중복 요청이 나가지 않는다.
+  const { data: regions = [] } = usePublicRegionsQuery();
 
   // 로그인 시 원래 가려던 경로. 마법사 완료·보류 후 이곳으로 복귀한다.
   const from = getRedirectPath(location.state);
@@ -36,13 +50,18 @@ export function useProfileSetupWizard() {
   });
   const [newKeywordInput, setNewKeywordInput] = useState('');
 
+  const submitMutation = useMutation({
+    mutationFn: ({ userId, request }: { userId: string; request: OnboardingProfileRequestDto }) =>
+      submitOnboardingProfile(userId, request),
+  });
+
   const updateDraft = (patch: Partial<UserProfile>) => {
     setDraft((prev) => ({ ...prev, ...patch }));
   };
 
   const canProceed = isStepComplete(step, draft);
 
-  const goNext = () => {
+  const goNext = async () => {
     // 버튼이 비활성화돼 있어 정상 흐름에서는 도달하지 않지만, 방어적으로 한 번 더 막는다.
     if (!canProceed) return;
 
@@ -50,10 +69,31 @@ export function useProfileSetupWizard() {
       setStep((prev) => prev + 1);
       return;
     }
+
+    if (!userId) {
+      showToast('로그인이 필요한 기능입니다. 다시 로그인한 뒤 이용해 주세요.', 'warning');
+      return;
+    }
+
     // 결혼상태·전공·특화조건·연소득·관심분야는 모두 선택 항목이라, 비워 두면 매칭 시 제한없음으로 간주한다.
-    updateProfile({ ...draft, isOnboarded: true });
-    navigate(from ?? ROUTES.recommend, { replace: true });
-    showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과를 확인해보세요.', 'success');
+    const request = buildOnboardingRequest(draft, regions);
+    if (!request) {
+      showToast('거주 지역을 다시 선택해 주세요.', 'warning');
+      setStep(1);
+      return;
+    }
+
+    try {
+      await submitMutation.mutateAsync({ userId, request });
+      updateProfile({ ...draft, isOnboarded: true });
+      navigate(from ?? ROUTES.recommend, { replace: true });
+      showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과를 확인해보세요.', 'success');
+    } catch (error) {
+      showToast(
+        getOnboardingErrorMessage(error, '프로필 저장에 실패했습니다. 잠시 후 다시 시도해 주세요.'),
+        'warning',
+      );
+    }
   };
 
   const goPrev = () => {
@@ -120,6 +160,7 @@ export function useProfileSetupWizard() {
     step,
     draft,
     canProceed,
+    isSubmitting: submitMutation.isPending,
     newKeywordInput,
     setNewKeywordInput,
     updateDraft,

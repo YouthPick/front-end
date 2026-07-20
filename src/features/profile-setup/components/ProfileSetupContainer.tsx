@@ -6,6 +6,7 @@ export function ProfileSetupContainer() {
     step,
     draft,
     canProceed,
+    isSubmitting,
     newKeywordInput,
     setNewKeywordInput,
     updateDraft,
@@ -23,6 +24,7 @@ export function ProfileSetupContainer() {
       step={step}
       draft={draft}
       canProceed={canProceed}
+      isSubmitting={isSubmitting}
       newKeywordInput={newKeywordInput}
       onKeywordInputChange={setNewKeywordInput}
       onUpdateDraft={updateDraft}

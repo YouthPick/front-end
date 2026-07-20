@@ -7,6 +7,11 @@ export {
   softDeleteAdminUser,
   updateAdminUserRole,
 } from './api/adminUserApi';
+export type {
+  OnboardingProfileRequestDto,
+  OnboardingProfileResponseDto,
+} from './api/onboarding.dto';
+export { submitOnboardingProfile } from './api/onboardingApi';
 export type { AdminUser, AdminUserProfile } from './model/adminUser.types';
 export {
   mapAdminUserDtoToAdminUser,
