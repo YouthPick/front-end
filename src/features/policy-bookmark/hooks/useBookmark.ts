@@ -32,6 +32,7 @@ export function useBookmark() {
     mutationFn: toggleBookmark,
     onSuccess: ({ saved }) => {
       queryClient.invalidateQueries({ queryKey: bookmarkKeys.all });
+      queryClient.invalidateQueries({ queryKey: ['trackers'] });
       if (saved) {
         showToast('관심 정책으로 보관되었습니다! [신청관리]에서 일정을 추가해 보세요.', 'success');
       } else {

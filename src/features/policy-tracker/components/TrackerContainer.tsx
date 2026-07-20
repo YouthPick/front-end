@@ -128,25 +128,26 @@ export function TrackerContainer() {
             <TrackerDetailPanel
               tracker={activeTracker}
               policy={activePolicy}
-              onUpdateStatus={(status) => mutations.updateStatus(activeTracker.policyId, status)}
+              onUpdateStatus={(status) =>
+                mutations.updateStatus(activeTracker.applicationId, status)
+              }
               onUpdateDate={(targetDate) =>
-                mutations.updateDate(activeTracker.policyId, targetDate)
+                mutations.updateDate(activeTracker.applicationId, targetDate)
               }
-              onToggleChecklistItem={(itemId) =>
-                mutations.toggleChecklistItem(activeTracker.policyId, itemId)
-              }
-              onDeleteChecklistItem={(itemId) =>
-                mutations.deleteChecklistItem(activeTracker.policyId, itemId)
-              }
+              onToggleChecklistItem={(itemId) => {
+                const item = activeTracker.checklist.find(
+                  (checklistItem) => checklistItem.id === itemId,
+                );
+                if (item) mutations.toggleChecklistItem(item);
+              }}
+              onDeleteChecklistItem={(itemId) => mutations.deleteChecklistItem(itemId)}
               onAddChecklistItem={(text) =>
-                mutations.addChecklistItem(activeTracker.policyId, text)
+                mutations.addChecklistItem(activeTracker.applicationId, text)
               }
-              onEditChecklistItem={(itemId, text) =>
-                mutations.editChecklistItem(activeTracker.policyId, itemId, text)
-              }
-              onSaveMemo={(memo) => mutations.saveMemo(activeTracker.policyId, memo)}
+              onEditChecklistItem={(itemId, text) => mutations.editChecklistItem(itemId, text)}
+              onSaveMemo={(memo) => mutations.saveMemo(activeTracker.applicationId, memo)}
               onDeleteTracker={() =>
-                mutations.deleteTracker(activeTracker.policyId, { onSuccess: clearSelection })
+                mutations.deleteTracker(activeTracker.applicationId, { onSuccess: clearSelection })
               }
             />
           ) : (
