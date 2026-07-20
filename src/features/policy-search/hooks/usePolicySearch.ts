@@ -1,5 +1,6 @@
-import { usePolicySearchQuery } from '@/entities/policy';
-import { usePagination } from '@/shared/hooks';
+import { useState } from 'react';
+
+import { usePolicySearchPageQuery } from '@/entities/policy';
 import { useToast } from '@/shared/ui';
 
 import { useSearchFilters } from './useSearchFilters';
@@ -8,7 +9,8 @@ import { useSearchFilters } from './useSearchFilters';
 // 로딩 스켈레톤 개수와 실제 페이지당 카드 개수가 어긋나지 않게 한다.
 const SEARCH_PAGE_SIZE = 6;
 
-// 검색 화면 use case: URL 필터 상태 + 서버(mock) 검색 질의를 묶는다.
+// 검색 화면 use case: URL 필터 상태 + 서버 페이지네이션 검색 질의를 묶는다.
+// category는 서버가 필터링하고, keyword·region·status·age는 #36 검색 작업에서 서버 연결 예정.
 export function usePolicySearch() {
   const {
     query,
@@ -22,13 +24,15 @@ export function usePolicySearch() {
   } = useSearchFilters();
   const { showToast } = useToast();
 
-  const {
-    data: policies = [],
-    isLoading,
-    isError,
-    refetch,
-  } = usePolicySearchQuery({ query, ...filters });
-  const { page, pageItems, pageCount, setPage } = usePagination(policies, SEARCH_PAGE_SIZE);
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError, refetch } = usePolicySearchPageQuery(
+    { query, ...filters },
+    page,
+    SEARCH_PAGE_SIZE,
+  );
+  const pageItems = data?.policies ?? [];
+  const pageCount = data?.totalPages ?? 1;
+  const totalCount = data?.totalCount ?? 0;
 
   const submitSearch = () => {
     submitQuery();
@@ -49,7 +53,7 @@ export function usePolicySearch() {
   return {
     query: draftQuery,
     filters,
-    policies,
+    totalCount,
     page,
     pageItems,
     pageCount,

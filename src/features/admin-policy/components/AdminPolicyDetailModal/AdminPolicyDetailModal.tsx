@@ -18,6 +18,8 @@ interface AdminPolicyDetailModalProps {
   policy: AdminPolicy | null;
   regions: Region[];
   isRegionsLoading: boolean;
+  isRegionsError: boolean;
+  onRetryRegions: () => void;
   onClose: () => void;
   onSave: (input: AdminPolicyUpdateInput) => void;
   isSaving: boolean;
@@ -45,6 +47,8 @@ export function AdminPolicyDetailModal({
   policy,
   regions,
   isRegionsLoading,
+  isRegionsError,
+  onRetryRegions,
   onClose,
   onSave,
   isSaving,
@@ -290,6 +294,8 @@ export function AdminPolicyDetailModal({
             <AdminPolicyRegionPicker
               regions={regions}
               isLoading={isRegionsLoading}
+              isError={isRegionsError}
+              onRetry={onRetryRegions}
               selectedRegionCodes={draft.regionCodes}
               onToggleRegion={toggleRegion}
             />

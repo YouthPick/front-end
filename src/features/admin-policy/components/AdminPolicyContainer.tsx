@@ -28,6 +28,8 @@ export function AdminPolicyContainer() {
   const {
     regions,
     isRegionsLoading,
+    isRegionsError,
+    onRetryRegions,
     saveChanges,
     isSaving,
     toggleVisibility,
@@ -57,6 +59,8 @@ export function AdminPolicyContainer() {
       selectedPolicy={selectedPolicy}
       regions={regions}
       isRegionsLoading={isRegionsLoading}
+      isRegionsError={isRegionsError}
+      onRetryRegions={onRetryRegions}
       onSelectPolicy={onSelectPolicy}
       onCloseDetail={onCloseDetail}
       onSave={saveChanges}

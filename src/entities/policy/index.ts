@@ -7,7 +7,12 @@ export {
   softDeleteAdminPolicy,
   updateAdminPolicy,
 } from './api/adminPolicyApi';
-export type { PolicyDto, RecentlyViewedPolicyDto } from './api/policy.dto';
+export type {
+  PolicyCardDto,
+  PolicyDetailDto,
+  PolicyRegionDto,
+  RecentlyViewedPolicyDto,
+} from './api/policy.dto';
 export type { PolicySearchParams } from './api/policyApi';
 export {
   fetchPolicies,
@@ -27,7 +32,6 @@ export {
 export type {
   Policy,
   PolicyCategory,
-  PolicyLogoType,
   PolicyTag,
   RecentlyViewedPolicy,
 } from './model/policy.types';
@@ -35,13 +39,17 @@ export { normalizePolicyCategory, POLICY_CATEGORIES } from './model/policyCatego
 export { UNRESTRICTED_CONDITION } from './model/policyConditions';
 export { usePolicyDetailStore } from './model/policyDetailStore';
 export {
-  mapPolicyDtosToPolicies,
-  mapPolicyDtoToPolicy,
+  mapPolicyCardsToPolicies,
+  mapPolicyCardToPolicy,
+  mapPolicyDetailToPolicy,
   mapRecentlyViewedDtoToModel,
 } from './model/policyMapper';
 export {
   policyKeys,
   usePoliciesQuery,
+  usePolicyCardPageQuery,
+  usePolicyDetailQuery,
+  usePolicySearchPageQuery,
   usePolicySearchQuery,
   useRecentlyViewedPoliciesQuery,
 } from './model/policyQueries';
