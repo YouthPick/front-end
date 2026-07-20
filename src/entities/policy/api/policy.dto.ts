@@ -2,7 +2,9 @@
 // UI model(Policy)로의 변환은 policyMapper가 담당한다.
 
 // GET /v1/policies 목록 카드 (백엔드 PolicyCardResponse)
-// minAge/maxAge null = 나이 제한 없음, applicationEndDate null = 상시/일정 미정, regionLabel null = 지역 정보 없음.
+// minAge/maxAge null = 나이 제한 없음, applicationEndDate null = 상시/일정 미정.
+// provinces는 적용 시도명 목록(중복 제거·정렬, 지역 매핑 없으면 빈 배열) — "전국/OO 외 N" 표시 문구는
+// 상세의 regions와 같은 규칙으로 프론트(policyMapper)가 조립한다.
 // category는 DB nullable — 실데이터에 null 존재. 매퍼가 걸러낸다.
 export interface PolicyCardDto {
   id: number;
@@ -12,7 +14,7 @@ export interface PolicyCardDto {
   minAge: number | null;
   maxAge: number | null;
   applicationEndDate: string | null;
-  regionLabel: string | null;
+  provinces: string[];
 }
 
 // 상세 응답의 적용 지역 (백엔드 RegionResponse)
