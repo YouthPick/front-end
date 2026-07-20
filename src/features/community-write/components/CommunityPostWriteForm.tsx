@@ -4,6 +4,7 @@ import {
   isPolicyAttachableCategory,
 } from '@/entities/community-post';
 import type { Policy } from '@/entities/policy';
+import { RichTextEditor } from '@/shared/ui';
 
 import { PolicyAttachField } from './PolicyAttachField';
 
@@ -88,13 +89,12 @@ export function CommunityPostWriteForm({
         <label htmlFor="community-write-content" className="block text-xs font-bold text-slate-600">
           내용
         </label>
-        <textarea
+        <RichTextEditor
           id="community-write-content"
-          value={content}
-          onChange={(e) => onContentChange(e.target.value)}
+          content={content}
+          onChange={onContentChange}
           placeholder="내용을 입력해 주세요"
-          rows={10}
-          className="w-full resize-none rounded-2xl border border-slate-200 bg-white p-4 text-xs leading-relaxed transition-colors focus:border-primary focus:outline-none"
+          disabled={isSubmitting}
         />
       </div>
 

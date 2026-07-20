@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify';
 import { Eye, Heart, MessageCircle } from 'lucide-react';
 
 import type { CommunityPost } from '../model/communityPost.types';
@@ -51,9 +52,11 @@ export function CommunityPostDetail({
         </div>
       </div>
 
-      <p className="whitespace-pre-line text-xs leading-relaxed text-slate-700 border-t border-slate-100/75 pt-4">
-        {post.content}
-      </p>
+      <div
+        className="text-xs leading-relaxed text-slate-700 border-t border-slate-100/75 pt-4 wysiwyg-content"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: DOMPurify로 XSS 방지 후 렌더링
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+      />
 
       {post.attachedPolicy && (
         <AttachedPolicyPreview policy={post.attachedPolicy} onView={onViewAttachedPolicy} />

@@ -19,7 +19,14 @@ export function CommunityPostWriteContainer() {
   const [content, setContent] = useState('');
   const [attachedPolicy, setAttachedPolicy] = useState<Policy | null>(null);
 
-  const canSubmit = category !== null && title.trim() !== '' && content.trim() !== '';
+  const isContentEmpty = (html: string) => {
+    const clean = html.replace(/<[^>]*>/g, '').trim();
+    const hasImage = /<img[^>]*>/.test(html);
+    return clean === '' && !hasImage;
+  };
+
+  const canSubmit =
+    category !== null && title.trim() !== '' && content.trim() !== '' && !isContentEmpty(content);
 
   const handleCategoryChange = (next: CommunityPostCategory) => {
     setCategory(next);
