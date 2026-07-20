@@ -9,7 +9,7 @@ const DEFAULT_TARGET_DATE = '2026-06-30';
 
 let trackers: TrackerItem[] = [
   {
-    policyId: 'p1',
+    policyId: '1',
     status: '준비중',
     targetDate: '2026-06-25',
     checklist: [
@@ -21,7 +21,7 @@ let trackers: TrackerItem[] = [
     memo: '교육 일정과 면접 일정이 겹치는지 확인할 것',
   },
   {
-    policyId: 'p2',
+    policyId: '2',
     status: '관심',
     targetDate: '2026-07-10',
     checklist: [
@@ -31,7 +31,7 @@ let trackers: TrackerItem[] = [
     memo: '월세 이체 내역 3개월분 미리 출력해두기',
   },
   {
-    policyId: 'p5',
+    policyId: '5',
     status: '신청완료',
     targetDate: '2026-06-20',
     checklist: [
@@ -41,7 +41,7 @@ let trackers: TrackerItem[] = [
     memo: '결과 발표는 공식 홈페이지 고시 예정',
   },
   {
-    policyId: 'p3',
+    policyId: '3',
     status: '준비중',
     targetDate: '2026-07-15',
     checklist: [
@@ -51,14 +51,14 @@ let trackers: TrackerItem[] = [
     memo: '개강 전까지 훈련장려금 계좌 개설 완료하기',
   },
   {
-    policyId: 'p6',
+    policyId: '6',
     status: '관심',
     targetDate: '2026-08-01',
     checklist: [{ id: 'c11', text: '희망 강좌 목록 조사', completed: false }],
     memo: '',
   },
   {
-    policyId: 'p7',
+    policyId: '7',
     status: '신청완료',
     targetDate: '2026-06-30',
     checklist: [
@@ -68,7 +68,7 @@ let trackers: TrackerItem[] = [
     memo: '매달 말일까지 보고서 제출 필수',
   },
   {
-    policyId: 'p8',
+    policyId: '8',
     status: '종료',
     targetDate: '2026-05-15',
     checklist: [
@@ -78,7 +78,7 @@ let trackers: TrackerItem[] = [
     memo: '3년 만기 예정일 캘린더에 등록해두기',
   },
   {
-    policyId: 'p9',
+    policyId: '9',
     status: '준비중',
     targetDate: '2026-07-01',
     checklist: [{ id: 'c16', text: '만 19세 확인 서류 준비', completed: false }],

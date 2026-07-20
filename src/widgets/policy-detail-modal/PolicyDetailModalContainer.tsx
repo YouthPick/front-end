@@ -10,9 +10,9 @@ import { PolicyDetailModalPresenter } from './PolicyDetailModalPresenter';
 
 // 원본 화면의 데모용 고정 점수 매핑을 유지한다.
 const DEMO_SCORE_BY_POLICY_ID: Record<string, number> = {
-  p1: 94,
-  p2: 88,
-  p3: 82,
+  '1': 94,
+  '2': 88,
+  '3': 82,
 };
 const DEFAULT_DEMO_SCORE = 78;
 

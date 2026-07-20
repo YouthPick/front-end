@@ -3,7 +3,7 @@ import { delay } from '@/shared/utils';
 
 // 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
 
-let savedPolicyIds: string[] = ['p1', 'p2', 'p5', 'p_missing'];
+let savedPolicyIds: string[] = ['1', '2', '5', '9999'];
 
 export async function fetchBookmarkedPolicyIds(): Promise<string[]> {
   await delay(MOCK_API_DELAY_MS);

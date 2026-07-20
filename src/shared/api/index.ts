@@ -5,6 +5,7 @@ export { queryClient } from './queryClient';
 export {
   clearAccessToken,
   getAccessToken,
+  notifySessionExpired,
   setAccessToken,
   subscribeSessionExpired,
 } from './tokenStore';
