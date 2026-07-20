@@ -21,6 +21,7 @@ export function waitForPolicyChatReceipt(
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let isSettled = false;
   let resolveReceipt: (() => void) | null = null;
+  let rejectReceipt: (() => void) | null = null;
 
   function clearReceiptTimeout(): void {
     if (timeoutId === null) return;
@@ -28,17 +29,23 @@ export function waitForPolicyChatReceipt(
     timeoutId = null;
   }
 
-  function settleReceipt(): void {
+  // 실제 RECEIPT 프레임 수신(성공)과 타임아웃(실패)을 구분해 confirmed의 resolve/reject로 갈라 보낸다.
+  function settleReceipt(isConfirmed: boolean): void {
     if (isSettled || !isActive()) return;
     isSettled = true;
     clearReceiptTimeout();
-    resolveReceipt?.();
+    if (isConfirmed) {
+      resolveReceipt?.();
+    } else {
+      rejectReceipt?.();
+    }
   }
 
-  const confirmed = new Promise<void>((resolve) => {
+  const confirmed = new Promise<void>((resolve, reject) => {
     resolveReceipt = resolve;
-    timeoutId = setTimeout(settleReceipt, timeoutMs);
-    client.watchForReceipt(receiptId, settleReceipt);
+    rejectReceipt = reject;
+    timeoutId = setTimeout(() => settleReceipt(false), timeoutMs);
+    client.watchForReceipt(receiptId, () => settleReceipt(true));
   });
 
   return {

@@ -16,7 +16,7 @@ import {
 import { motion } from 'motion/react';
 
 import { getPolicyCategoryBadgeClasses, type Policy } from '@/entities/policy';
-import { PolicyChatPanel } from '@/features/policy-chat';
+import { PolicyChatContainer } from '@/features/policy-chat';
 
 interface PolicyDetailField {
   key: string;
@@ -181,7 +181,7 @@ export function PolicyDetailModalPresenter({
             </p>
           </div>
 
-          <PolicyChatPanel policyId={policy.id} />
+          <PolicyChatContainer policyId={policy.id} />
 
           {/* Quick info row */}
           <div className="grid grid-cols-2 gap-3">

@@ -31,6 +31,9 @@ export interface MockPublishParams {
 export interface MockClientConfig {
   readonly beforeConnect?: () => void | Promise<void>;
   readonly onConnect?: () => void;
+  readonly onStompError?: (frame: MockFrame) => void;
+  readonly onWebSocketClose?: () => void;
+  readonly onWebSocketError?: () => void;
 }
 
 export class MockStompClient {
@@ -63,6 +66,18 @@ export class MockStompClient {
   connect(): void {
     this.connected = true;
     this.config.onConnect?.();
+  }
+
+  emitStompError(body: string): void {
+    this.config.onStompError?.({ body, headers: {} });
+  }
+
+  emitWebSocketClose(): void {
+    this.config.onWebSocketClose?.();
+  }
+
+  emitWebSocketError(): void {
+    this.config.onWebSocketError?.();
   }
 
   subscribe(

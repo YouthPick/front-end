@@ -7,7 +7,7 @@ import type { PolicyChatMessage, PolicyChatStatus } from '../../model/policyChat
 const MESSAGE_MAX_LENGTH = 1000;
 const AUTO_SCROLL_THRESHOLD_PX = 48;
 
-interface PolicyChatPanelPresenterProps {
+interface PolicyChatPresenterProps {
   messages: PolicyChatMessage[];
   status: PolicyChatStatus;
   errorMessage: string | null;
@@ -29,7 +29,7 @@ function formatMessageTime(createdAt: string): string {
   }).format(createdDate);
 }
 
-export function PolicyChatPanelPresenter({
+export function PolicyChatPresenter({
   messages,
   status,
   errorMessage,
@@ -37,7 +37,7 @@ export function PolicyChatPanelPresenter({
   sendErrorMessage,
   onRetry,
   onSendMessage,
-}: PolicyChatPanelPresenterProps) {
+}: PolicyChatPresenterProps) {
   const [draft, setDraft] = useState('');
   const listRef = useRef<HTMLDivElement | null>(null);
   const isNearBottomRef = useRef(true);
@@ -184,7 +184,7 @@ export function PolicyChatPanelPresenter({
             rows={2}
             aria-describedby="policy-chat-character-count policy-chat-send-error"
             className="min-h-18 flex-1 resize-none rounded-2xl border border-slate-200 bg-white p-3 text-xs leading-relaxed shadow-sm transition-colors focus:border-primary focus:outline-none disabled:bg-slate-50"
-            disabled={status === 'error'}
+            disabled={status === 'error' || isSending}
           />
           <button
             type="submit"

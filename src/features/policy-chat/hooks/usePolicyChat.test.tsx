@@ -1,7 +1,10 @@
 import { act, cleanup, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CHAT_SEND_FALLBACK_MESSAGE } from '../model/policyChatErrors';
+import {
+  CHAT_CONNECTION_FALLBACK_MESSAGE,
+  CHAT_SEND_FALLBACK_MESSAGE,
+} from '../model/policyChatErrors';
 import {
   finishPolicyChatBeforeConnect,
   getPolicyChatReceiptIds,
@@ -55,6 +58,13 @@ function latestClient(): MockStompClient {
   return client;
 }
 
+function createAxiosLikeError(status: number | undefined): unknown {
+  return Object.assign(new Error('request failed'), {
+    isAxiosError: true,
+    response: status === undefined ? undefined : { status },
+  });
+}
+
 describe('usePolicyChat STOMP lifecycle', () => {
   beforeEach(() => {
     vi.useRealTimers();
@@ -104,9 +114,9 @@ describe('usePolicyChat STOMP lifecycle', () => {
     expect(client.connectHeaders.Authorization).toBe(`Bearer ${refreshedToken}`);
   });
 
-  it('expires the session only when token refresh fails before connecting', async () => {
+  it('expires the session only when refresh token itself is rejected (401) before connecting', async () => {
     sharedApiMock.getAccessToken.mockReturnValue(null);
-    sharedApiMock.requestNewAccessToken.mockRejectedValue(new Error('refresh failed'));
+    sharedApiMock.requestNewAccessToken.mockRejectedValue(createAxiosLikeError(401));
 
     const { result } = renderPolicyChatTestHook();
     const client = latestClient();
@@ -117,6 +127,42 @@ describe('usePolicyChat STOMP lifecycle', () => {
     expect(sharedApiMock.notifySessionExpired).toHaveBeenCalledTimes(1);
     expect(client.deactivate).toHaveBeenCalledWith({ force: true });
     expect(result.current.status).toBe('error');
+  });
+
+  it('does not log the user out when token refresh fails transiently (network/5xx)', async () => {
+    sharedApiMock.getAccessToken.mockReturnValue(null);
+    sharedApiMock.requestNewAccessToken.mockRejectedValue(createAxiosLikeError(undefined));
+
+    const { result } = renderPolicyChatTestHook();
+    const client = latestClient();
+
+    await finishPolicyChatBeforeConnect(client);
+
+    expect(sharedApiMock.requestNewAccessToken).toHaveBeenCalledTimes(1);
+    expect(sharedApiMock.notifySessionExpired).not.toHaveBeenCalled();
+    expect(client.deactivate).toHaveBeenCalledWith({ force: true });
+    expect(result.current.status).toBe('error');
+  });
+
+  it('forces a fresh token refresh after a STOMP-level connection rejection', async () => {
+    const { client } = await renderConnectedPolicyChat({
+      getClient: latestClient,
+      historyMock: policyChatApiMock,
+    });
+
+    await act(async () => {
+      client.emitStompError('');
+    });
+
+    // 로컬에서는 여전히 만료 전으로 보이는 토큰이라도, STOMP 연결 거부 뒤에는 캐시를 재사용하지 않고
+    // 다시 발급받아야 서버 측 세션 무효화를 무한 재연결 없이 감지할 수 있다.
+    sharedApiMock.requestNewAccessToken.mockClear();
+    await act(async () => {
+      client.activate();
+      await client.finishBeforeConnect();
+    });
+
+    expect(sharedApiMock.requestNewAccessToken).toHaveBeenCalledTimes(1);
   });
 
   it('starts initial history immediately after issuing message and error subscriptions', async () => {
@@ -188,6 +234,28 @@ describe('usePolicyChat STOMP lifecycle', () => {
     expect(result.current.messages).toEqual([]);
   });
 
+  it('surfaces a reconnecting error instead of silently treating a subscription receipt timeout as success', async () => {
+    vi.useFakeTimers();
+    const { result } = renderPolicyChatTestHook();
+    const client = latestClient();
+
+    await act(async () => {
+      await client.finishBeforeConnect();
+      client.connect();
+    });
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(result.current.status).toBe('ready');
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+
+    expect(result.current.status).toBe('reconnecting');
+    expect(result.current.errorMessage).toBe(CHAT_CONNECTION_FALLBACK_MESSAGE);
+  });
+
   it('uses the initial-history cursor for receipt delta after a later live message arrives', async () => {
     policyChatApiMock.fetchPolicyChatMessages
       .mockResolvedValueOnce({ messages: [makePolicyChatMessageDto(5, 'initial')], nextCursor: 5 })
@@ -225,6 +293,37 @@ describe('usePolicyChat STOMP lifecycle', () => {
       expect.objectContaining({ afterId: 5, policyId: POLICY_CHAT_TEST_POLICY_ID }),
     );
     expect(result.current.messages.map((message) => message.id)).toEqual([5, 6, 10]);
+  });
+
+  it('resumes from the last known cursor instead of refetching all history on reconnect', async () => {
+    policyChatApiMock.fetchPolicyChatMessages.mockResolvedValueOnce({
+      messages: [makePolicyChatMessageDto(7, 'first')],
+      nextCursor: 7,
+    });
+
+    renderPolicyChatTestHook();
+    const client = latestClient();
+
+    await act(async () => {
+      await client.finishBeforeConnect();
+      client.connect();
+    });
+    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(1));
+
+    // stompjs가 내부적으로 재연결하면 같은 client 인스턴스에서 onConnect가 다시 호출된다.
+    policyChatApiMock.fetchPolicyChatMessages.mockResolvedValueOnce({
+      messages: [],
+      nextCursor: 7,
+    });
+    await act(async () => {
+      client.connect();
+    });
+
+    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(2));
+    expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ afterId: 7, policyId: POLICY_CHAT_TEST_POLICY_ID }),
+    );
   });
 
   it('resolves send success only after the broker delivers the matching author message', async () => {
@@ -280,6 +379,20 @@ describe('usePolicyChat STOMP lifecycle', () => {
     await expect(sendResult).resolves.toBe(false);
     expect(result.current.isSending).toBe(false);
     expect(result.current.sendErrorMessage).toBe(POLICY_CHAT_TEST_VALIDATION_ERROR_MESSAGE);
+  });
+
+  it('ignores a stray error-queue frame that does not correlate with any pending send', async () => {
+    const { client, result } = await renderConnectedPolicyChat({
+      getClient: latestClient,
+      historyMock: policyChatApiMock,
+    });
+
+    await act(async () => {
+      client.emitRawMessage(POLICY_CHAT_TEST_ERROR_DESTINATION, JSON.stringify({ code: 'C001' }));
+    });
+
+    expect(result.current.isSending).toBe(false);
+    expect(result.current.sendErrorMessage).toBeNull();
   });
 
   it('resolves send failure when the broker delivery confirmation times out', async () => {

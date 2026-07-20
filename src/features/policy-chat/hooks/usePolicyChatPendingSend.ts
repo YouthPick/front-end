@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 
+import { generateId } from '@/shared/utils';
 import type { PolicyChatMessage } from '../model/policyChat.types';
 import { CHAT_SEND_FALLBACK_MESSAGE } from '../model/policyChatErrors';
 
@@ -24,11 +25,7 @@ export interface PolicyChatPendingSendControls {
   startPendingSend: () => StartedPolicyChatSend | null;
   completeDeliveredMessage: (message: PolicyChatMessage) => void;
   failPendingSend: (nextSendErrorMessage: string, updateState: boolean) => void;
-}
-
-function createClientMessageId(): string {
-  if (typeof crypto.randomUUID === 'function') return crypto.randomUUID();
-  return `policy-chat-message-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  hasPendingSend: () => boolean;
 }
 
 export function usePolicyChatPendingSend(): PolicyChatPendingSendControls {
@@ -39,10 +36,8 @@ export function usePolicyChatPendingSend(): PolicyChatPendingSendControls {
   const settlePendingSend = useCallback(
     (sent: boolean, nextSendErrorMessage: string | null, updateState: boolean) => {
       const pendingSend = pendingSendRef.current;
-      if (!pendingSend) {
-        if (updateState && nextSendErrorMessage) setSendErrorMessage(nextSendErrorMessage);
-        return;
-      }
+      // 대기 중인 전송이 없으면 지금 도착한 실패 신호는 현재 전송과 무관하므로 무시한다.
+      if (!pendingSend) return;
 
       pendingSendRef.current = null;
       clearTimeout(pendingSend.timeoutId);
@@ -63,7 +58,7 @@ export function usePolicyChatPendingSend(): PolicyChatPendingSendControls {
 
     setIsSending(true);
     setSendErrorMessage(null);
-    const clientMessageId = createClientMessageId();
+    const clientMessageId = generateId();
     const deliveryPromise = new Promise<boolean>((resolve) => {
       const timeoutId = setTimeout(() => {
         settlePendingSend(false, CHAT_SEND_FALLBACK_MESSAGE, true);
@@ -94,6 +89,8 @@ export function usePolicyChatPendingSend(): PolicyChatPendingSendControls {
     [settlePendingSend],
   );
 
+  const hasPendingSend = useCallback(() => pendingSendRef.current !== null, []);
+
   return {
     isSending,
     sendErrorMessage,
@@ -102,5 +99,6 @@ export function usePolicyChatPendingSend(): PolicyChatPendingSendControls {
     startPendingSend,
     completeDeliveredMessage,
     failPendingSend,
+    hasPendingSend,
   };
 }

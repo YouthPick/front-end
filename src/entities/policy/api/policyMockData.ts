@@ -426,6 +426,10 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
   },
 ];
 
+// 백엔드 API가 준비되면 이 파일과 함께 삭제한다. 그 전까지는 mock/데모 정책 id를 실제 백엔드
+// 정책 id와 구분하는 유일한 근거이므로, id 문자열 형태(숫자 여부)만으로 실제 데이터 여부를 추론하지 않는다.
+export const MOCK_POLICY_IDS: ReadonlySet<string> = new Set(MOCK_POLICY_DTOS.map((dto) => dto.id));
+
 export const RECENTLY_VIEWED_POLICY_DTOS: RecentlyViewedPolicyDto[] = [
   { id: '2', category: '주거', title: '청년 월세 한시 특별지원', date: '2025.05.28' },
   { id: '4', category: '일자리', title: '청년내일채움공제', date: '2025.05.27' },

@@ -1,1 +1,0 @@
-export { PolicyChatPanel } from './PolicyChatPanel';

@@ -15,6 +15,7 @@ export {
   fetchRecentlyViewedPolicies,
   searchPolicies,
 } from './api/policyApi';
+export { MOCK_POLICY_IDS } from './api/policyMockData';
 export type { AdminPolicy } from './model/adminPolicy.types';
 export { mapAdminPolicyDtoToAdminPolicy } from './model/adminPolicyMapper';
 export {

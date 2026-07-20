@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   PolicyChatDisabledState,
-  PolicyChatPanelPresenter,
-} from '@/features/policy-chat/components/PolicyChatPanel/PolicyChatPanelPresenter';
+  PolicyChatPresenter,
+} from '@/features/policy-chat/components/PolicyChatContainer/PolicyChatPresenter';
 import { mergePolicyChatMessages } from '@/features/policy-chat/model/policyChatMapper';
 
 describe('policy chat smoke', () => {
@@ -84,7 +84,7 @@ describe('policy chat smoke', () => {
 
   it('keeps the draft when sending reports failure', async () => {
     render(
-      <PolicyChatPanelPresenter
+      <PolicyChatPresenter
         messages={[]}
         status="ready"
         errorMessage={null}

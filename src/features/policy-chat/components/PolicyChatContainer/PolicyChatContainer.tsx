@@ -1,17 +1,19 @@
+import { MOCK_POLICY_IDS } from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
 
 import { usePolicyChat } from '../../hooks/usePolicyChat';
 import {
   PolicyChatDisabledState,
   PolicyChatLoginRequiredState,
-  PolicyChatPanelPresenter,
-} from './PolicyChatPanelPresenter';
+  PolicyChatPresenter,
+} from './PolicyChatPresenter';
 
-interface PolicyChatPanelProps {
+interface PolicyChatContainerProps {
   policyId: string;
 }
 
 function parseBackendPolicyId(policyId: string): number | null {
+  if (MOCK_POLICY_IDS.has(policyId)) return null;
   if (!/^\d+$/.test(policyId)) return null;
 
   const parsedPolicyId = Number(policyId);
@@ -20,7 +22,7 @@ function parseBackendPolicyId(policyId: string): number | null {
   return parsedPolicyId;
 }
 
-export function PolicyChatPanel({ policyId }: PolicyChatPanelProps) {
+export function PolicyChatContainer({ policyId }: PolicyChatContainerProps) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const backendPolicyId = parseBackendPolicyId(policyId);
   const chat = usePolicyChat({
@@ -32,7 +34,7 @@ export function PolicyChatPanel({ policyId }: PolicyChatPanelProps) {
   if (backendPolicyId === null) return <PolicyChatDisabledState />;
 
   return (
-    <PolicyChatPanelPresenter
+    <PolicyChatPresenter
       messages={chat.messages}
       status={chat.status}
       errorMessage={chat.errorMessage}

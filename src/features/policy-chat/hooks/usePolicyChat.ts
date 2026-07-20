@@ -8,7 +8,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { notifySessionExpired } from '@/shared/api';
 import { fetchPolicyChatMessages } from '../api/policyChatApi';
-import { getFreshPolicyChatAccessToken } from '../api/policyChatAuth';
+import {
+  getFreshPolicyChatAccessToken,
+  isPolicyChatSessionInvalidError,
+} from '../api/policyChatAuth';
 import { createPolicyChatReceiptId, waitForPolicyChatReceipt } from '../api/policyChatReceipts';
 import {
   getPolicyChatErrorDestination,
@@ -53,6 +56,7 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
     setSendErrorMessage,
     completeDeliveredMessage,
     failPendingSend,
+    hasPendingSend,
   } = pendingSend;
 
   useEffect(() => {
@@ -76,6 +80,7 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
     let isDisposed = false;
     let hasConnected = false;
     let hasLoadedHistory = false;
+    let shouldForceTokenRefresh = false;
 
     cursorRef.current = 0;
     setMessages([]);
@@ -132,6 +137,9 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
     }
 
     function handlePolicyChatError(message: IMessage) {
+      // 대기 중인 전송이 없으면 지연 도착한(또는 다른 요청의) 에러 프레임이므로 무시한다.
+      if (!hasPendingSend()) return;
+
       let nextSendErrorMessage = CHAT_SEND_FALLBACK_MESSAGE;
       try {
         nextSendErrorMessage = parsePolicyChatErrorBody(message.body, CHAT_SEND_FALLBACK_MESSAGE);
@@ -152,15 +160,23 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
       heartbeatOutgoing: 10_000,
       beforeConnect: async () => {
         try {
-          const token = await getFreshPolicyChatAccessToken();
+          const token = await getFreshPolicyChatAccessToken(shouldForceTokenRefresh);
+          shouldForceTokenRefresh = false;
           if (!isActiveSession()) return;
 
           client.connectHeaders = { Authorization: `Bearer ${token}` };
-        } catch {
+        } catch (error) {
           if (!isActiveSession()) return;
-          setErrorMessage(CHAT_AUTH_REQUIRED_MESSAGE);
-          setStatus('error');
-          notifySessionExpired();
+          // refresh token 자체가 무효한 경우에만 세션을 만료 처리한다. 네트워크 단절/서버 5xx 같은
+          // 일시적 오류까지 notifySessionExpired를 호출하면 위젯 마운트만으로 앱 전체가 로그아웃된다.
+          if (isPolicyChatSessionInvalidError(error)) {
+            setErrorMessage(CHAT_AUTH_REQUIRED_MESSAGE);
+            setStatus('error');
+            notifySessionExpired();
+          } else {
+            setErrorMessage(CHAT_CONNECTION_FALLBACK_MESSAGE);
+            setStatus(hasConnected || hasLoadedHistory ? 'reconnecting' : 'error');
+          }
           void client.deactivate({ force: true });
         }
       },
@@ -192,13 +208,19 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
             receipt: errorReceiptId,
           }),
         );
-        const initialHistoryCursor = fetchHistoryDelta(0);
-        void Promise.all([messageReceipt.confirmed, errorReceipt.confirmed]).then(async () => {
-          if (!isActiveSession()) return;
-          const afterInitialHistoryId = await initialHistoryCursor;
-          if (afterInitialHistoryId === null || !isActiveSession()) return;
-          void fetchHistoryDelta(afterInitialHistoryId);
-        });
+        const initialHistoryCursor = fetchHistoryDelta(cursorRef.current);
+        void Promise.all([messageReceipt.confirmed, errorReceipt.confirmed])
+          .then(async () => {
+            if (!isActiveSession()) return;
+            const afterInitialHistoryId = await initialHistoryCursor;
+            if (afterInitialHistoryId === null || !isActiveSession()) return;
+            void fetchHistoryDelta(afterInitialHistoryId);
+          })
+          .catch(() => {
+            if (!isActiveSession()) return;
+            setErrorMessage(CHAT_CONNECTION_FALLBACK_MESSAGE);
+            setStatus(hasLoadedHistory ? 'reconnecting' : 'error');
+          });
       },
       onStompError: (frame) => {
         if (!isActiveSession()) return;
@@ -208,7 +230,10 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
           setErrorMessage(CHAT_CONNECTION_FALLBACK_MESSAGE);
         }
         failPendingSend(CHAT_SEND_FALLBACK_MESSAGE, true);
-        setStatus(hasLoadedHistory ? 'reconnecting' : 'error');
+        setStatus(hasConnected || hasLoadedHistory ? 'reconnecting' : 'error');
+        // STOMP CONNECT가 거부된 경우일 수 있으니 다음 재연결에서는 캐시된 토큰을 재사용하지 않고
+        // 강제로 새 토큰을 발급받아, 서버 측 세션 무효화를 무한 재연결 없이 감지한다.
+        shouldForceTokenRefresh = true;
       },
       onWebSocketClose: () => {
         if (!isActiveSession()) return;
@@ -220,7 +245,7 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
         if (!isActiveSession()) return;
         setErrorMessage(CHAT_CONNECTION_FALLBACK_MESSAGE);
         failPendingSend(CHAT_SEND_FALLBACK_MESSAGE, true);
-        setStatus(hasLoadedHistory ? 'reconnecting' : 'error');
+        setStatus(hasConnected || hasLoadedHistory ? 'reconnecting' : 'error');
       },
     });
 
@@ -242,6 +267,7 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
     chatSessionId,
     completeDeliveredMessage,
     failPendingSend,
+    hasPendingSend,
     setIsSending,
     setSendErrorMessage,
   ]);

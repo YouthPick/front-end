@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { getAccessToken, requestNewAccessToken } from '@/shared/api';
 
 const ACCESS_TOKEN_REFRESH_SKEW_SECONDS = 30;
@@ -31,9 +33,17 @@ export function isPolicyChatAccessTokenUsable(token: string): boolean {
   return expiresAtSeconds * 1000 > Date.now() + refreshThresholdMs;
 }
 
-export async function getFreshPolicyChatAccessToken(): Promise<string> {
+export async function getFreshPolicyChatAccessToken(forceRefresh = false): Promise<string> {
   const currentToken = getAccessToken();
-  if (currentToken && isPolicyChatAccessTokenUsable(currentToken)) return currentToken;
+  if (!forceRefresh && currentToken && isPolicyChatAccessTokenUsable(currentToken)) {
+    return currentToken;
+  }
 
   return requestNewAccessToken();
+}
+
+// refresh 요청이 401로 거부됐다는 건 refresh token 자체가 무효하다는 뜻이라 실제 세션 만료로 본다.
+// 네트워크 단절/타임아웃/서버 5xx는 응답이 없거나 다른 status라 여기 해당하지 않는다.
+export function isPolicyChatSessionInvalidError(error: unknown): boolean {
+  return axios.isAxiosError(error) && error.response?.status === 401;
 }
