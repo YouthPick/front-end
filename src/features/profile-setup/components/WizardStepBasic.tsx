@@ -1,12 +1,11 @@
+import { useMemo } from 'react';
+
+import { usePublicRegionsQuery } from '@/entities/region';
 import type { UserProfile } from '@/entities/user';
-import { CURRENT_YEAR, REGIONS } from '@/shared/constants';
+import { CURRENT_YEAR } from '@/shared/constants';
 
 const BIRTH_YEAR_BASE = 1988;
 const BIRTH_YEAR_COUNT = 25;
-
-// 검색 필터와 달리 프로필에서 "전체" 거주지는 선택할 수 없다.
-const REGION_OPTIONS = REGIONS.filter((region) => region !== '전체');
-const SUB_REGION_OPTIONS = ['마포구', '분당구', '해운대구', '남동구', '기타'];
 
 interface WizardStepBasicProps {
   draft: UserProfile;
@@ -14,6 +13,25 @@ interface WizardStepBasicProps {
 }
 
 export function WizardStepBasic({ draft, onUpdateDraft }: WizardStepBasicProps) {
+  const { data: regions = [], isLoading, isError } = usePublicRegionsQuery();
+
+  // 시·도 대표 행(districtName === provinceName)만 남겨 광역시·도 선택지로 쓴다.
+  const provinces = useMemo(
+    () => regions.filter((region) => region.districtName === region.provinceName),
+    [regions],
+  );
+
+  // 선택된 시·도에 속한 시·군·구만 노출한다. 이전에는 시·도와 무관하게 고정된 5개 목록을 보여줘
+  // 시·도를 바꿔도 이전 시·군·구 선택이 그대로 남는 문제가 있었다.
+  const districts = useMemo(
+    () =>
+      regions.filter(
+        (region) =>
+          region.provinceName === draft.region && region.districtName !== region.provinceName,
+      ),
+    [regions, draft.region],
+  );
+
   return (
     <div className="space-y-5 animate-in fade-in duration-200">
       <div className="space-y-1">
@@ -52,15 +70,16 @@ export function WizardStepBasic({ draft, onUpdateDraft }: WizardStepBasicProps) 
           <select
             id="wizard-region"
             value={draft.region}
-            onChange={(e) => onUpdateDraft({ region: e.target.value })}
-            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-700 outline-none"
+            disabled={isLoading}
+            onChange={(e) => onUpdateDraft({ region: e.target.value, subRegion: '' })}
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-700 outline-none disabled:opacity-50"
           >
             <option value="" disabled>
-              지역
+              {isLoading ? '불러오는 중...' : '지역'}
             </option>
-            {REGION_OPTIONS.map((region) => (
-              <option key={region} value={region}>
-                {region}
+            {provinces.map((province) => (
+              <option key={province.regionCode} value={province.provinceName}>
+                {province.provinceName}
               </option>
             ))}
           </select>
@@ -73,18 +92,24 @@ export function WizardStepBasic({ draft, onUpdateDraft }: WizardStepBasicProps) 
           <select
             id="wizard-sub-region"
             value={draft.subRegion}
+            disabled={draft.region === ''}
             onChange={(e) => onUpdateDraft({ subRegion: e.target.value })}
-            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-700 outline-none"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-700 outline-none disabled:opacity-50"
           >
-            <option value="">선택 안 함</option>
-            {SUB_REGION_OPTIONS.map((subRegion) => (
-              <option key={subRegion} value={subRegion}>
-                {subRegion === '기타' ? '기타 전체' : subRegion}
+            <option value="">선택 안 함 (시·도 전체)</option>
+            {districts.map((district) => (
+              <option key={district.regionCode} value={district.districtName}>
+                {district.districtName}
               </option>
             ))}
           </select>
         </div>
       </div>
+      {isError && (
+        <p className="text-[10px] text-red-400">
+          지역 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.
+        </p>
+      )}
       <p className="text-[10px] text-slate-400">
         ※ 시군구 조건이 맞지 않더라도 전국 및 광역시 통합 우대 조건은 누락 없이 분석 매치해
         드립니다.
