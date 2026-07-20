@@ -3,7 +3,7 @@ import type { PolicyDto, RecentlyViewedPolicyDto } from './policy.dto';
 
 export const MOCK_POLICY_DTOS: PolicyDto[] = [
   {
-    id: 'p1',
+    id: '1',
     title: '청년 디지털 일자리 지원 사업',
     category: '일자리',
     region: '서울특별시',
@@ -31,7 +31,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.work.go.kr',
   },
   {
-    id: 'p2',
+    id: '2',
     title: '청년 월세 한시 특별지원',
     category: '주거',
     region: '서울특별시',
@@ -59,7 +59,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.bokjiro.go.kr',
   },
   {
-    id: 'p3',
+    id: '3',
     title: 'K-디지털 트레이닝 (국비지원)',
     category: '교육',
     region: '서울특별시',
@@ -87,7 +87,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.hrd.go.kr',
   },
   {
-    id: 'p4',
+    id: '4',
     title: '청년내일채움공제',
     category: '일자리',
     region: '경기도',
@@ -115,7 +115,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.sbcof.or.kr',
   },
   {
-    id: 'p5',
+    id: '5',
     title: '청년 주거급여 분리지급',
     category: '주거',
     region: '서울특별시',
@@ -143,7 +143,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.bokjiro.go.kr',
   },
   {
-    id: 'p6',
+    id: '6',
     title: '국민내일배움카드',
     category: '교육',
     region: '전국',
@@ -172,7 +172,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.hrd.go.kr',
   },
   {
-    id: 'p7',
+    id: '7',
     title: '서울시 청년수당',
     category: '복지·문화',
     region: '서울특별시',
@@ -200,7 +200,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://youth.seoul.go.kr',
   },
   {
-    id: 'p8',
+    id: '8',
     title: '청년내일저축계좌',
     category: '복지·문화',
     region: '부산광역시',
@@ -228,7 +228,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.bokjiro.go.kr',
   },
   {
-    id: 'p9',
+    id: '9',
     title: '청년문화예술패스',
     category: '복지·문화',
     region: '전국',
@@ -256,7 +256,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.kopis.or.kr',
   },
   {
-    id: 'p10',
+    id: '10',
     title: '정부부처 청년인턴',
     category: '참여·권리',
     region: '전국',
@@ -284,7 +284,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.jobis.or.kr',
   },
   {
-    id: 'p11',
+    id: '11',
     title: '청년 창업 지원금',
     category: '일자리',
     region: '전국',
@@ -312,7 +312,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.k-startup.go.kr',
   },
   {
-    id: 'p12',
+    id: '12',
     title: '청년 대중교통비 지원 (K-패스)',
     category: '복지·문화',
     region: '전국',
@@ -340,7 +340,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://korea-pass.kr',
   },
   {
-    id: 'p13',
+    id: '13',
     title: '청년 전세자금 대출 이자 지원',
     category: '주거',
     region: '경기도',
@@ -367,7 +367,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
     link: 'https://www.gg.go.kr',
   },
   {
-    id: 'p14',
+    id: '14',
     title: '청년 정책참여단 모집',
     category: '참여·권리',
     region: '전국',
@@ -427,7 +427,7 @@ export const MOCK_POLICY_DTOS: PolicyDto[] = [
 ];
 
 export const RECENTLY_VIEWED_POLICY_DTOS: RecentlyViewedPolicyDto[] = [
-  { id: 'p2', category: '주거', title: '청년 월세 한시 특별지원', date: '2025.05.28' },
-  { id: 'p4', category: '일자리', title: '청년내일채움공제', date: '2025.05.27' },
-  { id: 'p6', category: '교육', title: '국민내일배움카드', date: '2025.05.26' },
+  { id: '2', category: '주거', title: '청년 월세 한시 특별지원', date: '2025.05.28' },
+  { id: '4', category: '일자리', title: '청년내일채움공제', date: '2025.05.27' },
+  { id: '6', category: '교육', title: '국민내일배움카드', date: '2025.05.26' },
 ];
