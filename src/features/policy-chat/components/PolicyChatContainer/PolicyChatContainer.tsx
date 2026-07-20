@@ -1,4 +1,3 @@
-import { MOCK_POLICY_IDS } from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
 
 import { usePolicyChat } from '../../hooks/usePolicyChat';
@@ -12,8 +11,9 @@ interface PolicyChatContainerProps {
   policyId: string;
 }
 
+// 정책 목록/상세가 실제 백엔드 API(#82)로 연동되면서 Policy.id는 항상 백엔드 정책의 숫자 id를
+// 문자열로 담는다(policyMapper.ts 참고). 형식이 어긋나는 값만 방어적으로 걸러낸다.
 function parseBackendPolicyId(policyId: string): number | null {
-  if (MOCK_POLICY_IDS.has(policyId)) return null;
   if (!/^\d+$/.test(policyId)) return null;
 
   const parsedPolicyId = Number(policyId);

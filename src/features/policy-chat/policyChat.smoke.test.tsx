@@ -11,7 +11,7 @@ describe('policy chat smoke', () => {
   it('renders the disabled state copy', () => {
     render(<PolicyChatDisabledState />);
 
-    expect(screen.getByText('실제 정책 정보에서 채팅을 이용할 수 있습니다')).toBeTruthy();
+    expect(screen.getByText('이 정책은 지금 채팅을 이용할 수 없습니다')).toBeTruthy();
   });
 
   it('merges chat messages by id and keeps the latest payload', () => {

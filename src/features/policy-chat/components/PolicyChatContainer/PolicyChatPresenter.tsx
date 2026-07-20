@@ -216,11 +216,9 @@ export function PolicyChatDisabledState() {
   return (
     <section className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-center space-y-2">
       <LockKeyhole className="mx-auto h-5 w-5 text-slate-400" aria-hidden="true" />
-      <p className="text-xs font-bold text-slate-600">
-        실제 정책 정보에서 채팅을 이용할 수 있습니다
-      </p>
+      <p className="text-xs font-bold text-slate-600">이 정책은 지금 채팅을 이용할 수 없습니다</p>
       <p className="text-[10px] leading-relaxed text-slate-400">
-        데모 정책 또는 임시 정책 ID에서는 정책별 대화 요청을 보내지 않습니다.
+        정책 ID를 확인할 수 없어 정책별 대화 요청을 보내지 않습니다.
       </p>
     </section>
   );

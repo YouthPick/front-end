@@ -25,20 +25,20 @@ describe('PolicyChatContainer', () => {
     useAuthStore.setState({ isAuthenticated: true });
   });
 
-  it('disables chat for a mock/demo policy id instead of connecting to STOMP', () => {
-    render(<PolicyChatContainer policyId="1" />);
+  it('disables chat for a malformed (non-numeric) policy id instead of connecting to STOMP', () => {
+    render(<PolicyChatContainer policyId="not-a-real-id" />);
 
-    expect(screen.getByText('실제 정책 정보에서 채팅을 이용할 수 있습니다')).toBeTruthy();
+    expect(screen.getByText('이 정책은 지금 채팅을 이용할 수 없습니다')).toBeTruthy();
     expect(usePolicyChatMock).toHaveBeenCalledWith(
       expect.objectContaining({ policyId: null, enabled: false }),
     );
   });
 
-  it('enables chat for a numeric policy id outside the mock dataset', () => {
-    render(<PolicyChatContainer policyId="100001" />);
+  it('enables chat for a real backend policy id', () => {
+    render(<PolicyChatContainer policyId="1" />);
 
     expect(usePolicyChatMock).toHaveBeenCalledWith(
-      expect.objectContaining({ policyId: 100001, enabled: true }),
+      expect.objectContaining({ policyId: 1, enabled: true }),
     );
   });
 });
