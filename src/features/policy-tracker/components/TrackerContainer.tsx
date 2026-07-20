@@ -1,7 +1,9 @@
+import { useQueries } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router';
 
-import { usePoliciesQuery } from '@/entities/policy';
+import { fetchPolicy, mapPolicyDetailToPolicy, policyKeys } from '@/entities/policy';
 import { usePagination } from '@/shared/hooks';
 import { ErrorState, Skeleton } from '@/shared/ui';
 
@@ -30,12 +32,15 @@ export function TrackerContainer() {
     isError: isTrackersError,
     refetch: refetchTrackers,
   } = useTrackers();
-  const {
-    data: policies = [],
-    isLoading: isPoliciesLoading,
-    isError: isPoliciesError,
-    refetch: refetchPolicies,
-  } = usePoliciesQuery();
+  // 등록된 트래커의 정책만 상세 API로 개별 조회한다. '전체 목록'(최신 100건) join 방식은
+  // 100건 밖 정책을 조용히 누락시켰다. 상세 캐시(policyKeys.detail)는 상세 모달과 공유된다.
+  const policyQueries = useQueries({
+    queries: trackers.map((tracker) => ({
+      queryKey: policyKeys.detail(tracker.policyId),
+      queryFn: async () => mapPolicyDetailToPolicy(await fetchPolicy(tracker.policyId)),
+    })),
+  });
+  const policies = policyQueries.flatMap((query) => (query.data ? [query.data] : []));
   const { selectedPolicyId, selectTracker, clearSelection } = useTrackerSelection();
   const mutations = useTrackerMutations();
   const { isStartError, retryStart } = useTrackerStartParam();
@@ -43,8 +48,14 @@ export function TrackerContainer() {
   // 목록(trackers)과 정책 조인(policies) 딜레이가 달라, policies가 pending/실패인 동안
   // policyTitle 필터가 목록을 비우면 탭 카운트(raw trackers)와 불일치가 생긴다.
   // 두 쿼리를 함께 게이트해 로딩/에러 상태에서 일관된 UI를 보장한다.
-  const isLoading = isTrackersLoading || isPoliciesLoading;
-  const isError = isTrackersError || isPoliciesError;
+  // 단 404(삭제·비노출 전환 정책)는 에러가 아니라 '없는 항목'으로 취급해 목록에서만 제외한다.
+  const isLoading = isTrackersLoading || policyQueries.some((query) => query.isPending);
+  const isError =
+    isTrackersError ||
+    policyQueries.some(
+      (query) =>
+        query.isError && !(isAxiosError(query.error) && query.error.response?.status === 404),
+    );
 
   // 로딩/에러 중에도 훅 호출 순서를 지키기 위해 조기 return보다 위에서 계산한다.
   const entries: TrackerListEntry[] = trackers
@@ -82,7 +93,9 @@ export function TrackerContainer() {
         title="신청관리 목록을 불러오지 못했습니다"
         onRetry={() => {
           if (isTrackersError) refetchTrackers();
-          if (isPoliciesError) refetchPolicies();
+          for (const query of policyQueries) {
+            if (query.isError) query.refetch();
+          }
         }}
       />
     );

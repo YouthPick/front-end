@@ -12,6 +12,10 @@ export default defineConfig(() => {
       },
     },
     server: {
+      // apiClient의 baseURL('/api')을 로컬 백엔드로 전달한다. 배포 환경의 리버스 프록시와 같은 역할.
+      proxy: {
+        '/api': 'http://localhost:8080',
+      },
       // 내부 네트워크의 다른 PC에서 접속할 수 있도록 모든 인터페이스에 바인딩한다.
       host: true,
       // HMR is disabled in AI Studio via DISABLE_HMR env var.

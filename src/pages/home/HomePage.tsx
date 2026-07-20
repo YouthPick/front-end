@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { type PolicyCategory, usePoliciesQuery, usePolicyDetailStore } from '@/entities/policy';
+import {
+  type PolicyCategory,
+  usePolicyCardPageQuery,
+  usePolicyDetailStore,
+} from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
 import { RecommendationPreview, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
-import { usePagination } from '@/shared/hooks';
 import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import { HeroBanner } from '@/widgets/hero-banner';
 import {
@@ -29,8 +33,15 @@ export function HomePage() {
     isError: isRecommendationsError,
     reload: reloadRecommendations,
   } = useRecommendations();
-  const { data: policies = [], isLoading } = usePoliciesQuery();
-  const { page, pageItems, pageCount, setPage } = usePagination(policies, HOME_POLICY_COUNT);
+  const [page, setPage] = useState(1);
+  const {
+    data: policyPage,
+    isLoading,
+    isError: isPoliciesError,
+    refetch: refetchPolicies,
+  } = usePolicyCardPageQuery(page, HOME_POLICY_COUNT);
+  const pageItems = policyPage?.policies ?? [];
+  const pageCount = policyPage?.totalPages ?? 1;
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
   const navigate = useNavigate();
 
@@ -87,7 +98,12 @@ export function HomePage() {
           </button>
         </div>
 
-        {isLoading ? (
+        {isPoliciesError ? (
+          <ErrorState
+            title="신규 정책 목록을 불러오지 못했습니다"
+            onRetry={() => refetchPolicies()}
+          />
+        ) : isLoading ? (
           <div className={POLICY_GRID_CLASS}>
             {Array.from({ length: HOME_POLICY_COUNT }, (_, index) => (
               // biome-ignore lint/suspicious/noArrayIndexKey: 순서가 바뀌지 않는 정적 로딩 플레이스홀더라 안정적인 id가 없다

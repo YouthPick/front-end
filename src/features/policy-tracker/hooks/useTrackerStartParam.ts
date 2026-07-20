@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router';
 
-import { fetchPolicy } from '@/entities/policy';
+import { fetchPolicy, mapPolicyDetailToPolicy } from '@/entities/policy';
 import { useToast } from '@/shared/ui';
 
 import { startTracker } from '../api/trackerApi';
@@ -18,8 +18,8 @@ export function useTrackerStartParam() {
 
   const startMutation = useMutation({
     mutationFn: async (policyId: string) => {
-      const policy = await fetchPolicy(policyId);
-      if (!policy) throw new Error(`정책을 찾을 수 없습니다: ${policyId}`);
+      // 미존재 정책은 fetchPolicy가 404로 throw한다 — onError 토스트로 이어진다.
+      const policy = mapPolicyDetailToPolicy(await fetchPolicy(policyId));
       const result = await startTracker(policyId, policy.deadline);
       return { ...result, policyId, policyTitle: policy.title };
     },
