@@ -2,6 +2,7 @@ import { useSearchParams } from 'react-router';
 
 import { useSubmittableUrlQuery } from '@/shared/hooks';
 
+import { REGION_FILTER_OPTIONS } from '../policySearchOptions';
 import type { PolicySearchFilterKey, PolicySearchFilters } from '../types/policySearch.types';
 
 export const DEFAULT_FILTER_VALUE = '전체';
@@ -14,8 +15,15 @@ export function useSearchFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { query, draftQuery, setDraftQuery, submitQuery } = useSubmittableUrlQuery('q');
 
+  // 옵션에 없는 region 값은 '전체'로 정규화한다. 공유·북마크된 옛 URL(?region=전국 등)이나 손수정 쿼리가
+  // 들어오면 controlled select는 매칭 실패로 빈 칸을 보여주는데 요청에는 그 값이 그대로 나가, 필터바는
+  // "지역 조건 없음"인데 결과는 0건인 상태가 된다.
+  const rawRegion = searchParams.get('region');
+  const region =
+    rawRegion && REGION_FILTER_OPTIONS.includes(rawRegion) ? rawRegion : DEFAULT_FILTER_VALUE;
+
   const filters: PolicySearchFilters = {
-    region: searchParams.get('region') ?? DEFAULT_FILTER_VALUE,
+    region,
     status: searchParams.get('status') ?? DEFAULT_FILTER_VALUE,
     category: searchParams.get('category') ?? DEFAULT_FILTER_VALUE,
     age: searchParams.get('age') ?? DEFAULT_FILTER_VALUE,
@@ -55,10 +63,6 @@ export function useSearchFilters() {
     }
   };
 
-  const showNationwideOnly = () => {
-    setSearchParams(new URLSearchParams({ region: '전국' }), { replace: true });
-  };
-
   return {
     query,
     draftQuery,
@@ -67,6 +71,5 @@ export function useSearchFilters() {
     filters,
     setFilter,
     resetFilters,
-    showNationwideOnly,
   };
 }

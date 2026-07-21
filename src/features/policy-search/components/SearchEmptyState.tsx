@@ -1,11 +1,13 @@
 import { EmptyState } from '@/shared/ui';
 
 interface SearchEmptyStateProps {
+  onResetRegion: () => void;
   onResetAll: () => void;
-  onShowNationwide: () => void;
 }
 
-export function SearchEmptyState({ onResetAll, onShowNationwide }: SearchEmptyStateProps) {
+// 안내문이 시·도 조건을 원인으로 지목하므로, 기본 액션도 지역만 푼다 — 입력한 검색어와 나머지 필터를
+// 살린 채 결과가 나오게 하는 가장 좁은 복구다. 전체 초기화는 검색어까지 지우므로 보조로 둔다.
+export function SearchEmptyState({ onResetRegion, onResetAll }: SearchEmptyStateProps) {
   return (
     <EmptyState
       icon="🔍"
@@ -14,17 +16,17 @@ export function SearchEmptyState({ onResetAll, onShowNationwide }: SearchEmptySt
     >
       <button
         type="button"
-        onClick={onResetAll}
-        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+        onClick={onResetRegion}
+        className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:brightness-105 transition-colors"
       >
-        필터 설정 전체 초기화
+        지역 조건 해제하고 다시 보기
       </button>
       <button
         type="button"
-        onClick={onShowNationwide}
-        className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:brightness-105 transition-colors"
+        onClick={onResetAll}
+        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors"
       >
-        전국 공통 정책 보기
+        필터 전체 초기화
       </button>
     </EmptyState>
   );

@@ -1,4 +1,5 @@
 import {
+  DEFAULT_FILTER_VALUE,
   PolicyFilterBar,
   PolicySearchBar,
   SearchEmptyState,
@@ -26,7 +27,6 @@ export function SearchPage() {
     setQuery,
     setFilter,
     resetFilters,
-    showNationwideOnly,
     submitSearch,
   } = usePolicySearch();
 
@@ -84,8 +84,8 @@ export function SearchPage() {
           </>
         ) : (
           <SearchEmptyState
+            onResetRegion={() => setFilter('region', DEFAULT_FILTER_VALUE)}
             onResetAll={() => resetFilters({ clearQuery: true })}
-            onShowNationwide={showNationwideOnly}
           />
         ))}
     </div>
