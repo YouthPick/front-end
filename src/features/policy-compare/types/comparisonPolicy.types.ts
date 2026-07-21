@@ -5,6 +5,7 @@ export interface ComparisonPolicy {
   organizationName: string;
   ageRangeText: string;
   incomeText: string;
+  regionText: string;
   additionalQualification: string;
   participationRestriction: string;
   applicationEndDateText: string;

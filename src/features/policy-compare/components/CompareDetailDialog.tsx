@@ -23,6 +23,7 @@ const COMPARE_ROWS: { label: string; render: (policy: ComparisonPolicy) => strin
   { label: '카테고리', render: (policy) => policy.category },
   { label: '주관기관', render: (policy) => policy.organizationName },
   { label: '지원 연령', render: (policy) => policy.ageRangeText },
+  { label: '지원 지역', render: (policy) => policy.regionText },
   { label: '소득 조건', render: (policy) => policy.incomeText },
   { label: '신청자격', render: (policy) => policy.additionalQualification },
   { label: '참여제한사항', render: (policy) => policy.participationRestriction },
