@@ -7,7 +7,7 @@ import {
   deleteCommunityPost,
   useCommunityPostQuery,
 } from '@/entities/community-post';
-import { usePolicyDetailStore } from '@/entities/policy';
+import { usePolicyDetailQuery, usePolicyDetailStore } from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
 import { CommentListContainer, useCommunityComments } from '@/features/community-comment';
 import { useCommunityLike } from '@/features/community-like';
@@ -30,6 +30,9 @@ interface CommunityDetailPageContentProps {
 
 function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps) {
   const { data: post, isLoading, isError, refetch } = useCommunityPostQuery(postId);
+  // PostDetailResponse에는 policyId/policyTitle만 있고 category/deadline이 없어
+  // 게시글 상세 응답만으로는 첨부 정책 카드를 완성할 수 없다 — 정책 상세를 따로 조회해 채운다.
+  const { data: attachedPolicy } = usePolicyDetailQuery(post?.policyId ?? null);
   const { isLiked, toggleLike } = useCommunityLike();
   const { data: comments } = useCommunityComments(postId);
   const user = useAuthStore((state) => state.user);
@@ -77,7 +80,18 @@ function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps)
       {!isLoading && !isError && post && (
         <>
           <CommunityPostDetail
-            post={{ ...post, commentCount: comments?.length ?? post.commentCount }}
+            post={{
+              ...post,
+              commentCount: comments?.length ?? post.commentCount,
+              attachedPolicy: attachedPolicy
+                ? {
+                    id: attachedPolicy.id,
+                    title: attachedPolicy.title,
+                    category: attachedPolicy.category,
+                    deadline: attachedPolicy.deadline,
+                  }
+                : post.attachedPolicy,
+            }}
             isLiked={isLiked(post.id)}
             onToggleLike={toggleLike}
             onViewAttachedPolicy={openPolicyDetail}
