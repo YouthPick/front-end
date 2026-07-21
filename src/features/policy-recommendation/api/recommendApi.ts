@@ -4,7 +4,7 @@ import { CURRENT_YEAR } from '@/shared/constants';
 
 import type { PolicyRecommendation } from '../types/recommendation.types';
 
-// 온보딩의 취업/학력 상태 vocabulary를 정책의 eligibleStatuses(POLICY_ELIGIBLE_STATUSES) vocabulary로
+// 온보딩의 취업/학력 상태 vocabulary를 정책의 eligibleStatuses vocabulary로
 // 느슨하게 연결하는 매핑. 두 값 체계가 서로 다른 목적(온보딩 입력 vs 정책 신분 구분)으로 설계돼 있어
 // 직접 비교할 수 없으므로, 실질적으로 겹치는 신분에 한해 매칭시킨다.
 const EMPLOYMENT_TO_ELIGIBLE_TOKENS: Record<string, string[]> = {

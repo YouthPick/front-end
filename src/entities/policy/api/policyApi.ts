@@ -4,9 +4,11 @@ import type { PolicyCardDto, PolicyDetailDto, RecentlyViewedPolicyDto } from './
 export interface PolicySearchParams {
   query?: string;
   region?: string;
-  status?: string;
   category?: string;
   age?: string;
+  // 백엔드 jobCode(온통청년 취업상태 코드). UI 라벨 → 코드 변환은 소비하는 feature가 하고,
+  // 여기서는 이미 번역된 값만 받는다 — entities가 온보딩 어휘를 알 필요가 없다.
+  jobCode?: string;
 }
 
 // ponytail: 최신 LIST_PAGE_SIZE건만 받는 '요약 전체 목록'. 현재 소비자는 추천(useRecommendations)과
@@ -57,8 +59,8 @@ export async function searchPolicies(params: PolicySearchParams): Promise<Policy
   return (await fetchPolicySearchPage(params, 1, LIST_PAGE_SIZE)).data;
 }
 
-// 검색 화면 서버 페이지네이션. keyword·region·category·age(→ ageMin/ageMax)는 백엔드가
-// 필터링한다(#86/#87). status는 아직 서버 미지원 — 보내지 않는다.
+// 검색 화면 서버 페이지네이션. keyword·region·category·age(→ ageMin/ageMax)·jobCode를
+// 백엔드가 필터링한다(#86/#87, back-end#133).
 // page는 1-base. 백엔드가 one-indexed-parameters=true로 요청·응답(meta.page)을 모두
 // 1-base로 통일했다 — 여기서 0-base로 변환하면 안 된다(#126).
 export async function fetchPolicySearchPage(
@@ -72,6 +74,7 @@ export async function fetchPolicySearchPage(
       region: toFilterParam(params.region),
       category: toFilterParam(params.category),
       ...toAgeParams(params.age),
+      jobCode: params.jobCode,
       page,
       size,
     },

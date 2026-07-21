@@ -54,6 +54,6 @@ export {
   usePolicySearchQuery,
   useRecentlyViewedPoliciesQuery,
 } from './model/policyQueries';
-export { POLICY_ELIGIBLE_STATUSES } from './model/policyStatuses';
+export { JOB_CODE_UNRESTRICTED, jobCodeForProfileCode } from './model/policyJobCodes';
 export { PolicyCard } from './ui/PolicyCard';
 export { getPolicyCategoryBadgeClasses, PolicyCategoryBadge } from './ui/PolicyCategoryBadge';
