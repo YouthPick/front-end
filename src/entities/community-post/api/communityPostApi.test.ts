@@ -7,12 +7,16 @@ const apiClientMock = vi.hoisted(() => ({
   post: vi.fn(),
 }));
 
-vi.mock('@/shared/api', () => ({ apiClient: apiClientMock }));
+vi.mock('@/shared/api', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/shared/api')>();
+  return { ...actual, apiClient: apiClientMock };
+});
 
 import {
   createCommunityPost,
   deleteCommunityPost,
   fetchCommunityPost,
+  fetchCommunityPosts,
   updateCommunityPost,
 } from './communityPostApi';
 
@@ -123,5 +127,40 @@ describe('커뮤니티 게시글 생성 API', () => {
 
     await expect(deleteCommunityPost('91')).resolves.toBeUndefined();
     expect(apiClientMock.delete).toHaveBeenCalledWith('/v1/posts/91');
+  });
+
+  it('목록 조회는 페이지 파라미터로 실제 GET API를 호출하고 페이지 결과로 변환한다', async () => {
+    apiClientMock.get.mockResolvedValue({
+      data: {
+        data: [
+          {
+            id: 91,
+            authorId: 3,
+            authorNickname: '정원',
+            policyId: null,
+            policyTitle: null,
+            category: 'FREE',
+            title: '목록 글',
+            viewCount: 5,
+            createdAt: '2026-07-20T10:00:00',
+          },
+        ],
+        meta: { page: 1, totalCount: 1, totalPages: 1 },
+      },
+    });
+
+    const result = await fetchCommunityPosts({ page: 1, pageSize: 6 });
+
+    expect(apiClientMock.get).toHaveBeenCalledWith('/v1/posts', {
+      params: { page: 1, size: 6, sort: 'createdAt,desc' },
+    });
+    expect(result).toEqual({
+      items: [
+        expect.objectContaining({ id: '91', title: '목록 글', category: '잡담', content: '' }),
+      ],
+      page: 1,
+      pageSize: 6,
+      totalCount: 1,
+    });
   });
 });
