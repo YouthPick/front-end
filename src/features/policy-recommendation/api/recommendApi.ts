@@ -5,7 +5,8 @@ import type {
   RecommendationReliability,
 } from '../types/recommendation.types';
 
-// 매칭 축(백엔드 REC 6축) → 추천 사유 문구. 새 축이 추가돼도 화면이 깨지지 않도록 알 수 없는 축은 그대로 보여준다.
+// 매칭 축(백엔드 10축) → 추천 사유 문구. 백엔드가 축을 추가해도 화면이 깨지지 않도록 알 수 없는 축은
+// fallback 문구로 내보내지만, 문구가 어색해지므로(예: "특화조건 조건이 일치합니다.") 축이 늘면 여기도 같이 채운다.
 const REASON_BY_AXIS: Record<string, string> = {
   나이: '지원 연령 조건에 해당합니다.',
   지역: '거주 지역이 정책 지역 조건과 일치합니다.',
@@ -13,6 +14,10 @@ const REASON_BY_AXIS: Record<string, string> = {
   학력: '학력 조건이 지원 대상에 포함됩니다.',
   분야: '관심 분야로 등록한 카테고리와 일치합니다.',
   키워드: '관심 키워드가 정책과 일치합니다.',
+  특화조건: '특화조건(우대 대상)에 해당합니다.',
+  전공: '전공 계열이 지원 대상에 포함됩니다.',
+  결혼여부: '결혼 여부 조건에 해당합니다.',
+  소득: '연소득이 정책 소득 기준 이내입니다.',
 };
 
 function toReasons(matchedAxes: string[]): string[] {
@@ -28,7 +33,7 @@ function toReliability(score: number): RecommendationReliability {
   return 'LOW';
 }
 
-// 맞춤정책 조회(회원 전용). 매칭 점수는 백엔드(REC 6축)가 계산해 내려주고, 프론트는 표시용 사유 문구·신뢰도만 파생한다.
+// 맞춤정책 조회(회원 전용). 매칭 점수는 백엔드가 계산해 내려주고, 프론트는 표시용 사유 문구·신뢰도만 파생한다.
 export async function fetchRecommendations(): Promise<PolicyRecommendation[]> {
   const dtos = await fetchRecommendedPolicies();
   return dtos.map((dto) => ({
