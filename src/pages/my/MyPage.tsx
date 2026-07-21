@@ -120,7 +120,10 @@ export function MyPage() {
           ) : isProfileLoading ? (
             <Skeleton className="h-64" />
           ) : isOnboarded && profile ? (
-            <ProfileSummaryCard profile={profile} onEdit={() => navigate(ROUTES.profileSetup)} />
+            <ProfileSummaryCard
+              profile={profile}
+              onEdit={() => navigate(ROUTES.profileSetup, { state: { from: ROUTES.my } })}
+            />
           ) : (
             <EmptyState
               icon="📝"
