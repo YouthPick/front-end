@@ -26,8 +26,3 @@ export interface PolicyComparisonItemDto {
   // 지원 지역. 비어 있으면 지역 조건이 등록되지 않은 정책이다.
   regions: PolicyComparisonRegionDto[];
 }
-
-export interface PolicyComparisonResponseDto {
-  comparisonId: string;
-  policies: PolicyComparisonItemDto[];
-}

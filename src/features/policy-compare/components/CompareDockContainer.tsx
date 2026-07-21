@@ -31,7 +31,7 @@ export function CompareDockContainer() {
     enabled: showDetailDialog && count >= 2,
   });
   const comparisonPolicies = comparisonQuery.data
-    ? mapPolicyComparisonItemDtosToComparisonPolicies(comparisonQuery.data.policies)
+    ? mapPolicyComparisonItemDtosToComparisonPolicies(comparisonQuery.data)
     : [];
   const isComparisonError =
     comparisonQuery.isError || (showDetailDialog && !comparisonQuery.isValidRequest);

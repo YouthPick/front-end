@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { createPolicyComparison } from '../api/compareApi';
+import { getPolicyComparison } from '../api/compareApi';
 
 export const comparisonKeys = {
   all: ['policy-comparisons'] as const,
-  detail: (policyIds: string[]) =>
-    [...comparisonKeys.all, [...policyIds].sort((a, b) => Number(a) - Number(b))] as const,
+  // 서버가 요청 순서를 그대로 보존해 응답하므로(비교표 열 순서 = 사용자가 고른 순서) 캐시 키도
+  // 정렬하지 않고 요청 순서를 그대로 쓴다. 정렬하면 [2,1]과 [1,2]가 같은 키를 공유해
+  // 실제 응답 순서와 어긋난 캐시가 재사용된다.
+  detail: (policyIds: string[]) => [...comparisonKeys.all, policyIds] as const,
 };
 
 interface UsePolicyComparisonQueryOptions {
@@ -22,7 +24,7 @@ export function usePolicyComparisonQuery(
 
   const query = useQuery({
     queryKey: comparisonKeys.detail(policyIds),
-    queryFn: () => createPolicyComparison(numericIds),
+    queryFn: () => getPolicyComparison(numericIds),
     enabled: enabled && isValidRequest,
   });
 
