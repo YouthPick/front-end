@@ -126,7 +126,7 @@ export function mapPolicyDetailToPolicy(dto: PolicyDetailDto): Policy {
     screeningMethod: dto.screeningMethod,
     participationRestriction: dto.participationRestriction,
     details: [],
-    link: toExternalLink(dto.applicationUrl ?? dto.referenceUrl1),
+    link: toExternalLink(dto.applicationUrl ?? dto.referenceUrl1 ?? dto.referenceUrl2),
     isSourceMissing: false,
   };
 }
