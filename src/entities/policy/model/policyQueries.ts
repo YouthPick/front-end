@@ -49,16 +49,16 @@ function mapPolicyPageEnvelope(envelope: ApiPageEnvelope<PolicyCardDto>) {
 export function usePolicySearchPageQuery(params: PolicySearchParams, page: number, size: number) {
   return useQuery({
     queryKey: policyKeys.searchPage(params, page, size),
-    queryFn: async () => mapPolicyPageEnvelope(await fetchPolicySearchPage(params, page - 1, size)),
+    queryFn: async () => mapPolicyPageEnvelope(await fetchPolicySearchPage(params, page, size)),
     placeholderData: keepPreviousData,
   });
 }
 
-// 홈 그리드 서버 페이지네이션. page는 1-base(UI 기준)로 받아 서버 0-base로 변환한다.
+// 홈 그리드 서버 페이지네이션. 서버가 1-base(one-indexed-parameters)라 UI 페이지 번호를 그대로 넘긴다.
 export function usePolicyCardPageQuery(page: number, size: number) {
   return useQuery({
     queryKey: policyKeys.page(page, size),
-    queryFn: async () => mapPolicyPageEnvelope(await fetchPolicyCardPage(page - 1, size)),
+    queryFn: async () => mapPolicyPageEnvelope(await fetchPolicyCardPage(page, size)),
     // 페이지 전환 시 이전 페이지를 유지해 스켈레톤 깜빡임을 막는다.
     placeholderData: keepPreviousData,
   });

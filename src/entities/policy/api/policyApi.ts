@@ -35,10 +35,12 @@ function toAgeParams(age: string | undefined): { ageMin?: number; ageMax?: numbe
 }
 
 export async function fetchPolicies(): Promise<PolicyCardDto[]> {
-  return (await fetchPolicyCardPage(0, LIST_PAGE_SIZE)).data;
+  return (await fetchPolicyCardPage(1, LIST_PAGE_SIZE)).data;
 }
 
-// 홈 그리드용 서버 페이지네이션 — 페이지를 넘길 때마다 해당 페이지만 받아온다. page는 0-base.
+// 홈 그리드용 서버 페이지네이션 — 페이지를 넘길 때마다 해당 페이지만 받아온다.
+// page는 1-base. 백엔드가 spring.data.web.pageable.one-indexed-parameters=true로
+// 요청·응답(meta.page)을 모두 1-base로 통일했다 — 여기서 0-base로 변환하면 안 된다.
 export async function fetchPolicyCardPage(
   page: number,
   size: number,
