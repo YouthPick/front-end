@@ -1,5 +1,5 @@
 import Image from '@tiptap/extension-image';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import {
   Bold,
@@ -63,6 +63,14 @@ export function RichTextEditor({
     if (editor.getHTML() === content) return;
     editor.commands.setContent(content, { emitUpdate: false });
   }, [editor, content]);
+
+  // editor.isEmpty를 렌더에서 직접 읽으면 위 setContent(emitUpdate: false)처럼 onUpdate를
+  // 건너뛰는 트랜잭션 이후 리렌더가 일어나지 않아(Tiptap v3 shouldRerenderOnTransaction
+  // 기본값이 false) 플레이스홀더가 옛 값 기준으로 계속 떠 있는다. useEditorState로 따로 구독한다.
+  const isEmpty = useEditorState({
+    editor,
+    selector: ({ editor }) => editor?.isEmpty ?? true,
+  });
 
   if (!editor) {
     return null;
@@ -253,7 +261,7 @@ export function RichTextEditor({
 
       {/* Editor Content Area */}
       <div className="relative min-h-[250px] p-4 text-xs leading-relaxed outline-none">
-        {editor.isEmpty && (
+        {isEmpty && (
           <div className="absolute top-4 left-4 pointer-events-none text-slate-400 select-none">
             {placeholder}
           </div>
