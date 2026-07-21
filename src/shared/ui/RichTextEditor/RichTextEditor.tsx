@@ -15,7 +15,7 @@ import {
   Strikethrough,
   Undo,
 } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { uploadFile } from '@/shared/api/fileApi';
 
 interface RichTextEditorProps {
@@ -54,6 +54,15 @@ export function RichTextEditor({
       },
     },
   });
+
+  // useEditor는 마운트 시점의 content만 반영한다(deps 없음). 게시글 수정처럼 content가
+  // 비동기로 나중에 채워지는 경우를 위해 외부에서 바뀐 값을 에디터에 동기화한다.
+  // 타이핑 중 onUpdate가 올린 값과 같으면 건너뛰어 커서 위치가 튀지 않게 한다.
+  useEffect(() => {
+    if (!editor) return;
+    if (editor.getHTML() === content) return;
+    editor.commands.setContent(content, { emitUpdate: false });
+  }, [editor, content]);
 
   if (!editor) {
     return null;
