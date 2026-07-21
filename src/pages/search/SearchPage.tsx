@@ -1,4 +1,5 @@
 import {
+  DEFAULT_FILTER_VALUE,
   PolicyFilterBar,
   PolicySearchBar,
   SearchEmptyState,
@@ -82,7 +83,10 @@ export function SearchPage() {
             <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
           </>
         ) : (
-          <SearchEmptyState onResetAll={() => resetFilters({ clearQuery: true })} />
+          <SearchEmptyState
+            onResetRegion={() => setFilter('region', DEFAULT_FILTER_VALUE)}
+            onResetAll={() => resetFilters({ clearQuery: true })}
+          />
         ))}
     </div>
   );
