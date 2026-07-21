@@ -130,28 +130,40 @@ export async function startTracker(
   };
 }
 
+// 신청 정보(상태/마감일)를 부분 수정하는 PATCH 응답은 체크리스트를 포함하지 않는다.
+// 두 PATCH 모두 갱신된 신청 정보 + 기존 체크리스트를 합쳐 TrackerItem으로 돌려주는 동일한 패턴이라 하나로 묶는다.
+async function patchTrackerApplication(
+  applicationId: number,
+  patch: () => Promise<{ data: { data: PolicyApplicationDto } }>,
+): Promise<TrackerItem> {
+  const response = await patch();
+  return mapPolicyApplicationToTracker(response.data.data, await fetchChecklist(applicationId));
+}
+
 export async function updateTrackerStatus(
   applicationId: number,
   status: TrackerStatus,
 ): Promise<TrackerItem> {
-  const response = await apiClient.patch<{ data: PolicyApplicationDto }>(
-    `/v1/policy-applications/${applicationId}/status`,
-    undefined,
-    { params: { status: toApiApplicationStatus(status) } },
+  return patchTrackerApplication(applicationId, () =>
+    apiClient.patch<{ data: PolicyApplicationDto }>(
+      `/v1/policy-applications/${applicationId}/status`,
+      undefined,
+      { params: { status: toApiApplicationStatus(status) } },
+    ),
   );
-  return mapPolicyApplicationToTracker(response.data.data, await fetchChecklist(applicationId));
 }
 
 export async function updateTrackerDate(
   applicationId: number,
   targetDate: string,
 ): Promise<TrackerItem> {
-  const response = await apiClient.patch<{ data: PolicyApplicationDto }>(
-    `/v1/policy-applications/${applicationId}/end-at`,
-    undefined,
-    { params: { endAt: toIsoDateTime(targetDate) } },
+  return patchTrackerApplication(applicationId, () =>
+    apiClient.patch<{ data: PolicyApplicationDto }>(
+      `/v1/policy-applications/${applicationId}/end-at`,
+      undefined,
+      { params: { endAt: toIsoDateTime(targetDate) } },
+    ),
   );
-  return mapPolicyApplicationToTracker(response.data.data, await fetchChecklist(applicationId));
 }
 
 export async function addChecklistItem(applicationId: number, text: string): Promise<void> {

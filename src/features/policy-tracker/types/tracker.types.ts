@@ -1,5 +1,12 @@
 export type TrackerStatus = '관심' | '준비중' | '신청완료' | '종료';
 
+// 상태 선택지의 단일 출처. 배지 목록, 상태 select, 탭 등 여러 곳에서 이 배열만 참조한다.
+export const TRACKER_STATUSES: readonly TrackerStatus[] = ['관심', '준비중', '신청완료', '종료'];
+
+export function isTrackerStatus(value: string): value is TrackerStatus {
+  return (TRACKER_STATUSES as readonly string[]).includes(value);
+}
+
 export interface TrackerChecklistItem {
   id: number;
   text: string;

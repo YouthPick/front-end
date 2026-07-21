@@ -1,12 +1,10 @@
-import type { TrackerItem, TrackerStatusTab } from '../../types/tracker.types';
+import {
+  TRACKER_STATUSES,
+  type TrackerItem,
+  type TrackerStatusTab,
+} from '../../types/tracker.types';
 
-export const TRACKER_STATUS_TABS: TrackerStatusTab[] = [
-  '전체',
-  '관심',
-  '준비중',
-  '신청완료',
-  '종료',
-];
+export const TRACKER_STATUS_TABS: TrackerStatusTab[] = ['전체', ...TRACKER_STATUSES];
 
 interface TrackerStatusTabsProps {
   trackers: TrackerItem[];

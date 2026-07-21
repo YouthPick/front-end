@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { type UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useToast } from '@/shared/ui';
+import { type ToastType, useToast } from '@/shared/ui';
 
 import {
   addChecklistItem,
@@ -15,82 +15,87 @@ import {
 import type { TrackerChecklistItem, TrackerStatus } from '../types/tracker.types';
 import { trackerKeys } from './useTrackers';
 
-export function useTrackerMutations() {
+interface TrackerMutationOptions<TVariables, TResult> {
+  successToast?: (variables: TVariables, result: TResult) => string;
+  successToastType?: ToastType;
+  errorToast?: string;
+}
+
+// 신청관리 mutation들은 전부 "성공 시 목록 무효화 + 토스트 안내"라는 같은 모양을 반복한다.
+// 이 훅이 그 공통 뼈대를 맡고, 각 mutation은 요청 함수와 토스트 문구만 넘긴다.
+function useTrackerMutation<TVariables, TResult>(
+  mutationFn: (variables: TVariables) => Promise<TResult>,
+  options?: TrackerMutationOptions<TVariables, TResult>,
+): UseMutationResult<TResult, unknown, TVariables> {
   const queryClient = useQueryClient();
   const { showToast } = useToast();
 
-  const invalidateTrackers = () => {
-    queryClient.invalidateQueries({ queryKey: trackerKeys.all });
-  };
+  return useMutation({
+    mutationFn,
+    onSuccess: (result, variables) => {
+      queryClient.invalidateQueries({ queryKey: trackerKeys.all });
+      if (options?.successToast) {
+        showToast(options.successToast(variables, result), options.successToastType);
+      }
+    },
+    onError: options?.errorToast
+      ? () => showToast(options.errorToast as string, 'warning')
+      : undefined,
+  });
+}
 
-  const statusMutation = useMutation({
-    mutationFn: ({ applicationId, status }: { applicationId: number; status: TrackerStatus }) =>
+export function useTrackerMutations() {
+  const statusMutation = useTrackerMutation(
+    ({ applicationId, status }: { applicationId: number; status: TrackerStatus }) =>
       updateTrackerStatus(applicationId, status),
-    onSuccess: (_, { status }) => {
-      invalidateTrackers();
-      showToast(`신청관리 상태가 [${status}]로 갱신되었습니다.`, 'success');
-    },
-  });
+    { successToast: ({ status }) => `신청관리 상태가 [${status}]로 갱신되었습니다.` },
+  );
 
-  const dateMutation = useMutation({
-    mutationFn: ({ applicationId, targetDate }: { applicationId: number; targetDate: string }) =>
+  const dateMutation = useTrackerMutation(
+    ({ applicationId, targetDate }: { applicationId: number; targetDate: string }) =>
       updateTrackerDate(applicationId, targetDate),
-    onSuccess: (_, { targetDate }) => {
-      invalidateTrackers();
-      showToast(`제출 마감일정이 변경되었습니다: ${targetDate}`, 'info');
+    {
+      successToast: ({ targetDate }) => `제출 마감일정이 변경되었습니다: ${targetDate}`,
+      successToastType: 'info',
     },
-  });
+  );
 
-  const addChecklistMutation = useMutation({
-    mutationFn: ({ applicationId, text }: { applicationId: number; text: string }) =>
+  const addChecklistMutation = useTrackerMutation(
+    ({ applicationId, text }: { applicationId: number; text: string }) =>
       addChecklistItem(applicationId, text),
-    onSuccess: () => {
-      invalidateTrackers();
-      showToast('체크리스트 준비 일감이 추가되었습니다.', 'success');
-    },
-  });
+    { successToast: () => '체크리스트 준비 일감이 추가되었습니다.' },
+  );
 
-  const toggleChecklistMutation = useMutation({
-    mutationFn: (item: TrackerChecklistItem) => toggleChecklistItem(item),
-    onSuccess: invalidateTrackers,
-  });
+  const toggleChecklistMutation = useTrackerMutation((item: TrackerChecklistItem) =>
+    toggleChecklistItem(item),
+  );
 
-  const editChecklistMutation = useMutation({
-    mutationFn: ({ itemId, text }: { itemId: number; text: string }) =>
-      editChecklistItem(itemId, text),
-    onSuccess: () => {
-      invalidateTrackers();
-      showToast('체크리스트 내용이 수정되었습니다.', 'success');
+  const editChecklistMutation = useTrackerMutation(
+    ({ itemId, text }: { itemId: number; text: string }) => editChecklistItem(itemId, text),
+    {
+      successToast: () => '체크리스트 내용이 수정되었습니다.',
+      errorToast: '체크리스트 수정에 실패했습니다. 잠시 후 다시 시도해 주세요.',
     },
-    onError: () => {
-      showToast('체크리스트 수정에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning');
-    },
-  });
+  );
 
-  const deleteChecklistMutation = useMutation({
-    mutationFn: (itemId: number) => deleteChecklistItem(itemId),
-    onSuccess: () => {
-      invalidateTrackers();
-      showToast('준비할 일감이 삭제되었습니다.', 'info');
-    },
-  });
+  const deleteChecklistMutation = useTrackerMutation(
+    (itemId: number) => deleteChecklistItem(itemId),
+    { successToast: () => '준비할 일감이 삭제되었습니다.', successToastType: 'info' },
+  );
 
-  const memoMutation = useMutation({
-    mutationFn: ({ applicationId, memo }: { applicationId: number; memo: string }) =>
+  const memoMutation = useTrackerMutation(
+    ({ applicationId, memo }: { applicationId: number; memo: string }) =>
       saveTrackerMemo(applicationId, memo),
-    onSuccess: () => {
-      invalidateTrackers();
-      showToast('개인 기록 메모가 저장되었습니다.', 'success');
-    },
-  });
+    { successToast: () => '개인 기록 메모가 저장되었습니다.' },
+  );
 
-  const deleteMutation = useMutation({
-    mutationFn: (applicationId: number) => deleteTracker(applicationId),
-    onSuccess: () => {
-      invalidateTrackers();
-      showToast('신청관리 목록에서 삭제되었습니다.', 'warning');
+  const deleteMutation = useTrackerMutation(
+    (applicationId: number) => deleteTracker(applicationId),
+    {
+      successToast: () => '신청관리 목록에서 삭제되었습니다.',
+      successToastType: 'warning',
     },
-  });
+  );
 
   return {
     updateStatus: (applicationId: number, status: TrackerStatus) =>
