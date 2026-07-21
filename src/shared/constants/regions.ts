@@ -20,14 +20,19 @@ export const REGIONS = [
   '경상북도',
   '경상남도',
   '제주특별자치도',
-];
+] as const;
+
+// as const로 리터럴 유니온을 만든다. 위 주석이 요구하는 "시드와 문자열 완전 일치"를 타입이 대신
+// 지켜주지는 못하지만, 최소한 오버라이드 키의 오타는 컴파일 단계에서 걸린다 — 지금까지 이런 오타는
+// 드롭다운에 정상으로 보이면서 조용히 0건만 반환했다(광주광역시 사례).
+export type RegionName = (typeof REGIONS)[number];
 
 // 표시명이 전송값과 다른 시도. '전남광주통합특별시'는 행정 표준 명칭이 아니라 시드의 통합 명칭이라
 // 그대로 노출하면 광주·전남 주민이 자기 지역으로 인지하기 어렵다. 값은 유지하고 라벨만 바꾼다.
-const REGION_LABEL_OVERRIDES: Record<string, string> = {
+const REGION_LABEL_OVERRIDES: Partial<Record<RegionName, string>> = {
   전남광주통합특별시: '광주·전남',
 };
 
 export function regionLabel(region: string): string {
-  return REGION_LABEL_OVERRIDES[region] ?? region;
+  return REGION_LABEL_OVERRIDES[region as RegionName] ?? region;
 }
