@@ -1,5 +1,7 @@
+import { normalizePolicyCategory, provincesToLabel } from '@/entities/policy';
+
 import type { ComparisonPolicy } from '../types/comparisonPolicy.types';
-import type { PolicyComparisonItemDto, PolicyComparisonRegionDto } from './compareApi.dto';
+import type { PolicyComparisonItemDto } from './compareApi.dto';
 
 const NO_INFO = '정보 없음';
 
@@ -23,26 +25,19 @@ function formatApplicationEndDate(applicationEndDate: string | null): string {
   return applicationEndDate.replace(/-/g, '.');
 }
 
-// 시도 단위로 요약한다. 전체 시도 수를 알 수 없어 "전국"인지 단정할 수 없으므로, 여러 시도면
-// "OO 외 N"으로만 표기한다(백엔드 목록 카드의 regionLabel과 같은 형식).
-function formatRegions(regions: PolicyComparisonRegionDto[]): string {
-  const provinceNames = [...new Set(regions.map((region) => region.provinceName))].sort();
-  if (provinceNames.length === 0) return NO_INFO;
-  if (provinceNames.length === 1) return provinceNames[0];
-  return `${provinceNames[0]} 외 ${provinceNames.length - 1}`;
-}
-
 export function mapPolicyComparisonItemDtoToComparisonPolicy(
   dto: PolicyComparisonItemDto,
 ): ComparisonPolicy {
   return {
     policyId: dto.policyId,
     title: dto.title,
-    category: dto.category ?? NO_INFO,
+    // 카테고리·지역 표시 규칙은 목록·상세와 같아야 하므로 entities/policy의 공통 로직을 그대로 쓴다.
+    // 여기서 자체 fallback을 두면 같은 정책이 화면마다 다르게 보인다(#120).
+    category: normalizePolicyCategory(dto.category) ?? '기타',
     organizationName: dto.organizationName ?? NO_INFO,
     ageRangeText: formatAgeRange(dto.minAge, dto.maxAge),
     incomeText: formatIncome(dto.incomeMaxAmount, dto.incomeEtcContent),
-    regionText: formatRegions(dto.regions),
+    regionText: provincesToLabel(dto.regions.map((region) => region.provinceName)),
     additionalQualification: dto.additionalQualification ?? NO_INFO,
     participationRestriction: dto.participationRestriction ?? NO_INFO,
     applicationEndDateText: formatApplicationEndDate(dto.applicationEndDate),

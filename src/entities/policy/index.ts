@@ -43,6 +43,7 @@ export {
   mapPolicyCardToPolicy,
   mapPolicyDetailToPolicy,
   mapRecentlyViewedDtoToModel,
+  provincesToLabel,
 } from './model/policyMapper';
 export {
   policyKeys,
