@@ -163,4 +163,34 @@ describe('커뮤니티 게시글 생성 API', () => {
       totalCount: 1,
     });
   });
+
+  it('검색어/카테고리/조회수순 정렬을 백엔드 쿼리 파라미터로 그대로 전달한다', async () => {
+    apiClientMock.get.mockResolvedValue({
+      data: { data: [], meta: { page: 1, totalCount: 0, totalPages: 0 } },
+    });
+
+    await fetchCommunityPosts({
+      page: 1,
+      pageSize: 6,
+      query: '정책',
+      category: '정책질문',
+      sort: 'views',
+    });
+
+    expect(apiClientMock.get).toHaveBeenCalledWith('/v1/posts', {
+      params: { page: 1, size: 6, sort: 'viewCount,desc', category: 'QUESTION', query: '정책' },
+    });
+  });
+
+  it('카테고리가 "전체"거나 없으면 category 파라미터를 보내지 않는다', async () => {
+    apiClientMock.get.mockResolvedValue({
+      data: { data: [], meta: { page: 1, totalCount: 0, totalPages: 0 } },
+    });
+
+    await fetchCommunityPosts({ page: 1, pageSize: 6, category: '전체' });
+
+    expect(apiClientMock.get).toHaveBeenCalledWith('/v1/posts', {
+      params: { page: 1, size: 6, sort: 'createdAt,desc', category: undefined, query: undefined },
+    });
+  });
 });

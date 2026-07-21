@@ -13,6 +13,7 @@ export {
 } from './api/adminCommunityPostApi';
 export type { CommunityPostDto } from './api/communityPost.dto';
 export type {
+  CommunityPostPageSearchParams,
   CommunityPostSearchParams,
   CreateCommunityPostParams,
 } from './api/communityPostApi';
