@@ -55,10 +55,6 @@ export function useSearchFilters() {
     }
   };
 
-  const showNationwideOnly = () => {
-    setSearchParams(new URLSearchParams({ region: '전국' }), { replace: true });
-  };
-
   return {
     query,
     draftQuery,
@@ -67,6 +63,5 @@ export function useSearchFilters() {
     filters,
     setFilter,
     resetFilters,
-    showNationwideOnly,
   };
 }

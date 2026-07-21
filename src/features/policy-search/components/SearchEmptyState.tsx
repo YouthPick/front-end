@@ -2,10 +2,9 @@ import { EmptyState } from '@/shared/ui';
 
 interface SearchEmptyStateProps {
   onResetAll: () => void;
-  onShowNationwide: () => void;
 }
 
-export function SearchEmptyState({ onResetAll, onShowNationwide }: SearchEmptyStateProps) {
+export function SearchEmptyState({ onResetAll }: SearchEmptyStateProps) {
   return (
     <EmptyState
       icon="🔍"
@@ -18,13 +17,6 @@ export function SearchEmptyState({ onResetAll, onShowNationwide }: SearchEmptySt
         className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors"
       >
         필터 설정 전체 초기화
-      </button>
-      <button
-        type="button"
-        onClick={onShowNationwide}
-        className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:brightness-105 transition-colors"
-      >
-        전국 공통 정책 보기
       </button>
     </EmptyState>
   );

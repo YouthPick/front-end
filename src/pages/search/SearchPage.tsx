@@ -26,7 +26,6 @@ export function SearchPage() {
     setQuery,
     setFilter,
     resetFilters,
-    showNationwideOnly,
     submitSearch,
   } = usePolicySearch();
 
@@ -83,10 +82,7 @@ export function SearchPage() {
             <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
           </>
         ) : (
-          <SearchEmptyState
-            onResetAll={() => resetFilters({ clearQuery: true })}
-            onShowNationwide={showNationwideOnly}
-          />
+          <SearchEmptyState onResetAll={() => resetFilters({ clearQuery: true })} />
         ))}
     </div>
   );
