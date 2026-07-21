@@ -12,12 +12,14 @@ export type {
   PolicyDetailDto,
   PolicyRegionDto,
   RecentlyViewedPolicyDto,
+  RecommendedPolicyDto,
 } from './api/policy.dto';
-export type { PolicySearchParams } from './api/policyApi';
+export type { PolicySearchParams, RecommendedPolicyParams } from './api/policyApi';
 export {
   fetchPolicies,
   fetchPolicy,
   fetchRecentlyViewedPolicies,
+  fetchRecommendedPolicies,
   searchPolicies,
 } from './api/policyApi';
 export type { AdminPolicy } from './model/adminPolicy.types';

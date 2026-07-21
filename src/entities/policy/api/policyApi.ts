@@ -1,5 +1,10 @@
 import { type ApiPageEnvelope, apiClient } from '@/shared/api';
-import type { PolicyCardDto, PolicyDetailDto, RecentlyViewedPolicyDto } from './policy.dto';
+import type {
+  PolicyCardDto,
+  PolicyDetailDto,
+  RecentlyViewedPolicyDto,
+  RecommendedPolicyDto,
+} from './policy.dto';
 
 export interface PolicySearchParams {
   query?: string;
@@ -9,8 +14,8 @@ export interface PolicySearchParams {
   age?: string;
 }
 
-// ponytail: 최신 LIST_PAGE_SIZE건만 받는 '요약 전체 목록'. 현재 소비자는 추천(useRecommendations)과
-// 비교함 독(#90에서 교체 예정)뿐이다. 전량 채점이 필요해지면 백엔드 추천 API로 이관한다.
+// 최신 LIST_PAGE_SIZE건만 받는 '요약 전체 목록'. 추천은 #150에서 백엔드 API(fetchRecommendedPolicies)로
+// 이관했고, 현재 소비자는 비교함 독(#90에서 교체 예정)뿐이다.
 const LIST_PAGE_SIZE = 100;
 
 const DEFAULT_FILTER = '전체';
@@ -87,4 +92,28 @@ export async function fetchPolicy(policyId: string): Promise<PolicyDetailDto> {
 
 export async function fetchRecentlyViewedPolicies(): Promise<RecentlyViewedPolicyDto[]> {
   return [];
+}
+
+export interface RecommendedPolicyParams {
+  region?: string;
+  category?: string;
+  keyword?: string;
+}
+
+// 회원 전용. 비로그인/온보딩 프로필 미등록(U004)이면 apiClient가 예외를 던진다 —
+// caller(useRecommendations)가 에러 상태로 처리한다.
+export async function fetchRecommendedPolicies(
+  params: RecommendedPolicyParams = {},
+): Promise<RecommendedPolicyDto[]> {
+  const response = await apiClient.get<{ data: RecommendedPolicyDto[] }>(
+    '/v1/recommended-policies',
+    {
+      params: {
+        region: toFilterParam(params.region),
+        category: toFilterParam(params.category),
+        keyword: toFilterParam(params.keyword),
+      },
+    },
+  );
+  return response.data.data;
 }

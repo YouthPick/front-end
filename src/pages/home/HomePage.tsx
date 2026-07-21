@@ -7,6 +7,7 @@ import {
   usePolicyDetailStore,
 } from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
+import { useMyProfile } from '@/features/my-profile';
 import { RecommendationPreview, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
@@ -27,12 +28,13 @@ export function HomePage() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
   const {
-    profile,
     recommendations,
     isLoading: isRecommendationsLoading,
     isError: isRecommendationsError,
     reload: reloadRecommendations,
   } = useRecommendations();
+  // 프로필은 서버가 원본이다 — store 값은 새로고침 후 빈 값이라 여기서 쓰면 안 된다.
+  const { profile, isLoading: isProfileLoading } = useMyProfile();
   const [page, setPage] = useState(1);
   const {
     data: policyPage,
@@ -61,7 +63,7 @@ export function HomePage() {
             title="맞춤 추천을 불러오지 못했습니다"
             onRetry={() => reloadRecommendations()}
           />
-        ) : isRecommendationsLoading ? (
+        ) : isRecommendationsLoading || isProfileLoading || !profile ? (
           <Skeleton className="h-64" />
         ) : (
           <RecommendationPreview
