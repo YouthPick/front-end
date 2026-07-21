@@ -49,7 +49,7 @@ function toExternalLink(url: string | null): string {
 // 시도명 목록을 카드·상세 공통 규칙으로 요약한다: 없음→'전국', 1개→시도명, 여러 개→'첫 시도 외 N'.
 // 백엔드는 원본 시도명 목록만 내려주고(카드: PolicyCardResponse.provinces, 상세: PolicyDetailResponse.regions),
 // "전국"/"외 N" 같은 표시 문구 조립은 여기 프론트에서만 한다.
-function provincesToLabel(provinces: string[]): string {
+export function provincesToLabel(provinces: string[]): string {
   const distinct = [...new Set(provinces.filter(Boolean))].sort();
   if (distinct.length === 0) return '전국';
   if (distinct.length === 1) return distinct[0];
