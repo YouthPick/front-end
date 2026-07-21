@@ -21,6 +21,7 @@ export {
   createCommunityPost,
   deleteCommunityPost,
   fetchCommunityPost,
+  fetchCommunityPosts,
   searchCommunityPosts,
   updateCommunityPost,
 } from './api/communityPostApi';
@@ -59,6 +60,7 @@ export {
 } from './model/communityPostMapper';
 export {
   communityPostKeys,
+  useCommunityPostPageQuery,
   useCommunityPostQuery,
   useCommunityPostSearchQuery,
 } from './model/communityPostQueries';

@@ -1,14 +1,8 @@
 import { Link } from 'react-router';
 
-import {
-  CommunityBoardEmptyState,
-  CommunityBoardSortSelect,
-  CommunityCategoryTabs,
-  CommunitySearchBar,
-  useCommunityBoard,
-} from '@/features/community-board';
+import { useCommunityBoard } from '@/features/community-board';
 import { ROUTES } from '@/shared/constants';
-import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
+import { EmptyState, ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import {
   COMMUNITY_POST_GRID_CLASS,
   COMMUNITY_POST_GRID_SKELETON_COUNT,
@@ -16,24 +10,8 @@ import {
 } from '@/widgets/community-post-grid';
 
 export function CommunityPage() {
-  const {
-    query,
-    category,
-    sort,
-    posts,
-    page,
-    pageItems,
-    pageCount,
-    setPage,
-    isLoading,
-    isError,
-    reload,
-    setQuery,
-    submitQuery,
-    resetFilters,
-    setCategory,
-    setSort,
-  } = useCommunityBoard();
+  const { posts, page, pageItems, pageCount, setPage, isLoading, isError, reload } =
+    useCommunityBoard();
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -51,13 +29,6 @@ export function CommunityPage() {
         >
           글쓰기
         </Link>
-      </div>
-
-      <CommunitySearchBar query={query} onQueryChange={setQuery} onSubmit={submitQuery} />
-
-      <div className="flex items-center justify-between gap-2">
-        <CommunityCategoryTabs activeCategory={category} onCategoryChange={setCategory} />
-        <CommunityBoardSortSelect sort={sort} onSortChange={setSort} />
       </div>
 
       {isLoading && (
@@ -79,7 +50,7 @@ export function CommunityPage() {
             <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
           </>
         ) : (
-          <CommunityBoardEmptyState onResetFilters={resetFilters} />
+          <EmptyState icon="💬" title="아직 등록된 게시글이 없습니다" />
         ))}
     </div>
   );
