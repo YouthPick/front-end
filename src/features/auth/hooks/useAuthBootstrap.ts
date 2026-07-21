@@ -5,6 +5,7 @@ import { requestNewAccessToken } from '@/shared/api';
 
 import { fetchCurrentUser } from '../api/authApi';
 import { mapAuthUserDtoToAuthUser } from '../api/authMapper';
+import { syncOnboardedStatus } from '../lib/syncOnboardedStatus';
 
 // 앱 시작 시 1회, HttpOnly refresh 쿠키로 세션 복원을 시도한다. provider는 /auth/me에 없어 알 수 없다.
 // AuthBootstrap은 앱 루트에 고정 마운트되어 실질적으로 언마운트되지 않으므로 cleanup은 두지 않고,
@@ -29,6 +30,7 @@ export function useAuthBootstrap() {
         await requestNewAccessToken();
         const userDto = await fetchCurrentUser();
         login(mapAuthUserDtoToAuthUser(userDto));
+        await syncOnboardedStatus();
       } catch {
         // refresh 쿠키가 없거나 만료된 경우: 비로그인 상태로 둔다.
       } finally {

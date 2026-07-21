@@ -7,6 +7,7 @@ export {
   softDeleteAdminUser,
   updateAdminUserRole,
 } from './api/adminUserApi';
+export { fetchMyProfile } from './api/myProfileApi';
 export type {
   OnboardingProfileRequestDto,
   OnboardingProfileResponseDto,
