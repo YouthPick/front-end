@@ -16,7 +16,7 @@ import {
 } from '@/entities/user';
 import { ROUTES } from '@/shared/constants';
 import { useToast } from '@/shared/ui';
-import { getRedirectPath } from '@/shared/utils';
+import { getRedirectPath, hasEditIntent } from '@/shared/utils';
 
 import { buildOnboardingRequest } from '../model/buildOnboardingRequest';
 import { getOnboardingErrorMessage } from '../model/onboardingErrors';
@@ -48,6 +48,17 @@ export function useProfileSetupWizard() {
 
   // 로그인 시 원래 가려던 경로. 마법사 완료·보류 후 이곳으로 복귀한다.
   const from = getRedirectPath(location.state);
+  // 마이페이지 "수정" 버튼처럼 명시적으로 들어온 게 아니면(URL 직접 입력, 북마크, 뒤로가기 등)
+  // 이미 온보딩을 완료한 사용자를 굳이 이 페이지에 머물게 하지 않는다.
+  const editIntent = hasEditIntent(location.state);
+  const isDataLoading = isMyProfileLoading || isRegionsLoading;
+  const shouldRedirectHome = !isDataLoading && isEditMode && !editIntent;
+
+  useEffect(() => {
+    if (shouldRedirectHome) {
+      navigate(ROUTES.home, { replace: true });
+    }
+  }, [shouldRedirectHome, navigate]);
 
   const [step, setStep] = useState(1);
   const [draft, setDraft] = useState<UserProfile>({
@@ -187,7 +198,7 @@ export function useProfileSetupWizard() {
     draft,
     canProceed,
     isEditMode,
-    isLoading: isMyProfileLoading || isRegionsLoading,
+    isLoading: isDataLoading || shouldRedirectHome,
     isSubmitting: submitMutation.isPending,
     newKeywordInput,
     setNewKeywordInput,

@@ -17,3 +17,10 @@ export function getRedirectPath(state: unknown): string | null {
   const from = (state as Record<string, unknown>).from;
   return isInternalPath(from) ? from : null;
 }
+
+// 마이페이지 "수정" 버튼처럼 명시적으로 프로필 수정을 의도하고 온보딩 페이지에 진입했는지 확인한다.
+// URL 직접 입력·북마크 등 의도치 않은 진입과 구분하는 데 쓴다.
+export function hasEditIntent(state: unknown): boolean {
+  if (typeof state !== 'object' || state === null) return false;
+  return (state as Record<string, unknown>).intent === 'edit';
+}

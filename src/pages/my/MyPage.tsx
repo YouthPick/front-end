@@ -122,7 +122,9 @@ export function MyPage() {
           ) : isOnboarded && profile ? (
             <ProfileSummaryCard
               profile={profile}
-              onEdit={() => navigate(ROUTES.profileSetup, { state: { from: ROUTES.my } })}
+              onEdit={() =>
+                navigate(ROUTES.profileSetup, { state: { from: ROUTES.my, intent: 'edit' } })
+              }
             />
           ) : (
             <EmptyState
