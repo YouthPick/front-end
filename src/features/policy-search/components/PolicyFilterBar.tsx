@@ -1,5 +1,4 @@
 import { POLICY_CATEGORIES } from '@/entities/policy';
-import { regionLabel } from '@/shared/constants';
 
 import { AGES, REGION_FILTER_OPTIONS, STATUSES } from '../policySearchOptions';
 import type { PolicySearchFilterKey, PolicySearchFilters } from '../types/policySearch.types';
@@ -14,14 +13,12 @@ interface FilterSelectProps {
   label: string;
   value: string;
   options: readonly string[];
-  // 표시명이 전송값과 다른 옵션이 있을 때만 넘긴다(예: 지역의 전남광주통합특별시 → 광주·전남).
-  optionLabel?: (option: string) => string;
   onChange: (value: string) => void;
 }
 
 const CATEGORY_OPTIONS = ['전체', ...POLICY_CATEGORIES];
 
-function FilterSelect({ id, label, value, options, optionLabel, onChange }: FilterSelectProps) {
+function FilterSelect({ id, label, value, options, onChange }: FilterSelectProps) {
   return (
     <div className="flex items-center px-4.5 py-3.5 transition-colors hover:bg-slate-50/40 relative">
       <div className="flex items-center space-x-2 w-full text-left">
@@ -37,7 +34,7 @@ function FilterSelect({ id, label, value, options, optionLabel, onChange }: Filt
           >
             {options.map((option) => (
               <option key={option} value={option}>
-                {optionLabel ? optionLabel(option) : option}
+                {option}
               </option>
             ))}
           </select>
@@ -72,7 +69,6 @@ export function PolicyFilterBar({ filters, onFilterChange }: PolicyFilterBarProp
           label="지역"
           value={filters.region}
           options={REGION_FILTER_OPTIONS}
-          optionLabel={regionLabel}
           onChange={(value) => onFilterChange('region', value)}
         />
         <FilterSelect
