@@ -11,7 +11,7 @@ export type {
   OnboardingProfileRequestDto,
   OnboardingProfileResponseDto,
 } from './api/onboarding.dto';
-export { submitOnboardingProfile } from './api/onboardingApi';
+export { submitOnboardingProfile, updateOnboardingProfile } from './api/onboardingApi';
 export type { AdminUser, AdminUserProfile } from './model/adminUser.types';
 export {
   mapAdminUserDtoToAdminUser,
@@ -25,6 +25,7 @@ export {
   useUpdateAdminUserRoleMutation,
 } from './model/adminUserQueries';
 export { useAuthStore } from './model/authStore';
+export { mapMyProfileResponse } from './model/mapMyProfileResponse';
 export { myProfileKeys, useMyProfileQuery } from './model/myProfileQueries';
 export {
   codeForLabel,

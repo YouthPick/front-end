@@ -10,6 +10,7 @@ interface ProfileSetupPresenterProps {
   step: number;
   draft: UserProfile;
   canProceed: boolean;
+  isEditMode: boolean;
   isSubmitting: boolean;
   newKeywordInput: string;
   onKeywordInputChange: (value: string) => void;
@@ -27,6 +28,7 @@ export function ProfileSetupPresenter({
   step,
   draft,
   canProceed,
+  isEditMode,
   isSubmitting,
   newKeywordInput,
   onKeywordInputChange,
@@ -44,7 +46,9 @@ export function ProfileSetupPresenter({
       {/* Wizard progress bar */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs font-bold text-slate-400">
-          <span className="text-primary font-black">맞춤 조건 분석 프로필 설정</span>
+          <span className="text-primary font-black">
+            {isEditMode ? '맞춤 프로필 수정' : '맞춤 조건 분석 프로필 설정'}
+          </span>
           <span>
             {step} / {WIZARD_TOTAL_STEPS} 단계
           </span>
@@ -94,7 +98,7 @@ export function ProfileSetupPresenter({
             onClick={onSkip}
             className="rounded-xl border border-slate-200 bg-white px-4.5 py-2.5 text-xs font-bold text-slate-400 hover:text-slate-600"
           >
-            나중에 하기
+            {isEditMode ? '취소' : '나중에 하기'}
           </button>
         )}
 
@@ -107,7 +111,9 @@ export function ProfileSetupPresenter({
           {step === WIZARD_TOTAL_STEPS
             ? isSubmitting
               ? '저장 중...'
-              : '맞춤 추천목록 확인'
+              : isEditMode
+                ? '수정 완료'
+                : '맞춤 추천목록 확인'
             : '다음 단계로'}
         </button>
       </div>

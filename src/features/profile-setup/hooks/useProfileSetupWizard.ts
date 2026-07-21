@@ -1,14 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { usePublicRegionsQuery } from '@/entities/region';
 import {
+  mapMyProfileResponse,
   myProfileKeys,
   type OnboardingProfileRequestDto,
   submitOnboardingProfile,
   type UserProfile,
+  updateOnboardingProfile,
   useAuthStore,
+  useMyProfileQuery,
   useProfileStore,
 } from '@/entities/user';
 import { ROUTES } from '@/shared/constants';
@@ -38,7 +41,10 @@ export function useProfileSetupWizard() {
   const location = useLocation();
   const queryClient = useQueryClient();
   // WizardStepBasic도 같은 쿼리를 구독하므로 캐시를 공유해 중복 요청이 나가지 않는다.
-  const { data: regions = [] } = usePublicRegionsQuery();
+  const { data: regions = [], isLoading: isRegionsLoading } = usePublicRegionsQuery();
+  // "프로필 수정"은 이 마법사를 그대로 재사용한다 — 이미 서버에 프로필이 있으면 수정 모드로 동작한다.
+  const { data: myProfileDto, isLoading: isMyProfileLoading } = useMyProfileQuery();
+  const isEditMode = myProfileDto !== undefined && myProfileDto !== null;
 
   // 로그인 시 원래 가려던 경로. 마법사 완료·보류 후 이곳으로 복귀한다.
   const from = getRedirectPath(location.state);
@@ -52,9 +58,16 @@ export function useProfileSetupWizard() {
   });
   const [newKeywordInput, setNewKeywordInput] = useState('');
 
+  // 수정 모드로 진입했을 때만 서버 프로필로 draft를 다시 채운다. myProfileDto/regions 쿼리가
+  // 비동기로 늦게 채워지므로 useState 초기값(로컬 profile 스토어 기준)만으로는 기존 값이 반영되지 않는다.
+  useEffect(() => {
+    if (!myProfileDto) return;
+    setDraft(mapMyProfileResponse(myProfileDto, regions));
+  }, [myProfileDto, regions]);
+
   const submitMutation = useMutation({
     mutationFn: ({ userId, request }: { userId: string; request: OnboardingProfileRequestDto }) =>
-      submitOnboardingProfile(userId, request),
+      isEditMode ? updateOnboardingProfile(request) : submitOnboardingProfile(userId, request),
   });
 
   const updateDraft = (patch: Partial<UserProfile>) => {
@@ -90,7 +103,12 @@ export function useProfileSetupWizard() {
       updateProfile({ ...draft, isOnboarded: true });
       queryClient.invalidateQueries({ queryKey: myProfileKeys.all });
       navigate(from ?? ROUTES.recommend, { replace: true });
-      showToast('✨ 맞춤 프로필 설정 완료! 실시간 추천 결과를 확인해보세요.', 'success');
+      showToast(
+        isEditMode
+          ? '프로필이 수정되었습니다.'
+          : '✨ 맞춤 프로필 설정 완료! 실시간 추천 결과를 확인해보세요.',
+        'success',
+      );
     } catch (error) {
       showToast(
         getOnboardingErrorMessage(error, '프로필 저장에 실패했습니다. 잠시 후 다시 시도해 주세요.'),
@@ -106,8 +124,13 @@ export function useProfileSetupWizard() {
   };
 
   const skip = () => {
+    // 프로필 수정 중 취소는 원래 화면(마이페이지)으로 돌아간다.
+    if (isEditMode) {
+      navigate(from ?? ROUTES.my, { replace: true });
+      return;
+    }
     // 원래 가려던 경로(from)가 온보딩을 요구하는 화면(예: 맞춤 추천)이면 그리로 돌아가는 순간
-    // 다시 마법사로 튕기므로, 스킵은 항상 홈으로 보낸다.
+    // 다시 마법사로 튕기므로, 최초 온보딩의 스킵은 항상 홈으로 보낸다.
     navigate(ROUTES.home, { replace: true });
   };
 
@@ -163,6 +186,8 @@ export function useProfileSetupWizard() {
     step,
     draft,
     canProceed,
+    isEditMode,
+    isLoading: isMyProfileLoading || isRegionsLoading,
     isSubmitting: submitMutation.isPending,
     newKeywordInput,
     setNewKeywordInput,

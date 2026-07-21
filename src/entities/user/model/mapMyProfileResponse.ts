@@ -1,14 +1,15 @@
 import type { Region } from '@/entities/region';
+
+import type { OnboardingProfileResponseDto } from '../api/onboarding.dto';
 import {
   EDUCATION_STATUS_OPTIONS,
   EMPLOYMENT_STATUS_OPTIONS,
   labelForCode,
   MAJOR_OPTIONS,
   MARITAL_STATUS_OPTIONS,
-  type OnboardingProfileResponseDto,
   SPECIAL_CONDITION_OPTIONS,
-  type UserProfile,
-} from '@/entities/user';
+} from './profileOptions';
+import type { UserProfile } from './user.types';
 
 // 온보딩 제출 시(resolveRegionCode) 시·군·구 미선택은 districtName === provinceName인 시·도 대표 코드로
 // 저장되므로, 조회 시에도 그 경우 subRegion을 빈 문자열로 되돌려 같은 표시 형태를 유지한다.

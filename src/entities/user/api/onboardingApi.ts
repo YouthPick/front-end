@@ -16,3 +16,13 @@ export async function submitOnboardingProfile(
   );
   return response.data.data;
 }
+
+export async function updateOnboardingProfile(
+  request: OnboardingProfileRequestDto,
+): Promise<OnboardingProfileResponseDto> {
+  const response = await apiClient.patch<ApiEnvelope<OnboardingProfileResponseDto>>(
+    '/v1/me/profile',
+    request,
+  );
+  return response.data.data;
+}
