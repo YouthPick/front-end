@@ -35,10 +35,12 @@ function toAgeParams(age: string | undefined): { ageMin?: number; ageMax?: numbe
 }
 
 export async function fetchPolicies(): Promise<PolicyCardDto[]> {
-  return (await fetchPolicyCardPage(0, LIST_PAGE_SIZE)).data;
+  return (await fetchPolicySearchPage({}, 1, LIST_PAGE_SIZE)).data;
 }
 
-// 홈 그리드용 서버 페이지네이션 — 페이지를 넘길 때마다 해당 페이지만 받아온다. page는 0-base.
+// 홈 그리드용 서버 페이지네이션 — 페이지를 넘길 때마다 해당 페이지만 받아온다.
+// page는 1-base. 백엔드가 spring.data.web.pageable.one-indexed-parameters=true로
+// 요청·응답(meta.page)을 모두 1-base로 통일했다 — 여기서 0-base로 변환하면 안 된다.
 export async function fetchPolicyCardPage(
   page: number,
   size: number,
@@ -49,23 +51,16 @@ export async function fetchPolicyCardPage(
   return response.data;
 }
 
+// 커뮤니티 정책 첨부 검색 용도 — 첫 페이지만 필요해 페이지네이션 없이 쓴다.
+// 현재 유일한 호출부(usePolicyAttachSearch)는 query만 채워 보낸다.
 export async function searchPolicies(params: PolicySearchParams): Promise<PolicyCardDto[]> {
-  // 커뮤니티 정책 첨부 검색 용도. keyword·region·category를 서버로 넘기지만
-  // 현재 유일한 호출부(usePolicyAttachSearch)는 query만 채워 보낸다. status는 서버 미지원.
-  const response = await apiClient.get<ApiPageEnvelope<PolicyCardDto>>('/v1/policies', {
-    params: {
-      keyword: toFilterParam(params.query),
-      region: toFilterParam(params.region),
-      category: toFilterParam(params.category),
-      page: 0,
-      size: LIST_PAGE_SIZE,
-    },
-  });
-  return response.data.data;
+  return (await fetchPolicySearchPage(params, 1, LIST_PAGE_SIZE)).data;
 }
 
 // 검색 화면 서버 페이지네이션. keyword·region·category·age(→ ageMin/ageMax)는 백엔드가
 // 필터링한다(#86/#87). status는 아직 서버 미지원 — 보내지 않는다.
+// page는 1-base. 백엔드가 one-indexed-parameters=true로 요청·응답(meta.page)을 모두
+// 1-base로 통일했다 — 여기서 0-base로 변환하면 안 된다(#126).
 export async function fetchPolicySearchPage(
   params: PolicySearchParams,
   page: number,
