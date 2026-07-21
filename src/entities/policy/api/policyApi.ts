@@ -50,7 +50,8 @@ export async function fetchPolicyCardPage(
 }
 
 export async function searchPolicies(params: PolicySearchParams): Promise<PolicyCardDto[]> {
-  // 커뮤니티 정책 첨부 검색 용도 — 호출부가 keyword만 쓴다. status는 서버 미지원.
+  // 커뮤니티 정책 첨부 검색 용도. keyword·region·category를 서버로 넘기지만
+  // 현재 유일한 호출부(usePolicyAttachSearch)는 query만 채워 보낸다. status는 서버 미지원.
   const response = await apiClient.get<ApiPageEnvelope<PolicyCardDto>>('/v1/policies', {
     params: {
       keyword: toFilterParam(params.query),
