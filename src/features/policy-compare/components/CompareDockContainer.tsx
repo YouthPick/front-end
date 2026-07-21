@@ -2,14 +2,19 @@ import { ArrowLeftRight, ChevronRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 
+import { parseApiError } from '@/shared/api';
+
+import { getCompareErrorMessage } from '../api/compareErrorMessages';
+import { mapPolicyComparisonItemDtosToComparisonPolicies } from '../api/compareMapper';
 import { useCompare } from '../hooks/useCompare';
+import { usePolicyComparisonQuery } from '../hooks/usePolicyComparisonQuery';
 import { CompareDetailDialog } from './CompareDetailDialog';
 import { ComparePanelPresenter } from './ComparePanelPresenter';
 
 // RootLayout에 상시 마운트되는 정책 비교 독.
 // 담긴 정책이 없으면 숨기고, 담는 순간 우측에서 슬라이드-인 한다. 이후 접기/펼치기 토글이 가능하다.
 export function CompareDockContainer() {
-  const { comparingPolicies, removeCompare, clearCompare } = useCompare();
+  const { policyIds, comparingPolicies, removeCompare, clearCompare } = useCompare();
   const [showDetailDialog, setShowDetailDialog] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const count = comparingPolicies.length;
@@ -20,6 +25,19 @@ export function CompareDockContainer() {
     if (count === 0 || count > prevCountRef.current) setIsCollapsed(false);
     prevCountRef.current = count;
   }, [count]);
+
+  // 상세 비교 모달이 열려 있을 때만 실제 비교 API를 호출한다.
+  const comparisonQuery = usePolicyComparisonQuery(policyIds, {
+    enabled: showDetailDialog && count >= 2,
+  });
+  const comparisonPolicies = comparisonQuery.data
+    ? mapPolicyComparisonItemDtosToComparisonPolicies(comparisonQuery.data)
+    : [];
+  const isComparisonError =
+    comparisonQuery.isError || (showDetailDialog && !comparisonQuery.isValidRequest);
+  const comparisonErrorMessage = isComparisonError
+    ? getCompareErrorMessage(parseApiError(comparisonQuery.error))
+    : undefined;
 
   return (
     <>
@@ -72,7 +90,15 @@ export function CompareDockContainer() {
       <AnimatePresence>
         {showDetailDialog && count >= 2 && (
           <CompareDetailDialog
-            policies={comparingPolicies}
+            policies={comparisonPolicies}
+            isLoading={comparisonQuery.isLoading}
+            isError={isComparisonError}
+            errorMessage={comparisonErrorMessage}
+            onRetry={() => {
+              // isValidRequest가 false면 refetch()를 호출해도 실제로는 성공할 수 없는 요청이라
+              // (enabled와 무관하게 강제 실행되는) refetch를 아예 호출하지 않는다.
+              if (comparisonQuery.isValidRequest) comparisonQuery.refetch();
+            }}
             onClose={() => setShowDetailDialog(false)}
           />
         )}

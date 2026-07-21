@@ -34,6 +34,7 @@ export function useCompare() {
   };
 
   return {
+    policyIds,
     comparingPolicies,
     isComparing,
     toggleCompare,
