@@ -3,16 +3,15 @@ import { useState } from 'react';
 
 import type { Policy } from '@/entities/policy';
 
-import type { TrackerItem, TrackerStatus } from '../../types/tracker.types';
+import {
+  isTrackerStatus,
+  TRACKER_STATUSES,
+  type TrackerItem,
+  type TrackerStatus,
+} from '../../types/tracker.types';
 import { TrackerChecklist } from './TrackerChecklist';
 import { TrackerDeleteConfirm } from './TrackerDeleteConfirm';
 import { TrackerMemoEditor } from './TrackerMemoEditor';
-
-const TRACKER_STATUS_OPTIONS: TrackerStatus[] = ['관심', '준비중', '신청완료', '종료'];
-
-function isTrackerStatus(value: string): value is TrackerStatus {
-  return (TRACKER_STATUS_OPTIONS as readonly string[]).includes(value);
-}
 
 interface TrackerDetailPanelProps {
   tracker: TrackerItem;
@@ -78,7 +77,7 @@ export function TrackerDetailPanel({
             }}
             className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 outline-none cursor-pointer focus:bg-white focus:border-primary"
           >
-            {TRACKER_STATUS_OPTIONS.map((status) => (
+            {TRACKER_STATUSES.map((status) => (
               <option key={status} value={status}>
                 {status}
               </option>
