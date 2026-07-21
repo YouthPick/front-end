@@ -1,8 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-import type { PageParams } from '@/shared/types';
-
 import {
+  type CommunityPostPageSearchParams,
   type CommunityPostSearchParams,
   fetchCommunityPost,
   fetchCommunityPosts,
@@ -13,7 +12,7 @@ import { mapCommunityPostDtosToPosts, mapCommunityPostDtoToPost } from './commun
 export const communityPostKeys = {
   all: ['community-posts'] as const,
   list: (params: CommunityPostSearchParams) => ['community-posts', 'list', params] as const,
-  page: (params: PageParams) => ['community-posts', 'page', params] as const,
+  page: (params: CommunityPostPageSearchParams) => ['community-posts', 'page', params] as const,
   detail: (postId: string) => ['community-posts', 'detail', postId] as const,
 };
 
@@ -30,8 +29,11 @@ export function useCommunityPostSearchQuery(
   });
 }
 
-// 커뮤니티 메인 목록: 서버 페이지네이션(최신순 고정) 조회.
-export function useCommunityPostPageQuery(params: PageParams, options?: { enabled?: boolean }) {
+// 커뮤니티 메인 목록: 서버 페이지네이션 + 검색어/카테고리/정렬 조회.
+export function useCommunityPostPageQuery(
+  params: CommunityPostPageSearchParams,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: communityPostKeys.page(params),
     queryFn: async () => {

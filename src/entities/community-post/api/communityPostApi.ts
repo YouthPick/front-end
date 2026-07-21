@@ -2,6 +2,7 @@ import { type ApiPageEnvelope, apiClient, toPageResult } from '@/shared/api';
 import { MOCK_API_DELAY_MS } from '@/shared/constants';
 import type { PageParams, PageResult } from '@/shared/types';
 import { delay, matchesTextQuery } from '@/shared/utils';
+import { normalizeCommunityPostCategory } from '../model/communityCategories';
 import type { AttachedPolicySummary, CommunityPostCategory } from '../model/communityPost.types';
 import type { CommunityPostSortOption } from '../model/communityPostSort';
 import type { CommunityPostDto } from './communityPost.dto';
@@ -48,10 +49,6 @@ function sortPosts(
   switch (sort) {
     case 'views':
       return sorted.sort((a, b) => b.viewCount - a.viewCount);
-    case 'comments':
-      return sorted.sort((a, b) => b.commentCount - a.commentCount);
-    case 'likes':
-      return sorted.sort((a, b) => b.likeCount - a.likeCount);
     default:
       return sorted.sort((a, b) =>
         a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0,
@@ -104,14 +101,37 @@ function mapPostSummaryToDto(dto: PostSummaryResponseDto): CommunityPostDto {
   };
 }
 
-// 커뮤니티 메인 목록: 서버 페이지네이션으로 최신순만 조회한다.
-// 백엔드 GET /api/v1/posts가 검색어/카테고리/정렬 파라미터를 지원하지 않아
-// 해당 필터 UI는 useCommunityBoard에서 임시로 뺐다.
+export interface CommunityPostPageSearchParams extends PageParams {
+  category?: string;
+  query?: string;
+  sort?: CommunityPostSortOption;
+}
+
+// 백엔드 정렬 컬럼이 존재하는 옵션만 지원한다(댓글수/좋아요수는 Post 엔티티에 없음).
+const SORT_PARAM_BY_OPTION: Record<CommunityPostSortOption, string> = {
+  latest: 'createdAt,desc',
+  views: 'viewCount,desc',
+};
+
+// '전체'나 알 수 없는 값은 필터 없음으로 취급한다.
+function toBackendCategory(category?: string): PostSummaryResponseDto['category'] | undefined {
+  if (!category) return undefined;
+  const normalized = normalizeCommunityPostCategory(category);
+  return normalized ? categoryToApi[normalized] : undefined;
+}
+
+// 커뮤니티 메인 목록: 서버 페이지네이션 + 검색어/카테고리 필터 + 정렬(최신순/조회수순).
 export async function fetchCommunityPosts(
-  params: PageParams,
+  params: CommunityPostPageSearchParams,
 ): Promise<PageResult<CommunityPostDto>> {
   const response = await apiClient.get<ApiPageEnvelope<PostSummaryResponseDto>>('/v1/posts', {
-    params: { page: params.page, size: params.pageSize, sort: 'createdAt,desc' },
+    params: {
+      page: params.page,
+      size: params.pageSize,
+      sort: SORT_PARAM_BY_OPTION[params.sort ?? 'latest'],
+      category: toBackendCategory(params.category),
+      query: params.query || undefined,
+    },
   });
   return toPageResult(
     { data: response.data.data.map(mapPostSummaryToDto), meta: response.data.meta },
