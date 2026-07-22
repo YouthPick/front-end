@@ -1,5 +1,5 @@
 import { AlertCircle, Loader2, LockKeyhole, MessageCircle, SendHorizontal } from 'lucide-react';
-import type { FormEvent } from 'react';
+import type { FormEvent, KeyboardEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import type { PolicyChatMessage, PolicyChatStatus } from '../../model/policyChat.types';
@@ -63,11 +63,22 @@ export function PolicyChatPresenter({
     setDraft(value.slice(0, MESSAGE_MAX_LENGTH));
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submitDraft = async () => {
     if (!canSubmit) return;
     const sent = await onSendMessage(draft);
     if (sent) setDraft('');
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await submitDraft();
+  };
+
+  // Enter로 전송, Shift+Enter로 줄바꿈. 한글 등 조합 중 Enter(조합 확정)는 전송하지 않는다.
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key !== 'Enter' || event.shiftKey || event.nativeEvent.isComposing) return;
+    event.preventDefault();
+    void submitDraft();
   };
 
   return (
@@ -180,7 +191,8 @@ export function PolicyChatPresenter({
             value={draft}
             maxLength={MESSAGE_MAX_LENGTH}
             onChange={(event) => handleDraftChange(event.target.value)}
-            placeholder="이 정책에 대해 궁금한 점이나 경험을 공유해 주세요"
+            onKeyDown={handleKeyDown}
+            placeholder="이 정책에 대해 궁금한 점이나 경험을 공유해 주세요 (Enter: 전송, Shift+Enter: 줄바꿈)"
             rows={2}
             aria-describedby="policy-chat-character-count policy-chat-send-error"
             className="min-h-18 flex-1 resize-none rounded-2xl border border-slate-200 bg-white p-3 text-xs leading-relaxed shadow-sm transition-colors focus:border-primary focus:outline-none disabled:bg-slate-50"
