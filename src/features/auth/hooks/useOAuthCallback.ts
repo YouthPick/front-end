@@ -10,6 +10,7 @@ import { isInternalPath } from '@/shared/utils';
 import { exchangeOAuthCallback, fetchCurrentUser } from '../api/authApi';
 import { getAuthErrorMessage } from '../api/authErrorMessages';
 import { mapAuthUserDtoToAuthUser } from '../api/authMapper';
+import { getOAuthCallbackErrorMessage } from '../lib/oauthCallbackError';
 import { consumeOAuthSession } from '../lib/oauthSession';
 import { getProviderLabel } from '../lib/providerLabel';
 import { syncOnboardedStatus } from '../lib/syncOnboardedStatus';
@@ -33,6 +34,12 @@ export function useOAuthCallback() {
       const code = searchParams.get('code');
       const state = searchParams.get('state');
       const { provider, redirectTo } = consumeOAuthSession();
+      const providerErrorMessage = getOAuthCallbackErrorMessage(searchParams.get('error'));
+
+      if (providerErrorMessage) {
+        setErrorMessage(providerErrorMessage);
+        return;
+      }
 
       if (!code || !state || !provider) {
         setErrorMessage('로그인 정보가 올바르지 않습니다. 로그인 화면에서 다시 시도해 주세요.');
