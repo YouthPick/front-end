@@ -1,7 +1,9 @@
+import { useIsFetching, useIsMutating } from '@tanstack/react-query';
 import {
   ClipboardList,
   FileText,
   LayoutDashboard,
+  Loader2,
   LogIn,
   MessagesSquare,
   RefreshCw,
@@ -39,8 +41,12 @@ const NAV_SECTIONS = [
 ] as const;
 
 export function AdminLayout() {
+  const isFetching = useIsFetching();
+  const isMutating = useIsMutating();
+  const isStaleUpdating = isFetching > 0 || isMutating > 0;
+
   return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-start relative">
       <aside className="lg:w-56 lg:flex-shrink-0">
         <nav
           aria-label="관리자 메뉴"
@@ -59,7 +65,7 @@ export function AdminLayout() {
                     to={item.to}
                     end={item.end}
                     className={({ isActive }) =>
-                      `flex items-center space-x-2 rounded-xl px-2.5 py-2 text-xs font-bold transition-colors ${
+                      `flex items-center space-x-2 rounded-xl px-2.5 py-2 text-xs font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                         isActive ? 'bg-primary/5 text-primary' : 'text-slate-500 hover:bg-slate-50'
                       }`
                     }
@@ -74,7 +80,16 @@ export function AdminLayout() {
         </nav>
       </aside>
 
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 relative">
+        {isStaleUpdating && (
+          <div
+            aria-live="polite"
+            className="absolute top-0 right-0 flex items-center space-x-1.5 rounded-full bg-slate-50 border border-slate-100 px-3 py-1 text-[10px] font-bold text-slate-500 shadow-sm animate-in fade-in duration-200"
+          >
+            <Loader2 className="h-3 w-3 animate-spin text-primary" />
+            <span>{isMutating > 0 ? '서버에 반영 중...' : '데이터 동기화 중...'}</span>
+          </div>
+        )}
         <Outlet />
       </div>
     </div>
