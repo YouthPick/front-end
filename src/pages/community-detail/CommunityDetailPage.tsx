@@ -12,7 +12,7 @@ import { useAuthStore } from '@/entities/user';
 import { CommentListContainer, useCommunityComments } from '@/features/community-comment';
 import { useCommunityLike } from '@/features/community-like';
 import { buildCommunityEditPath, ROUTES } from '@/shared/constants';
-import { ConfirmDialog, ErrorState, Skeleton, useToast } from '@/shared/ui';
+import { ConfirmDialog, EmptyState, ErrorState, Skeleton, useToast } from '@/shared/ui';
 
 export function CommunityDetailPage() {
   const { postId } = useParams<{ postId: string }>();
@@ -24,12 +24,29 @@ export function CommunityDetailPage() {
   return <CommunityDetailPageContent postId={postId} />;
 }
 
+function PostNotFoundState() {
+  return (
+    <EmptyState
+      icon="📭"
+      title="존재하지 않거나 삭제된 게시글입니다"
+      description="게시글이 삭제되었거나 주소가 잘못되었어요. 목록에서 다른 글을 둘러보세요."
+    >
+      <Link
+        to={ROUTES.community}
+        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+      >
+        목록으로
+      </Link>
+    </EmptyState>
+  );
+}
+
 interface CommunityDetailPageContentProps {
   postId: string;
 }
 
 function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps) {
-  const { data: post, isLoading, isError, refetch } = useCommunityPostQuery(postId);
+  const { data: post, isLoading, isError, isNotFound, refetch } = useCommunityPostQuery(postId);
   // PostDetailResponse에는 policyId/policyTitle만 있고 category/deadline이 없어
   // 게시글 상세 응답만으로는 첨부 정책 카드를 완성할 수 없다 — 정책 상세를 따로 조회해 채운다.
   const { data: attachedPolicy } = usePolicyDetailQuery(post?.policyId ?? null);
@@ -71,11 +88,14 @@ function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps)
         </div>
       )}
 
-      {isError && <ErrorState title="게시글을 불러오지 못했습니다" onRetry={() => refetch()} />}
+      {/* 404는 재시도해도 영원히 실패한다 — 재시도 버튼 없이 not-found 안내와 목록 이동만 제공한다(rules §9.1). */}
+      {isNotFound && <PostNotFoundState />}
 
-      {!isLoading && !isError && !post && (
-        <ErrorState title="존재하지 않거나 삭제된 게시글입니다" />
+      {isError && !isNotFound && (
+        <ErrorState title="게시글을 불러오지 못했습니다" onRetry={() => refetch()} />
       )}
+
+      {!isLoading && !isError && !post && <PostNotFoundState />}
 
       {!isLoading && !isError && post && (
         <>

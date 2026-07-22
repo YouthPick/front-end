@@ -25,3 +25,9 @@ export function parseApiError(error: unknown): ApiErrorResponse | null {
 
   return data as ApiErrorResponse;
 }
+
+// HTTP status 기준 흐름 분기(rules §9.1)용 헬퍼.
+// 404는 "존재하지 않는 데이터"이므로 재시도 UI가 아니라 Empty/안내 UI로 분기해야 한다.
+export function isNotFoundError(error: unknown): boolean {
+  return axios.isAxiosError(error) && error.response?.status === 404;
+}
