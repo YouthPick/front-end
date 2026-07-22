@@ -1,5 +1,5 @@
 {
-  "name": "react-example",
+  "name": "bop-front-end",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -18,13 +18,11 @@
   },
   "dependencies": {
     "@stomp/stompjs": "^7.3.0",
-    "@tailwindcss/vite": "^4.1.14",
     "@tanstack/react-query": "^5.101.2",
     "@tanstack/react-table": "^8.21.3",
     "@tiptap/extension-image": "^3.28.0",
     "@tiptap/react": "^3.28.0",
     "@tiptap/starter-kit": "^3.28.0",
-    "@vitejs/plugin-react": "^5.0.4",
     "axios": "^1.18.1",
     "dompurify": "^3.4.12",
     "lucide-react": "^0.546.0",
@@ -36,10 +34,12 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.3",
+    "@tailwindcss/vite": "^4.1.14",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^22.14.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
     "jsdom": "^27.0.0",
     "tailwindcss": "^4.1.14",

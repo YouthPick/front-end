@@ -72,6 +72,7 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
       return;
     }
 
+    const activePolicyId = policyId;
     const abortController = new AbortController();
     const subscriptions: StompSubscription[] = [];
     let isDisposed = false;
@@ -92,7 +93,7 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
     async function fetchHistoryDelta(afterId: number): Promise<number | null> {
       try {
         const response = await fetchPolicyChatMessages({
-          policyId,
+          policyId: activePolicyId,
           afterId,
           signal: abortController.signal,
         });
@@ -118,7 +119,7 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
     function handleIncomingMessage(message: IMessage) {
       try {
         const dto = parsePolicyChatMessageBody(message.body);
-        if (!dto || dto.policyId !== policyId || !isActiveSession()) return;
+        if (!dto || dto.policyId !== activePolicyId || !isActiveSession()) return;
 
         const nextMessage = mapPolicyChatMessageDtoToMessage(dto);
         cursorRef.current = Math.max(cursorRef.current, nextMessage.id);
@@ -182,8 +183,8 @@ export function usePolicyChat({ policyId, enabled }: UsePolicyChatParams): UsePo
 
         hasConnected = true;
         subscriptions.push(
-          client.subscribe(getPolicyChatMessageDestination(policyId), handleIncomingMessage),
-          client.subscribe(getPolicyChatErrorDestination(policyId), handlePolicyChatError),
+          client.subscribe(getPolicyChatMessageDestination(activePolicyId), handleIncomingMessage),
+          client.subscribe(getPolicyChatErrorDestination(activePolicyId), handlePolicyChatError),
         );
         const initialHistoryCursor = fetchHistoryDelta(cursorRef.current);
         void initialHistoryCursor.then((afterInitialHistoryId) => {
