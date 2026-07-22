@@ -67,3 +67,14 @@ export async function deleteCommunityComment(commentId: string): Promise<void> {
     (comment) => comment.id !== commentId && comment.parentId !== commentId,
   );
 }
+
+export async function fetchCommunityCommentCounts(
+  postIds: string[],
+): Promise<Record<string, number>> {
+  await delay(MOCK_API_DELAY_MS);
+  const counts: Record<string, number> = {};
+  for (const postId of postIds) {
+    counts[postId] = comments.filter((c) => c.postId === postId).length;
+  }
+  return counts;
+}
