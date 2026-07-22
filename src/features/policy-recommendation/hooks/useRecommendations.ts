@@ -10,12 +10,17 @@ import { buildRecommendations } from '../api/recommendApi';
 export function useRecommendations() {
   const localProfile = useProfileStore((state) => state.profile);
   const { data: regions = [], isLoading: isRegionsLoading } = usePublicRegionsQuery();
-  const { data: myProfileDto, isLoading: isMyProfileLoading } = useMyProfileQuery();
+  const {
+    data: myProfileDto,
+    isLoading: isMyProfileLoading,
+    isError: isMyProfileError,
+    refetch: refetchMyProfile,
+  } = useMyProfileQuery();
   const {
     data: policies = [],
     isLoading: isPoliciesLoading,
-    isError,
-    refetch,
+    isError: isPoliciesError,
+    refetch: refetchPolicies,
   } = usePoliciesQuery();
 
   // 클라이언트 스토어(useProfileStore)는 같은 세션에서 방금 온보딩/수정한 값만 신뢰할 수 있다.
@@ -32,11 +37,16 @@ export function useRecommendations() {
     [policies, profile],
   );
 
+  const reload = () => {
+    refetchPolicies();
+    refetchMyProfile();
+  };
+
   return {
     profile,
     recommendations,
     isLoading: isPoliciesLoading || isProfileLoading,
-    isError,
-    reload: refetch,
+    isError: isPoliciesError || isMyProfileError,
+    reload,
   };
 }
