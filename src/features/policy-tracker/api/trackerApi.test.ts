@@ -85,7 +85,7 @@ describe('정책 신청관리 API 매퍼', () => {
       { applicationId: 91, policyId: '42', checklist: [{ id: 7, completed: false }] },
     ]);
     expect(apiClientMock.get).toHaveBeenNthCalledWith(1, '/v1/policy-applications', {
-      params: { size: 100 },
+      params: { page: 1, size: 100 },
     });
     expect(apiClientMock.get).toHaveBeenNthCalledWith(
       2,

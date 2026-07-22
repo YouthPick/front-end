@@ -1,17 +1,36 @@
-import { type ApiPageEnvelope, apiClient } from '@/shared/api';
+import { type ApiPageEnvelope, apiClient, queryClient } from '@/shared/api';
 
-interface PolicyApplicationBookmarkDto {
+export interface PolicyApplicationBookmarkDto {
   id: number;
   policyId: number;
   status: 'INTERESTED' | 'PREPARING' | 'APPLIED' | 'COMPLETED';
 }
 
-async function fetchApplications(): Promise<PolicyApplicationBookmarkDto[]> {
-  const response = await apiClient.get<ApiPageEnvelope<PolicyApplicationBookmarkDto>>(
+export async function fetchApplications(): Promise<PolicyApplicationBookmarkDto[]> {
+  const firstResponse = await apiClient.get<ApiPageEnvelope<PolicyApplicationBookmarkDto>>(
     '/v1/policy-applications',
-    { params: { size: 100 } },
+    { params: { page: 1, size: 100 } },
   );
-  return response.data.data;
+
+  const { data, meta } = firstResponse.data;
+  let allItems = [...data];
+
+  if (meta.totalPages > 1) {
+    const promises = [];
+    for (let p = 2; p <= meta.totalPages; p++) {
+      promises.push(
+        apiClient.get<ApiPageEnvelope<PolicyApplicationBookmarkDto>>('/v1/policy-applications', {
+          params: { page: p, size: 100 },
+        }),
+      );
+    }
+    const responses = await Promise.all(promises);
+    for (const res of responses) {
+      allItems = allItems.concat(res.data.data);
+    }
+  }
+
+  return allItems;
 }
 
 export async function fetchBookmarkedPolicyIds(): Promise<string[]> {
@@ -27,7 +46,8 @@ export async function toggleBookmark(policyId: string): Promise<{ saved: boolean
     throw new Error('유효하지 않은 정책 ID입니다.');
   }
 
-  const applications = await fetchApplications();
+  const cachedApps = queryClient.getQueryData<PolicyApplicationBookmarkDto[]>(['applications']);
+  const applications = cachedApps ?? (await fetchApplications());
   const existing = applications.find((application) => application.policyId === numericPolicyId);
 
   if (existing?.status === 'INTERESTED') {
