@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { clearAccessToken, subscribeSessionExpired } from '@/shared/api';
+import { clearAccessToken, queryClient, subscribeSessionExpired } from '@/shared/api';
 
 import { useProfileStore } from './profileStore';
 import type { AuthUser } from './user.types';
@@ -32,6 +32,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
   logout: () => {
     clearAccessToken();
+    // 사용자 범위 queryKey가 없는 캐시가 남으면 다른 계정 로그인 뒤 이전 정보가 잠시 보일 수 있다.
+    queryClient.clear();
     // 기기 공용 브라우저에서 다른 사용자가 로그인해도 이전 사용자의 온보딩 상태가 남지 않게 한다.
     useProfileStore.getState().resetProfile();
     set({ user: null, isAuthenticated: false });
