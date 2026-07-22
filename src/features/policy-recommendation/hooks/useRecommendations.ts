@@ -1,52 +1,22 @@
-import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-import { usePoliciesQuery } from '@/entities/policy';
-import { usePublicRegionsQuery } from '@/entities/region';
-import { mapMyProfileResponse, useMyProfileQuery, useProfileStore } from '@/entities/user';
+import { policyKeys } from '@/entities/policy';
 
-import { buildRecommendations } from '../api/recommendApi';
+import { fetchRecommendations } from '../api/recommendApi';
 
-// 정책 목록 쿼리를 그대로 공유하고 추천 점수만 파생해, 목록과 추천의 이중 fetch를 피한다.
+// 프로필은 이 훅이 돌려주지 않는다 — Zustand store의 프로필은 isOnboarded만 persist돼서
+// 새로고침 후 나머지 필드가 빈 값(region: '', birthYear: 0)으로 남기 때문이다.
+// 프로필을 표시해야 하는 화면은 서버가 원본인 useMyProfile()을 쓴다.
 export function useRecommendations() {
-  const localProfile = useProfileStore((state) => state.profile);
-  const { data: regions = [], isLoading: isRegionsLoading } = usePublicRegionsQuery();
   const {
-    data: myProfileDto,
-    isLoading: isMyProfileLoading,
-    isError: isMyProfileError,
-    refetch: refetchMyProfile,
-  } = useMyProfileQuery();
-  const {
-    data: policies = [],
-    isLoading: isPoliciesLoading,
-    isError: isPoliciesError,
-    refetch: refetchPolicies,
-  } = usePoliciesQuery();
+    data: recommendations = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: policyKeys.recommended,
+    queryFn: fetchRecommendations,
+  });
 
-  // 클라이언트 스토어(useProfileStore)는 같은 세션에서 방금 온보딩/수정한 값만 신뢰할 수 있다.
-  // 새로고침이나 다른 기기 로그인에서는 서버 프로필이 진실 원천이므로, 로딩 중에는 화면 깜빡임을
-  // 막기 위해 로컬 값을 잠시 보여주고 서버 응답이 오면 그 값으로 교체한다.
-  const isProfileLoading = isMyProfileLoading || isRegionsLoading;
-  const profile = useMemo(
-    () => (myProfileDto ? mapMyProfileResponse(myProfileDto, regions) : localProfile),
-    [myProfileDto, regions, localProfile],
-  );
-
-  const recommendations = useMemo(
-    () => buildRecommendations(policies, profile),
-    [policies, profile],
-  );
-
-  const reload = () => {
-    refetchPolicies();
-    refetchMyProfile();
-  };
-
-  return {
-    profile,
-    recommendations,
-    isLoading: isPoliciesLoading || isProfileLoading,
-    isError: isPoliciesError || isMyProfileError,
-    reload,
-  };
+  return { recommendations, isLoading, isError, reload: refetch };
 }

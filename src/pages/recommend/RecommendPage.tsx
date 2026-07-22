@@ -1,12 +1,16 @@
 import { Edit3 } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
+import { useMyProfile } from '@/features/my-profile';
 import { ProfileBriefing, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
+import { Skeleton } from '@/shared/ui';
 import { RecommendationFeed } from '@/widgets/recommendation-feed';
 
 export function RecommendPage() {
-  const { profile, recommendations, isLoading, isError } = useRecommendations();
+  const { recommendations, isLoading, isError } = useRecommendations();
+  // 프로필은 서버가 원본이다 — store 값은 새로고침 후 빈 값이라 여기서 쓰면 안 된다.
+  const { profile, isLoading: isProfileLoading } = useMyProfile();
   const navigate = useNavigate();
 
   return (
@@ -38,11 +42,15 @@ export function RecommendPage() {
         </button>
       </div>
 
-      <ProfileBriefing
-        profile={profile}
-        recommendationCount={isLoading ? null : recommendations.length}
-        isRecommendationsError={isError}
-      />
+      {isProfileLoading || !profile ? (
+        <Skeleton className="h-28" />
+      ) : (
+        <ProfileBriefing
+          profile={profile}
+          recommendationCount={isLoading ? null : recommendations.length}
+          isRecommendationsError={isError}
+        />
+      )}
 
       <RecommendationFeed />
     </div>

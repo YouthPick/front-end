@@ -27,6 +27,9 @@ export const policyKeys = {
     ['policies', 'search-page', params, page, size] as const,
   detail: (policyId: string) => ['policies', 'detail', policyId] as const,
   recentlyViewed: ['policies', 'recently-viewed'] as const,
+  // 맞춤 추천은 서버가 프로필을 읽어 계산하므로, 프로필이 바뀌면 이 키를 무효화해야 최신 결과가 뜬다.
+  // 훅(features/policy-recommendation)과 프로필 저장(features/profile-setup) 양쪽이 참조해야 해서 entities에 둔다.
+  recommended: ['policies', 'recommended'] as const,
 };
 
 export function usePoliciesQuery() {
