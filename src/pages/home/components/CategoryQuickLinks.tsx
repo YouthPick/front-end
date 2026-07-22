@@ -10,6 +10,8 @@ interface CategoryCard {
   icon: LucideIcon;
 }
 
+// key는 POLICY_CATEGORIES(정규화된 실분류 5개)와 일치시킨다. '기타'는 미분류 fallback이라 제외한다.
+// bg 색상 계열은 getPolicyCategoryBadgeClasses(shared/utils)의 카테고리별 배지 색과 맞춘다.
 const CATEGORY_CARDS = [
   {
     key: '일자리',
@@ -21,7 +23,7 @@ const CATEGORY_CARDS = [
   {
     key: '주거',
     title: '주거',
-    subtitle: '주거・금융 지원',
+    subtitle: '주거・생활 안정',
     bg: 'bg-blue-50 text-blue-600 hover:bg-blue-100/50',
     icon: Home,
   },
@@ -29,7 +31,7 @@ const CATEGORY_CARDS = [
     key: '교육·직업훈련',
     title: '교육',
     subtitle: '역량・직업훈련',
-    bg: 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100/50',
+    bg: 'bg-teal-50 text-teal-600 hover:bg-teal-100/50',
     icon: GraduationCap,
   },
   {
