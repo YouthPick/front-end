@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { notifySessionExpired, queryClient, setAccessToken } from '@/shared/api';
 
@@ -17,19 +17,22 @@ function seedPersonalCache() {
   queryClient.setQueryData(['bookmarks'], ['42']);
 }
 
-describe('authStore 로그아웃 시 서버 상태 캐시 정리', () => {
+describe('authStore 로그아웃 및 캐시 정리', () => {
   beforeEach(() => {
     queryClient.clear();
     useAuthStore.setState({ user: null, isAuthenticated: false, isInitializing: false });
+    vi.restoreAllMocks();
   });
 
   it('logout()은 TanStack Query 캐시를 전부 비운다', () => {
+    const clearSpy = vi.spyOn(queryClient, 'clear');
     useAuthStore.getState().login(TEST_USER);
     seedPersonalCache();
     expect(queryClient.getQueryCache().getAll()).not.toHaveLength(0);
 
     useAuthStore.getState().logout();
 
+    expect(clearSpy).toHaveBeenCalledOnce();
     expect(queryClient.getQueryData(['me', 'profile'])).toBeUndefined();
     expect(queryClient.getQueryData(['bookmarks'])).toBeUndefined();
     expect(queryClient.getQueryCache().getAll()).toHaveLength(0);
