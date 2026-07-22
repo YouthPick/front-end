@@ -110,13 +110,13 @@ export function TrackerDetailPanel({
         </div>
       </div>
 
-      {/* Required documents brief */}
+      {/* Required documents */}
       <div className="rounded-2xl bg-slate-50 p-4 border border-slate-100 space-y-2">
         <h4 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
-          정책 제출 서류 기본 안내
+          정책 제출 서류
         </h4>
         <p className="text-xs text-slate-600 font-extrabold leading-relaxed">
-          • 신청서 및 자기소개서, 구직상태 자격 소명 확인서
+          {policy.submissionDocuments ?? '제출 서류 정보는 공식 공고에서 확인해 주세요.'}
         </p>
         <p className="text-[10px] text-slate-400">
           * 주관 부처 마감 이전에 제출 서류 목록이 변동되었는지 공식 안내 고시를 반드시 교차

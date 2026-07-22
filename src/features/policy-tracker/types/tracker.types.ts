@@ -19,6 +19,8 @@ export interface TrackerItem {
   policyId: string;
   /** 정책 자체의 공식 신청 마감일(yyyy-MM-dd). 없으면 빈 문자열 — 개인 마감일은 이 날짜를 넘을 수 없다. */
   policyDeadline: string;
+  /** 신청관리 기록이 생성된 날짜(yyyy-MM-dd). */
+  createdAt: string;
   status: TrackerStatus;
   targetDate: string;
   checklist: TrackerChecklistItem[];
