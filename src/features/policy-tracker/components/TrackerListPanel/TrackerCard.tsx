@@ -63,7 +63,7 @@ export function TrackerCard({ tracker, policyTitle, isSelected, onSelect }: Trac
       </div>
 
       <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-bold">
-        <span>수정기록: 2026.06.23</span>
+        <span>신청 시작: {tracker.createdAt || '날짜 정보 없음'}</span>
         <span className="text-primary hover:underline flex items-center space-x-0.5">
           <span>관리하기</span>
           <ChevronRight className="h-3 w-3" />

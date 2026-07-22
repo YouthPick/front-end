@@ -48,6 +48,7 @@ describe('정책 신청관리 API 매퍼', () => {
       applicationId: 91,
       policyId: '42',
       policyDeadline: '2026-08-31',
+      createdAt: '2026-07-20',
       status: '준비중',
       targetDate: '2026-08-20',
       checklist: [{ id: 7, text: '등본 제출', completed: true }],

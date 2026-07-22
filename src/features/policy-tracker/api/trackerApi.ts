@@ -67,6 +67,7 @@ export function mapPolicyApplicationToTracker(
     applicationId: application.id,
     policyId: String(application.policyId),
     policyDeadline: toDateInputValue(application.policyApplicationEndDate),
+    createdAt: toDateInputValue(application.createdAt),
     status: trackerStatusByApiStatus[application.status],
     targetDate: toDateInputValue(application.endAt),
     checklist: checklist.map((item) => ({
