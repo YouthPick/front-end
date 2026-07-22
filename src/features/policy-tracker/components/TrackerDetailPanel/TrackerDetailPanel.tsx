@@ -50,14 +50,16 @@ export function TrackerDetailPanel({
           </span>
           <h3 className="text-sm font-black text-slate-800 leading-tight pr-6">{policy.title}</h3>
         </div>
-        <a
-          href={policy.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 rounded-xl border border-slate-200 px-3 py-1.5 text-[10px] font-extrabold text-slate-600 hover:bg-slate-50"
-        >
-          공식 공고 ↗
-        </a>
+        {policy.link && (
+          <a
+            href={policy.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 rounded-xl border border-slate-200 px-3 py-1.5 text-[10px] font-extrabold text-slate-600 hover:bg-slate-50"
+          >
+            공식 공고 ↗
+          </a>
+        )}
       </div>
 
       {/* Interactive inputs: status, target date */}
