@@ -11,6 +11,7 @@ import { AdminLayout } from '@/widgets/admin-layout';
 import { RootLayout } from '../layouts/RootLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 import { RequireOnboarded } from './RequireOnboarded';
+import { RouteErrorBoundary } from './RouteErrorBoundary';
 
 // 홈·검색·로그인 외 화면은 라우트 단위로 지연 로딩해 초기 번들을 줄인다.
 const AdminPage = lazy(() => import('@/pages/admin').then((m) => ({ default: m.AdminPage })));
@@ -68,6 +69,8 @@ const TrackerPage = lazy(() => import('@/pages/tracker').then((m) => ({ default:
 export const router = createBrowserRouter([
   {
     element: <RootLayout />,
+    // 렌더 예외·청크 로드 실패의 최종 방어선. 없으면 lazy import 실패 시 흰 화면이 된다.
+    errorElement: <RouteErrorBoundary />,
     children: [
       { path: ROUTES.home, element: <HomePage /> },
       { path: ROUTES.search, element: <SearchPage /> },
