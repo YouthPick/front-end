@@ -1,3 +1,5 @@
+import { useToastStore } from '../ui/toast/toastStore';
+
 // access token은 AUTH-GR-002(localStorage 저장 금지)에 따라 메모리에만 보관한다.
 // 새로고침 시에는 refresh token(HttpOnly 쿠키)으로 세션을 다시 복원한다.
 let accessToken: string | null = null;
@@ -9,6 +11,7 @@ export function getAccessToken(): string | null {
 
 export function setAccessToken(token: string): void {
   accessToken = token;
+  localStorage.setItem('has_logged_in_hint', 'true');
 }
 
 export function clearAccessToken(): void {
@@ -24,5 +27,7 @@ export function subscribeSessionExpired(listener: () => void): () => void {
 
 export function notifySessionExpired(): void {
   clearAccessToken();
+  localStorage.removeItem('has_logged_in_hint');
+  useToastStore.getState().showToast('세션이 만료되었습니다. 다시 로그인해주세요.', 'warning');
   for (const listener of sessionExpiredListeners) listener();
 }

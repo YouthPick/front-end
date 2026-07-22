@@ -35,15 +35,25 @@ let refreshPromise: Promise<string> | null = null;
 // 실제로 나가게 한다 — refresh token이 1회용으로 회전되는 백엔드에서 동시 요청 중 하나가 401로
 // 실패하는 것을 방지한다.
 export function requestNewAccessToken(): Promise<string> {
+  const hasHint = localStorage.getItem('has_logged_in_hint') === 'true';
+  if (!hasHint) {
+    return Promise.reject(new Error('No login session hint'));
+  }
+
   if (!refreshPromise) {
     refreshPromise = axios
       .post<{ data: { accessToken: string } }>(`${API_BASE_URL}/v1/auth/token/refresh`, null, {
         withCredentials: true,
+        timeout: 10_000,
       })
       .then((response) => {
         const token = response.data.data.accessToken;
         setAccessToken(token);
         return token;
+      })
+      .catch((error) => {
+        localStorage.removeItem('has_logged_in_hint');
+        throw error;
       })
       .finally(() => {
         refreshPromise = null;
