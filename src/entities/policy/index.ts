@@ -38,6 +38,7 @@ export type {
 export { normalizePolicyCategory, POLICY_CATEGORIES } from './model/policyCategories';
 export { UNRESTRICTED_CONDITION } from './model/policyConditions';
 export { usePolicyDetailStore } from './model/policyDetailStore';
+export { JOB_CODE_UNRESTRICTED, jobCodeForProfileCode } from './model/policyJobCodes';
 export {
   mapPolicyCardsToPolicies,
   mapPolicyCardToPolicy,
@@ -54,6 +55,5 @@ export {
   usePolicySearchQuery,
   useRecentlyViewedPoliciesQuery,
 } from './model/policyQueries';
-export { POLICY_ELIGIBLE_STATUSES } from './model/policyStatuses';
 export { PolicyCard } from './ui/PolicyCard';
 export { getPolicyCategoryBadgeClasses, PolicyCategoryBadge } from './ui/PolicyCategoryBadge';
