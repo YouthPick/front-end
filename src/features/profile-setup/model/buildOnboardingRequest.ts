@@ -32,7 +32,7 @@ export function buildOnboardingRequest(
     regionCode,
     employmentStatus,
     educationLevel,
-    merryStatus: codeForLabel(MARITAL_STATUS_OPTIONS, draft.maritalStatus),
+    maritalStatus: codeForLabel(MARITAL_STATUS_OPTIONS, draft.maritalStatus),
     major: majorCode === null ? [] : [majorCode],
     specialCondition: draft.specialConditions
       .map((label) => codeForLabel(SPECIAL_CONDITION_OPTIONS, label))

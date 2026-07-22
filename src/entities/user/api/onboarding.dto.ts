@@ -3,7 +3,7 @@ export interface OnboardingProfileRequestDto {
   regionCode: string;
   employmentStatus: string;
   educationLevel: string;
-  merryStatus: string | null;
+  maritalStatus: string | null;
   major: string[];
   specialCondition: string[];
   income: number | null;
@@ -18,7 +18,7 @@ export interface OnboardingProfileResponseDto {
   regionCode: string;
   employmentStatus: string;
   educationLevel: string;
-  merryStatus: string | null;
+  maritalStatus: string | null;
   major: string[];
   specialCondition: string[];
   income: number | null;

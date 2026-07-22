@@ -21,6 +21,7 @@ import { getRedirectPath, hasEditIntent } from '@/shared/utils';
 
 import { buildOnboardingRequest } from '../model/buildOnboardingRequest';
 import { getOnboardingErrorMessage } from '../model/onboardingErrors';
+import { profileSchema } from '../model/profileSchema';
 
 export const MAX_INTEREST_COUNT = 3;
 export const MAX_KEYWORD_COUNT = 5;
@@ -28,8 +29,18 @@ export const WIZARD_TOTAL_STEPS = 4;
 
 // 출생연도·거주지역(1단계)·취업상태·학력(2단계)은 필수값이다. 나머지 단계는 전부 선택이라 항상 통과시킨다.
 function isStepComplete(step: number, draft: UserProfile): boolean {
-  if (step === 1) return draft.birthYear !== 0 && draft.region !== '';
-  if (step === 2) return draft.employmentStatus !== '' && draft.educationStatus !== '';
+  if (step === 1) {
+    return profileSchema.pick({ birthYear: true, region: true }).safeParse({
+      birthYear: draft.birthYear === 0 ? undefined : draft.birthYear,
+      region: draft.region === '' ? undefined : draft.region,
+    }).success;
+  }
+  if (step === 2) {
+    return profileSchema.pick({ employmentStatus: true, educationStatus: true }).safeParse({
+      employmentStatus: draft.employmentStatus === '' ? undefined : draft.employmentStatus,
+      educationStatus: draft.educationStatus === '' ? undefined : draft.educationStatus,
+    }).success;
+  }
   return true;
 }
 
@@ -99,6 +110,42 @@ export function useProfileSetupWizard() {
 
     if (!userId) {
       showToast('로그인이 필요한 기능입니다. 다시 로그인한 뒤 이용해 주세요.', 'warning');
+      return;
+    }
+
+    const validationResult = profileSchema.safeParse({
+      ...draft,
+      birthYear: draft.birthYear === 0 ? undefined : draft.birthYear,
+      region: draft.region === '' ? undefined : draft.region,
+      employmentStatus: draft.employmentStatus === '' ? undefined : draft.employmentStatus,
+      educationStatus: draft.educationStatus === '' ? undefined : draft.educationStatus,
+      annualIncome: draft.incomeUnknown ? null : draft.annualIncome,
+    });
+
+    if (!validationResult.success) {
+      const firstErrorMessage =
+        validationResult.error.issues[0]?.message ?? '입력 정보가 올바르지 않습니다.';
+      showToast(firstErrorMessage, 'warning');
+
+      const step1Res = profileSchema.pick({ birthYear: true, region: true }).safeParse({
+        birthYear: draft.birthYear === 0 ? undefined : draft.birthYear,
+        region: draft.region === '' ? undefined : draft.region,
+      });
+      if (!step1Res.success) {
+        setStep(1);
+        return;
+      }
+
+      const step2Res = profileSchema
+        .pick({ employmentStatus: true, educationStatus: true })
+        .safeParse({
+          employmentStatus: draft.employmentStatus === '' ? undefined : draft.employmentStatus,
+          educationStatus: draft.educationStatus === '' ? undefined : draft.educationStatus,
+        });
+      if (!step2Res.success) {
+        setStep(2);
+        return;
+      }
       return;
     }
 
