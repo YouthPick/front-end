@@ -6,10 +6,11 @@ import { useAuthStore } from '@/entities/user';
 import { ROUTES } from '@/shared/constants';
 import { useToast } from '@/shared/ui';
 
-import { fetchBookmarkedPolicyIds, toggleBookmark } from '../api/bookmarkApi';
+import { fetchApplications, toggleBookmark } from '../api/bookmarkApi';
 
 export const bookmarkKeys = {
   all: ['bookmarks'] as const,
+  applications: ['applications'] as const,
 };
 
 export function useBookmark() {
@@ -22,18 +23,25 @@ export function useBookmark() {
   const isTogglingRef = useRef(false);
 
   const {
-    data: savedPolicyIds = [],
+    data: applications = [],
     isLoading,
     isError,
     refetch,
   } = useQuery({
-    queryKey: bookmarkKeys.all,
-    queryFn: fetchBookmarkedPolicyIds,
+    queryKey: bookmarkKeys.applications,
+    queryFn: fetchApplications,
+    staleTime: 5 * 60 * 1000, // 5분
+    enabled: isAuthenticated,
   });
+
+  const savedPolicyIds = applications
+    .filter((application) => application.status === 'INTERESTED')
+    .map((application) => String(application.policyId));
 
   const toggleMutation = useMutation({
     mutationFn: toggleBookmark,
     onSuccess: ({ saved }) => {
+      queryClient.invalidateQueries({ queryKey: bookmarkKeys.applications });
       queryClient.invalidateQueries({ queryKey: bookmarkKeys.all });
       queryClient.invalidateQueries({ queryKey: ['trackers'] });
       if (saved) {

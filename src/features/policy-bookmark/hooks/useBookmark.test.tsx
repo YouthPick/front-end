@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const bookmarkApiMock = vi.hoisted(() => ({
+  fetchApplications: vi.fn(),
   fetchBookmarkedPolicyIds: vi.fn(),
   toggleBookmark: vi.fn(),
 }));
@@ -32,6 +33,7 @@ function createWrapper() {
 describe('useBookmark', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    bookmarkApiMock.fetchApplications.mockResolvedValue([]);
     bookmarkApiMock.fetchBookmarkedPolicyIds.mockResolvedValue([]);
   });
 
@@ -42,7 +44,7 @@ describe('useBookmark', () => {
     );
     const { result } = renderHook(() => useBookmark(), { wrapper: createWrapper() });
 
-    await waitFor(() => expect(bookmarkApiMock.fetchBookmarkedPolicyIds).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(bookmarkApiMock.fetchApplications).toHaveBeenCalledTimes(1));
     act(() => {
       result.current.toggleSave('42');
       result.current.toggleSave('42');

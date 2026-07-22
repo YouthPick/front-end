@@ -1,4 +1,4 @@
-import { type ApiPageEnvelope, apiClient } from '@/shared/api';
+import { type ApiPageEnvelope, apiClient, queryClient } from '@/shared/api';
 
 import type { TrackerChecklistItem, TrackerItem, TrackerStatus } from '../types/tracker.types';
 
@@ -87,14 +87,34 @@ async function fetchChecklist(applicationId: number): Promise<PolicyApplicationC
   return response.data.data;
 }
 
-export async function fetchTrackers(): Promise<TrackerItem[]> {
-  const response = await apiClient.get<ApiPageEnvelope<PolicyApplicationDto>>(
+async function fetchAllApplications(): Promise<PolicyApplicationDto[]> {
+  const firstResponse = await apiClient.get<ApiPageEnvelope<PolicyApplicationDto>>(
     '/v1/policy-applications',
-    {
-      params: { size: 100 },
-    },
+    { params: { page: 1, size: 100 } },
   );
-  const applications = response.data.data;
+
+  const { data, meta } = firstResponse.data;
+  let allItems = [...data];
+
+  if (meta.totalPages > 1) {
+    const promises = [];
+    for (let p = 2; p <= meta.totalPages; p++) {
+      promises.push(
+        apiClient.get<ApiPageEnvelope<PolicyApplicationDto>>('/v1/policy-applications', {
+          params: { page: p, size: 100 },
+        }),
+      );
+    }
+    const responses = await Promise.all(promises);
+    for (const res of responses) {
+      allItems = allItems.concat(res.data.data);
+    }
+  }
+  return allItems;
+}
+
+export async function fetchTrackers(): Promise<TrackerItem[]> {
+  const applications = await fetchAllApplications();
   const checklists = await Promise.all(
     applications.map((application) => fetchChecklist(application.id)),
   );
@@ -113,7 +133,10 @@ export async function startTracker(
   policyId: string,
   deadline: string,
 ): Promise<StartTrackerResult> {
-  const existing = (await fetchTrackers()).find((tracker) => tracker.policyId === policyId);
+  const cachedTrackers = queryClient.getQueryData<TrackerItem[]>(['trackers']);
+  const existing = (cachedTrackers ?? (await fetchTrackers())).find(
+    (tracker) => tracker.policyId === policyId,
+  );
   if (existing) {
     return { tracker: existing, created: false };
   }
@@ -161,8 +184,7 @@ export async function updateTrackerDate(
   return patchTrackerApplication(applicationId, () =>
     apiClient.patch<{ data: PolicyApplicationDto }>(
       `/v1/policy-applications/${applicationId}/end-at`,
-      undefined,
-      { params: { endAt: toIsoDateTime(targetDate) } },
+      { endAt: toIsoDateTime(targetDate) },
     ),
   );
 }
@@ -186,9 +208,7 @@ export async function deleteChecklistItem(itemId: number): Promise<void> {
 }
 
 export async function saveTrackerMemo(applicationId: number, memo: string): Promise<void> {
-  await apiClient.patch(`/v1/policy-applications/${applicationId}/memo`, undefined, {
-    params: { memo },
-  });
+  await apiClient.patch(`/v1/policy-applications/${applicationId}/memo`, { memo });
 }
 
 export async function deleteTracker(applicationId: number): Promise<void> {
