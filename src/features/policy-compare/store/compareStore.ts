@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface CompareStore {
   policyIds: string[];
@@ -7,10 +8,18 @@ interface CompareStore {
   clearPolicyIds: () => void;
 }
 
-export const useCompareStore = create<CompareStore>((set) => ({
-  policyIds: [],
-  addPolicyId: (policyId) => set((state) => ({ policyIds: [...state.policyIds, policyId] })),
-  removePolicyId: (policyId) =>
-    set((state) => ({ policyIds: state.policyIds.filter((id) => id !== policyId) })),
-  clearPolicyIds: () => set({ policyIds: [] }),
-}));
+export const useCompareStore = create<CompareStore>()(
+  persist(
+    (set) => ({
+      policyIds: [],
+      addPolicyId: (policyId) => set((state) => ({ policyIds: [...state.policyIds, policyId] })),
+      removePolicyId: (policyId) =>
+        set((state) => ({ policyIds: state.policyIds.filter((id) => id !== policyId) })),
+      clearPolicyIds: () => set({ policyIds: [] }),
+    }),
+    {
+      name: 'policy-compare-storage',
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+);
