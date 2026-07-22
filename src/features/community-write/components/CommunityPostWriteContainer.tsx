@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useBlocker, useNavigate } from 'react-router';
 
 import {
   type CommunityPostCategory,
@@ -49,6 +49,54 @@ export function CommunityPostWriteContainer({ postId }: CommunityPostWriteContai
   const [content, setContent] = useState('');
   const [attachedPolicy, setAttachedPolicy] = useState<Policy | null>(null);
 
+  const isContentEmpty = (html: string) => {
+    const clean = html.replace(/<[^>]*>/g, '').trim();
+    const hasImage = /<img[^>]*>/.test(html);
+    return clean === '' && !hasImage;
+  };
+
+  const isDirty =
+    (existingPost
+      ? title !== existingPost.title ||
+        content !== existingPost.content ||
+        category !== existingPost.category ||
+        attachedPolicy?.id !== existingPost.policyId
+      : title.trim() !== '' ||
+        !isContentEmpty(content) ||
+        category !== null ||
+        attachedPolicy !== null) && !isSubmitting;
+
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      isDirty && currentLocation.pathname !== nextLocation.pathname,
+  );
+
+  useEffect(() => {
+    if (blocker.state === 'blocked') {
+      const confirmLeave = window.confirm(
+        '작성 중인 내용이 저장되지 않고 사라집니다. 정말 이동하시겠습니까?',
+      );
+      if (confirmLeave) {
+        blocker.proceed();
+      } else {
+        blocker.reset();
+      }
+    }
+  }, [blocker]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isDirty]);
+
   useEffect(() => {
     if (!existingPost) return;
     setCategory(existingPost.category);
@@ -72,12 +120,6 @@ export function CommunityPostWriteContainer({ postId }: CommunityPostWriteContai
   useEffect(() => {
     if (existingPolicy) setAttachedPolicy(existingPolicy);
   }, [existingPolicy]);
-
-  const isContentEmpty = (html: string) => {
-    const clean = html.replace(/<[^>]*>/g, '').trim();
-    const hasImage = /<img[^>]*>/.test(html);
-    return clean === '' && !hasImage;
-  };
 
   const needsPolicy = category !== null && isPolicyAttachableCategory(category);
   const canSubmit =
