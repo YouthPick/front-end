@@ -33,7 +33,7 @@ function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps)
   // PostDetailResponse에는 policyId/policyTitle만 있고 category/deadline이 없어
   // 게시글 상세 응답만으로는 첨부 정책 카드를 완성할 수 없다 — 정책 상세를 따로 조회해 채운다.
   const { data: attachedPolicy } = usePolicyDetailQuery(post?.policyId ?? null);
-  const { isLiked, toggleLike } = useCommunityLike();
+  const { isLiked, toggleLike, isToggling } = useCommunityLike();
   const { data: comments } = useCommunityComments(postId);
   const user = useAuthStore((state) => state.user);
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
@@ -94,6 +94,7 @@ function CommunityDetailPageContent({ postId }: CommunityDetailPageContentProps)
             }}
             isLiked={isLiked(post.id)}
             onToggleLike={toggleLike}
+            isLikeToggling={isToggling}
             onViewAttachedPolicy={openPolicyDetail}
             canManage={canManage}
             onEdit={() => navigate(buildCommunityEditPath(post.id))}

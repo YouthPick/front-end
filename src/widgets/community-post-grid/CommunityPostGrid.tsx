@@ -19,7 +19,7 @@ export function CommunityPostGrid({
   className = COMMUNITY_POST_GRID_CLASS,
 }: CommunityPostGridProps) {
   const navigate = useNavigate();
-  const { isLiked, toggleLike } = useCommunityLike();
+  const { isLiked, toggleLike, isToggling } = useCommunityLike();
   const commentCounts = useCommunityCommentCounts(posts.map((post) => post.id));
 
   return (
@@ -31,6 +31,7 @@ export function CommunityPostGrid({
             onSelect={(target) => navigate(buildCommunityDetailPath(target.id))}
             isLiked={isLiked(post.id)}
             onToggleLike={toggleLike}
+            isLikeToggling={isToggling}
           />
         </li>
       ))}

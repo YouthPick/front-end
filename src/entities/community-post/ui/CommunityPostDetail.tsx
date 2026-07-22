@@ -9,6 +9,8 @@ interface CommunityPostDetailProps {
   post: CommunityPost;
   isLiked: boolean;
   onToggleLike: (postId: string) => void;
+  /** 좋아요 토글 요청 진행 중 여부. true면 하트 버튼을 비활성화해 중복 클릭을 막는다. */
+  isLikeToggling?: boolean;
   onViewAttachedPolicy: (policyId: string) => void;
   canManage?: boolean;
   onEdit?: () => void;
@@ -19,6 +21,7 @@ export function CommunityPostDetail({
   post,
   isLiked,
   onToggleLike,
+  isLikeToggling = false,
   onViewAttachedPolicy,
   canManage = false,
   onEdit,
@@ -54,9 +57,11 @@ export function CommunityPostDetail({
             <button
               type="button"
               onClick={() => onToggleLike(post.id)}
+              disabled={isLikeToggling}
+              aria-disabled={isLikeToggling}
               aria-pressed={isLiked}
               aria-label={isLiked ? '좋아요 취소' : '좋아요'}
-              className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold transition-colors ${
+              className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
                 isLiked ? 'text-rose-500' : 'text-slate-400 hover:text-rose-400'
               }`}
             >

@@ -14,16 +14,13 @@ export {
 export type { CommunityPostDto } from './api/communityPost.dto';
 export type {
   CommunityPostPageSearchParams,
-  CommunityPostSearchParams,
   CreateCommunityPostParams,
 } from './api/communityPostApi';
 export {
-  adjustCommunityPostLikeCount,
   createCommunityPost,
   deleteCommunityPost,
   fetchCommunityPost,
   fetchCommunityPosts,
-  searchCommunityPosts,
   updateCommunityPost,
 } from './api/communityPostApi';
 export type {
@@ -63,7 +60,6 @@ export {
   communityPostKeys,
   useCommunityPostPageQuery,
   useCommunityPostQuery,
-  useCommunityPostSearchQuery,
 } from './model/communityPostQueries';
 export type { CommunityPostSortOption } from './model/communityPostSort';
 export {
