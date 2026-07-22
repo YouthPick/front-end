@@ -4,8 +4,13 @@ import { usePublicRegionsQuery } from '@/entities/region';
 import type { UserProfile } from '@/entities/user';
 import { CURRENT_YEAR } from '@/shared/constants';
 
-const BIRTH_YEAR_BASE = 1988;
-const BIRTH_YEAR_COUNT = 25;
+const MIN_ELIGIBLE_AGE = 14;
+const MAX_ELIGIBLE_AGE = 38;
+
+const BIRTH_YEARS = Array.from(
+  { length: MAX_ELIGIBLE_AGE - MIN_ELIGIBLE_AGE + 1 },
+  (_, index) => CURRENT_YEAR - MIN_ELIGIBLE_AGE - index,
+);
 
 interface WizardStepBasicProps {
   draft: UserProfile;
@@ -54,7 +59,7 @@ export function WizardStepBasic({ draft, onUpdateDraft }: WizardStepBasicProps) 
           <option value="" disabled>
             출생연도
           </option>
-          {Array.from({ length: BIRTH_YEAR_COUNT }, (_, i) => BIRTH_YEAR_BASE + i).map((year) => (
+          {BIRTH_YEARS.map((year) => (
             <option key={year} value={year}>
               {year}년생 (만 {CURRENT_YEAR - year}세)
             </option>
