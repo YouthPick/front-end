@@ -8,6 +8,8 @@ interface CommunityPostCardProps {
   onSelect: (post: CommunityPost) => void;
   isLiked: boolean;
   onToggleLike: (postId: string) => void;
+  /** 좋아요 토글 요청 진행 중 여부. true면 하트 버튼을 비활성화해 중복 클릭을 막는다. */
+  isLikeToggling?: boolean;
 }
 
 export function CommunityPostCard({
@@ -15,6 +17,7 @@ export function CommunityPostCard({
   onSelect,
   isLiked,
   onToggleLike,
+  isLikeToggling = false,
 }: CommunityPostCardProps) {
   return (
     <article className="relative flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-within:ring-2 focus-within:ring-primary/40">
@@ -66,9 +69,11 @@ export function CommunityPostCard({
           <button
             type="button"
             onClick={() => onToggleLike(post.id)}
+            disabled={isLikeToggling}
+            aria-disabled={isLikeToggling}
             aria-pressed={isLiked}
             aria-label={isLiked ? '좋아요 취소' : '좋아요'}
-            className={`relative z-10 flex items-center gap-1 rounded-md px-1.5 py-0.5 transition-colors ${
+            className={`relative z-10 flex items-center gap-1 rounded-md px-1.5 py-0.5 transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
               isLiked ? 'text-rose-500' : 'text-slate-400 hover:text-rose-400'
             }`}
           >

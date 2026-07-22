@@ -1,68 +1,15 @@
 import { type ApiPageEnvelope, apiClient, toPageResult } from '@/shared/api';
-import { MOCK_API_DELAY_MS } from '@/shared/constants';
 import type { PageParams, PageResult } from '@/shared/types';
-import { delay, matchesTextQuery } from '@/shared/utils';
 import { normalizeCommunityPostCategory } from '../model/communityCategories';
 import type { AttachedPolicySummary, CommunityPostCategory } from '../model/communityPost.types';
 import type { CommunityPostSortOption } from '../model/communityPostSort';
 import type { CommunityPostDto } from './communityPost.dto';
-import { MOCK_COMMUNITY_POST_DTOS } from './communityPostMockData';
 
-// searchCommunityPosts는 마이페이지의 "내가 작성한 글"/"좋아요한 글"이 여전히 사용한다
-// (백엔드에 작성자/좋아요 기준 조회 API가 아직 없어 전체 목록을 받아 클라이언트에서 거른다).
-// 커뮤니티 메인 목록은 fetchCommunityPosts(실제 API)를 사용한다.
-
-let posts: CommunityPostDto[] = [...MOCK_COMMUNITY_POST_DTOS];
-
-export interface CommunityPostSearchParams {
-  query?: string;
-  category?: string;
-  sort?: CommunityPostSortOption;
-  authorId?: string;
-}
-
-function cloneDto(dto: CommunityPostDto): CommunityPostDto {
-  return { ...dto, attachedPolicy: dto.attachedPolicy ? { ...dto.attachedPolicy } : null };
-}
-
-function matchesSearchParams(post: CommunityPostDto, params: CommunityPostSearchParams): boolean {
-  if (!matchesTextQuery([post.title, post.content], params.query)) {
-    return false;
-  }
-
-  if (params.category && params.category !== '전체' && post.category !== params.category) {
-    return false;
-  }
-
-  if (params.authorId && post.authorId !== params.authorId) {
-    return false;
-  }
-
-  return true;
-}
-
-function sortPosts(
-  posts: CommunityPostDto[],
-  sort: CommunityPostSortOption | undefined,
-): CommunityPostDto[] {
-  const sorted = [...posts];
-  switch (sort) {
-    case 'views':
-      return sorted.sort((a, b) => b.viewCount - a.viewCount);
-    default:
-      return sorted.sort((a, b) =>
-        a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0,
-      );
-  }
-}
-
-export async function searchCommunityPosts(
-  params: CommunityPostSearchParams,
-): Promise<CommunityPostDto[]> {
-  await delay(MOCK_API_DELAY_MS);
-  const filtered = posts.filter((post) => matchesSearchParams(post, params));
-  return sortPosts(filtered, params.sort).map(cloneDto);
-}
+// 게시글 조회/생성/수정/삭제는 모두 실서버(/v1/posts)를 사용한다.
+// mock 게시글 배열 기반이던 searchCommunityPosts(마이페이지 내가 쓴 글/좋아요한 글)와
+// adjustCommunityPostLikeCount(좋아요 수 갱신)는 실서버 게시글 id와 mock 배열이 어긋나
+// 항상 빗나가는 문제가 있어 제거했다 — 좋아요 수 patch는 features/community-like에서
+// 캐시 기준 ±1로 직접 계산하고, 마이페이지 목록은 백엔드 API가 생길 때까지 "준비 중"으로 둔다.
 
 export async function fetchCommunityPost(postId: string): Promise<CommunityPostDto | null> {
   const response = await apiClient.get<{ data: PostDetailResponseDto }>(`/v1/posts/${postId}`);
@@ -139,21 +86,6 @@ export async function fetchCommunityPosts(
   );
 }
 
-// 좋아요 토글 시 집계 좋아요 수를 함께 갱신한다. delta는 +1(좋아요) 또는 -1(좋아요 취소).
-export async function adjustCommunityPostLikeCount(
-  postId: string,
-  delta: 1 | -1,
-): Promise<CommunityPostDto | null> {
-  await delay(MOCK_API_DELAY_MS);
-  let updated: CommunityPostDto | null = null;
-  posts = posts.map((post) => {
-    if (post.id !== postId) return post;
-    updated = { ...post, likeCount: Math.max(0, post.likeCount + delta) };
-    return updated;
-  });
-  return updated ? cloneDto(updated) : null;
-}
-
 export interface CreateCommunityPostParams {
   title: string;
   category: CommunityPostCategory;
@@ -199,6 +131,9 @@ function extractUploadedImageUrls(content: string): string[] {
   ];
 }
 
+// 상세 응답(PostDetailResponse)에도 commentCount/likeCount가 없어 0으로 채운다.
+// 좋아요 수는 백엔드 집계 API가 생길 때까지 features/community-like가 토글 시
+// 캐시에서 ±1로 직접 갱신하는 임시 표시값이다.
 function mapPostDetailToCommunityPost(dto: PostDetailResponseDto): CommunityPostDto {
   return {
     id: String(dto.id),

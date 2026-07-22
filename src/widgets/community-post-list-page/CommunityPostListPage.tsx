@@ -18,6 +18,7 @@ interface CommunityPostListPageProps {
   isError: boolean;
   onRetry: () => void;
   emptyTitle: string;
+  emptyDescription?: string;
 }
 
 // 좋아요한 글 / 내가 작성한 글 등 "내 게시글 모음" 성격의 전용 페이지가 공유하는 shell.
@@ -31,6 +32,7 @@ export function CommunityPostListPage({
   isError,
   onRetry,
   emptyTitle,
+  emptyDescription,
 }: CommunityPostListPageProps) {
   const { page, pageItems, pageCount, setPage } = usePagination(posts, LIST_PAGE_SIZE);
 
@@ -63,7 +65,7 @@ export function CommunityPostListPage({
             <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
           </>
         ) : (
-          <EmptyState title={emptyTitle} />
+          <EmptyState title={emptyTitle} description={emptyDescription} />
         ))}
     </div>
   );
