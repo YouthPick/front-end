@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { clearAccessToken, subscribeSessionExpired } from '@/shared/api';
+import { clearAccessToken, queryClient, subscribeSessionExpired } from '@/shared/api';
 
 import { useProfileStore } from './profileStore';
 import type { AuthUser } from './user.types';
@@ -34,6 +34,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
     clearAccessToken();
     // 기기 공용 브라우저에서 다른 사용자가 로그인해도 이전 사용자의 온보딩 상태가 남지 않게 한다.
     useProfileStore.getState().resetProfile();
+    // 개인 데이터 queryKey(['me','profile'], ['bookmarks'] 등)에 사용자 스코프가 없어, 캐시를 비우지
+    // 않으면 다른 계정으로 재로그인 시 staleTime 내 이전 사용자 데이터가 그대로 렌더된다.
+    // 공개 데이터 캐시도 함께 날아가 로그아웃 직후 1회 refetch가 발생하지만 감수한다.
+    queryClient.clear();
     set({ user: null, isAuthenticated: false });
   },
   setInitializing: (isInitializing) => set({ isInitializing }),
