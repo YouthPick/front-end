@@ -18,6 +18,7 @@ export type { PolicySearchParams, RecommendedPolicyParams } from './api/policyAp
 export {
   fetchPolicies,
   fetchPolicy,
+  fetchPolicyCardPage,
   fetchRecentlyViewedPolicies,
   fetchRecommendedPolicies,
   searchPolicies,

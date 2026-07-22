@@ -1,4 +1,8 @@
-import { fetchRecommendedPolicies, mapPolicyCardToPolicy } from '@/entities/policy';
+import {
+  fetchPolicyCardPage,
+  fetchRecommendedPolicies,
+  mapPolicyCardToPolicy,
+} from '@/entities/policy';
 
 import type {
   PolicyRecommendation,
@@ -35,11 +39,27 @@ function toReliability(score: number): RecommendationReliability {
 
 // 맞춤정책 조회(회원 전용). 매칭 점수는 백엔드가 계산해 내려주고, 프론트는 표시용 사유 문구·신뢰도만 파생한다.
 export async function fetchRecommendations(): Promise<PolicyRecommendation[]> {
-  const dtos = await fetchRecommendedPolicies();
-  return dtos.map((dto) => ({
-    policy: mapPolicyCardToPolicy(dto),
-    score: dto.score,
-    reliability: toReliability(dto.score),
-    reasons: toReasons(dto.matchedAxes),
-  }));
+  try {
+    const dtos = await fetchRecommendedPolicies();
+    return dtos.map((dto) => ({
+      policy: mapPolicyCardToPolicy(dto),
+      score: dto.score,
+      reliability: toReliability(dto.score),
+      reasons: toReasons(dto.matchedAxes),
+    }));
+  } catch (error) {
+    console.warn('추천 정책 조회 실패. 최신 정책 Fallback을 제공합니다.', error);
+    try {
+      const pageResult = await fetchPolicyCardPage(1, 6);
+      return pageResult.data.map((dto) => ({
+        policy: mapPolicyCardToPolicy(dto),
+        score: 0,
+        reliability: 'LOW',
+        reasons: ['최근 등록된 새로운 청년 정책입니다.'],
+      }));
+    } catch (fallbackError) {
+      console.error('최신 정책 Fallback 조회마저 실패했습니다.', fallbackError);
+      return [];
+    }
+  }
 }

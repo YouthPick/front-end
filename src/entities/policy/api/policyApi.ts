@@ -94,7 +94,11 @@ export async function fetchPolicy(policyId: string): Promise<PolicyDetailDto> {
 }
 
 export async function fetchRecentlyViewedPolicies(): Promise<RecentlyViewedPolicyDto[]> {
-  return [];
+  const response = await apiClient.get<ApiPageEnvelope<RecentlyViewedPolicyDto>>(
+    '/v1/policy-recent-views',
+    { params: { page: 1, size: 20 } },
+  );
+  return response.data.data;
 }
 
 export interface RecommendedPolicyParams {
