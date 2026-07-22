@@ -6,7 +6,8 @@ import { MAX_COMPARE_COUNT } from '@/shared/constants';
 import { COMPARE_SLOTS } from './compareSlots';
 
 interface ComparePanelPresenterProps {
-  comparingPolicies: Policy[];
+  // policyIds와 인덱스가 1:1로 대응한다. 아직 상세를 불러오는 중인 슬롯은 undefined다.
+  comparingPolicies: (Policy | undefined)[];
   onOpenDetail: () => void;
   onRemove: (policy: Policy) => void;
   onClear: () => void;

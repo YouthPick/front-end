@@ -23,9 +23,9 @@ export function useCompare() {
     })),
   });
 
-  const comparingPolicies = policyDetailQueries
-    .map((query) => query.data)
-    .filter((policy): policy is Policy => policy !== undefined);
+  // policyIds와 인덱스를 1:1로 유지한다. 로딩 중인 항목은 걸러내지 않고 undefined로 남겨야
+  // 비교 슬롯 위치가 밀리지 않고, 개수도 실제 담긴 수와 어긋나지 않는다.
+  const comparingPolicies: (Policy | undefined)[] = policyDetailQueries.map((query) => query.data);
 
   const isComparing = (policyId: string) => policyIds.includes(policyId);
 
