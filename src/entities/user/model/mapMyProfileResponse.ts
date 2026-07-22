@@ -38,8 +38,8 @@ export function mapMyProfileResponse(
     subRegion,
     employmentStatus: labelForCode(EMPLOYMENT_STATUS_OPTIONS, dto.employmentStatus) ?? '',
     educationStatus: labelForCode(EDUCATION_STATUS_OPTIONS, dto.educationLevel) ?? '',
-    maritalStatus: dto.merryStatus
-      ? (labelForCode(MARITAL_STATUS_OPTIONS, dto.merryStatus) ?? '')
+    maritalStatus: dto.maritalStatus
+      ? (labelForCode(MARITAL_STATUS_OPTIONS, dto.maritalStatus) ?? '')
       : '',
     major: majorCode ? (labelForCode(MAJOR_OPTIONS, majorCode) ?? '') : '',
     specialConditions: dto.specialCondition.map(

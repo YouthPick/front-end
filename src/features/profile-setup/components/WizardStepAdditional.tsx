@@ -31,14 +31,16 @@ export function WizardStepAdditional({
         label="결혼 상태"
         options={MARITAL_STATUS_OPTIONS.map((option) => option.label)}
         isSelected={(option) => draft.maritalStatus === option}
-        onSelect={(value) => onUpdateDraft({ maritalStatus: value })}
+        onSelect={(value) =>
+          onUpdateDraft({ maritalStatus: draft.maritalStatus === value ? '' : value })
+        }
       />
 
       <OptionButtonGrid
         label="전공 계열"
         options={MAJOR_OPTIONS.map((option) => option.label)}
         isSelected={(option) => draft.major === option}
-        onSelect={(value) => onUpdateDraft({ major: value })}
+        onSelect={(value) => onUpdateDraft({ major: draft.major === value ? '' : value })}
       />
 
       <OptionButtonGrid
