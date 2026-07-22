@@ -32,7 +32,9 @@ export function RecommendPage() {
         </div>
         <button
           type="button"
-          onClick={() => navigate(ROUTES.profileSetup)}
+          onClick={() =>
+            navigate(ROUTES.profileSetup, { state: { from: ROUTES.recommend, intent: 'edit' } })
+          }
           className="shrink-0 self-start sm:self-center inline-flex items-center space-x-1 rounded-xl bg-primary/10 px-3.5 py-2 text-xs font-bold text-primary hover:bg-primary/20 transition-all cursor-pointer"
         >
           <Edit3 className="h-3.5 w-3.5" />

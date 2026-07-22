@@ -70,7 +70,9 @@ export function HomePage() {
             userName={user.name}
             profile={profile}
             recommendations={recommendations}
-            onEditProfile={() => navigate(ROUTES.profileSetup)}
+            onEditProfile={() =>
+              navigate(ROUTES.profileSetup, { state: { from: ROUTES.home, intent: 'edit' } })
+            }
             onViewAll={() => navigate(ROUTES.recommend)}
             onViewDetails={(policy) => openPolicyDetail(policy.id)}
           />
