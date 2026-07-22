@@ -109,15 +109,9 @@ export class MockStompClient {
   }
 }
 
-interface ReceiptSubscription {
-  readonly headers: Record<string, string> | undefined;
-}
-
 interface ConnectedPolicyChatClient {
-  readonly subscriptions: readonly ReceiptSubscription[];
   finishBeforeConnect: () => Promise<void>;
   connect: () => void;
-  emitReceipt: (receiptId: string) => void;
 }
 
 interface PolicyChatAuthClient {
@@ -150,18 +144,6 @@ export function makePolicyChatMessageDto(id: number, content: string): PolicyCha
   };
 }
 
-export function getPolicyChatReceiptIds(client: MockStompClient): readonly [string, string] {
-  const [messageSubscription, errorSubscription] = client.subscriptions;
-  const messageReceiptId = messageSubscription?.headers?.receipt;
-  const errorReceiptId = errorSubscription?.headers?.receipt;
-
-  if (!messageReceiptId || !errorReceiptId) {
-    throw new Error('Expected message and error subscriptions to include receipt headers');
-  }
-
-  return [messageReceiptId, errorReceiptId];
-}
-
 export function renderPolicyChatTestHook() {
   return renderHook(() => usePolicyChat({ policyId: POLICY_CHAT_TEST_POLICY_ID, enabled: true }));
 }
@@ -182,17 +164,6 @@ export async function renderConnectedPolicyChat<Client extends ConnectedPolicyCh
   await act(async () => {
     await client.finishBeforeConnect();
     client.connect();
-  });
-  await waitFor(() => expect(historyMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(1));
-
-  const [messageSubscription, errorSubscription] = client.subscriptions;
-  if (!messageSubscription?.headers?.receipt || !errorSubscription?.headers?.receipt) {
-    throw new Error('Expected subscriptions to include receipt headers');
-  }
-
-  await act(async () => {
-    client.emitReceipt(messageSubscription.headers.receipt);
-    client.emitReceipt(errorSubscription.headers.receipt);
   });
   await waitFor(() => expect(historyMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(2));
 

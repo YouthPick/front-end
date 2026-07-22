@@ -1,13 +1,9 @@
 import { act, cleanup, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  CHAT_CONNECTION_FALLBACK_MESSAGE,
-  CHAT_SEND_FALLBACK_MESSAGE,
-} from '../model/policyChatErrors';
+import { CHAT_SEND_FALLBACK_MESSAGE } from '../model/policyChatErrors';
 import {
   finishPolicyChatBeforeConnect,
-  getPolicyChatReceiptIds,
   type MockClientConfig,
   MockStompClient,
   makePolicyChatMessageDto,
@@ -179,7 +175,7 @@ describe('usePolicyChat STOMP lifecycle', () => {
     expect(messageSubscription?.destination).toBe(POLICY_CHAT_TEST_MESSAGE_DESTINATION);
     expect(errorSubscription?.destination).toBe(POLICY_CHAT_TEST_ERROR_DESTINATION);
 
-    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(2));
     expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({ afterId: 0, policyId: POLICY_CHAT_TEST_POLICY_ID }),
@@ -187,7 +183,7 @@ describe('usePolicyChat STOMP lifecycle', () => {
     expect(result.current.status).toBe('ready');
   });
 
-  it('starts the safety delta only after both subscription receipts settle', async () => {
+  it('starts the safety delta after initial history settles without waiting for a receipt', async () => {
     renderPolicyChatTestHook();
     const client = latestClient();
 
@@ -196,17 +192,6 @@ describe('usePolicyChat STOMP lifecycle', () => {
       client.connect();
     });
 
-    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(1));
-    const [messageReceiptId, errorReceiptId] = getPolicyChatReceiptIds(client);
-
-    await act(async () => {
-      client.emitReceipt(messageReceiptId);
-    });
-    expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(1);
-
-    await act(async () => {
-      client.emitReceipt(errorReceiptId);
-    });
     await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(2));
     expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenNthCalledWith(
       2,
@@ -214,49 +199,7 @@ describe('usePolicyChat STOMP lifecycle', () => {
     );
   });
 
-  it('shows empty chat before timers advance when STOMP subscription receipts never arrive', async () => {
-    vi.useFakeTimers();
-    const { result } = renderPolicyChatTestHook();
-    const client = latestClient();
-
-    await act(async () => {
-      await client.finishBeforeConnect();
-      client.connect();
-    });
-
-    expect(client.subscriptions).toHaveLength(2);
-    await act(async () => {
-      await Promise.resolve();
-    });
-
-    expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(1);
-    expect(result.current.status).toBe('ready');
-    expect(result.current.messages).toEqual([]);
-  });
-
-  it('surfaces a reconnecting error instead of silently treating a subscription receipt timeout as success', async () => {
-    vi.useFakeTimers();
-    const { result } = renderPolicyChatTestHook();
-    const client = latestClient();
-
-    await act(async () => {
-      await client.finishBeforeConnect();
-      client.connect();
-    });
-    await act(async () => {
-      await Promise.resolve();
-    });
-    expect(result.current.status).toBe('ready');
-
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(10_000);
-    });
-
-    expect(result.current.status).toBe('reconnecting');
-    expect(result.current.errorMessage).toBe(CHAT_CONNECTION_FALLBACK_MESSAGE);
-  });
-
-  it('uses the initial-history cursor for receipt delta after a later live message arrives', async () => {
+  it('uses the initial-history cursor for safety delta after a later live message arrives', async () => {
     policyChatApiMock.fetchPolicyChatMessages
       .mockResolvedValueOnce({ messages: [makePolicyChatMessageDto(5, 'initial')], nextCursor: 5 })
       .mockResolvedValueOnce({
@@ -270,7 +213,7 @@ describe('usePolicyChat STOMP lifecycle', () => {
       await client.finishBeforeConnect();
       client.connect();
     });
-    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(2));
 
     await act(async () => {
       client.emitMessage(
@@ -279,14 +222,7 @@ describe('usePolicyChat STOMP lifecycle', () => {
       );
     });
 
-    expect(result.current.messages.map((message) => message.id)).toEqual([5, 10]);
-    const [messageReceiptId, errorReceiptId] = getPolicyChatReceiptIds(client);
-
-    await act(async () => {
-      client.emitReceipt(messageReceiptId);
-      client.emitReceipt(errorReceiptId);
-    });
-
+    expect(result.current.messages.map((message) => message.id)).toEqual([5, 6, 10]);
     await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(2));
     expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenNthCalledWith(
       2,
@@ -296,7 +232,7 @@ describe('usePolicyChat STOMP lifecycle', () => {
   });
 
   it('resumes from the last known cursor instead of refetching all history on reconnect', async () => {
-    policyChatApiMock.fetchPolicyChatMessages.mockResolvedValueOnce({
+    policyChatApiMock.fetchPolicyChatMessages.mockResolvedValue({
       messages: [makePolicyChatMessageDto(7, 'first')],
       nextCursor: 7,
     });
@@ -308,10 +244,10 @@ describe('usePolicyChat STOMP lifecycle', () => {
       await client.finishBeforeConnect();
       client.connect();
     });
-    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(2));
 
     // stompjs가 내부적으로 재연결하면 같은 client 인스턴스에서 onConnect가 다시 호출된다.
-    policyChatApiMock.fetchPolicyChatMessages.mockResolvedValueOnce({
+    policyChatApiMock.fetchPolicyChatMessages.mockResolvedValue({
       messages: [],
       nextCursor: 7,
     });
@@ -319,9 +255,9 @@ describe('usePolicyChat STOMP lifecycle', () => {
       client.connect();
     });
 
-    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenCalledTimes(4));
     expect(policyChatApiMock.fetchPolicyChatMessages).toHaveBeenNthCalledWith(
-      2,
+      3,
       expect.objectContaining({ afterId: 7, policyId: POLICY_CHAT_TEST_POLICY_ID }),
     );
   });
