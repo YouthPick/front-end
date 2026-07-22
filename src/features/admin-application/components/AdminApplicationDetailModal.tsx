@@ -141,6 +141,10 @@ export function AdminApplicationDetailModal({
             </div>
           )}
 
+          {!isChecklistLoading && checklist.length === 0 && (
+            <p className="text-[10px] text-slate-400 italic py-1">등록된 체크리스트가 없습니다.</p>
+          )}
+
           {!isChecklistLoading && checklist.length > 0 && (
             <ul className="space-y-1.5">
               {checklist.map((item) => (
