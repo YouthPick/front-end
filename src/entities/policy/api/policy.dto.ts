@@ -60,6 +60,22 @@ export interface PolicyDetailDto {
   regions: PolicyRegionDto[];
 }
 
+// GET /v1/recommended-policies 맞춤정책 카드 (백엔드 RecommendedPolicyResponse).
+// PolicyCardDto와 필드가 같고 매칭 점수(score, REC 6축 합산 0~100)와 일치한 축 목록(matchedAxes,
+// 예: "나이"·"지역"·"취업"·"학력"·"분야"·"키워드")이 더해진다.
+export interface RecommendedPolicyDto {
+  id: number;
+  title: string;
+  category: string | null;
+  description: string | null;
+  minAge: number | null;
+  maxAge: number | null;
+  applicationEndDate: string | null;
+  provinces: string[];
+  score: number;
+  matchedAxes: string[];
+}
+
 // 최근 본 정책 카드. 회원 전용 실 API(#75) 연동은 이번 범위(#82) 밖 — 목데이터 유지.
 export interface RecentlyViewedPolicyDto {
   id: string;

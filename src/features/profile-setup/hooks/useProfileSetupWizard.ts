@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
+import { policyKeys } from '@/entities/policy';
 import { usePublicRegionsQuery } from '@/entities/region';
 import {
   mapMyProfileResponse,
@@ -112,7 +113,12 @@ export function useProfileSetupWizard() {
     try {
       await submitMutation.mutateAsync({ userId, request });
       updateProfile({ ...draft, isOnboarded: true });
-      queryClient.invalidateQueries({ queryKey: myProfileKeys.all });
+      // invalidate가 아니라 remove인 이유: 방금 프로필을 바꿨으므로 캐시에 남은 값은 "오래된" 게 아니라
+      // 틀린 데이터다. invalidate는 재조회 동안 이전 값을 그대로 노출해 잘못된 추천이 1초쯤 보이고,
+      // 그렇다고 isFetching으로 스켈레톤을 걸면 탭 복귀 등 평범한 백그라운드 갱신 때도 화면이 깜빡인다.
+      // 캐시를 비우면 다음 마운트가 최초 로딩이 되어 기존 스켈레톤 처리가 그대로 동작한다.
+      queryClient.removeQueries({ queryKey: myProfileKeys.all });
+      queryClient.removeQueries({ queryKey: policyKeys.recommended });
       navigate(from ?? ROUTES.recommend, { replace: true });
       showToast(
         isEditMode
