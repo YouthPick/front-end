@@ -5,9 +5,12 @@ import { useBookmark } from '@/features/policy-bookmark';
 import { useCompare } from '@/features/policy-compare';
 import { RecommendationCard, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
-import { Skeleton } from '@/shared/ui';
+import { usePagination } from '@/shared/hooks';
+import { Pagination, Skeleton } from '@/shared/ui';
 
-const FEED_COUNT = 8;
+// 추천 API는 매칭된 전체 목록(수십~수백 건)을 한 번에 내려준다. 앞 8건만 자르면 헤더의
+// "통합 매칭 수"와 실제로 보이는 카드 수가 어긋나므로, 받은 목록 전체를 클라이언트 페이지네이션으로 노출한다.
+const FEED_PAGE_SIZE = 8;
 
 // 추천(recommendation) + 찜(bookmark) + 신청관리 이동을 조합하는 블록.
 // feature 간 직접 의존 대신 widget에서 조립한다.
@@ -17,6 +20,10 @@ export function RecommendationFeed() {
   const { isComparing, toggleCompare } = useCompare();
   const openPolicyDetail = usePolicyDetailStore((state) => state.openPolicyDetail);
   const navigate = useNavigate();
+  const { page, pageItems, pageCount, totalCount, setPage } = usePagination(
+    recommendations,
+    FEED_PAGE_SIZE,
+  );
 
   const handleStartTracker = (policy: Policy) => {
     navigate(`${ROUTES.tracker}?start=${policy.id}`);
@@ -63,19 +70,30 @@ export function RecommendationFeed() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-      {recommendations.slice(0, FEED_COUNT).map((recommendation) => (
-        <RecommendationCard
-          key={recommendation.policy.id}
-          recommendation={recommendation}
-          isSaved={isSaved(recommendation.policy.id)}
-          onViewDetails={(policy) => openPolicyDetail(policy.id)}
-          onToggleSave={toggleSave}
-          onStartTracker={handleStartTracker}
-          isComparing={isComparing(recommendation.policy.id)}
-          onToggleCompare={toggleCompare}
-        />
-      ))}
+    <div className="space-y-6">
+      <div className="flex items-center justify-between text-[11px] font-bold text-slate-400">
+        <span>총 {totalCount}건</span>
+        <span>
+          {page} / {pageCount} 페이지
+        </span>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {pageItems.map((recommendation) => (
+          <RecommendationCard
+            key={recommendation.policy.id}
+            recommendation={recommendation}
+            isSaved={isSaved(recommendation.policy.id)}
+            onViewDetails={(policy) => openPolicyDetail(policy.id)}
+            onToggleSave={toggleSave}
+            onStartTracker={handleStartTracker}
+            isComparing={isComparing(recommendation.policy.id)}
+            onToggleCompare={toggleCompare}
+          />
+        ))}
+      </div>
+
+      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
     </div>
   );
 }
