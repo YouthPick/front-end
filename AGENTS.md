@@ -10,6 +10,7 @@
 - Code Quality: **Biome** (`biome.json`) — 포맷·import 정리·lint. 타입 검증은 `tsc --noEmit`.
 - 구조: Feature-Sliced Design(FSD) — `app / pages / widgets / features / entities / shared`
 - 빌드: Vite 정적 SPA. production smoke는 `pnpm build` 후 `pnpm start`(= `vite preview`)로 확인한다. 별도 Node 서버를 추가하지 않는다.
+- Docker: `Dockerfile`은 `pnpm build` 산출물(`dist`)을 nginx(`nginx.conf`)로 정적 서빙한다(Node 런타임 아님). 루트의 `back-end/docker-compose.yml`이 `frontend` 서비스로 빌드/기동한다. `nginx.conf`가 `/api`를 `backend` 컨테이너로 리버스 프록시해 프론트/백엔드가 브라우저 기준 같은 origin이 되므로 배포 도메인이 바뀌어도 CORS 걱정 없이 그대로 쓸 수 있다. 이를 위해 Docker 빌드는 `VITE_API_BASE_URL=/api`(상대경로)로 고정하며, 로컬 `.env`의 절대경로 값은 무시된다.
 - 백엔드 API 연동: 에러는 HTTP status가 아니라 응답 body의 `code` 기반으로 사용자 메시지를 매핑한다.
 - 디자인 토큰은 `src/index.css`에 정의된 것만 사용한다.
 
