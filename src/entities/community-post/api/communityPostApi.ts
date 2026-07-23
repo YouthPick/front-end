@@ -39,7 +39,7 @@ function mapPostSummaryToDto(dto: PostSummaryResponseDto): CommunityPostDto {
     id: String(dto.id),
     title: dto.title,
     category: categoryFromApi[dto.category],
-    content: dto.contentExcerpt,
+    content: dto.contentExcerpt ?? '',
     authorId: String(dto.authorId),
     authorName: dto.authorNickname,
     createdAt: dto.createdAt.slice(0, 10),
