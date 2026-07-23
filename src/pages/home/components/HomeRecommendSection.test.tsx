@@ -26,6 +26,7 @@ const baseProps = {
   userName: '홍길동',
   profile,
   recommendations: [],
+  isFallback: false,
   isLoading: false,
   isError: false,
   onRetry: vi.fn(),

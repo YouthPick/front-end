@@ -10,6 +10,7 @@ interface HomeRecommendSectionProps {
   userName: string | null;
   profile: UserProfile | null;
   recommendations: PolicyRecommendation[];
+  isFallback: boolean;
   isLoading: boolean;
   isError: boolean;
   onRetry: () => void;
@@ -25,6 +26,7 @@ export function HomeRecommendSection({
   userName,
   profile,
   recommendations,
+  isFallback,
   isLoading,
   isError,
   onRetry,
@@ -63,6 +65,7 @@ export function HomeRecommendSection({
       userName={userName}
       profile={profile}
       recommendations={recommendations}
+      isFallback={isFallback}
       onEditProfile={onEditProfile}
       onViewAll={onViewAll}
       onViewDetails={onViewDetails}

@@ -5,8 +5,8 @@ import {
 } from '@/entities/policy';
 
 import type {
-  PolicyRecommendation,
   RecommendationReliability,
+  RecommendationResult,
 } from '../types/recommendation.types';
 
 // 매칭 축(백엔드 10축) → 추천 사유 문구. 백엔드가 축을 추가해도 화면이 깨지지 않도록 알 수 없는 축은
@@ -37,29 +37,36 @@ function toReliability(score: number): RecommendationReliability {
   return 'LOW';
 }
 
-// 맞춤정책 조회(회원 전용). 매칭 점수는 백엔드가 계산해 내려주고, 프론트는 표시용 사유 문구·신뢰도만 파생한다.
-export async function fetchRecommendations(): Promise<PolicyRecommendation[]> {
+// 맞춤정책 조회(회원 전용). 자격 필터와 매칭 점수는 백엔드가 계산해 내려주고, 프론트는 표시용 사유 문구·신뢰도만 파생한다.
+// fallback 경로는 자격 필터를 거치지 않은 최신 정책이라, 화면이 두 상태를 구분할 수 있게 isFallback을 함께 돌려준다.
+export async function fetchRecommendations(): Promise<RecommendationResult> {
   try {
     const dtos = await fetchRecommendedPolicies();
-    return dtos.map((dto) => ({
-      policy: mapPolicyCardToPolicy(dto),
-      score: dto.score,
-      reliability: toReliability(dto.score),
-      reasons: toReasons(dto.matchedAxes),
-    }));
+    return {
+      recommendations: dtos.map((dto) => ({
+        policy: mapPolicyCardToPolicy(dto),
+        score: dto.score,
+        reliability: toReliability(dto.score),
+        reasons: toReasons(dto.matchedAxes),
+      })),
+      isFallback: false,
+    };
   } catch (error) {
     console.warn('추천 정책 조회 실패. 최신 정책 Fallback을 제공합니다.', error);
     try {
       const pageResult = await fetchPolicyCardPage(1, 6);
-      return pageResult.data.map((dto) => ({
-        policy: mapPolicyCardToPolicy(dto),
-        score: 0,
-        reliability: 'LOW',
-        reasons: ['최근 등록된 새로운 청년 정책입니다.'],
-      }));
+      return {
+        recommendations: pageResult.data.map((dto) => ({
+          policy: mapPolicyCardToPolicy(dto),
+          score: 0,
+          reliability: 'LOW',
+          reasons: ['최근 등록된 새로운 청년 정책입니다.'],
+        })),
+        isFallback: true,
+      };
     } catch (fallbackError) {
       console.error('최신 정책 Fallback 조회마저 실패했습니다.', fallbackError);
-      return [];
+      return { recommendations: [], isFallback: true };
     }
   }
 }
