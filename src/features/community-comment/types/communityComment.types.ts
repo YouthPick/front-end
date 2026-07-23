@@ -1,9 +1,8 @@
 export interface CommunityComment {
   id: string;
-  postId: string;
   parentId: string | null;
-  authorName: string;
-  authorEmail: string;
+  authorId: string;
+  authorNickname: string;
   content: string;
   createdAt: string;
 }

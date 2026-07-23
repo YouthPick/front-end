@@ -3,11 +3,10 @@ import type { CommunityComment } from '../types/communityComment.types';
 
 export function mapCommunityCommentDtoToComment(dto: CommunityCommentDto): CommunityComment {
   return {
-    id: dto.id,
-    postId: dto.postId,
-    parentId: dto.parentId,
-    authorName: dto.authorName,
-    authorEmail: dto.authorEmail,
+    id: String(dto.id),
+    parentId: dto.parentId === null ? null : String(dto.parentId),
+    authorId: String(dto.authorId),
+    authorNickname: dto.authorNickname,
     content: dto.content,
     createdAt: dto.createdAt,
   };
