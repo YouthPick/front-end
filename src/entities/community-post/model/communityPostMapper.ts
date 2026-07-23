@@ -25,6 +25,7 @@ export function mapCommunityPostDtoToPost(dto: CommunityPostDto): CommunityPost 
     likeCount: dto.likeCount,
     attachedPolicy: dto.attachedPolicy ? { ...dto.attachedPolicy } : null,
     policyId: dto.policyId ?? null,
+    policyTitle: dto.policyTitle ?? null,
   };
 }
 

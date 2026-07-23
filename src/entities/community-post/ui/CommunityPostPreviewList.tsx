@@ -1,6 +1,8 @@
+import { Paperclip } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import { ErrorState, Skeleton } from '@/shared/ui';
+import { stripHtml } from '@/shared/utils';
 
 import type { CommunityPost } from '../model/communityPost.types';
 import { CommunityCategoryBadge } from './CommunityCategoryBadge';
@@ -68,7 +70,7 @@ export function CommunityPostPreviewList({
             {previewPosts.map((post) => (
               <div
                 key={post.id}
-                className="relative flex items-center justify-between py-3 px-2 -mx-2 rounded-xl transition-colors hover:bg-slate-50/50"
+                className="relative flex items-start justify-between gap-2 py-3 px-2 -mx-2 rounded-xl transition-colors hover:bg-slate-50/50"
               >
                 <button
                   type="button"
@@ -76,13 +78,27 @@ export function CommunityPostPreviewList({
                   aria-label={`${post.title} 상세 보기`}
                   className="absolute inset-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 />
-                <div className="flex items-center space-x-2.5 min-w-0 flex-1">
-                  <CommunityCategoryBadge category={post.category} />
-                  <span className="truncate text-[11px] font-bold text-slate-700">
-                    {post.title}
-                  </span>
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="flex items-center gap-1.5">
+                    <CommunityCategoryBadge category={post.category} />
+                    {post.policyTitle && (
+                      <span
+                        className="flex min-w-0 items-center gap-1 rounded-md border border-primary/20 bg-primary/5 px-1.5 py-0.5 text-[10px] font-bold text-primary"
+                        title={`첨부된 정책: ${post.policyTitle}`}
+                      >
+                        <Paperclip className="h-2.5 w-2.5 shrink-0" aria-hidden="true" />
+                        <span className="max-w-20 truncate">{post.policyTitle}</span>
+                      </span>
+                    )}
+                    <span className="truncate text-[11px] font-bold text-slate-700">
+                      {post.title}
+                    </span>
+                  </div>
+                  <p className="line-clamp-1 text-[10px] leading-relaxed text-slate-400 font-medium">
+                    {stripHtml(post.content)}
+                  </p>
                 </div>
-                {renderTrailing(post)}
+                <div className="flex shrink-0 items-center">{renderTrailing(post)}</div>
               </div>
             ))}
           </div>

@@ -85,15 +85,17 @@ export function CommunityPostDetail({
         </div>
       </div>
 
-      <div
-        className="text-xs leading-relaxed text-slate-700 border-t border-slate-100/75 pt-4 wysiwyg-content"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: DOMPurify로 XSS 방지 후 렌더링
-        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
-      />
+      <div className="space-y-4 border-t border-slate-100/75 pt-4">
+        {post.attachedPolicy && (
+          <AttachedPolicyPreview policy={post.attachedPolicy} onView={onViewAttachedPolicy} />
+        )}
 
-      {post.attachedPolicy && (
-        <AttachedPolicyPreview policy={post.attachedPolicy} onView={onViewAttachedPolicy} />
-      )}
+        <div
+          className="text-xs leading-relaxed text-slate-700 wysiwyg-content"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: DOMPurify로 XSS 방지 후 렌더링
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+        />
+      </div>
     </article>
   );
 }
