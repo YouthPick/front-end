@@ -29,6 +29,7 @@ export function HomePage() {
   const user = useAuthStore((state) => state.user);
   const {
     recommendations,
+    isFallback: isRecommendationsFallback,
     isLoading: isRecommendationsLoading,
     isError: isRecommendationsError,
     reload: reloadRecommendations,
@@ -70,6 +71,7 @@ export function HomePage() {
         userName={user?.name ?? null}
         profile={profile}
         recommendations={recommendations}
+        isFallback={isRecommendationsFallback}
         isLoading={isRecommendationsLoading || isProfileLoading}
         isError={isRecommendationsError}
         onRetry={() => reloadRecommendations()}

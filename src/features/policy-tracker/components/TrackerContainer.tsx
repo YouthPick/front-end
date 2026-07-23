@@ -95,7 +95,7 @@ export function TrackerContainer() {
               <span className="text-4xl">📋</span>
               <h3 className="text-sm font-bold text-slate-700">관리할 신청 일감을 선택해 주세요</h3>
               <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
-                왼쪽의 신청관리 목록에서 특정 정책을 선택하거나, [맞춤 추천] 또는 [정책 찾기]
+                왼쪽의 신청관리 목록에서 특정 정책을 선택하거나, [맞춤 정책] 또는 [정책 찾기]
                 목록에서 마음에 드는 항목의 **'신청관리 시작'**을 눌러보세요!
               </p>
             </div>

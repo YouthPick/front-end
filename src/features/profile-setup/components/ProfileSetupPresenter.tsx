@@ -113,7 +113,7 @@ export function ProfileSetupPresenter({
               ? '저장 중...'
               : isEditMode
                 ? '수정 완료'
-                : '맞춤 추천목록 확인'
+                : '맞춤 정책 확인'
             : '다음 단계로'}
         </button>
       </div>

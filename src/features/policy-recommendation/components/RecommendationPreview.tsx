@@ -4,6 +4,7 @@ import type { Policy } from '@/entities/policy';
 import type { UserProfile } from '@/entities/user';
 
 import type { PolicyRecommendation } from '../types/recommendation.types';
+import { RecommendationNotice } from './RecommendationNotice';
 
 const PREVIEW_COUNT = 3;
 
@@ -11,6 +12,7 @@ interface RecommendationPreviewProps {
   userName: string;
   profile: UserProfile;
   recommendations: PolicyRecommendation[];
+  isFallback: boolean;
   onEditProfile: () => void;
   onViewAll: () => void;
   onViewDetails: (policy: Policy) => void;
@@ -20,6 +22,7 @@ export function RecommendationPreview({
   userName,
   profile,
   recommendations,
+  isFallback,
   onEditProfile,
   onViewAll,
   onViewDetails,
@@ -39,11 +42,7 @@ export function RecommendationPreview({
               {profile.educationStatus}
             </span>
           </p>
-          {/* Degraded 안내: 최신 100건 대상 + 상세 자격조건(결혼·전공 등) 미연동 상태의 한계 고지 */}
-          <p className="text-[10px] text-slate-400 mt-0.5">
-            최신 정책 위주로 추천되며, 세부 자격조건 연동 전이라 일부 부적격 정책이 포함될 수
-            있어요.
-          </p>
+          <RecommendationNotice isFallback={isFallback} className="text-[10px] mt-0.5" />
         </div>
         <button
           type="button"
