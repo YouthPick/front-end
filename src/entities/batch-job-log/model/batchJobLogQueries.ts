@@ -30,7 +30,7 @@ export function useRunBatchJobSyncMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (userId: string | null) => runBatchJobSync(userId),
+    mutationFn: runBatchJobSync,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: batchJobLogKeys.all });
     },
