@@ -10,6 +10,7 @@ export { queryClient } from './queryClient';
 export {
   clearAccessToken,
   getAccessToken,
+  markLoggedOut,
   notifySessionExpired,
   setAccessToken,
   subscribeSessionExpired,
