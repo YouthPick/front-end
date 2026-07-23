@@ -33,9 +33,9 @@ export function HomePage() {
     isLoading: isRecommendationsLoading,
     isError: isRecommendationsError,
     reload: reloadRecommendations,
-  } = useRecommendations();
+  } = useRecommendations({ enabled: isAuthenticated });
   // 프로필은 서버가 원본이다 — store 값은 새로고침 후 빈 값이라 여기서 쓰면 안 된다.
-  const { profile, isLoading: isProfileLoading } = useMyProfile();
+  const { profile, isLoading: isProfileLoading } = useMyProfile({ enabled: isAuthenticated });
   const [page, setPage] = useState(1);
   const {
     data: policyPage,

@@ -1,6 +1,11 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 
-import { getAccessToken, notifySessionExpired, setAccessToken } from './tokenStore';
+import {
+  clearAccessToken,
+  getAccessToken,
+  notifySessionExpired,
+  setAccessToken,
+} from './tokenStore';
 
 // 배포 환경은 리버스 프록시가 /api를 백엔드로 전달한다고 가정한다.
 // 로컬에서 백엔드를 별도 오리진(예: http://localhost:8080)으로 띄웠다면
@@ -75,12 +80,20 @@ apiClient.interceptors.response.use(
       !isRefreshRequest
     ) {
       originalRequest._retry = true;
+      // 로그인한 적 없는 게스트가 회원 전용 API를 호출해 401을 받는 경우도 이 분기를 탄다.
+      // 그 경우 refresh 대상 세션 자체가 없으므로 "세션 만료"로 취급해 토스트를 띄우지 않는다 —
+      // 실제로 세션이 있다가 refresh에 실패한 경우에만 notifySessionExpired를 호출한다.
+      const hadSessionHint = localStorage.getItem('has_logged_in_hint') === 'true';
       try {
         const token = await requestNewAccessToken();
         originalRequest.headers.set('Authorization', `Bearer ${token}`);
         return apiClient(originalRequest);
       } catch {
-        notifySessionExpired();
+        if (hadSessionHint) {
+          notifySessionExpired();
+        } else {
+          clearAccessToken();
+        }
       }
     }
 
