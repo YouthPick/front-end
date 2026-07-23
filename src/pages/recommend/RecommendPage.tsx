@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { useMyProfile } from '@/features/my-profile';
 import { ProfileBriefing, useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
-import { Skeleton } from '@/shared/ui';
+import { EmptyState, Skeleton } from '@/shared/ui';
 import { RecommendationFeed } from '@/widgets/recommendation-feed';
 
 export function RecommendPage() {
@@ -42,14 +42,30 @@ export function RecommendPage() {
         </button>
       </div>
 
-      {isProfileLoading || !profile ? (
+      {isProfileLoading ? (
         <Skeleton className="h-28" />
-      ) : (
+      ) : profile ? (
         <ProfileBriefing
           profile={profile}
           recommendationCount={isLoading ? null : recommendations.length}
           isRecommendationsError={isError}
         />
+      ) : (
+        // RequireOnboarded는 persist된 로컬 isOnboarded 플래그만 보므로, 서버 프로필이 비어 있는데도
+        // 이 페이지에 도달할 수 있다. 스켈레톤에 고정되지 않도록 Empty + 설정 CTA를 띄운다.
+        <EmptyState
+          icon="📝"
+          title="맞춤 프로필이 아직 없습니다"
+          description="프로필을 설정하면 조건에 맞는 정책을 순위로 추천해 드려요."
+        >
+          <button
+            type="button"
+            onClick={() => navigate(ROUTES.profileSetup, { state: { from: ROUTES.recommend } })}
+            className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground hover:opacity-90"
+          >
+            프로필 설정하기
+          </button>
+        </EmptyState>
       )}
 
       <RecommendationFeed />

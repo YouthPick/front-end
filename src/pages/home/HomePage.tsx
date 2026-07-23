@@ -8,7 +8,7 @@ import {
 } from '@/entities/policy';
 import { useAuthStore } from '@/entities/user';
 import { useMyProfile } from '@/features/my-profile';
-import { RecommendationPreview, useRecommendations } from '@/features/policy-recommendation';
+import { useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import { HeroBanner } from '@/widgets/hero-banner';
@@ -19,7 +19,7 @@ import {
 } from '@/widgets/policy-card-grid';
 
 import { CategoryQuickLinks } from './components/CategoryQuickLinks';
-import { GuestRecommendCta } from './components/GuestRecommendCta';
+import { HomeRecommendSection } from './components/HomeRecommendSection';
 
 // 로딩 스켈레톤 개수를 실제 표시 개수와 같은 값으로 맞춰 드리프트를 방지한다.
 const HOME_POLICY_COUNT = POLICY_GRID_SKELETON_COUNT;
@@ -51,38 +51,36 @@ export function HomePage() {
     navigate(`${ROUTES.search}?category=${encodeURIComponent(category)}`);
   };
 
+  // 비로그인은 로그인부터, 로그인했지만 온보딩 미완료면 프로필 설정 마법사로 보낸다.
+  const handleStartRecommend = () => {
+    if (isAuthenticated) {
+      navigate(ROUTES.profileSetup, { state: { from: ROUTES.home } });
+      return;
+    }
+
+    navigate(ROUTES.login, { state: { from: ROUTES.recommend } });
+  };
+
   return (
     <div className="space-y-10 animate-in fade-in duration-300">
       <HeroBanner />
-
       <CategoryQuickLinks onSelectCategory={handleSelectCategory} />
-
-      {isAuthenticated && user ? (
-        isRecommendationsError ? (
-          <ErrorState
-            title="맞춤 추천을 불러오지 못했습니다"
-            onRetry={() => reloadRecommendations()}
-          />
-        ) : isRecommendationsLoading || isProfileLoading || !profile ? (
-          <Skeleton className="h-64" />
-        ) : (
-          <RecommendationPreview
-            userName={user.name}
-            profile={profile}
-            recommendations={recommendations}
-            onEditProfile={() =>
-              navigate(ROUTES.profileSetup, { state: { from: ROUTES.home, intent: 'edit' } })
-            }
-            onViewAll={() => navigate(ROUTES.recommend)}
-            onViewDetails={(policy) => openPolicyDetail(policy.id)}
-          />
-        )
-      ) : (
-        <GuestRecommendCta
-          onGetRecommendations={() => navigate(ROUTES.login, { state: { from: ROUTES.recommend } })}
-          onBrowseAll={() => navigate(ROUTES.search)}
-        />
-      )}
+      <HomeRecommendSection
+        isAuthenticated={isAuthenticated}
+        userName={user?.name ?? null}
+        profile={profile}
+        recommendations={recommendations}
+        isLoading={isRecommendationsLoading || isProfileLoading}
+        isError={isRecommendationsError}
+        onRetry={() => reloadRecommendations()}
+        onStartRecommend={handleStartRecommend}
+        onEditProfile={() =>
+          navigate(ROUTES.profileSetup, { state: { from: ROUTES.home, intent: 'edit' } })
+        }
+        onBrowseAll={() => navigate(ROUTES.search)}
+        onViewAll={() => navigate(ROUTES.recommend)}
+        onViewDetails={(policy) => openPolicyDetail(policy.id)}
+      />
 
       {/* 신규 정책 그리드 */}
       <section className="space-y-6 pt-4">
