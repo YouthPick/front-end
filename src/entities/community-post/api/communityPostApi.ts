@@ -24,19 +24,22 @@ interface PostSummaryResponseDto {
   policyTitle: string | null;
   category: 'QUESTION' | 'REVIEW' | 'FREE';
   title: string;
+  contentExcerpt: string;
   viewCount: number;
   createdAt: string;
 }
 
-// 목록 응답(PostSummaryResponse)에는 content/commentCount/likeCount가 없다.
-// 카드 미리보기 본문은 빈 문자열로, 댓글·좋아요 수는 0으로 채우고 각 위젯이 별도로 채워 넣는다
+// 목록 응답(PostSummaryResponse)에는 commentCount/likeCount와 첨부 정책의
+// category/deadline이 없다. 카드 미리보기 본문은 서버가 잘라 보내는 contentExcerpt를
+// 그대로 쓰고, 첨부 정책은 policyId/policyTitle만으로 배지를 채운다(전체 정보는 상세에서만
+// 가능). 댓글·좋아요 수는 0으로 채우고 각 위젯이 별도로 채워 넣는다
 // (CommunityPostGrid의 useCommunityCommentCounts 등).
 function mapPostSummaryToDto(dto: PostSummaryResponseDto): CommunityPostDto {
   return {
     id: String(dto.id),
     title: dto.title,
     category: categoryFromApi[dto.category],
-    content: '',
+    content: dto.contentExcerpt ?? '',
     authorId: String(dto.authorId),
     authorName: dto.authorNickname,
     createdAt: dto.createdAt.slice(0, 10),
@@ -45,6 +48,7 @@ function mapPostSummaryToDto(dto: PostSummaryResponseDto): CommunityPostDto {
     likeCount: 0,
     attachedPolicy: null,
     policyId: dto.policyId === null ? null : String(dto.policyId),
+    policyTitle: dto.policyTitle,
   };
 }
 
@@ -148,6 +152,7 @@ function mapPostDetailToCommunityPost(dto: PostDetailResponseDto): CommunityPost
     likeCount: 0,
     attachedPolicy: null,
     policyId: dto.policyId === null ? null : String(dto.policyId),
+    policyTitle: dto.policyTitle,
   };
 }
 

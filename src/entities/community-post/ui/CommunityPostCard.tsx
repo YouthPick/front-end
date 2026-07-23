@@ -33,13 +33,13 @@ export function CommunityPostCard({
       <div className="space-y-2.5">
         <div className="flex items-center gap-1.5">
           <CommunityCategoryBadge category={post.category} />
-          {post.attachedPolicy && (
+          {post.policyTitle && (
             <span
-              className="flex items-center gap-0.5 rounded-md border border-primary/20 bg-primary/5 px-1.5 py-0.5 text-[10px] font-bold text-primary"
-              title={`첨부된 정책: ${post.attachedPolicy.title}`}
+              className="flex min-w-0 items-center gap-1 rounded-md border border-primary/20 bg-primary/5 px-1.5 py-0.5 text-[10px] font-bold text-primary"
+              title={`첨부된 정책: ${post.policyTitle}`}
             >
-              <Paperclip className="h-2.5 w-2.5" aria-hidden="true" />
-              정책첨부
+              <Paperclip className="h-2.5 w-2.5 shrink-0" aria-hidden="true" />
+              <span className="max-w-[140px] truncate">{post.policyTitle}</span>
             </span>
           )}
           <span className="text-[10px] font-bold text-slate-400">{post.authorName}</span>

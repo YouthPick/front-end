@@ -141,6 +141,7 @@ describe('커뮤니티 게시글 생성 API', () => {
             policyTitle: null,
             category: 'FREE',
             title: '목록 글',
+            contentExcerpt: '목록 미리보기',
             viewCount: 5,
             createdAt: '2026-07-20T10:00:00',
           },
@@ -156,7 +157,12 @@ describe('커뮤니티 게시글 생성 API', () => {
     });
     expect(result).toEqual({
       items: [
-        expect.objectContaining({ id: '91', title: '목록 글', category: '잡담', content: '' }),
+        expect.objectContaining({
+          id: '91',
+          title: '목록 글',
+          category: '잡담',
+          content: '목록 미리보기',
+        }),
       ],
       page: 1,
       pageSize: 6,
