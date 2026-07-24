@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.github
+.vscode
+*.md
+.playwright-mcp
+.env
+.env copy.example

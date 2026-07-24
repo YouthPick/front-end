@@ -75,6 +75,11 @@ body {
   color: #1e293b;
 }
 
+/* Tailwind preflight가 button의 커서를 default로 초기화하므로, 클릭 가능한 버튼은 포인터로 되돌린다. */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
@@ -93,4 +98,75 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* WYSIWYG Content & Editor Styling */
+.ProseMirror {
+  outline: none;
+  min-height: 250px;
+}
+
+.ProseMirror p,
+.wysiwyg-content p {
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror h1,
+.wysiwyg-content h1 {
+  font-size: 1.375rem;
+  font-weight: 800;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+}
+
+.ProseMirror h2,
+.wysiwyg-content h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #334155;
+}
+
+.ProseMirror ul,
+.wysiwyg-content ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.ProseMirror ol,
+.wysiwyg-content ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.ProseMirror li,
+.wysiwyg-content li {
+  margin-bottom: 0.25rem;
+}
+
+.ProseMirror blockquote,
+.wysiwyg-content blockquote {
+  border-left: 4px solid var(--color-primary);
+  padding-left: 1rem;
+  font-style: italic;
+  color: #475569;
+  margin: 1rem 0;
+  background-color: var(--color-primary-light);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.ProseMirror img,
+.wysiwyg-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1rem 0;
+  display: block;
+}
+
 

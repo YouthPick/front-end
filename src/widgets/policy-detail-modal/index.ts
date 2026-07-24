@@ -1,0 +1,1 @@
+export { PolicyDetailModalContainer } from './PolicyDetailModalContainer';

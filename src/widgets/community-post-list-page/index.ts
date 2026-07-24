@@ -1,0 +1,1 @@
+export { CommunityPostListPage } from './CommunityPostListPage';

@@ -6,3 +6,10 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# 개인/로컬 전용 (커밋 금지)
+CLAUDE.local.md
+.claude/settings.local.json
+
+# IntelliJ IDEA
+.idea/

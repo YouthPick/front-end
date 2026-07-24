@@ -1,0 +1,1 @@
+export { MyLikedPostsPage } from './MyLikedPostsPage';

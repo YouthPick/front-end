@@ -1,0 +1,104 @@
+import { User } from 'lucide-react';
+import { Link, NavLink, useNavigate } from 'react-router';
+import youthPickLogo from '@/assets/images/youthpick-logo.png';
+import { useAuthStore } from '@/entities/user';
+import { ROUTES } from '@/shared/constants';
+
+const MENU_ITEMS = [
+  { to: ROUTES.search, label: '정책 찾기', end: false, authOnly: false },
+  { to: ROUTES.recommend, label: '맞춤 정책', end: false, authOnly: false },
+  { to: ROUTES.community, label: '커뮤니티', end: false, authOnly: false },
+  { to: ROUTES.tracker, label: '신청관리', end: false, authOnly: true },
+];
+
+export function Header() {
+  const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const navigate = useNavigate();
+
+  // 로그인 전용 링크(신청관리)는 인증 사용자에게만 노출한다. (라우터 가드와 이중 방어)
+  const menuItems = MENU_ITEMS.filter((item) => !item.authOnly || isAuthenticated);
+
+  return (
+    <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md shadow-sm">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+        {/* Left side: logo and desktop menu */}
+        <div className="flex items-center space-x-8">
+          <Link
+            to={ROUTES.home}
+            className="flex cursor-pointer items-center"
+            id="header-logo"
+            aria-label="YouthPick 홈"
+          >
+            <img src={youthPickLogo} alt="" className="h-8 w-auto" />
+          </Link>
+
+          {/* Desktop navigation. 모바일은 하단 탭바(MobileNav)가 동일한 동선을 제공한다. */}
+          <nav className="hidden md:flex items-center space-x-6 text-xs font-bold text-slate-500">
+            {menuItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  `transition-all py-1.5 px-1 relative hover:text-primary ${isActive ? 'text-primary' : ''}`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <span>{item.label}</span>
+                    {isActive && (
+                      <span className="absolute bottom-[-17px] left-0 right-0 h-0.5 bg-primary rounded-full" />
+                    )}
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+
+        {/* Right side: login/profile */}
+        <div className="flex items-center space-x-3">
+          {isAuthenticated && user ? (
+            <>
+              {user.role === 'admin' && (
+                <NavLink
+                  to={ROUTES.admin}
+                  className={({ isActive }) =>
+                    `text-xs font-bold transition-colors hover:text-primary ${
+                      isActive ? 'text-primary' : 'text-slate-400'
+                    }`
+                  }
+                  id="header-admin-link"
+                >
+                  관리자
+                </NavLink>
+              )}
+              <button
+                type="button"
+                onClick={() => navigate(ROUTES.my)}
+                className="flex items-center space-x-1.5 rounded-full border border-slate-100 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700 transition-all hover:bg-slate-100"
+                id="header-profile-button"
+              >
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-black text-white">
+                  {user.name[0]}
+                </span>
+                <span className="max-w-[70px] truncate">{user.name}님</span>
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => navigate(ROUTES.login)}
+              className="flex items-center space-x-1 rounded-full bg-primary px-4.5 py-2 text-xs font-bold text-white transition-all hover:brightness-105 active:scale-95 cursor-pointer shadow-sm shadow-primary/10"
+              id="login-button"
+            >
+              <User className="h-3.5 w-3.5" />
+              <span>로그인</span>
+            </button>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+}
