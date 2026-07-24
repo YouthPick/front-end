@@ -1,7 +1,9 @@
 import { useLikedCommunityPosts } from '@/features/community-like';
+import { useSeo } from '@/shared/hooks';
 import { CommunityPostListPage } from '@/widgets/community-post-list-page';
 
 export function MyLikedPostsPage() {
+  useSeo({ title: '좋아요한 글', noindex: true });
   const { likedPosts, isLoading, isError, refetch } = useLikedCommunityPosts();
 
   return (
