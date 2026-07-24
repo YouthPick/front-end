@@ -17,7 +17,7 @@
 - Code Quality: Biome
 - Package Manager: pnpm
 
-프론트는 Vite 정적 SPA로 빌드하고, production smoke는 Vite preview 서버(`pnpm start`)로 확인한다. 별도 Node 서버를 추가하지 않는다.
+프론트는 Vite 정적 SPA로 빌드하고, production smoke는 Vite preview 서버(`pnpm start`)로 확인한다. 별도 Node 서버를 추가하지 않는다. Docker 이미지(`Dockerfile`)는 빌드 산출물을 nginx로 정적 서빙하며, `back-end/docker-compose.yml`의 `frontend` 서비스가 이를 빌드/기동한다.
 
 ## 2. 작업 흐름
 
