@@ -1,7 +1,9 @@
 import { useMyCommunityPosts } from '@/features/community-my-posts';
+import { useSeo } from '@/shared/hooks';
 import { CommunityPostListPage } from '@/widgets/community-post-list-page';
 
 export function MyPostsPage() {
+  useSeo({ title: '내가 작성한 글', noindex: true });
   const { posts, isLoading, isError, refetch } = useMyCommunityPosts();
 
   return (

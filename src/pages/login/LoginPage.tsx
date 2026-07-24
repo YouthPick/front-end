@@ -2,8 +2,10 @@ import { useNavigate } from 'react-router';
 
 import { SocialLoginPanel, useOAuthLogin } from '@/features/auth';
 import { ROUTES } from '@/shared/constants';
+import { useSeo } from '@/shared/hooks';
 
 export function LoginPage() {
+  useSeo({ title: '로그인', noindex: true });
   const { startOAuthLogin, isRedirecting } = useOAuthLogin();
   const navigate = useNavigate();
 

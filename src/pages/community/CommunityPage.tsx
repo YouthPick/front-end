@@ -8,6 +8,7 @@ import {
   useCommunityBoard,
 } from '@/features/community-board';
 import { ROUTES } from '@/shared/constants';
+import { useSeo } from '@/shared/hooks';
 import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import {
   COMMUNITY_POST_GRID_CLASS,
@@ -16,6 +17,10 @@ import {
 } from '@/widgets/community-post-grid';
 
 export function CommunityPage() {
+  useSeo({
+    title: '커뮤니티',
+    description: '정책에 대한 질문과 후기, 소소한 이야기를 자유롭게 나누는 청년들의 이야기 공간.',
+  });
   const {
     query,
     category,

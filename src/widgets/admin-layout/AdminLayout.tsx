@@ -14,6 +14,7 @@ import {
 import { NavLink, Outlet } from 'react-router';
 
 import { ROUTES } from '@/shared/constants';
+import { useSeo } from '@/shared/hooks';
 
 const NAV_SECTIONS = [
   {
@@ -41,6 +42,7 @@ const NAV_SECTIONS = [
 ] as const;
 
 export function AdminLayout() {
+  useSeo({ title: '관리자', noindex: true });
   const isFetching = useIsFetching();
   const isMutating = useIsMutating();
   const isStaleUpdating = isFetching > 0 || isMutating > 0;

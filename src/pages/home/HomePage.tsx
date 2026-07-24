@@ -10,6 +10,7 @@ import { useAuthStore } from '@/entities/user';
 import { useMyProfile } from '@/features/my-profile';
 import { useRecommendations } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
+import { useSeo } from '@/shared/hooks';
 import { ErrorState, Pagination, Skeleton } from '@/shared/ui';
 import { HeroBanner } from '@/widgets/hero-banner';
 import {
@@ -25,6 +26,11 @@ import { HomeRecommendSection } from './components/HomeRecommendSection';
 const HOME_POLICY_COUNT = POLICY_GRID_SKELETON_COUNT;
 
 export function HomePage() {
+  useSeo({
+    title: '나에게 맞는 청년정책 추천',
+    description:
+      '나에게 맞는 청년정책을 쉽고 빠르게 찾아주는 청년정책 맞춤형 서비스. 정책 검색, 맞춤 추천, 신청 관리, 청년 커뮤니티를 한곳에서 만나보세요.',
+  });
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
   const {
