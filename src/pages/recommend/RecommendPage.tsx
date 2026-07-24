@@ -8,10 +8,12 @@ import {
   useRecommendations,
 } from '@/features/policy-recommendation';
 import { ROUTES } from '@/shared/constants';
+import { useSeo } from '@/shared/hooks';
 import { EmptyState, Skeleton } from '@/shared/ui';
 import { RecommendationFeed } from '@/widgets/recommendation-feed';
 
 export function RecommendPage() {
+  useSeo({ title: '맞춤 추천', noindex: true });
   const { recommendations, isFallback, isLoading, isError } = useRecommendations();
   // 프로필은 서버가 원본이다 — store 값은 새로고침 후 빈 값이라 여기서 쓰면 안 된다.
   const { profile, isLoading: isProfileLoading } = useMyProfile();

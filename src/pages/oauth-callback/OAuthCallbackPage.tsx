@@ -2,9 +2,11 @@ import { useNavigate } from 'react-router';
 
 import { useOAuthCallback } from '@/features/auth';
 import { ROUTES } from '@/shared/constants';
+import { useSeo } from '@/shared/hooks';
 import { ErrorState, Skeleton } from '@/shared/ui';
 
 export function OAuthCallbackPage() {
+  useSeo({ title: '로그인 처리 중', noindex: true });
   const { errorMessage } = useOAuthCallback();
   const navigate = useNavigate();
 

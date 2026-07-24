@@ -5,12 +5,14 @@ import { AccountDangerZone, useDeleteAccount, useLogout } from '@/features/auth'
 import { useMyProfile } from '@/features/my-profile';
 import { useTrackers } from '@/features/policy-tracker';
 import { ROUTES } from '@/shared/constants';
+import { useSeo } from '@/shared/hooks';
 import { EmptyState, ErrorState, Skeleton } from '@/shared/ui';
 import { LikedCommunityPosts } from '@/widgets/liked-community-posts';
 import { MyCommunityPosts } from '@/widgets/my-community-posts';
 import { RecentlyViewed } from '@/widgets/recently-viewed';
 
 export function MyPage() {
+  useSeo({ title: '마이페이지', noindex: true });
   const user = useAuthStore((state) => state.user);
   const {
     profile,

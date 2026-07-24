@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /my
+Disallow: /tracker
+Disallow: /recommend
+Disallow: /login
+Disallow: /oauth
+Disallow: /profile/setup
+Disallow: /community/write
+Disallow: /community/*/edit
+
+Sitemap: https://youthpick.samchon.cloud/sitemap.xml

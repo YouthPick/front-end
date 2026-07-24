@@ -2,8 +2,10 @@ import { Navigate, useParams } from 'react-router';
 
 import { CommunityPostWriteContainer } from '@/features/community-write';
 import { ROUTES } from '@/shared/constants';
+import { useSeo } from '@/shared/hooks';
 
 export function CommunityEditPage() {
+  useSeo({ title: '게시글 수정', noindex: true });
   const { postId } = useParams<{ postId: string }>();
 
   if (!postId) {
