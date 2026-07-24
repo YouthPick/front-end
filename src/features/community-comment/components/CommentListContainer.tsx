@@ -43,7 +43,7 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
 
   const handleSubmitComment = () => {
     if (!user) return;
-    createComment(user.name, user.email, newCommentValue, {
+    createComment(newCommentValue, {
       onSuccess: () => setNewCommentValue(''),
     });
   };
@@ -55,7 +55,7 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
 
   const handleSubmitReply = (commentId: string) => {
     if (!user) return;
-    createReply(commentId, user.name, user.email, replyValue, {
+    createReply(commentId, replyValue, {
       onSuccess: () => {
         setReplyValue('');
         setOpenReplyId(null);
@@ -135,7 +135,7 @@ export function CommentListContainer({ postId }: CommentListContainerProps) {
               key={comment.id}
               comment={comment}
               replies={repliesByParentId[comment.id] ?? []}
-              currentUserEmail={user?.email ?? null}
+              currentUserId={user?.id ?? null}
               canReply={isAuthenticated}
               isReplyOpen={openReplyId === comment.id}
               replyValue={replyValue}

@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { parseApiError } from '@/shared/api';
 import { useToast } from '@/shared/ui';
 
+import { getCommentErrorMessage } from '../api/commentErrorMessages';
 import {
   createCommunityComment,
   deleteCommunityComment,
@@ -22,7 +24,8 @@ export function useCommunityCommentMutations(postId: string) {
   };
 
   const createMutation = useMutation({
-    mutationFn: createCommunityComment,
+    mutationFn: (params: { parentId: string | null; content: string }) =>
+      createCommunityComment({ postId, parentId: params.parentId, content: params.content }),
     onSuccess: (_, variables) => {
       invalidateComments();
       showToast(
@@ -30,48 +33,39 @@ export function useCommunityCommentMutations(postId: string) {
         'success',
       );
     },
-    onError: () => {
-      showToast('댓글 등록에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning');
+    onError: (error) => {
+      showToast(getCommentErrorMessage(parseApiError(error)), 'warning');
     },
   });
 
   const updateMutation = useMutation({
-    mutationFn: updateCommunityComment,
+    mutationFn: (params: { commentId: string; content: string }) =>
+      updateCommunityComment({ postId, commentId: params.commentId, content: params.content }),
     onSuccess: () => {
       invalidateComments();
       showToast('댓글이 수정되었습니다.', 'success');
     },
-    onError: () => {
-      showToast('댓글 수정에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning');
+    onError: (error) => {
+      showToast(getCommentErrorMessage(parseApiError(error)), 'warning');
     },
   });
 
   const deleteMutation = useMutation({
-    mutationFn: deleteCommunityComment,
+    mutationFn: (commentId: string) => deleteCommunityComment({ postId, commentId }),
     onSuccess: () => {
       invalidateComments();
       showToast('댓글이 삭제되었습니다.', 'info');
     },
-    onError: () => {
-      showToast('댓글 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.', 'warning');
+    onError: (error) => {
+      showToast(getCommentErrorMessage(parseApiError(error)), 'warning');
     },
   });
 
   return {
-    createComment: (
-      authorName: string,
-      authorEmail: string,
-      content: string,
-      options?: MutationOptions,
-    ) =>
-      createMutation.mutate({ postId, parentId: null, authorName, authorEmail, content }, options),
-    createReply: (
-      parentId: string,
-      authorName: string,
-      authorEmail: string,
-      content: string,
-      options?: MutationOptions,
-    ) => createMutation.mutate({ postId, parentId, authorName, authorEmail, content }, options),
+    createComment: (content: string, options?: MutationOptions) =>
+      createMutation.mutate({ parentId: null, content }, options),
+    createReply: (parentId: string, content: string, options?: MutationOptions) =>
+      createMutation.mutate({ parentId, content }, options),
     updateComment: (commentId: string, content: string, options?: MutationOptions) =>
       updateMutation.mutate({ commentId, content }, options),
     deleteComment: (commentId: string, options?: MutationOptions) =>

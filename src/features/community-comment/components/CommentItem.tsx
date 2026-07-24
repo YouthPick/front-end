@@ -5,7 +5,7 @@ import { CommentRow } from './CommentRow';
 interface CommentItemProps {
   comment: CommunityComment;
   replies: CommunityComment[];
-  currentUserEmail: string | null;
+  currentUserId: string | null;
   canReply: boolean;
   isReplyOpen: boolean;
   replyValue: string;
@@ -26,7 +26,7 @@ interface CommentItemProps {
 export function CommentItem({
   comment,
   replies,
-  currentUserEmail,
+  currentUserId,
   canReply,
   isReplyOpen,
   replyValue,
@@ -47,7 +47,7 @@ export function CommentItem({
     <div className="space-y-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
       <CommentRow
         comment={comment}
-        isOwner={currentUserEmail !== null && comment.authorEmail === currentUserEmail}
+        isOwner={currentUserId !== null && comment.authorId === currentUserId}
         isEditing={editingCommentId === comment.id}
         editValue={editValue}
         isSubmittingEdit={isUpdating}
@@ -90,7 +90,7 @@ export function CommentItem({
             <CommentRow
               key={reply.id}
               comment={reply}
-              isOwner={currentUserEmail !== null && reply.authorEmail === currentUserEmail}
+              isOwner={currentUserId !== null && reply.authorId === currentUserId}
               isEditing={editingCommentId === reply.id}
               editValue={editValue}
               isSubmittingEdit={isUpdating}

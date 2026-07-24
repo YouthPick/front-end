@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import { formatDateTime } from '@/shared/utils';
+
 import type { CommunityComment } from '../types/communityComment.types';
 import { CommentForm } from './CommentForm';
 
@@ -36,15 +38,17 @@ export function CommentRow({
         aria-hidden="true"
         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-black text-white"
       >
-        {comment.authorName[0]}
+        {comment.authorNickname[0]}
       </span>
 
       <div className="min-w-0 flex-1 space-y-1.5">
         <div className="flex items-center justify-between gap-1.5">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-bold text-slate-600">{comment.authorName}</span>
+            <span className="text-[10px] font-bold text-slate-600">{comment.authorNickname}</span>
             <span className="text-slate-200">·</span>
-            <span className="text-[10px] font-bold text-slate-400">{comment.createdAt}</span>
+            <span className="text-[10px] font-bold text-slate-400">
+              {formatDateTime(comment.createdAt)}
+            </span>
           </div>
 
           {!isEditing && (

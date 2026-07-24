@@ -1,9 +1,9 @@
 export interface CommunityCommentDto {
-  id: string;
-  postId: string;
-  parentId: string | null;
-  authorName: string;
-  authorEmail: string;
+  id: number;
+  parentId: number | null;
+  authorId: number;
+  authorNickname: string;
   content: string;
   createdAt: string;
+  updatedAt: string;
 }

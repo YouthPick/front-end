@@ -1,80 +1,69 @@
+import { apiClient } from '@/shared/api';
 import { MOCK_API_DELAY_MS } from '@/shared/constants';
-import { delay, generateId } from '@/shared/utils';
+import { delay } from '@/shared/utils';
 
 import type { CommunityCommentDto } from './communityComment.dto';
-import { MOCK_COMMUNITY_COMMENT_DTOS } from './communityCommentMockData';
-
-// 백엔드 API가 준비되면 이 파일의 mock 구현만 apiClient 호출로 교체한다.
-
-let comments: CommunityCommentDto[] = [...MOCK_COMMUNITY_COMMENT_DTOS];
-
-function cloneDto(dto: CommunityCommentDto): CommunityCommentDto {
-  return { ...dto };
-}
+import { MOCK_COMMUNITY_COMMENT_COUNTS } from './communityCommentMockData';
 
 export async function fetchCommunityComments(postId: string): Promise<CommunityCommentDto[]> {
-  await delay(MOCK_API_DELAY_MS);
-  return comments.filter((comment) => comment.postId === postId).map(cloneDto);
+  const response = await apiClient.get<{ data: CommunityCommentDto[] }>(
+    `/v1/posts/${postId}/comments`,
+  );
+  return response.data.data;
 }
 
 export interface CreateCommunityCommentParams {
   postId: string;
   parentId: string | null;
-  authorName: string;
-  authorEmail: string;
   content: string;
 }
 
 export async function createCommunityComment(
   params: CreateCommunityCommentParams,
 ): Promise<CommunityCommentDto> {
-  await delay(MOCK_API_DELAY_MS);
-  const newComment: CommunityCommentDto = {
-    id: generateId(),
-    postId: params.postId,
-    parentId: params.parentId,
-    authorName: params.authorName,
-    authorEmail: params.authorEmail,
-    content: params.content,
-    createdAt: new Date().toISOString().slice(0, 10),
-  };
-  comments = [...comments, newComment];
-  return cloneDto(newComment);
+  const response = await apiClient.post<{ data: CommunityCommentDto }>(
+    `/v1/posts/${params.postId}/comments`,
+    {
+      content: params.content,
+      parentId: params.parentId === null ? null : Number(params.parentId),
+    },
+  );
+  return response.data.data;
 }
 
 export interface UpdateCommunityCommentParams {
+  postId: string;
   commentId: string;
   content: string;
 }
 
 export async function updateCommunityComment(
   params: UpdateCommunityCommentParams,
-): Promise<CommunityCommentDto | null> {
-  await delay(MOCK_API_DELAY_MS);
-  let updated: CommunityCommentDto | null = null;
-  comments = comments.map((comment) => {
-    if (comment.id !== params.commentId) return comment;
-    updated = { ...comment, content: params.content };
-    return updated;
-  });
-  return updated ? cloneDto(updated) : null;
-}
-
-export async function deleteCommunityComment(commentId: string): Promise<void> {
-  await delay(MOCK_API_DELAY_MS);
-  // 대댓글은 부모 댓글과 함께 정리한다.
-  comments = comments.filter(
-    (comment) => comment.id !== commentId && comment.parentId !== commentId,
+): Promise<CommunityCommentDto> {
+  const response = await apiClient.patch<{ data: CommunityCommentDto }>(
+    `/v1/posts/${params.postId}/comments/${params.commentId}`,
+    { content: params.content },
   );
+  return response.data.data;
 }
 
+export interface DeleteCommunityCommentParams {
+  postId: string;
+  commentId: string;
+}
+
+export async function deleteCommunityComment(params: DeleteCommunityCommentParams): Promise<void> {
+  await apiClient.delete(`/v1/posts/${params.postId}/comments/${params.commentId}`);
+}
+
+// 게시글 목록의 댓글 수 배지는 백엔드에 벌크 조회 API가 없어 이 mock으로만 동작한다(별도 이슈 스코프).
 export async function fetchCommunityCommentCounts(
   postIds: string[],
 ): Promise<Record<string, number>> {
   await delay(MOCK_API_DELAY_MS);
   const counts: Record<string, number> = {};
   for (const postId of postIds) {
-    counts[postId] = comments.filter((c) => c.postId === postId).length;
+    counts[postId] = MOCK_COMMUNITY_COMMENT_COUNTS.filter((c) => c.postId === postId).length;
   }
   return counts;
 }
