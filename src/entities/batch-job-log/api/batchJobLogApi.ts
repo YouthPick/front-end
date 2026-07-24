@@ -20,10 +20,8 @@ export async function fetchBatchJobLogs(
   return toPageResult(response.data, params.pageSize);
 }
 
-// 관리자 대시보드의 "수동 강제 동기화" 버튼이 호출한다. 새 배치 작업을 실행하고 결과 로그 한 건을 반환한다.
-export async function runBatchJobSync(userId: string | null): Promise<BatchJobLogDto> {
-  const response = await apiClient.post<{ data: BatchJobLogDto }>('/v1/admin/batch-job-logs', {
-    userId,
-  });
-  return response.data.data;
+// 관리자 대시보드의 "수동 강제 동기화" 버튼이 호출한다. 비동기로 전체 동기화를 시작시키고 202를
+// 반환할 뿐 결과 로그는 안 준다 — 결과는 배치 작업 로그 목록(useBatchJobLogsQuery)에서 확인한다.
+export async function runBatchJobSync(): Promise<void> {
+  await apiClient.post('/v1/admin/batch/policy-sync');
 }
