@@ -3,7 +3,7 @@ import { Outlet, ScrollRestoration } from 'react-router';
 
 import { CompareDockContainer } from '@/features/policy-compare';
 import { Skeleton, ToastContainer } from '@/shared/ui';
-import { NoticeBanner } from '@/widgets/footer';
+import { Footer, NoticeBanner } from '@/widgets/footer';
 import { Header } from '@/widgets/header';
 import { MobileNav } from '@/widgets/mobile-nav';
 import { PolicyDetailModalContainer } from '@/widgets/policy-detail-modal';
@@ -29,6 +29,8 @@ export function RootLayout() {
         </Suspense>
         <NoticeBanner />
       </main>
+
+      <Footer />
 
       <MobileNav />
 
